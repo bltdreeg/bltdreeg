@@ -1,0 +1,117 @@
+#!/bin/bash
+# Sync selected packages from the Docker vendor volume onto the host bind-mount
+# vendor directory, then refresh host Composer metadata for the IDE.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+COMPOSE="docker compose -f infra/local/docker-compose.yml"
+HOST_VENDOR="tenant-app/vendor"
+
+packages=(
+  venturedrake/laravel-crm
+  venturedrake/laravel-crm-filament
+  spatie/laravel-permission
+  filament/filament
+  filament/actions
+  filament/forms
+  filament/tables
+  filament/schemas
+  filament/support
+  filament/infolists
+  filament/notifications
+  filament/widgets
+  filament/query-builder
+  livewire/livewire
+  blade-ui-kit/blade-heroicons
+  blade-ui-kit/blade-icons
+)
+
+for pkg in "${packages[@]}"; do
+  echo "sync $pkg"
+  mkdir -p "$HOST_VENDOR/$(dirname "$pkg")"
+  rm -rf "$HOST_VENDOR/$pkg"
+  $COMPOSE exec -T tenant tar -C /var/www/html/vendor -cf - "$pkg" \
+    | tar -C "$HOST_VENDOR" -xf -
+done
+
+python3 <<'PY'
+from pathlib import Path
+import json, subprocess
+
+root = Path("tenant-app")
+psr4 = root / "vendor/composer/autoload_psr4.php"
+text = psr4.read_text()
+entries = [
+    ("VentureDrake\\LaravelCrm\\", "$vendorDir . '/venturedrake/laravel-crm/src'"),
+    ("VentureDrake\\LaravelCrmFilament\\", "$vendorDir . '/venturedrake/laravel-crm-filament/src'"),
+    ("Spatie\\Permission\\", "$vendorDir . '/spatie/laravel-permission/src'"),
+    ("Filament\\", "$vendorDir . '/filament/filament/src'"),
+    ("Filament\\Actions\\", "$vendorDir . '/filament/actions/src'"),
+    ("Filament\\Forms\\", "$vendorDir . '/filament/forms/src'"),
+    ("Filament\\Tables\\", "$vendorDir . '/filament/tables/src'"),
+    ("Filament\\Schemas\\", "$vendorDir . '/filament/schemas/src'"),
+    ("Filament\\Support\\", "$vendorDir . '/filament/support/src'"),
+    ("Filament\\Infolists\\", "$vendorDir . '/filament/infolists/src'"),
+    ("Filament\\Notifications\\", "$vendorDir . '/filament/notifications/src'"),
+    ("Filament\\Widgets\\", "$vendorDir . '/filament/widgets/src'"),
+    ("Livewire\\", "$vendorDir . '/livewire/livewire/src'"),
+]
+changed = False
+for ns, path_expr in entries:
+    php_key = ns.replace("\\", "\\\\")
+    marker = f"'{php_key}'"
+    if marker in text:
+        continue
+    text = text.replace("return array(\n", f"return array(\n    '{php_key}' => array({path_expr}),\n", 1)
+    changed = True
+    print("psr4 +", ns)
+if changed:
+    psr4.write_text(text)
+
+docker_json = subprocess.check_output(
+    ["docker", "compose", "-f", "infra/local/docker-compose.yml", "exec", "-T", "tenant",
+     "cat", "/var/www/html/vendor/composer/installed.json"],
+    text=True,
+)
+host_path = root / "vendor/composer/installed.json"
+host = json.loads(host_path.read_text())
+docker = json.loads(docker_json)
+
+def pkgs(data):
+    return data["packages"] if isinstance(data, dict) and "packages" in data else data
+
+want = {
+    "venturedrake/laravel-crm",
+    "venturedrake/laravel-crm-filament",
+    "spatie/laravel-permission",
+    "filament/filament",
+    "filament/actions",
+    "filament/forms",
+    "filament/tables",
+    "filament/schemas",
+    "filament/support",
+    "filament/infolists",
+    "filament/notifications",
+    "filament/widgets",
+    "filament/query-builder",
+    "livewire/livewire",
+    "blade-ui-kit/blade-heroicons",
+    "blade-ui-kit/blade-icons",
+}
+host_pkgs = pkgs(host)
+docker_pkgs = {p["name"]: p for p in pkgs(docker) if p.get("name") in want}
+by_name = {p["name"]: i for i, p in enumerate(host_pkgs)}
+for name, pkg in docker_pkgs.items():
+    if name in by_name:
+        host_pkgs[by_name[name]] = pkg
+    else:
+        host_pkgs.append(pkg)
+    print("installed.json", name)
+
+if isinstance(host, dict):
+    host["packages"] = host_pkgs
+    host_path.write_text(json.dumps(host, indent=4) + "\n")
+else:
+    host_path.write_text(json.dumps(host_pkgs, indent=4) + "\n")
+print("IDE vendor sync complete")
+PY
