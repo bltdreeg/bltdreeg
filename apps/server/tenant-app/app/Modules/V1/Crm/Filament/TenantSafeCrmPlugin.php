@@ -51,11 +51,22 @@ class TenantSafeCrmPlugin extends LaravelCrmPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $settings = app()->bound('laravel-crm.settings') ? app('laravel-crm.settings') : null;
-        $brandName = $this->getBrand() ?? ($settings?->get('organization_name')) ?? 'Shop';
+        // Settings may be unavailable during composer package:discover (before migrate).
+        $brandName = $this->getBrand() ?? 'Shop';
+        $logo = null;
+
+        try {
+            $settings = app()->bound('laravel-crm.settings') ? app('laravel-crm.settings') : null;
+            if ($settings) {
+                $brandName = $this->getBrand() ?? ($settings->get('organization_name') ?: $brandName);
+                $logo = LogoUrl::resolve($settings->get('logo_file'));
+            }
+        } catch (\Throwable) {
+            // Ignore — e.g. crm_settings missing on first install.
+        }
+
         $panel->brandName($brandName);
 
-        $logo = LogoUrl::resolve($settings?->get('logo_file'));
         if ($logo) {
             $panel->brandLogo($logo);
         }

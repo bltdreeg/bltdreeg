@@ -10,6 +10,10 @@ cd bltdreeg/apps/server
 make start
 ```
 
+`make start` creates `.env` files (from `.env.example`), waits for MySQL/Redis,
+installs Composer deps, migrates, seeds, and syncs IDE vendor types. On ExFAT
+volumes it also strips macOS `._*` AppleDouble files that break Docker mounts.
+
 | Panel | URL | Login |
 |-------|-----|-------|
 | Landlord | http://admin.localhost:8085 | `admin@bltdreeg.test` / `password` |
