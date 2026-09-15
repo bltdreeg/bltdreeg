@@ -14,7 +14,16 @@ gen_key() {
     echo "base64:$(openssl rand -base64 32 | tr -d '\n')"
     return
   fi
-  python3 -c 'import base64,os; print("base64:" + base64.b64encode(os.urandom(32)).decode())'
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import base64,os; print("base64:" + base64.b64encode(os.urandom(32)).decode())'
+  elif command -v python >/dev/null 2>&1; then
+    python -c 'import base64,os; print("base64:" + base64.b64encode(os.urandom(32)).decode())'
+  elif command -v py >/dev/null 2>&1; then
+    py -3 -c 'import base64,os; print("base64:" + base64.b64encode(os.urandom(32)).decode())'
+  else
+    echo "error: need openssl or Python 3 to generate APP_KEY" >&2
+    exit 1
+  fi
 }
 
 ensure_app_env() {
