@@ -1,4 +1,0 @@
-# Keep Unix scripts executable under Git Bash / WSL. Windows autocrlf otherwise
-# checks them out as CRLF and bash treats `pipefail\r` / paths with CR as errors.
-*.sh text eol=lf
-Makefile text eol=lf
