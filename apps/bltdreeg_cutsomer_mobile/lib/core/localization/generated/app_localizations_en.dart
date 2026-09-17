@@ -1079,4 +1079,278 @@ class AppLocalizationsEn extends AppLocalizations {
   String photoCounter(int index, int total) {
     return '$index / $total';
   }
+
+  @override
+  String get bookingWhenTitle => 'When do you want to come?';
+
+  @override
+  String get bookingNowTitle => 'Now — join the queue';
+
+  @override
+  String bookingNowWait(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead of you · ~$minutes min',
+      one: '1 ahead of you · ~$minutes min',
+      zero: 'No queue — walk right in',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookingNowClosed => 'The salon is closed now — book a time';
+
+  @override
+  String get bookingScheduleTitle => 'Book a time';
+
+  @override
+  String get bookingScheduleSubtitle => 'Pick a day and time that suits you';
+
+  @override
+  String bookingDurationNote(int minutes) {
+    return 'Your services take $minutes min';
+  }
+
+  @override
+  String get slotPeriodMorning => 'Morning';
+
+  @override
+  String get slotPeriodAfternoon => 'Afternoon';
+
+  @override
+  String get slotPeriodEvening => 'Evening';
+
+  @override
+  String get slotsDayClosed =>
+      'The salon is closed that day — pick another day.';
+
+  @override
+  String get slotsDayFull => 'No free times that day — try another day.';
+
+  @override
+  String get slotsLoadFailed => 'Couldn\'t load the times.';
+
+  @override
+  String a11ySlotUnavailable(String time) {
+    return '$time, booked';
+  }
+
+  @override
+  String get bookingContinueToBarber => 'Continue — choose a barber';
+
+  @override
+  String get bookingBarberTitle => 'Choose a barber';
+
+  @override
+  String get barberAnyTitle => 'Any available barber';
+
+  @override
+  String get barberFastestBadge => 'Fastest';
+
+  @override
+  String get barberAnySubtitle => 'The first barber to finish takes you';
+
+  @override
+  String get barberAnySlotSubtitle => 'We\'ll assign a barber who\'s free then';
+
+  @override
+  String get barberPickByName => 'Or choose a barber by name';
+
+  @override
+  String get waitImmediate => 'Right away';
+
+  @override
+  String get waitNoQueue => 'No queue';
+
+  @override
+  String get barberFree => 'Free';
+
+  @override
+  String waitApproxShort(String value) {
+    return '$value min';
+  }
+
+  @override
+  String waitExtraMinutes(String value) {
+    return '$value min';
+  }
+
+  @override
+  String peopleAheadOfYou(int count) {
+    return '$count ahead of you';
+  }
+
+  @override
+  String peopleAheadOfBarber(int count) {
+    return '$count ahead';
+  }
+
+  @override
+  String get barberNotInToday => 'Not in today';
+
+  @override
+  String get barberBusyAtSlot => 'Not free at that time';
+
+  @override
+  String get bookingContinueToReview => 'Continue — review booking';
+
+  @override
+  String get bookingReviewTitle => 'Review booking';
+
+  @override
+  String driveDistance(String km, int minutes) {
+    return '$km km — $minutes min drive';
+  }
+
+  @override
+  String get reviewServicesHeader => 'Services';
+
+  @override
+  String get reviewBarberLabel => 'Barber';
+
+  @override
+  String get reviewTimeLabel => 'Time';
+
+  @override
+  String get timingNowLabel => 'Now — in the queue';
+
+  @override
+  String slotDateTime(String day, String time) {
+    return '$day · $time';
+  }
+
+  @override
+  String waitRangeTitle(int min, int max) {
+    return 'Your turn in $min–$max min';
+  }
+
+  @override
+  String get waitRightInTitle => 'You\'ll go right in';
+
+  @override
+  String waitAheadAndDuration(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead',
+      one: 'Only 1 ahead',
+      zero: 'No one ahead',
+    );
+    return '$_temp0 · your services take $minutes min';
+  }
+
+  @override
+  String get waitLiveNote =>
+      'The time is an estimate and updates live with the active chairs.';
+
+  @override
+  String slotAppointmentTitle(String day, String time) {
+    return 'Your appointment: $day at $time';
+  }
+
+  @override
+  String get slotArriveNote =>
+      'Arrive 5 minutes early so you don\'t miss your turn.';
+
+  @override
+  String get policyQueue =>
+      'When it\'s your turn you have 5 minutes to show up. If you don\'t, you move back one place, then the booking is cancelled.';
+
+  @override
+  String get policySlot =>
+      'If you\'re more than 10 minutes late, the booking is cancelled.';
+
+  @override
+  String get servicesSubtotal => 'Services subtotal';
+
+  @override
+  String get bundleDiscount => 'Bundle discount';
+
+  @override
+  String get totalLabel => 'Total';
+
+  @override
+  String get payCashNote => 'Pay cash at the salon after your service';
+
+  @override
+  String get confirmJoinQueue => 'Confirm and join the queue';
+
+  @override
+  String get confirmSlotBooking => 'Confirm booking';
+
+  @override
+  String get bookingErrorSlotTaken =>
+      'That time was just booked — pick another.';
+
+  @override
+  String get bookingErrorBarberUnavailable =>
+      'That barber isn\'t available — pick another.';
+
+  @override
+  String get bookingErrorSalonClosed =>
+      'The salon just closed — book a time instead.';
+
+  @override
+  String get bookingErrorAlreadyInQueue =>
+      'You\'re already in a queue. Follow that turn first.';
+
+  @override
+  String get actionPickTime => 'Pick a time';
+
+  @override
+  String get actionPickBarber => 'Pick a barber';
+
+  @override
+  String get actionTrackTurn => 'Track your turn';
+
+  @override
+  String get bookingIncompleteTitle => 'This booking isn\'t complete';
+
+  @override
+  String get bookingIncompleteBody =>
+      'Choose your services and time on the salon page first.';
+
+  @override
+  String get actionBackToSalon => 'Back to the salon';
+
+  @override
+  String get confirmedQueueTitle => 'Done — you\'re in the queue';
+
+  @override
+  String get confirmedSlotTitle => 'Done — your booking is confirmed';
+
+  @override
+  String get ticketNumberLabel => 'Your number';
+
+  @override
+  String get aheadOfYouLabel => 'Ahead of you';
+
+  @override
+  String aheadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+      zero: 'No one',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expectedTimeLabel => 'Expected wait';
+
+  @override
+  String get appointmentLabel => 'Your appointment';
+
+  @override
+  String get confirmedQueueNote =>
+      'We\'ll notify you when one person is left ahead of you, then when it\'s your turn.';
+
+  @override
+  String get confirmedSlotNote => 'We\'ll remind you an hour before.';
+
+  @override
+  String get bookingLoadFailed => 'Couldn\'t load the booking.';
 }

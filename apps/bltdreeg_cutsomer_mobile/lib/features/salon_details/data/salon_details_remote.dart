@@ -89,6 +89,13 @@ final class FakeSalonDetailsRemoteDataSource
         });
   }
 
+  /// Current details without latency (other fake backends build on it).
+  SalonDetails? detailsFor(String salonId) =>
+      switch (_catalog.salonById(salonId)) {
+        final summary? => _build(summary),
+        null => null,
+      };
+
   // ---- fixtures --------------------------------------------------------------
 
   SalonDetails _build(SalonSummary s) => SalonDetails(

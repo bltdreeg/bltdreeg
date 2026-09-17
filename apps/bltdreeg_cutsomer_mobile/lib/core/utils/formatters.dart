@@ -50,6 +50,14 @@ final class AppFormatters {
   /// Weekday name: `الخميس` / `Thursday`.
   String weekday(DateTime d) => _latin(DateFormat.EEEE(localeCode).format(d));
 
+  /// `18 سبتمبر` / `18 Sep`.
+  String dayMonth(DateTime d) =>
+      _latin(DateFormat(_ar ? 'd MMMM' : 'd MMM', localeCode).format(d));
+
+  /// Weekday for compact chips: `الخميس` / `Thu`.
+  String weekdayShort(DateTime d) =>
+      _latin(DateFormat(_ar ? 'EEEE' : 'EEE', localeCode).format(d));
+
   /// Day of month: `15`.
   String dayOfMonth(DateTime d) => _latin(DateFormat.d(localeCode).format(d));
 

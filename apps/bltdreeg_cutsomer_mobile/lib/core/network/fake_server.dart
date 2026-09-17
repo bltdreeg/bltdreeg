@@ -30,7 +30,11 @@ final class FakeServer {
     if (!_connectivity.isOnline) {
       throw const NetworkException('fake-server: offline');
     }
-    final base = latency ?? _environment.simulatedLatency;
+    // A per-call [latency] shapes how an action feels in the app; with
+    // latency disabled (tests) every call is immediate.
+    final base = _environment.simulatedLatency == Duration.zero
+        ? Duration.zero
+        : latency ?? _environment.simulatedLatency;
     final jitterMs = base.inMilliseconds == 0
         ? 0
         : _random.nextInt(base.inMilliseconds ~/ 2 + 1);

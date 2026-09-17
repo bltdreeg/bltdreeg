@@ -1097,4 +1097,273 @@ class AppLocalizationsAr extends AppLocalizations {
   String photoCounter(int index, int total) {
     return '$index / $total';
   }
+
+  @override
+  String get bookingWhenTitle => 'امتى تحب تيجي؟';
+
+  @override
+  String get bookingNowTitle => 'دلوقتي — ادخل الطابور';
+
+  @override
+  String bookingNowWait(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'قدامك $count · ~$minutes د',
+      one: 'قدامك 1 بس · ~$minutes د',
+      zero: 'مفيش دور — هتدخل على طول',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get bookingNowClosed => 'الصالون مقفول دلوقتي — احجز معاد';
+
+  @override
+  String get bookingScheduleTitle => 'احجز معاد';
+
+  @override
+  String get bookingScheduleSubtitle => 'اختار اليوم والساعة اللي تناسبك';
+
+  @override
+  String bookingDurationNote(int minutes) {
+    return 'مدة خدماتك $minutes دقيقة';
+  }
+
+  @override
+  String get slotPeriodMorning => 'الصبح';
+
+  @override
+  String get slotPeriodAfternoon => 'بعد الضهر';
+
+  @override
+  String get slotPeriodEvening => 'بالليل';
+
+  @override
+  String get slotsDayClosed => 'الصالون أجازة اليوم ده — اختار يوم تاني.';
+
+  @override
+  String get slotsDayFull => 'مفيش مواعيد فاضية اليوم ده — جرّب يوم تاني.';
+
+  @override
+  String get slotsLoadFailed => 'معرفناش نجيب المواعيد.';
+
+  @override
+  String a11ySlotUnavailable(String time) {
+    return '$time، محجوز';
+  }
+
+  @override
+  String get bookingContinueToBarber => 'كمّل — اختار الحلاق';
+
+  @override
+  String get bookingBarberTitle => 'اختار الحلاق';
+
+  @override
+  String get barberAnyTitle => 'أي حلاق متاح';
+
+  @override
+  String get barberFastestBadge => 'الأسرع';
+
+  @override
+  String get barberAnySubtitle => 'أول واحد يخلّص هيستلمك';
+
+  @override
+  String get barberAnySlotSubtitle => 'هنختارلك حلاق فاضي في المعاد ده';
+
+  @override
+  String get barberPickByName => 'أو اختار حلاق بالاسم';
+
+  @override
+  String get waitImmediate => 'فوراً';
+
+  @override
+  String get waitNoQueue => 'مفيش دور';
+
+  @override
+  String get barberFree => 'فاضي';
+
+  @override
+  String waitApproxShort(String value) {
+    return '$value د';
+  }
+
+  @override
+  String waitExtraMinutes(String value) {
+    return '$value د';
+  }
+
+  @override
+  String peopleAheadOfYou(int count) {
+    return 'قدامك $count';
+  }
+
+  @override
+  String peopleAheadOfBarber(int count) {
+    return 'قدامه $count';
+  }
+
+  @override
+  String get barberNotInToday => 'مش موجود النهارده';
+
+  @override
+  String get barberBusyAtSlot => 'مش فاضي في المعاد ده';
+
+  @override
+  String get bookingContinueToReview => 'كمّل — راجع الحجز';
+
+  @override
+  String get bookingReviewTitle => 'راجع الحجز';
+
+  @override
+  String driveDistance(String km, int minutes) {
+    return '$km كم — $minutes دقايق بالعربية';
+  }
+
+  @override
+  String get reviewServicesHeader => 'الخدمات';
+
+  @override
+  String get reviewBarberLabel => 'الحلاق';
+
+  @override
+  String get reviewTimeLabel => 'المعاد';
+
+  @override
+  String get timingNowLabel => 'دلوقتي — في الطابور';
+
+  @override
+  String slotDateTime(String day, String time) {
+    return '$day · $time';
+  }
+
+  @override
+  String waitRangeTitle(int min, int max) {
+    return 'دورك خلال $min لـ $max دقيقة';
+  }
+
+  @override
+  String get waitRightInTitle => 'هتدخل على طول';
+
+  @override
+  String waitAheadAndDuration(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'قدامك $count',
+      one: 'قدامك 1 بس',
+      zero: 'محدش قدامك',
+    );
+    return '$_temp0 · مدة خدمتك $minutes دقيقة';
+  }
+
+  @override
+  String get waitLiveNote =>
+      'الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.';
+
+  @override
+  String slotAppointmentTitle(String day, String time) {
+    return 'معادك $day الساعة $time';
+  }
+
+  @override
+  String get slotArriveNote => 'تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.';
+
+  @override
+  String get policyQueue =>
+      'لما يجي دورك عندك 5 دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.';
+
+  @override
+  String get policySlot => 'لو اتأخرت أكتر من 10 دقايق عن معادك، الحجز بيتلغى.';
+
+  @override
+  String get servicesSubtotal => 'مجموع الخدمات';
+
+  @override
+  String get bundleDiscount => 'خصم الباقة';
+
+  @override
+  String get totalLabel => 'الإجمالي';
+
+  @override
+  String get payCashNote => 'الدفع كاش في الفرع بعد الخدمة';
+
+  @override
+  String get confirmJoinQueue => 'أكّد ودخّلني الطابور';
+
+  @override
+  String get confirmSlotBooking => 'أكّد الحجز';
+
+  @override
+  String get bookingErrorSlotTaken => 'المعاد ده لسه اتحجز — اختار معاد تاني.';
+
+  @override
+  String get bookingErrorBarberUnavailable =>
+      'الحلاق ده مش متاح — اختار حلاق تاني.';
+
+  @override
+  String get bookingErrorSalonClosed => 'الصالون قفل — احجز معاد بدل الطابور.';
+
+  @override
+  String get bookingErrorAlreadyInQueue =>
+      'انت في طابور دلوقتي. تابع دورك الأول.';
+
+  @override
+  String get actionPickTime => 'اختار معاد';
+
+  @override
+  String get actionPickBarber => 'اختار حلاق';
+
+  @override
+  String get actionTrackTurn => 'تابع دورك';
+
+  @override
+  String get bookingIncompleteTitle => 'الحجز لسه مش كامل';
+
+  @override
+  String get bookingIncompleteBody =>
+      'اختار خدماتك ومعادك من صفحة الصالون الأول.';
+
+  @override
+  String get actionBackToSalon => 'ارجع للصالون';
+
+  @override
+  String get confirmedQueueTitle => 'تمام — انت في الطابور';
+
+  @override
+  String get confirmedSlotTitle => 'تمام — حجزك اتأكد';
+
+  @override
+  String get ticketNumberLabel => 'رقم دورك';
+
+  @override
+  String get aheadOfYouLabel => 'قدامك';
+
+  @override
+  String aheadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count أنفار',
+      one: '1 واحد',
+      zero: 'محدش',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get expectedTimeLabel => 'الوقت المتوقع';
+
+  @override
+  String get appointmentLabel => 'معادك';
+
+  @override
+  String get confirmedQueueNote =>
+      'هنبعتلك إشعار لما يفضل قدامك واحد، وبعدين لما يجي دورك.';
+
+  @override
+  String get confirmedSlotNote => 'هنفكّرك قبل معادك بساعة.';
+
+  @override
+  String get bookingLoadFailed => 'معرفناش نجيب الحجز.';
 }

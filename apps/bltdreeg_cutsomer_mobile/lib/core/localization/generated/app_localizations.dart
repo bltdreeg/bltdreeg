@@ -1591,6 +1591,438 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{index} / {total}'**
   String photoCounter(int index, int total);
+
+  /// No description provided for @bookingWhenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'امتى تحب تيجي؟'**
+  String get bookingWhenTitle;
+
+  /// No description provided for @bookingNowTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دلوقتي — ادخل الطابور'**
+  String get bookingNowTitle;
+
+  /// No description provided for @bookingNowWait.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش دور — هتدخل على طول} =1{قدامك 1 بس · ~{minutes} د} other{قدامك {count} · ~{minutes} د}}'**
+  String bookingNowWait(int count, int minutes);
+
+  /// No description provided for @bookingNowClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالون مقفول دلوقتي — احجز معاد'**
+  String get bookingNowClosed;
+
+  /// No description provided for @bookingScheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز معاد'**
+  String get bookingScheduleTitle;
+
+  /// No description provided for @bookingScheduleSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار اليوم والساعة اللي تناسبك'**
+  String get bookingScheduleSubtitle;
+
+  /// No description provided for @bookingDurationNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة خدماتك {minutes} دقيقة'**
+  String bookingDurationNote(int minutes);
+
+  /// No description provided for @slotPeriodMorning.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصبح'**
+  String get slotPeriodMorning;
+
+  /// No description provided for @slotPeriodAfternoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد الضهر'**
+  String get slotPeriodAfternoon;
+
+  /// No description provided for @slotPeriodEvening.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالليل'**
+  String get slotPeriodEvening;
+
+  /// No description provided for @slotsDayClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالون أجازة اليوم ده — اختار يوم تاني.'**
+  String get slotsDayClosed;
+
+  /// No description provided for @slotsDayFull.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش مواعيد فاضية اليوم ده — جرّب يوم تاني.'**
+  String get slotsDayFull;
+
+  /// No description provided for @slotsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نجيب المواعيد.'**
+  String get slotsLoadFailed;
+
+  /// No description provided for @a11ySlotUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'{time}، محجوز'**
+  String a11ySlotUnavailable(String time);
+
+  /// No description provided for @bookingContinueToBarber.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمّل — اختار الحلاق'**
+  String get bookingContinueToBarber;
+
+  /// No description provided for @bookingBarberTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الحلاق'**
+  String get bookingBarberTitle;
+
+  /// No description provided for @barberAnyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي حلاق متاح'**
+  String get barberAnyTitle;
+
+  /// No description provided for @barberFastestBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسرع'**
+  String get barberFastestBadge;
+
+  /// No description provided for @barberAnySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول واحد يخلّص هيستلمك'**
+  String get barberAnySubtitle;
+
+  /// No description provided for @barberAnySlotSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنختارلك حلاق فاضي في المعاد ده'**
+  String get barberAnySlotSubtitle;
+
+  /// No description provided for @barberPickByName.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو اختار حلاق بالاسم'**
+  String get barberPickByName;
+
+  /// No description provided for @waitImmediate.
+  ///
+  /// In ar, this message translates to:
+  /// **'فوراً'**
+  String get waitImmediate;
+
+  /// No description provided for @waitNoQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش دور'**
+  String get waitNoQueue;
+
+  /// No description provided for @barberFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضي'**
+  String get barberFree;
+
+  /// Approximate minutes, pre-isolated LTR, e.g. ~18
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} د'**
+  String waitApproxShort(String value);
+
+  /// Signed minutes, pre-isolated LTR, e.g. +20
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} د'**
+  String waitExtraMinutes(String value);
+
+  /// No description provided for @peopleAheadOfYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'قدامك {count}'**
+  String peopleAheadOfYou(int count);
+
+  /// No description provided for @peopleAheadOfBarber.
+  ///
+  /// In ar, this message translates to:
+  /// **'قدامه {count}'**
+  String peopleAheadOfBarber(int count);
+
+  /// No description provided for @barberNotInToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش موجود النهارده'**
+  String get barberNotInToday;
+
+  /// No description provided for @barberBusyAtSlot.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش فاضي في المعاد ده'**
+  String get barberBusyAtSlot;
+
+  /// No description provided for @bookingContinueToReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمّل — راجع الحجز'**
+  String get bookingContinueToReview;
+
+  /// No description provided for @bookingReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع الحجز'**
+  String get bookingReviewTitle;
+
+  /// No description provided for @driveDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'{km} كم — {minutes} دقايق بالعربية'**
+  String driveDistance(String km, int minutes);
+
+  /// No description provided for @reviewServicesHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات'**
+  String get reviewServicesHeader;
+
+  /// No description provided for @reviewBarberLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحلاق'**
+  String get reviewBarberLabel;
+
+  /// No description provided for @reviewTimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعاد'**
+  String get reviewTimeLabel;
+
+  /// No description provided for @timingNowLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'دلوقتي — في الطابور'**
+  String get timingNowLabel;
+
+  /// No description provided for @slotDateTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'{day} · {time}'**
+  String slotDateTime(String day, String time);
+
+  /// No description provided for @waitRangeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك خلال {min} لـ {max} دقيقة'**
+  String waitRangeTitle(int min, int max);
+
+  /// No description provided for @waitRightInTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتدخل على طول'**
+  String get waitRightInTitle;
+
+  /// No description provided for @waitAheadAndDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{محدش قدامك} =1{قدامك 1 بس} other{قدامك {count}}} · مدة خدمتك {minutes} دقيقة'**
+  String waitAheadAndDuration(int count, int minutes);
+
+  /// No description provided for @waitLiveNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.'**
+  String get waitLiveNote;
+
+  /// No description provided for @slotAppointmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معادك {day} الساعة {time}'**
+  String slotAppointmentTitle(String day, String time);
+
+  /// No description provided for @slotArriveNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.'**
+  String get slotArriveNote;
+
+  /// No description provided for @policyQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما يجي دورك عندك 5 دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.'**
+  String get policyQueue;
+
+  /// No description provided for @policySlot.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو اتأخرت أكتر من 10 دقايق عن معادك، الحجز بيتلغى.'**
+  String get policySlot;
+
+  /// No description provided for @servicesSubtotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموع الخدمات'**
+  String get servicesSubtotal;
+
+  /// No description provided for @bundleDiscount.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الباقة'**
+  String get bundleDiscount;
+
+  /// No description provided for @totalLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get totalLabel;
+
+  /// No description provided for @payCashNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع كاش في الفرع بعد الخدمة'**
+  String get payCashNote;
+
+  /// No description provided for @confirmJoinQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد ودخّلني الطابور'**
+  String get confirmJoinQueue;
+
+  /// No description provided for @confirmSlotBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الحجز'**
+  String get confirmSlotBooking;
+
+  /// No description provided for @bookingErrorSlotTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعاد ده لسه اتحجز — اختار معاد تاني.'**
+  String get bookingErrorSlotTaken;
+
+  /// No description provided for @bookingErrorBarberUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحلاق ده مش متاح — اختار حلاق تاني.'**
+  String get bookingErrorBarberUnavailable;
+
+  /// No description provided for @bookingErrorSalonClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالون قفل — احجز معاد بدل الطابور.'**
+  String get bookingErrorSalonClosed;
+
+  /// No description provided for @bookingErrorAlreadyInQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'انت في طابور دلوقتي. تابع دورك الأول.'**
+  String get bookingErrorAlreadyInQueue;
+
+  /// No description provided for @actionPickTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار معاد'**
+  String get actionPickTime;
+
+  /// No description provided for @actionPickBarber.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار حلاق'**
+  String get actionPickBarber;
+
+  /// No description provided for @actionTrackTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تابع دورك'**
+  String get actionTrackTurn;
+
+  /// No description provided for @bookingIncompleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز لسه مش كامل'**
+  String get bookingIncompleteTitle;
+
+  /// No description provided for @bookingIncompleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار خدماتك ومعادك من صفحة الصالون الأول.'**
+  String get bookingIncompleteBody;
+
+  /// No description provided for @actionBackToSalon.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارجع للصالون'**
+  String get actionBackToSalon;
+
+  /// No description provided for @confirmedQueueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام — انت في الطابور'**
+  String get confirmedQueueTitle;
+
+  /// No description provided for @confirmedSlotTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام — حجزك اتأكد'**
+  String get confirmedSlotTitle;
+
+  /// No description provided for @ticketNumberLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم دورك'**
+  String get ticketNumberLabel;
+
+  /// No description provided for @aheadOfYouLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'قدامك'**
+  String get aheadOfYouLabel;
+
+  /// No description provided for @aheadCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{محدش} =1{1 واحد} other{{count} أنفار}}'**
+  String aheadCount(int count);
+
+  /// No description provided for @expectedTimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت المتوقع'**
+  String get expectedTimeLabel;
+
+  /// No description provided for @appointmentLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'معادك'**
+  String get appointmentLabel;
+
+  /// No description provided for @confirmedQueueNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنبعتلك إشعار لما يفضل قدامك واحد، وبعدين لما يجي دورك.'**
+  String get confirmedQueueNote;
+
+  /// No description provided for @confirmedSlotNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنفكّرك قبل معادك بساعة.'**
+  String get confirmedSlotNote;
+
+  /// No description provided for @bookingLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نجيب الحجز.'**
+  String get bookingLoadFailed;
 }
 
 class _AppLocalizationsDelegate

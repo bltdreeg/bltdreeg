@@ -9,6 +9,10 @@ import '../../features/auth/presentation/login/login_page.dart';
 import '../../features/auth/presentation/otp/otp_page.dart';
 import '../../features/auth/presentation/register/register_page.dart';
 import '../../features/auth/presentation/session/auth_session_cubit.dart';
+import '../../features/booking/presentation/pages/booking_barber_page.dart';
+import '../../features/booking/presentation/pages/booking_confirmed_page.dart';
+import '../../features/booking/presentation/pages/booking_review_page.dart';
+import '../../features/booking/presentation/pages/booking_slot_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/salon_details/domain/salon_details.dart';
@@ -225,31 +229,22 @@ final class AppRouter {
           GoRoute(
             name: AppRoutes.bookingSlot.name,
             path: AppRoutes.bookingSlot.path,
-            builder: (context, state) {
-              final id = state.pathParameters[RouteParams.salonId]!;
-              return RoutePlaceholderPage(
-                title: 'Booking 1/3 — slot',
-                links: [('→ barber', () => context.pushBookingBarber(id))],
-              );
-            },
+            builder: (_, state) => BookingSlotPage(
+              salonId: state.pathParameters[RouteParams.salonId]!,
+            ),
           ),
           GoRoute(
             name: AppRoutes.bookingBarber.name,
             path: AppRoutes.bookingBarber.path,
-            builder: (context, state) {
-              final id = state.pathParameters[RouteParams.salonId]!;
-              return RoutePlaceholderPage(
-                title: 'Booking 2/3 — barber',
-                links: [('→ review', () => context.pushBookingReview(id))],
-              );
-            },
+            builder: (_, state) => BookingBarberPage(
+              salonId: state.pathParameters[RouteParams.salonId]!,
+            ),
           ),
           GoRoute(
             name: AppRoutes.bookingReview.name,
             path: AppRoutes.bookingReview.path,
-            builder: (context, _) => RoutePlaceholderPage(
-              title: 'Booking 3/3 — review',
-              links: [('→ confirm', () => context.goBookingConfirmed('b1'))],
+            builder: (_, state) => BookingReviewPage(
+              salonId: state.pathParameters[RouteParams.salonId]!,
             ),
           ),
         ],
@@ -258,15 +253,14 @@ final class AppRouter {
         parentNavigatorKey: _rootKey,
         name: AppRoutes.bookingConfirmed.name,
         path: AppRoutes.bookingConfirmed.path,
-        builder: (context, state) => RoutePlaceholderPage(
-          title: 'Entered queue',
-          links: [
-            (
-              '→ track',
-              () =>
-                  context.goQueue(state.pathParameters[RouteParams.bookingId]!),
-            ),
-          ],
+        pageBuilder: (_, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          transitionDuration: AppMotion.medium,
+          transitionsBuilder: (_, animation, _, child) =>
+              FadeTransition(opacity: animation, child: child),
+          child: BookingConfirmedPage(
+            bookingId: state.pathParameters[RouteParams.bookingId]!,
+          ),
         ),
       ),
       GoRoute(

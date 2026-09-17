@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/assets/app_assets.dart';
 import '../../../../core/di/injection.dart';
@@ -16,6 +15,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_tone.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/context_extensions.dart';
+import '../../../../core/utils/external_links.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../favorites/presentation/widgets/favorite_button.dart';
 import '../../../salons/domain/entities/salon_summary.dart';
@@ -590,12 +590,10 @@ class _InfoBlock extends StatelessWidget {
                   size: AppButtonSize.sm,
                   fontSize: 13.5,
                   icon: AppAssets.iconNavigation,
-                  onPressed: () => _open(
+                  onPressed: () => ExternalLinks.directions(
                     context,
-                    Uri.parse(
-                      'https://www.google.com/maps/dir/?api=1&destination='
-                      '${details.latitude},${details.longitude}',
-                    ),
+                    latitude: details.latitude,
+                    longitude: details.longitude,
                   ),
                 ),
               ),
@@ -607,8 +605,10 @@ class _InfoBlock extends StatelessWidget {
                   size: AppButtonSize.sm,
                   fontSize: 13.5,
                   icon: AppAssets.iconPhone,
-                  onPressed: () =>
-                      _open(context, Uri(scheme: 'tel', path: details.phone)),
+                  onPressed: () => ExternalLinks.open(
+                    context,
+                    Uri(scheme: 'tel', path: details.phone),
+                  ),
                 ),
               ),
             ],
@@ -616,15 +616,6 @@ class _InfoBlock extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _open(BuildContext context, Uri uri) async {
-    final message = context.l10n.cantOpenApp;
-    final opened = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    ).catchError((Object _) => false);
-    if (!opened && context.mounted) context.showToast(message);
   }
 }
 

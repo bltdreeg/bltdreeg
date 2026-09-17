@@ -2,8 +2,6 @@ import 'package:get_it/get_it.dart';
 
 import '../../core/config/app_environment.dart';
 import '../../core/sync/outbox_processor.dart';
-import '../booking/data/in_memory_booking_draft_repository.dart';
-import '../booking/domain/booking_draft.dart';
 import '../favorites/data/favorites_data.dart';
 import '../favorites/domain/favorites_repository.dart';
 import '../favorites/domain/usecases.dart';
@@ -17,7 +15,7 @@ import 'presentation/pages/salon_gallery_page.dart';
 import 'presentation/salon_details_cubit.dart';
 
 /// Salon page + the pieces it owns or starts: favorites, recently viewed and
-/// the booking draft (service selection).
+/// the booking draft (service selection, registered by the booking module).
 void registerSalonDetailsModule(GetIt sl, AppEnvironment env) {
   sl
     ..registerLazySingleton(
@@ -53,9 +51,6 @@ void registerSalonDetailsModule(GetIt sl, AppEnvironment env) {
     ..registerFactory(() => WatchFavoriteIds(sl()))
     ..registerFactory(() => ToggleFavorite(sl()))
     ..registerLazySingleton(() => RecentlyViewedRepository(sl()))
-    ..registerLazySingleton<BookingDraftRepository>(
-      InMemoryBookingDraftRepository.new,
-    )
     ..registerFactoryParam<SalonDetailsCubit, String, void>(
       (salonId, _) => SalonDetailsCubit(
         salonId: salonId,

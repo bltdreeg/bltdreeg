@@ -291,26 +291,42 @@ final class FakeSalonCatalogRemoteDataSource
 
   /// One shared drift ticker for all listeners (home, search, salon page),
   /// like a single server-side queue. Runs only while someone listens.
-  late final Stream<Map<String, QueueLoad>> _driftStream = () {
-    Timer? timer;
-    // Lives as long as this data source (an app-lifetime singleton).
-    // ignore: close_sinks
-    late final StreamController<Map<String, QueueLoad>> controller;
-    controller = StreamController<Map<String, QueueLoad>>.broadcast(
-      onListen: () => timer = Timer.periodic(driftInterval!, (_) {
-        if (!_connectivity.isOnline) {
-          controller.addError(
-            const NetworkException('fake-socket: disconnected'),
-          );
-          return;
-        }
-        final changed = _drift();
-        if (changed.isNotEmpty) controller.add(changed);
-      }),
-      onCancel: () => timer?.cancel(),
+  Stream<Map<String, QueueLoad>> get _driftStream => _driftController.stream;
+
+  Timer? _driftTimer;
+
+  // Lives as long as this data source (an app-lifetime singleton).
+  // ignore: close_sinks
+  late final StreamController<Map<String, QueueLoad>> _driftController =
+      StreamController<Map<String, QueueLoad>>.broadcast(
+        onListen: () => _driftTimer = Timer.periodic(driftInterval!, (_) {
+          if (!_connectivity.isOnline) {
+            _driftController.addError(
+              const NetworkException('fake-socket: disconnected'),
+            );
+            return;
+          }
+          final changed = _drift();
+          if (changed.isNotEmpty) _driftController.add(changed);
+        }),
+        onCancel: () => _driftTimer?.cancel(),
+      );
+
+  /// Adds one person to [salonId]'s queue (a customer joined) and pushes the
+  /// new load to live listeners. Returns the load before joining: the people
+  /// ahead of the new customer.
+  QueueLoad joinQueue(String salonId) {
+    final index = _salons.indexWhere((s) => s.id == salonId);
+    final salon = _salons[index];
+    final ahead = salon.queue.peopleAhead + 1;
+    final load = QueueLoad(
+      peopleAhead: ahead,
+      waitMinutes: ahead * minutesPerPerson(salonId),
     );
-    return controller.stream;
-  }();
+    _salons[index] = salon.withQueue(load);
+    if (_driftController.hasListener) _driftController.add({salonId: load});
+    return salon.queue;
+  }
 
   /// Current state of one salon (fake salon-details backend).
   SalonSummary? salonById(String id) =>

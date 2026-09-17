@@ -800,5 +800,188 @@
         "type": "int"
       }
     }
-  }
+  },
+  "bookingWhenTitle": "امتى تحب تيجي؟",
+  "bookingNowTitle": "دلوقتي — ادخل الطابور",
+  "bookingNowWait": "{count, plural, =0{مفيش دور — هتدخل على طول} =1{قدامك 1 بس · ~{minutes} د} other{قدامك {count} · ~{minutes} د}}",
+  "@bookingNowWait": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "bookingNowClosed": "الصالون مقفول دلوقتي — احجز معاد",
+  "bookingScheduleTitle": "احجز معاد",
+  "bookingScheduleSubtitle": "اختار اليوم والساعة اللي تناسبك",
+  "bookingDurationNote": "مدة خدماتك {minutes} دقيقة",
+  "@bookingDurationNote": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "slotPeriodMorning": "الصبح",
+  "slotPeriodAfternoon": "بعد الضهر",
+  "slotPeriodEvening": "بالليل",
+  "slotsDayClosed": "الصالون أجازة اليوم ده — اختار يوم تاني.",
+  "slotsDayFull": "مفيش مواعيد فاضية اليوم ده — جرّب يوم تاني.",
+  "slotsLoadFailed": "معرفناش نجيب المواعيد.",
+  "a11ySlotUnavailable": "{time}، محجوز",
+  "@a11ySlotUnavailable": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "bookingContinueToBarber": "كمّل — اختار الحلاق",
+  "bookingBarberTitle": "اختار الحلاق",
+  "barberAnyTitle": "أي حلاق متاح",
+  "barberFastestBadge": "الأسرع",
+  "barberAnySubtitle": "أول واحد يخلّص هيستلمك",
+  "barberAnySlotSubtitle": "هنختارلك حلاق فاضي في المعاد ده",
+  "barberPickByName": "أو اختار حلاق بالاسم",
+  "waitImmediate": "فوراً",
+  "waitNoQueue": "مفيش دور",
+  "barberFree": "فاضي",
+  "waitApproxShort": "{value} د",
+  "@waitApproxShort": {
+    "description": "Approximate minutes, pre-isolated LTR, e.g. ~18",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "waitExtraMinutes": "{value} د",
+  "@waitExtraMinutes": {
+    "description": "Signed minutes, pre-isolated LTR, e.g. +20",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "peopleAheadOfYou": "قدامك {count}",
+  "@peopleAheadOfYou": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "peopleAheadOfBarber": "قدامه {count}",
+  "@peopleAheadOfBarber": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "barberNotInToday": "مش موجود النهارده",
+  "barberBusyAtSlot": "مش فاضي في المعاد ده",
+  "bookingContinueToReview": "كمّل — راجع الحجز",
+  "bookingReviewTitle": "راجع الحجز",
+  "driveDistance": "{km} كم — {minutes} دقايق بالعربية",
+  "@driveDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewServicesHeader": "الخدمات",
+  "reviewBarberLabel": "الحلاق",
+  "reviewTimeLabel": "المعاد",
+  "timingNowLabel": "دلوقتي — في الطابور",
+  "slotDateTime": "{day} · {time}",
+  "@slotDateTime": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitRangeTitle": "دورك خلال {min} لـ {max} دقيقة",
+  "@waitRangeTitle": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "waitRightInTitle": "هتدخل على طول",
+  "waitAheadAndDuration": "{count, plural, =0{محدش قدامك} =1{قدامك 1 بس} other{قدامك {count}}} · مدة خدمتك {minutes} دقيقة",
+  "@waitAheadAndDuration": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "waitLiveNote": "الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.",
+  "slotAppointmentTitle": "معادك {day} الساعة {time}",
+  "@slotAppointmentTitle": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "slotArriveNote": "تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.",
+  "policyQueue": "لما يجي دورك عندك 5 دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.",
+  "policySlot": "لو اتأخرت أكتر من 10 دقايق عن معادك، الحجز بيتلغى.",
+  "servicesSubtotal": "مجموع الخدمات",
+  "bundleDiscount": "خصم الباقة",
+  "totalLabel": "الإجمالي",
+  "payCashNote": "الدفع كاش في الفرع بعد الخدمة",
+  "confirmJoinQueue": "أكّد ودخّلني الطابور",
+  "confirmSlotBooking": "أكّد الحجز",
+  "bookingErrorSlotTaken": "المعاد ده لسه اتحجز — اختار معاد تاني.",
+  "bookingErrorBarberUnavailable": "الحلاق ده مش متاح — اختار حلاق تاني.",
+  "bookingErrorSalonClosed": "الصالون قفل — احجز معاد بدل الطابور.",
+  "bookingErrorAlreadyInQueue": "انت في طابور دلوقتي. تابع دورك الأول.",
+  "actionPickTime": "اختار معاد",
+  "actionPickBarber": "اختار حلاق",
+  "actionTrackTurn": "تابع دورك",
+  "bookingIncompleteTitle": "الحجز لسه مش كامل",
+  "bookingIncompleteBody": "اختار خدماتك ومعادك من صفحة الصالون الأول.",
+  "actionBackToSalon": "ارجع للصالون",
+  "confirmedQueueTitle": "تمام — انت في الطابور",
+  "confirmedSlotTitle": "تمام — حجزك اتأكد",
+  "ticketNumberLabel": "رقم دورك",
+  "aheadOfYouLabel": "قدامك",
+  "aheadCount": "{count, plural, =0{محدش} =1{1 واحد} other{{count} أنفار}}",
+  "@aheadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "expectedTimeLabel": "الوقت المتوقع",
+  "appointmentLabel": "معادك",
+  "confirmedQueueNote": "هنبعتلك إشعار لما يفضل قدامك واحد، وبعدين لما يجي دورك.",
+  "confirmedSlotNote": "هنفكّرك قبل معادك بساعة.",
+  "bookingLoadFailed": "معرفناش نجيب الحجز."
 }

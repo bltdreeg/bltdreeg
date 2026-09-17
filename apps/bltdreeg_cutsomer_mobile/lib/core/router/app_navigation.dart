@@ -70,6 +70,12 @@ extension AppNavigation on BuildContext {
     pathParameters: {RouteParams.salonId: salonId},
   );
 
+  /// Replaces the stack with the salon page (booking dead ends).
+  void goSalon(String salonId) => goNamed(
+    AppRoutes.salon.name,
+    pathParameters: {RouteParams.salonId: salonId},
+  );
+
   Future<void> pushSalonGallery(String salonId) => pushNamed(
     AppRoutes.salonGallery.name,
     pathParameters: {RouteParams.salonId: salonId},
@@ -100,6 +106,21 @@ extension AppNavigation on BuildContext {
     AppRoutes.bookingReview.name,
     pathParameters: {RouteParams.salonId: salonId},
   );
+
+  /// Back to the time step ("غيّر"), dropping the later steps.
+  void goBookingSlot(String salonId) => goNamed(
+    AppRoutes.bookingSlot.name,
+    pathParameters: {RouteParams.salonId: salonId},
+  );
+
+  /// Back to the barber step: a pop when it's underneath (the usual case),
+  /// otherwise rebuilt from the route tree (deep link to review).
+  void backToBookingBarber(String salonId) => canPop()
+      ? pop()
+      : goNamed(
+          AppRoutes.bookingBarber.name,
+          pathParameters: {RouteParams.salonId: salonId},
+        );
 
   /// Replaces the whole booking flow with the confirmation screen.
   void goBookingConfirmed(String bookingId) => goNamed(
