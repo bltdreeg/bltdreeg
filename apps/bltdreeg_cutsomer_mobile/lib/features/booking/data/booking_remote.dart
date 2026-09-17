@@ -1,3 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../../../core/config/app_environment.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/fake_server.dart';
@@ -18,12 +24,22 @@ abstract interface class BookingRemoteDataSource {
   Future<Booking> confirm(BookingRequest request);
 
   Future<Booking> fetch(String bookingId);
+
+  /// Live pushes of the booking as the queue moves.
+  Stream<Booking> watch(String bookingId);
+
+  Future<Booking> checkIn(String bookingId);
+
+  Future<Booking> postpone(String bookingId);
+
+  Future<Booking> leave(String bookingId);
 }
 
 final class ApiBookingRemoteDataSource implements BookingRemoteDataSource {
-  const ApiBookingRemoteDataSource(this._api);
+  const ApiBookingRemoteDataSource(this._api, this._env);
 
   final ApiClient _api;
+  final AppEnvironment _env;
 
   @override
   Future<DaySchedule> daySchedule({
@@ -54,18 +70,55 @@ final class ApiBookingRemoteDataSource implements BookingRemoteDataSource {
   @override
   Future<Booking> fetch(String bookingId) async =>
       BookingModel.fromJson(await _api.getJson('/bookings/$bookingId'));
+
+  @override
+  Stream<Booking> watch(String bookingId) {
+    final channel = WebSocketChannel.connect(
+      Uri.parse('${_env.queueSocketUrl}/bookings/$bookingId'),
+    );
+    return channel.stream.map(
+      (message) => BookingModel.fromJson(
+        jsonDecode(message as String) as Map<String, Object?>,
+      ),
+    );
+  }
+
+  @override
+  Future<Booking> checkIn(String bookingId) => _action(bookingId, 'check-in');
+
+  @override
+  Future<Booking> postpone(String bookingId) => _action(bookingId, 'postpone');
+
+  @override
+  Future<Booking> leave(String bookingId) => _action(bookingId, 'leave');
+
+  Future<Booking> _action(String bookingId, String action) async =>
+      BookingModel.fromJson(
+        await _api.postJson('/bookings/$bookingId/$action'),
+      );
 }
 
 /// In-memory booking backend on top of the fake salon backends: slots follow
 /// each salon's hours and barbers, joining "now" really adds a person to the
 /// salon's live queue, and confirmed slots stop being bookable.
+///
+/// Queue bookings move on their own: every [queueStepInterval] the person at
+/// the front finishes. At the front the customer has [Booking.turnGrace] to
+/// check in, is postponed once if they don't, then marked missed. A checked
+/// in service completes after three steps.
 final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
   FakeBookingRemoteDataSource({
     required this._server,
     required this._catalog,
     required this._details,
+    this.queueStepInterval,
     DateTime Function()? clock,
   }) : _clock = clock ?? DateTime.now;
+
+  /// Null: the queue only moves through [tick] (tests).
+  final Duration? queueStepInterval;
+
+  static const serviceSteps = 3;
 
   final FakeServer _server;
   final FakeSalonCatalogRemoteDataSource _catalog;
@@ -78,9 +131,18 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
   static const leadTime = Duration(minutes: 20);
 
   final _bookings = <String, Booking>{};
-  final _byRequest = <String, Booking>{};
-  final _holds = <({String barberId, DateTime start, DateTime end})>[];
+
+  /// Idempotency: request id → booking id.
+  final _requestIds = <String, String>{};
+  final _holds =
+      <({String bookingId, String barberId, DateTime start, DateTime end})>[];
+  final _serviceSteps = <String, int>{};
   var _nextId = 1;
+
+  // Lives as long as this data source (an app-lifetime singleton).
+  // ignore: close_sinks
+  final _pushes = StreamController<Booking>.broadcast();
+  Timer? _ticker;
 
   @override
   Future<DaySchedule> daySchedule({
@@ -91,15 +153,162 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
 
   @override
   Future<Booking> confirm(BookingRequest request) => _server(
-    () => _byRequest[request.requestId] ??= _confirm(request),
+    () {
+      if (_requestIds[request.requestId] case final id?) return _bookings[id]!;
+      final booking = _confirm(request);
+      _requestIds[request.requestId] = booking.id;
+      _ensureTicker();
+      return booking;
+    },
     // A commit that assigns a queue number feels heavier than a read.
     latency: const Duration(milliseconds: 1100),
   );
 
   @override
-  Future<Booking> fetch(String bookingId) => _server(
-    () => _bookings[bookingId] ?? (throw NotFoundException(bookingId)),
+  Future<Booking> fetch(String bookingId) => _server(() => _require(bookingId));
+
+  @override
+  Stream<Booking> watch(String bookingId) =>
+      _pushes.stream.where((b) => b.id == bookingId);
+
+  @override
+  Future<Booking> checkIn(String bookingId) => _server(() {
+    final booking = _require(bookingId);
+    _requireActive(booking);
+    if (booking.status != BookingStatus.yourTurn) {
+      throw const RuleException(BookingRuleCodes.notYourTurn);
+    }
+    _serviceSteps[bookingId] = 0;
+    return _update(
+      booking.copyWith(
+        status: BookingStatus.inService,
+        clearTurnStartedAt: true,
+      ),
+    );
+  });
+
+  @override
+  Future<Booking> postpone(String bookingId) => _server(() {
+    final booking = _require(bookingId);
+    _requireActive(booking);
+    if (booking.status != BookingStatus.yourTurn) {
+      throw const RuleException(BookingRuleCodes.notYourTurn);
+    }
+    if (booking.postponeUsed) {
+      throw const RuleException(BookingRuleCodes.postponeUsed);
+    }
+    return _update(_postponed(booking));
+  });
+
+  @override
+  Future<Booking> leave(String bookingId) => _server(() {
+    final booking = _require(bookingId);
+    _requireActive(booking);
+    if (booking.status == BookingStatus.inService) {
+      throw const RuleException(BookingRuleCodes.bookingFinished);
+    }
+    if (booking.isQueue) {
+      _catalog.leaveQueue(booking.salonId);
+    } else {
+      _holds.removeWhere((h) => h.bookingId == bookingId);
+    }
+    return _update(booking.copyWith(status: BookingStatus.cancelled));
+  });
+
+  /// Moves every running queue booking one step (see the class docs).
+  void tick() {
+    if (!_server.isOnline) {
+      if (_pushes.hasListener) {
+        _pushes.addError(const NetworkException('fake-socket: disconnected'));
+      }
+      return;
+    }
+    final now = _clock();
+    for (final booking in [..._bookings.values]) {
+      final next = _advance(booking, now);
+      if (next != booking) _update(next);
+    }
+    if (!_bookings.values.any(_isRunning)) {
+      _ticker?.cancel();
+      _ticker = null;
+    }
+  }
+
+  Booking _advance(Booking booking, DateTime now) {
+    switch (booking.status) {
+      case BookingStatus.waiting:
+        // The customer at the front finished.
+        _catalog.leaveQueue(booking.salonId);
+        final ahead = booking.peopleAhead - 1;
+        if (ahead <= 0) {
+          return booking.copyWith(
+            status: BookingStatus.yourTurn,
+            peopleAhead: 0,
+            waitMinutes: 0,
+            turnStartedAt: now,
+          );
+        }
+        return booking.copyWith(
+          peopleAhead: ahead,
+          waitMinutes: ahead * _catalog.minutesPerPerson(booking.salonId),
+        );
+      case BookingStatus.yourTurn:
+        if (now.isBefore(booking.turnDeadline!)) return booking;
+        return booking.postponeUsed
+            ? booking.copyWith(
+                status: BookingStatus.missed,
+                clearTurnStartedAt: true,
+              )
+            : _postponed(booking);
+      case BookingStatus.inService:
+        final steps = (_serviceSteps[booking.id] ?? 0) + 1;
+        _serviceSteps[booking.id] = steps;
+        return steps >= serviceSteps
+            ? booking.copyWith(status: BookingStatus.completed)
+            : booking;
+      case BookingStatus.upcoming ||
+          BookingStatus.completed ||
+          BookingStatus.cancelled ||
+          BookingStatus.missed:
+        return booking;
+    }
+  }
+
+  Booking _postponed(Booking booking) => booking.copyWith(
+    status: BookingStatus.waiting,
+    peopleAhead: 1,
+    waitMinutes: _catalog.minutesPerPerson(booking.salonId),
+    clearTurnStartedAt: true,
+    postponeUsed: true,
   );
+
+  static bool _isRunning(Booking b) =>
+      b.isQueue &&
+      (b.status == BookingStatus.waiting ||
+          b.status == BookingStatus.yourTurn ||
+          b.status == BookingStatus.inService);
+
+  void _ensureTicker() {
+    final interval = queueStepInterval;
+    if (interval == null || _ticker != null) return;
+    if (!_bookings.values.any(_isRunning)) return;
+    _ticker = Timer.periodic(interval, (_) => tick());
+  }
+
+  Booking _require(String bookingId) =>
+      _bookings[bookingId] ?? (throw NotFoundException(bookingId));
+
+  static void _requireActive(Booking booking) {
+    if (!booking.status.isActive) {
+      throw const RuleException(BookingRuleCodes.bookingFinished);
+    }
+  }
+
+  Booking _update(Booking booking) {
+    _bookings[booking.id] = booking;
+    if (_pushes.hasListener) _pushes.add(booking);
+    return booking;
+  }
 
   // ---- rules -----------------------------------------------------------------
 
@@ -221,7 +430,7 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
       throw const RuleException(BookingRuleCodes.salonClosed);
     }
     final active = _bookings.values
-        .where((b) => b.status == BookingStatus.waiting)
+        .where((b) => b.isQueue && b.status.isActive)
         .firstOrNull;
     if (active != null) {
       throw RuleException(
@@ -237,12 +446,19 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
       BarberWorking(:final queue) => queue,
       _ => before,
     };
-    return build(
+    final booking = build(
       status: BookingStatus.waiting,
       ticketNumber: load.peopleAhead + 1,
       peopleAhead: load.peopleAhead,
       waitMinutes: load.waitMinutes,
     );
+    // Nobody ahead: the turn starts right away.
+    return load.peopleAhead == 0
+        ? booking.copyWith(
+            status: BookingStatus.yourTurn,
+            turnStartedAt: _clock(),
+          )
+        : booking;
   }
 
   Booking _bookSlot(
@@ -265,6 +481,7 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
       );
     }
     _holds.add((
+      bookingId: 'bk$_nextId',
       barberId: barberId,
       start: start,
       end: start.add(Duration(minutes: request.totalMinutes)),

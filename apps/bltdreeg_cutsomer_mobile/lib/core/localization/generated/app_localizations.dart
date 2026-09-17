@@ -2023,6 +2023,354 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'معرفناش نجيب الحجز.'**
   String get bookingLoadFailed;
+
+  /// No description provided for @queueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك'**
+  String get queueTitle;
+
+  /// No description provided for @queueAheadPeople.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{محدش قدامك} =1{فاضلك واحد بس} =2{قدامك 2} other{قدامك {count} أنفار}}'**
+  String queueAheadPeople(int count);
+
+  /// No description provided for @stageJoined.
+  ///
+  /// In ar, this message translates to:
+  /// **'دخلت الطابور'**
+  String get stageJoined;
+
+  /// No description provided for @stageApproaching.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرّب دورك'**
+  String get stageApproaching;
+
+  /// No description provided for @stageYourTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك دلوقتي'**
+  String get stageYourTurn;
+
+  /// No description provided for @waitApproxSpaced.
+  ///
+  /// In ar, this message translates to:
+  /// **'~ {minutes} د'**
+  String waitApproxSpaced(int minutes);
+
+  /// No description provided for @leaveAtLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتحرك الساعة'**
+  String get leaveAtLabel;
+
+  /// No description provided for @leaveAtNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'دلوقتي'**
+  String get leaveAtNow;
+
+  /// No description provided for @distanceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة'**
+  String get distanceLabel;
+
+  /// No description provided for @liveNowHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي شغّال دلوقتي'**
+  String get liveNowHeader;
+
+  /// No description provided for @barbersOnShiftNamed.
+  ///
+  /// In ar, this message translates to:
+  /// **'{names} في الشيفت'**
+  String barbersOnShiftNamed(String names);
+
+  /// No description provided for @listTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'{a} و{b}'**
+  String listTwo(String a, String b);
+
+  /// No description provided for @listSeparator.
+  ///
+  /// In ar, this message translates to:
+  /// **'، '**
+  String get listSeparator;
+
+  /// No description provided for @servicesJoiner.
+  ///
+  /// In ar, this message translates to:
+  /// **' + '**
+  String get servicesJoiner;
+
+  /// No description provided for @moveNowTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتحرّك دلوقتي'**
+  String get moveNowTitle;
+
+  /// No description provided for @moveNowBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشوار {travel} دقايق — دورك بعد {wait} دقايق'**
+  String moveNowBody(int travel, int wait);
+
+  /// No description provided for @openDirectionsToSalon.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الاتجاهات للصالون'**
+  String get openDirectionsToSalon;
+
+  /// No description provided for @leaveQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلع من الطابور'**
+  String get leaveQueue;
+
+  /// No description provided for @leaveDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطلع من الطابور؟'**
+  String get leaveDialogTitle;
+
+  /// No description provided for @leaveDialogBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك رقم {number} هيروح لحد تاني ومش هينفع ترجعه. لو دخلت تاني هتبدأ من آخر الطابور.'**
+  String leaveDialogBody(int number);
+
+  /// No description provided for @leaveDialogNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخروج المتكرر من الطوابير بيقلّل تقييم الالتزام بتاعك.'**
+  String get leaveDialogNote;
+
+  /// No description provided for @leaveDialogConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيوه، اطلعني'**
+  String get leaveDialogConfirm;
+
+  /// No description provided for @leaveDialogStay.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليني في الطابور'**
+  String get leaveDialogStay;
+
+  /// No description provided for @yourTurnTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حان دورك'**
+  String get yourTurnTitle;
+
+  /// No description provided for @yourTurnBarberWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل على الكرسي — {barber} مستنيك'**
+  String yourTurnBarberWaiting(String barber);
+
+  /// No description provided for @yourTurnAnyBarber.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل على الكرسي — الحلاق مستنيك'**
+  String get yourTurnAnyBarber;
+
+  /// No description provided for @yourNumberLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقمك'**
+  String get yourNumberLabel;
+
+  /// No description provided for @timeLeftLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضلك'**
+  String get timeLeftLabel;
+
+  /// No description provided for @yourTurnGraceNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو ما حضرتش خلال 5 دقايق، دورك هيتأخر مركز واحد'**
+  String get yourTurnGraceNote;
+
+  /// No description provided for @yourTurnGraceNoteFinal.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو ما حضرتش خلال 5 دقايق، الحجز هيتلغي'**
+  String get yourTurnGraceNoteFinal;
+
+  /// No description provided for @imAtSalon.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا في المحل'**
+  String get imAtSalon;
+
+  /// No description provided for @postponeOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا جاي — أجّلني واحد'**
+  String get postponeOne;
+
+  /// No description provided for @postponeUsedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدمت التأجيل قبل كده'**
+  String get postponeUsedLabel;
+
+  /// No description provided for @postponedToast.
+  ///
+  /// In ar, this message translates to:
+  /// **'أجّلناك مركز واحد — فاضلك واحد'**
+  String get postponedToast;
+
+  /// No description provided for @inServiceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انت على الكرسي'**
+  String get inServiceTitle;
+
+  /// No description provided for @inServiceBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.'**
+  String get inServiceBody;
+
+  /// No description provided for @completedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نعيماً!'**
+  String get completedTitle;
+
+  /// No description provided for @completedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلصت في {salon}. رأيك بيساعد غيرك يختار صح.'**
+  String completedBody(String salon);
+
+  /// No description provided for @rateVisitAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم زيارتك'**
+  String get rateVisitAction;
+
+  /// No description provided for @cancelledTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خرجت من الطابور'**
+  String get cancelledTitle;
+
+  /// No description provided for @cancelledBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك راح لحد تاني. تقدر تحجز تاني في أي وقت.'**
+  String get cancelledBody;
+
+  /// No description provided for @bookingCancelledTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز اتلغى'**
+  String get bookingCancelledTitle;
+
+  /// No description provided for @bookingCancelledBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعاد اتفتح لغيرك. تقدر تحجز معاد تاني في أي وقت.'**
+  String get bookingCancelledBody;
+
+  /// No description provided for @missedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك فاتك'**
+  String get missedTitle;
+
+  /// No description provided for @missedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما حضرتش في الوقت فالحجز اتلغى. تقدر تدخل الطابور تاني.'**
+  String get missedBody;
+
+  /// No description provided for @bookAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز تاني'**
+  String get bookAgain;
+
+  /// No description provided for @upcomingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجزك جاي'**
+  String get upcomingTitle;
+
+  /// No description provided for @cancelBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغي الحجز'**
+  String get cancelBooking;
+
+  /// No description provided for @cancelDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلغي الحجز؟'**
+  String get cancelDialogTitle;
+
+  /// No description provided for @cancelDialogBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'معادك {time} هيتفتح لغيرك.'**
+  String cancelDialogBody(String time);
+
+  /// No description provided for @cancelDialogConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيوه، الغيه'**
+  String get cancelDialogConfirm;
+
+  /// No description provided for @cancelDialogKeep.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليه'**
+  String get cancelDialogKeep;
+
+  /// No description provided for @queueErrorNotYourTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مجاش دورك.'**
+  String get queueErrorNotYourTurn;
+
+  /// No description provided for @queueErrorPostponeUsed.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدمت التأجيل مرة قبل كده.'**
+  String get queueErrorPostponeUsed;
+
+  /// No description provided for @queueErrorFinished.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز ده خلص خلاص.'**
+  String get queueErrorFinished;
+
+  /// No description provided for @queueActionOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'محتاج نت عشان تعمل ده.'**
+  String get queueActionOffline;
+
+  /// No description provided for @a11yLiveOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش متحدّث'**
+  String get a11yLiveOffline;
+
+  /// No description provided for @durationLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة الخدمة'**
+  String get durationLabel;
 }
 
 class _AppLocalizationsDelegate

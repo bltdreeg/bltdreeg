@@ -15,6 +15,7 @@ const testEnvironment = AppEnvironment(
   queueSocketUrl: 'wss://test.invalid',
   simulatedLatency: Duration.zero,
   fakeLiveUpdateInterval: null,
+  fakeQueueStepInterval: null,
 );
 
 /// Resets the service locator with in-memory preferences and a fake

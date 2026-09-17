@@ -1366,4 +1366,209 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingLoadFailed => 'معرفناش نجيب الحجز.';
+
+  @override
+  String get queueTitle => 'دورك';
+
+  @override
+  String queueAheadPeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'قدامك $count أنفار',
+      two: 'قدامك 2',
+      one: 'فاضلك واحد بس',
+      zero: 'محدش قدامك',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get stageJoined => 'دخلت الطابور';
+
+  @override
+  String get stageApproaching => 'قرّب دورك';
+
+  @override
+  String get stageYourTurn => 'دورك دلوقتي';
+
+  @override
+  String waitApproxSpaced(int minutes) {
+    return '~ $minutes د';
+  }
+
+  @override
+  String get leaveAtLabel => 'تتحرك الساعة';
+
+  @override
+  String get leaveAtNow => 'دلوقتي';
+
+  @override
+  String get distanceLabel => 'المسافة';
+
+  @override
+  String get liveNowHeader => 'اللي شغّال دلوقتي';
+
+  @override
+  String barbersOnShiftNamed(String names) {
+    return '$names في الشيفت';
+  }
+
+  @override
+  String listTwo(String a, String b) {
+    return '$a و$b';
+  }
+
+  @override
+  String get listSeparator => '، ';
+
+  @override
+  String get servicesJoiner => ' + ';
+
+  @override
+  String get moveNowTitle => 'اتحرّك دلوقتي';
+
+  @override
+  String moveNowBody(int travel, int wait) {
+    return 'المشوار $travel دقايق — دورك بعد $wait دقايق';
+  }
+
+  @override
+  String get openDirectionsToSalon => 'افتح الاتجاهات للصالون';
+
+  @override
+  String get leaveQueue => 'اطلع من الطابور';
+
+  @override
+  String get leaveDialogTitle => 'تطلع من الطابور؟';
+
+  @override
+  String leaveDialogBody(int number) {
+    return 'دورك رقم $number هيروح لحد تاني ومش هينفع ترجعه. لو دخلت تاني هتبدأ من آخر الطابور.';
+  }
+
+  @override
+  String get leaveDialogNote =>
+      'الخروج المتكرر من الطوابير بيقلّل تقييم الالتزام بتاعك.';
+
+  @override
+  String get leaveDialogConfirm => 'أيوه، اطلعني';
+
+  @override
+  String get leaveDialogStay => 'خليني في الطابور';
+
+  @override
+  String get yourTurnTitle => 'حان دورك';
+
+  @override
+  String yourTurnBarberWaiting(String barber) {
+    return 'ادخل على الكرسي — $barber مستنيك';
+  }
+
+  @override
+  String get yourTurnAnyBarber => 'ادخل على الكرسي — الحلاق مستنيك';
+
+  @override
+  String get yourNumberLabel => 'رقمك';
+
+  @override
+  String get timeLeftLabel => 'فاضلك';
+
+  @override
+  String get yourTurnGraceNote =>
+      'لو ما حضرتش خلال 5 دقايق، دورك هيتأخر مركز واحد';
+
+  @override
+  String get yourTurnGraceNoteFinal => 'لو ما حضرتش خلال 5 دقايق، الحجز هيتلغي';
+
+  @override
+  String get imAtSalon => 'أنا في المحل';
+
+  @override
+  String get postponeOne => 'أنا جاي — أجّلني واحد';
+
+  @override
+  String get postponeUsedLabel => 'استخدمت التأجيل قبل كده';
+
+  @override
+  String get postponedToast => 'أجّلناك مركز واحد — فاضلك واحد';
+
+  @override
+  String get inServiceTitle => 'انت على الكرسي';
+
+  @override
+  String get inServiceBody =>
+      'نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.';
+
+  @override
+  String get completedTitle => 'نعيماً!';
+
+  @override
+  String completedBody(String salon) {
+    return 'خلصت في $salon. رأيك بيساعد غيرك يختار صح.';
+  }
+
+  @override
+  String get rateVisitAction => 'قيّم زيارتك';
+
+  @override
+  String get cancelledTitle => 'خرجت من الطابور';
+
+  @override
+  String get cancelledBody => 'دورك راح لحد تاني. تقدر تحجز تاني في أي وقت.';
+
+  @override
+  String get bookingCancelledTitle => 'الحجز اتلغى';
+
+  @override
+  String get bookingCancelledBody =>
+      'المعاد اتفتح لغيرك. تقدر تحجز معاد تاني في أي وقت.';
+
+  @override
+  String get missedTitle => 'دورك فاتك';
+
+  @override
+  String get missedBody =>
+      'ما حضرتش في الوقت فالحجز اتلغى. تقدر تدخل الطابور تاني.';
+
+  @override
+  String get bookAgain => 'احجز تاني';
+
+  @override
+  String get upcomingTitle => 'حجزك جاي';
+
+  @override
+  String get cancelBooking => 'الغي الحجز';
+
+  @override
+  String get cancelDialogTitle => 'تلغي الحجز؟';
+
+  @override
+  String cancelDialogBody(String time) {
+    return 'معادك $time هيتفتح لغيرك.';
+  }
+
+  @override
+  String get cancelDialogConfirm => 'أيوه، الغيه';
+
+  @override
+  String get cancelDialogKeep => 'خليه';
+
+  @override
+  String get queueErrorNotYourTurn => 'لسه مجاش دورك.';
+
+  @override
+  String get queueErrorPostponeUsed => 'استخدمت التأجيل مرة قبل كده.';
+
+  @override
+  String get queueErrorFinished => 'الحجز ده خلص خلاص.';
+
+  @override
+  String get queueActionOffline => 'محتاج نت عشان تعمل ده.';
+
+  @override
+  String get a11yLiveOffline => 'مش متحدّث';
+
+  @override
+  String get durationLabel => 'مدة الخدمة';
 }

@@ -30,11 +30,16 @@ void registerBookingModule(GetIt sl, AppEnvironment env) {
               details:
                   sl<SalonDetailsRemoteDataSource>()
                       as FakeSalonDetailsRemoteDataSource,
+              queueStepInterval: env.fakeQueueStepInterval,
             )
-          : ApiBookingRemoteDataSource(sl()),
+          : ApiBookingRemoteDataSource(sl(), env),
     )
     ..registerLazySingleton<BookingRepository>(
-      () => BookingRepositoryImpl(remote: sl(), database: sl()),
+      () => BookingRepositoryImpl(
+        remote: sl(),
+        database: sl(),
+        connectivity: sl(),
+      ),
     )
     ..registerFactory(() => GetDaySchedule(sl()))
     ..registerFactory(() => ConfirmBooking(sl(), sl()))

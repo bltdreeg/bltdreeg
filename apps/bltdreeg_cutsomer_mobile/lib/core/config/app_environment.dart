@@ -13,6 +13,7 @@ final class AppEnvironment {
     required this.queueSocketUrl,
     this.simulatedLatency = const Duration(milliseconds: 650),
     this.fakeLiveUpdateInterval = const Duration(seconds: 15),
+    this.fakeQueueStepInterval = const Duration(seconds: 20),
   });
 
   factory AppEnvironment.fromDefines() {
@@ -40,6 +41,11 @@ final class AppEnvironment {
   /// How often the fake backend pushes live queue changes. Null disables
   /// pushes (widget tests, static demos).
   final Duration? fakeLiveUpdateInterval;
+
+  /// How often the person at the front of a fake queue finishes, so a
+  /// joined queue visibly moves to "your turn" during a demo. Null freezes
+  /// fake queues.
+  final Duration? fakeQueueStepInterval;
 
   bool get usesFakeBackend => backendMode == BackendMode.fake;
 }

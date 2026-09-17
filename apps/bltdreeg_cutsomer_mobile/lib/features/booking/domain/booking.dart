@@ -1,19 +1,27 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../core/error/failures.dart';
 import '../../../core/l10n_data/localized_text.dart';
 import '../../../core/utils/result.dart';
 import '../../salon_details/domain/salon_details.dart';
 import 'booking_draft.dart';
 
-/// Lifecycle of a booking. The queue screen (27-30) and the bookings list
-/// (09-11) move it past [waiting] / [upcoming].
+/// Lifecycle of a booking. Queue bookings go waiting → yourTurn → inService
+/// → completed; scheduled ones start as upcoming. cancelled (the customer
+/// left) and missed (didn't show up) are final.
 enum BookingStatus {
   waiting,
+  yourTurn,
   upcoming,
   inService,
   completed,
   cancelled,
-  missed,
+  missed;
+
+  bool get isActive => switch (this) {
+    waiting || yourTurn || upcoming || inService => true,
+    completed || cancelled || missed => false,
+  };
 }
 
 /// A discount applied at review (e.g. the "قصة + دقن" bundle).
@@ -115,7 +123,12 @@ final class Booking extends Equatable {
     this.ticketNumber,
     this.peopleAhead = 0,
     this.waitMinutes = 0,
+    this.turnStartedAt,
+    this.postponeUsed = false,
   });
+
+  /// How long the customer has to show up once it's their turn (frame 29).
+  static const turnGrace = Duration(minutes: 5);
 
   final String id;
   final String salonId;
@@ -139,7 +152,46 @@ final class Booking extends Equatable {
   final int peopleAhead;
   final int waitMinutes;
 
+  /// When [BookingStatus.yourTurn] started; the grace countdown runs from it.
+  final DateTime? turnStartedAt;
+
+  /// "أجّلني واحد" can be used once per booking.
+  final bool postponeUsed;
+
   bool get isQueue => timing is JoinNow;
+
+  DateTime? get turnDeadline => turnStartedAt?.add(turnGrace);
+
+  Booking copyWith({
+    BookingStatus? status,
+    int? peopleAhead,
+    int? waitMinutes,
+    DateTime? turnStartedAt,
+    bool clearTurnStartedAt = false,
+    bool? postponeUsed,
+  }) => Booking(
+    id: id,
+    salonId: salonId,
+    salonName: salonName,
+    salonArea: salonArea,
+    salonAddress: salonAddress,
+    latitude: latitude,
+    longitude: longitude,
+    services: services,
+    timing: timing,
+    status: status ?? this.status,
+    quote: quote,
+    createdAt: createdAt,
+    barberId: barberId,
+    barberName: barberName,
+    ticketNumber: ticketNumber,
+    peopleAhead: peopleAhead ?? this.peopleAhead,
+    waitMinutes: waitMinutes ?? this.waitMinutes,
+    turnStartedAt: clearTurnStartedAt
+        ? null
+        : turnStartedAt ?? this.turnStartedAt,
+    postponeUsed: postponeUsed ?? this.postponeUsed,
+  );
   int get totalMinutes => services.fold(0, (sum, s) => sum + s.durationMinutes);
 
   @override
@@ -161,6 +213,8 @@ final class Booking extends Equatable {
     ticketNumber,
     peopleAhead,
     waitMinutes,
+    turnStartedAt,
+    postponeUsed,
   ];
 }
 
@@ -230,6 +284,60 @@ abstract final class BookingRuleCodes {
 
   /// `data['bookingId']` is the active queue booking.
   static const alreadyInQueue = 'already_in_queue';
+
+  /// Queue actions on a booking in the wrong state.
+  static const notYourTurn = 'not_your_turn';
+  static const postponeUsed = 'postpone_used';
+  static const bookingFinished = 'booking_finished';
+}
+
+/// What the queue screen shows (frames 27-30).
+enum QueueStage {
+  waiting,
+  approaching,
+  yourTurn,
+  inService,
+  completed,
+  cancelled,
+  missed,
+  upcoming,
+}
+
+extension BookingQueueStage on Booking {
+  QueueStage get stage => switch (status) {
+    BookingStatus.waiting when peopleAhead <= 1 => QueueStage.approaching,
+    BookingStatus.waiting => QueueStage.waiting,
+    BookingStatus.yourTurn => QueueStage.yourTurn,
+    BookingStatus.upcoming => QueueStage.upcoming,
+    BookingStatus.inService => QueueStage.inService,
+    BookingStatus.completed => QueueStage.completed,
+    BookingStatus.cancelled => QueueStage.cancelled,
+    BookingStatus.missed => QueueStage.missed,
+  };
+}
+
+final class BookingSnapshot extends Equatable {
+  const BookingSnapshot({this.booking, this.isLive = false, this.failure});
+
+  final Booking? booking;
+
+  /// Receiving live pushes right now; false shows "not updated".
+  final bool isLive;
+  final Failure? failure;
+
+  BookingSnapshot copyWith({
+    Booking? booking,
+    bool? isLive,
+    Failure? failure,
+    bool clearFailure = false,
+  }) => BookingSnapshot(
+    booking: booking ?? this.booking,
+    isLive: isLive ?? this.isLive,
+    failure: clearFailure ? null : failure ?? this.failure,
+  );
+
+  @override
+  List<Object?> get props => [booking, isLive, failure];
 }
 
 abstract interface class BookingRepository {
@@ -244,4 +352,18 @@ abstract interface class BookingRepository {
 
   /// Cached copy first (works offline and from deep links), then server.
   Future<Result<Booking>> booking(String bookingId);
+
+  /// Offline-first live booking: cache, then server, then pushes.
+  Stream<BookingSnapshot> watch(String bookingId);
+
+  Future<void> refresh(String bookingId);
+
+  /// "أنا في المحل" (frame 29).
+  Future<Result<Booking>> checkIn(String bookingId);
+
+  /// "أجّلني واحد": back one place, once per booking.
+  Future<Result<Booking>> postpone(String bookingId);
+
+  /// Leave the queue (frame 30) or cancel a scheduled booking.
+  Future<Result<Booking>> leave(String bookingId);
 }

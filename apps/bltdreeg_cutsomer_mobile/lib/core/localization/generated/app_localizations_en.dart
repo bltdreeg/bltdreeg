@@ -1353,4 +1353,210 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingLoadFailed => 'Couldn\'t load the booking.';
+
+  @override
+  String get queueTitle => 'Your turn';
+
+  @override
+  String queueAheadPeople(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people ahead',
+      one: 'Just one left',
+      zero: 'No one ahead',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get stageJoined => 'Joined';
+
+  @override
+  String get stageApproaching => 'Almost up';
+
+  @override
+  String get stageYourTurn => 'Your turn';
+
+  @override
+  String waitApproxSpaced(int minutes) {
+    return '~ $minutes min';
+  }
+
+  @override
+  String get leaveAtLabel => 'Leave at';
+
+  @override
+  String get leaveAtNow => 'Now';
+
+  @override
+  String get distanceLabel => 'Distance';
+
+  @override
+  String get liveNowHeader => 'Working right now';
+
+  @override
+  String barbersOnShiftNamed(String names) {
+    return '$names on shift';
+  }
+
+  @override
+  String listTwo(String a, String b) {
+    return '$a and $b';
+  }
+
+  @override
+  String get listSeparator => ', ';
+
+  @override
+  String get servicesJoiner => ' + ';
+
+  @override
+  String get moveNowTitle => 'Leave now';
+
+  @override
+  String moveNowBody(int travel, int wait) {
+    return '$travel min drive — your turn in $wait min';
+  }
+
+  @override
+  String get openDirectionsToSalon => 'Open directions to the salon';
+
+  @override
+  String get leaveQueue => 'Leave the queue';
+
+  @override
+  String get leaveDialogTitle => 'Leave the queue?';
+
+  @override
+  String leaveDialogBody(int number) {
+    return 'Your number $number goes to someone else and can\'t be restored. If you join again you start at the back.';
+  }
+
+  @override
+  String get leaveDialogNote =>
+      'Leaving queues often lowers your reliability score.';
+
+  @override
+  String get leaveDialogConfirm => 'Yes, take me out';
+
+  @override
+  String get leaveDialogStay => 'Keep my place';
+
+  @override
+  String get yourTurnTitle => 'It\'s your turn';
+
+  @override
+  String yourTurnBarberWaiting(String barber) {
+    return 'Take the chair — $barber is waiting';
+  }
+
+  @override
+  String get yourTurnAnyBarber => 'Take the chair — your barber is waiting';
+
+  @override
+  String get yourNumberLabel => 'Your number';
+
+  @override
+  String get timeLeftLabel => 'Time left';
+
+  @override
+  String get yourTurnGraceNote =>
+      'If you don\'t show up within 5 minutes, you move back one place';
+
+  @override
+  String get yourTurnGraceNoteFinal =>
+      'If you don\'t show up within 5 minutes, the booking is cancelled';
+
+  @override
+  String get imAtSalon => 'I\'m at the salon';
+
+  @override
+  String get postponeOne => 'On my way — move me back one';
+
+  @override
+  String get postponeUsedLabel => 'You\'ve already used your postpone';
+
+  @override
+  String get postponedToast => 'Moved back one place — one person ahead';
+
+  @override
+  String get inServiceTitle => 'You\'re in the chair';
+
+  @override
+  String get inServiceBody =>
+      'Enjoy! Once you\'re done we\'ll ask you to rate your visit.';
+
+  @override
+  String get completedTitle => 'Looking sharp!';
+
+  @override
+  String completedBody(String salon) {
+    return 'You\'re done at $salon. Your rating helps others choose.';
+  }
+
+  @override
+  String get rateVisitAction => 'Rate your visit';
+
+  @override
+  String get cancelledTitle => 'You left the queue';
+
+  @override
+  String get cancelledBody =>
+      'Your place went to someone else. You can book again anytime.';
+
+  @override
+  String get bookingCancelledTitle => 'Booking cancelled';
+
+  @override
+  String get bookingCancelledBody =>
+      'The time is free for others now. You can book again anytime.';
+
+  @override
+  String get missedTitle => 'You missed your turn';
+
+  @override
+  String get missedBody =>
+      'You didn\'t show up in time, so the booking was cancelled. You can join the queue again.';
+
+  @override
+  String get bookAgain => 'Book again';
+
+  @override
+  String get upcomingTitle => 'Upcoming booking';
+
+  @override
+  String get cancelBooking => 'Cancel booking';
+
+  @override
+  String get cancelDialogTitle => 'Cancel this booking?';
+
+  @override
+  String cancelDialogBody(String time) {
+    return 'Your $time slot will open up for others.';
+  }
+
+  @override
+  String get cancelDialogConfirm => 'Yes, cancel it';
+
+  @override
+  String get cancelDialogKeep => 'Keep it';
+
+  @override
+  String get queueErrorNotYourTurn => 'It isn\'t your turn yet.';
+
+  @override
+  String get queueErrorPostponeUsed => 'You\'ve already postponed once.';
+
+  @override
+  String get queueErrorFinished => 'This booking has already ended.';
+
+  @override
+  String get queueActionOffline => 'You need a connection to do this.';
+
+  @override
+  String get a11yLiveOffline => 'Not updated';
+
+  @override
+  String get durationLabel => 'Duration';
 }

@@ -44,3 +44,40 @@ final class GetBooking {
   Future<Result<Booking>> call(String bookingId) =>
       _repository.booking(bookingId);
 }
+
+/// Live booking for the queue screen.
+final class WatchBooking {
+  const WatchBooking(this._repository);
+
+  final BookingRepository _repository;
+
+  Stream<BookingSnapshot> call(String bookingId) =>
+      _repository.watch(bookingId);
+}
+
+final class CheckInToQueue {
+  const CheckInToQueue(this._repository);
+
+  final BookingRepository _repository;
+
+  Future<Result<Booking>> call(String bookingId) =>
+      _repository.checkIn(bookingId);
+}
+
+final class PostponeTurn {
+  const PostponeTurn(this._repository);
+
+  final BookingRepository _repository;
+
+  Future<Result<Booking>> call(String bookingId) =>
+      _repository.postpone(bookingId);
+}
+
+final class LeaveQueue {
+  const LeaveQueue(this._repository);
+
+  final BookingRepository _repository;
+
+  Future<Result<Booking>> call(String bookingId) =>
+      _repository.leave(bookingId);
+}

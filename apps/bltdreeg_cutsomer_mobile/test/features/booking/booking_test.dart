@@ -126,6 +126,7 @@ void main() {
           clock: () => now,
         ),
         database: db,
+        connectivity: connectivity,
       );
     });
 
@@ -171,7 +172,11 @@ void main() {
       final before = catalog.salonById('s1')!.queue.peopleAhead;
       final booking = (await repository.confirm(request('r1', const JoinNow())))
           .valueOrNull!;
-      expect(booking.status, BookingStatus.waiting);
+      // s1 has nobody ahead at this time, so the turn starts right away.
+      expect(
+        booking.status,
+        before == 0 ? BookingStatus.yourTurn : BookingStatus.waiting,
+      );
       expect(booking.peopleAhead, before);
       expect(booking.ticketNumber, before + 1);
       expect(booking.quote.total, 100);

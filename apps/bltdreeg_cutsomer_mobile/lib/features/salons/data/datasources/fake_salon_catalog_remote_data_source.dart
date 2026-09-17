@@ -328,6 +328,20 @@ final class FakeSalonCatalogRemoteDataSource
     return salon.queue;
   }
 
+  /// Removes one person from [salonId]'s queue (a customer left or was
+  /// served) and pushes the new load.
+  void leaveQueue(String salonId) {
+    final index = _salons.indexWhere((s) => s.id == salonId);
+    final salon = _salons[index];
+    final ahead = (salon.queue.peopleAhead - 1).clamp(0, 99);
+    final load = QueueLoad(
+      peopleAhead: ahead,
+      waitMinutes: ahead * minutesPerPerson(salonId),
+    );
+    _salons[index] = salon.withQueue(load);
+    if (_driftController.hasListener) _driftController.add({salonId: load});
+  }
+
   /// Current state of one salon (fake salon-details backend).
   SalonSummary? salonById(String id) =>
       _salons.where((s) => s.id == id).firstOrNull;

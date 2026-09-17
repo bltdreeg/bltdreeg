@@ -22,6 +22,9 @@ final class FakeServer {
   final ConnectivityService _connectivity;
   final Random _random;
 
+  /// Fake sockets use this to drop their pushes while offline.
+  bool get isOnline => _connectivity.isOnline;
+
   /// Probability (0..1) that a request fails with a 500. Stays 0 unless a
   /// test or a debug toggle raises it.
   double failureRate = 0;

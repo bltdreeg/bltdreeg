@@ -15,6 +15,7 @@ import '../../features/booking/presentation/pages/booking_review_page.dart';
 import '../../features/booking/presentation/pages/booking_slot_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/queue/presentation/pages/queue_page.dart';
 import '../../features/salon_details/domain/salon_details.dart';
 import '../../features/salon_details/presentation/pages/salon_details_page.dart';
 import '../../features/salon_details/presentation/pages/salon_gallery_page.dart';
@@ -267,7 +268,8 @@ final class AppRouter {
         parentNavigatorKey: _rootKey,
         name: AppRoutes.queue.name,
         path: AppRoutes.queue.path,
-        builder: (_, _) => const RoutePlaceholderPage(title: 'Queue'),
+        builder: (_, state) =>
+            QueuePage(bookingId: state.pathParameters[RouteParams.bookingId]!),
       ),
       GoRoute(
         parentNavigatorKey: _rootKey,

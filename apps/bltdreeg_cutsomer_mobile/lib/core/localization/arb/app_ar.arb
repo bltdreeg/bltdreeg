@@ -983,5 +983,132 @@
   "appointmentLabel": "معادك",
   "confirmedQueueNote": "هنبعتلك إشعار لما يفضل قدامك واحد، وبعدين لما يجي دورك.",
   "confirmedSlotNote": "هنفكّرك قبل معادك بساعة.",
-  "bookingLoadFailed": "معرفناش نجيب الحجز."
+  "bookingLoadFailed": "معرفناش نجيب الحجز.",
+  "queueTitle": "دورك",
+  "queueAheadPeople": "{count, plural, =0{محدش قدامك} =1{فاضلك واحد بس} =2{قدامك 2} other{قدامك {count} أنفار}}",
+  "@queueAheadPeople": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "stageJoined": "دخلت الطابور",
+  "stageApproaching": "قرّب دورك",
+  "stageYourTurn": "دورك دلوقتي",
+  "waitApproxSpaced": "~ {minutes} د",
+  "@waitApproxSpaced": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveAtLabel": "تتحرك الساعة",
+  "leaveAtNow": "دلوقتي",
+  "distanceLabel": "المسافة",
+  "liveNowHeader": "اللي شغّال دلوقتي",
+  "barbersOnShiftNamed": "{names} في الشيفت",
+  "@barbersOnShiftNamed": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "listTwo": "{a} و{b}",
+  "@listTwo": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "listSeparator": "، ",
+  "servicesJoiner": " + ",
+  "moveNowTitle": "اتحرّك دلوقتي",
+  "moveNowBody": "المشوار {travel} دقايق — دورك بعد {wait} دقايق",
+  "@moveNowBody": {
+    "placeholders": {
+      "travel": {
+        "type": "int"
+      },
+      "wait": {
+        "type": "int"
+      }
+    }
+  },
+  "openDirectionsToSalon": "افتح الاتجاهات للصالون",
+  "leaveQueue": "اطلع من الطابور",
+  "leaveDialogTitle": "تطلع من الطابور؟",
+  "leaveDialogBody": "دورك رقم {number} هيروح لحد تاني ومش هينفع ترجعه. لو دخلت تاني هتبدأ من آخر الطابور.",
+  "@leaveDialogBody": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveDialogNote": "الخروج المتكرر من الطوابير بيقلّل تقييم الالتزام بتاعك.",
+  "leaveDialogConfirm": "أيوه، اطلعني",
+  "leaveDialogStay": "خليني في الطابور",
+  "yourTurnTitle": "حان دورك",
+  "yourTurnBarberWaiting": "ادخل على الكرسي — {barber} مستنيك",
+  "@yourTurnBarberWaiting": {
+    "placeholders": {
+      "barber": {
+        "type": "String"
+      }
+    }
+  },
+  "yourTurnAnyBarber": "ادخل على الكرسي — الحلاق مستنيك",
+  "yourNumberLabel": "رقمك",
+  "timeLeftLabel": "فاضلك",
+  "yourTurnGraceNote": "لو ما حضرتش خلال 5 دقايق، دورك هيتأخر مركز واحد",
+  "yourTurnGraceNoteFinal": "لو ما حضرتش خلال 5 دقايق، الحجز هيتلغي",
+  "imAtSalon": "أنا في المحل",
+  "postponeOne": "أنا جاي — أجّلني واحد",
+  "postponeUsedLabel": "استخدمت التأجيل قبل كده",
+  "postponedToast": "أجّلناك مركز واحد — فاضلك واحد",
+  "inServiceTitle": "انت على الكرسي",
+  "inServiceBody": "نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.",
+  "completedTitle": "نعيماً!",
+  "completedBody": "خلصت في {salon}. رأيك بيساعد غيرك يختار صح.",
+  "@completedBody": {
+    "placeholders": {
+      "salon": {
+        "type": "String"
+      }
+    }
+  },
+  "rateVisitAction": "قيّم زيارتك",
+  "cancelledTitle": "خرجت من الطابور",
+  "cancelledBody": "دورك راح لحد تاني. تقدر تحجز تاني في أي وقت.",
+  "bookingCancelledTitle": "الحجز اتلغى",
+  "bookingCancelledBody": "المعاد اتفتح لغيرك. تقدر تحجز معاد تاني في أي وقت.",
+  "missedTitle": "دورك فاتك",
+  "missedBody": "ما حضرتش في الوقت فالحجز اتلغى. تقدر تدخل الطابور تاني.",
+  "bookAgain": "احجز تاني",
+  "upcomingTitle": "حجزك جاي",
+  "cancelBooking": "الغي الحجز",
+  "cancelDialogTitle": "تلغي الحجز؟",
+  "cancelDialogBody": "معادك {time} هيتفتح لغيرك.",
+  "@cancelDialogBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelDialogConfirm": "أيوه، الغيه",
+  "cancelDialogKeep": "خليه",
+  "queueErrorNotYourTurn": "لسه مجاش دورك.",
+  "queueErrorPostponeUsed": "استخدمت التأجيل مرة قبل كده.",
+  "queueErrorFinished": "الحجز ده خلص خلاص.",
+  "queueActionOffline": "محتاج نت عشان تعمل ده.",
+  "a11yLiveOffline": "مش متحدّث",
+  "durationLabel": "مدة الخدمة"
 }
