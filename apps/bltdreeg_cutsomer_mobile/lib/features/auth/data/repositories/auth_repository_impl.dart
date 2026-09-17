@@ -5,6 +5,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/utils/result.dart';
 import '../../domain/entities/auth_session.dart';
 import '../../domain/entities/otp_challenge.dart';
+import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_data_source.dart';
 import '../datasources/auth_remote_data_source.dart';
@@ -125,6 +126,23 @@ final class AuthRepositoryImpl implements AuthRepository {
         SessionSnapshot(status: AuthStatus.authenticated, user: session.user),
       );
     }
+    return result;
+  }
+
+  @override
+  Future<Result<User>> updateProfile(ProfileUpdate update) async {
+    final result = await guardResult(() => _remote.updateProfile(update));
+    if (result case Ok(:final value)) {
+      await _local.saveUser(value);
+      _emit(SessionSnapshot(status: AuthStatus.authenticated, user: value));
+    }
+    return result;
+  }
+
+  @override
+  Future<Result<void>> deleteAccount() async {
+    final result = await guardResult(_remote.deleteAccount);
+    if (result.isOk) await _clear();
     return result;
   }
 

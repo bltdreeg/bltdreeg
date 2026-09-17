@@ -1220,5 +1220,154 @@
   "notificationsEmptyTitle": "مفيش إشعارات لسه",
   "notificationsEmptyBody": "أول ما تدخل طابور، هنبعتلك هنا كل تحديث لدورك وأي عروض من الصالونات اللي بتحبها.",
   "notificationsEmptyCta": "دوّر على صالون",
-  "a11yUnread": "غير مقروء"
+  "a11yUnread": "غير مقروء",
+  "accountTitle": "حسابي",
+  "accountEdit": "عدّل",
+  "statCompletedCuts": "حلاقة خلصتها",
+  "statFavoriteSalons": "صالونات مفضّلة",
+  "groupAccount": "حسابي",
+  "groupApp": "التطبيق",
+  "groupHelp": "مساعدة",
+  "rowProfile": "بياناتي الشخصية",
+  "rowBookings": "حجوزاتي",
+  "rowFavorites": "الصالونات المفضّلة",
+  "rowLanguage": "اللغة",
+  "rowNotifications": "الإشعارات",
+  "rowHelp": "المساعدة والدعم",
+  "activeBookingsValue": "{count, plural, =1{1 نشط} other{{count} نشطين}}",
+  "@activeBookingsValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "signOut": "تسجيل الخروج",
+  "appVersionLine": "بالتدريج — نسخة {version}",
+  "@appVersionLine": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "signOutDialogTitle": "تسجيل الخروج؟",
+  "signOutDialogBodyInQueue": "عندك دور شغّال في {salon}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.",
+  "@signOutDialogBodyInQueue": {
+    "placeholders": {
+      "salon": {
+        "type": "String"
+      }
+    }
+  },
+  "signOutDialogBody": "هتحتاج تسجّل دخول تاني عشان تدخل طابور أو تشوف حجوزاتك.",
+  "signOutConfirm": "اخرج من الحساب",
+  "signOutCancel": "خليني فاضل",
+  "guestTitle": "انت بتتصفّح كضيف",
+  "guestBody": "سجّل دخولك عشان تدخل الطوابير وتتابع دورك",
+  "guestSignInCta": "سجّل دخول أو اعمل حساب",
+  "guestLockedHeader": "اللي محتاج حساب",
+  "guestAvailableHeader": "متاح من غير حساب",
+  "guestLockedBadge": "مقفول",
+  "guestLockedQueue": "دخول الطابور ومتابعة دورك",
+  "guestLockedBookings": "سجل حجوزاتك",
+  "guestLockedFavorites": "الصالونات المفضّلة",
+  "guestLockedRating": "تقييم الصالونات",
+  "guestAllowedBrowse": "تصفّح الصالونات والأسعار",
+  "guestAllowedWait": "شوف وقت الانتظار الحقيقي",
+  "profileTitle": "بياناتي الشخصية",
+  "changePhoto": "غيّر الصورة",
+  "firstNameLabel": "الاسم الأول",
+  "lastNameLabel": "اسم العيلة",
+  "phoneLabel": "رقم الموبايل",
+  "phoneVerifiedBadge": "متأكّد",
+  "phoneIsIdentity": "الرقم هو هويتك في بالتدريج",
+  "changePhoneAction": "غيّر الرقم",
+  "emailLabel": "البريد الإلكتروني",
+  "birthDateLabel": "تاريخ الميلاد",
+  "birthDateNote": "بنستخدمه عشان نبعتلك عرض في عيد ميلادك",
+  "areaLabel": "المنطقة",
+  "saveChanges": "احفظ التعديلات",
+  "profileSaved": "اتحفظت التعديلات",
+  "deleteAccount": "امسح حسابي",
+  "deleteAccountTitle": "تمسح حسابك؟",
+  "deleteAccountBody": "هنمسح بياناتك وحجوزاتك وتقييماتك، ومش هينفع نرجّعها. لو عندك دور شغّال هيتلغى.",
+  "deleteAccountConfirm": "أيوه، امسح حسابي",
+  "deleteAccountCancel": "خليه",
+  "nameRequired": "اكتب اسمك",
+  "photoNotSupportedYet": "الصورة بتتغيّر من التقييمات دلوقتي",
+  "notificationSettingsTitle": "الإشعارات",
+  "notifGroupQueue": "إشعارات الدور",
+  "notifQueueUpdates": "تحديثات الطابور",
+  "notifQueueUpdatesBody": "فاضلك اتنين · فاضلك واحد · حان دورك",
+  "notifAlwaysOn": "دايماً شغّالة",
+  "notifQueueLockedNote": "مش هينفع تقفلها — من غيرها مش هتعرف إمتى جه دورك وهتخسره.",
+  "notifGroupOffers": "العروض والتذكيرات",
+  "notifFavoriteOffers": "عروض الصالونات المفضّلة",
+  "notifFavoriteOffersBody": "خصومات وباقات جديدة",
+  "notifFavoriteFree": "صالون مفضّل بقى فاضي",
+  "notifFavoriteFreeBody": "في الأوقات اللي بتروح فيها عادةً",
+  "notifRateReminder": "ذكّرني أقيّم الزيارة",
+  "notifNewSalons": "عروض صالونات جديدة قريبة مني",
+  "notifGroupChannels": "قنوات الإرسال",
+  "notifChannelPush": "إشعارات التطبيق",
+  "notifChannelPushBody": "الأسرع والأدق",
+  "notifChannelSms": "رسايل نصية",
+  "notifChannelSmsBody": "احتياطي لو التطبيق مقفول",
+  "languageTitle": "اللغة",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "languageCurrent": "اللغة الحالية",
+  "languageArabicDirection": "من اليمين للشمال",
+  "languageEnglishDirection": "Left to right",
+  "languageDialogTitle": "تحوّل التطبيق لـ {language}؟",
+  "@languageDialogTitle": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "languageDialogBody": "الواجهة هتتقلب من اليمين للشمال. أسماء الصالونات والخدمات هتفضل زي ما صاحب الصالون كتبها.",
+  "languageDialogConfirm": "حوّل لـ {language}",
+  "@languageDialogConfirm": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "languageDialogCancel": "خليها زي ما هي",
+  "helpTitle": "المساعدة والدعم",
+  "helpSearchHint": "دوّر على مشكلتك",
+  "helpLiveTitle": "عندك مشكلة في دور دلوقتي؟",
+  "helpLiveBody": "بنرد خلال 5 دقايق من 10 ص لـ 12 ص",
+  "helpFaqHeader": "أكتر أسئلة بتتسأل",
+  "helpContactHeader": "كلّمنا",
+  "helpAboutHeader": "عن التطبيق",
+  "helpCallUs": "اتصل بينا",
+  "helpCallUsValue": "{number} · من 10 ص لـ 12 ص",
+  "@helpCallUsValue": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "helpTerms": "شروط الاستخدام",
+  "helpPrivacy": "سياسة الخصوصية",
+  "helpVersion": "نسخة التطبيق",
+  "helpNoResults": "مفيش نتيجة للي دوّرت عليه. كلّمنا وهنساعدك.",
+  "faqCancelledWhileThereQ": "دوري اتلغى وأنا في المحل — أعمل إيه؟",
+  "faqCancelledWhileThereA": "قول للريسيبشن يدوس \"حاضر\" من شاشة الصالون. لو الدور اتلغى فعلاً، كلّمنا من هنا وهندخّلك تاني في نفس المكان لو الصالون أكّد إنك كنت موجود.",
+  "faqWrongEstimateQ": "الوقت المتوقع طلع غلط",
+  "faqWrongEstimateA": "الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة. قيّم \"دقة الوقت المتوقع\" بعد الزيارة — ده اللي بيأثر على ترتيب الصالونات.",
+  "faqNoTurnAlertQ": "ما وصلنيش إشعار \"حان دورك\"",
+  "faqNoTurnAlertA": "اتأكد إن إشعارات التطبيق مفتوحة من إعدادات الموبايل، وإن شاشة الدور مفتوحة وقت ما تكون قريب. الرسايل النصية احتياطي لو التطبيق مقفول.",
+  "faqLeaveQueueQ": "إزاي أطلع من الطابور؟",
+  "faqLeaveQueueA": "من شاشة \"دورك\" دوس \"اطلع من الطابور\". دورك هيروح لحد تاني ومش هينفع ترجعه، ولو دخلت تاني هتبدأ من آخر الطابور.",
+  "faqPriceMismatchQ": "الصالون حاسبني غير السعر المكتوب",
+  "faqPriceMismatchA": "الأسعار اللي في التطبيق هي اللي الصالون كاتبها. لو حاسبك غير كده، ابعتلنا من هنا بصورة الفاتورة وإحنا بنراجع مع الصالون.",
+  "faqChangePhoneQ": "إزاي أغيّر رقم موبايلي؟",
+  "faqChangePhoneA": "الرقم هو هويتك في بالتدريج، فتغييره بيحتاج تأكيد برقم جديد. كلّمنا وهنعمله معاك، وحجوزاتك وتقييماتك هتنتقل زي ما هي."
 }

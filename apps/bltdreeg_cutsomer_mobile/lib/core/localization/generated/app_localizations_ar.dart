@@ -1831,4 +1831,353 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get a11yUnread => 'غير مقروء';
+
+  @override
+  String get accountTitle => 'حسابي';
+
+  @override
+  String get accountEdit => 'عدّل';
+
+  @override
+  String get statCompletedCuts => 'حلاقة خلصتها';
+
+  @override
+  String get statFavoriteSalons => 'صالونات مفضّلة';
+
+  @override
+  String get groupAccount => 'حسابي';
+
+  @override
+  String get groupApp => 'التطبيق';
+
+  @override
+  String get groupHelp => 'مساعدة';
+
+  @override
+  String get rowProfile => 'بياناتي الشخصية';
+
+  @override
+  String get rowBookings => 'حجوزاتي';
+
+  @override
+  String get rowFavorites => 'الصالونات المفضّلة';
+
+  @override
+  String get rowLanguage => 'اللغة';
+
+  @override
+  String get rowNotifications => 'الإشعارات';
+
+  @override
+  String get rowHelp => 'المساعدة والدعم';
+
+  @override
+  String activeBookingsValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نشطين',
+      one: '1 نشط',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String appVersionLine(String version) {
+    return 'بالتدريج — نسخة $version';
+  }
+
+  @override
+  String get signOutDialogTitle => 'تسجيل الخروج؟';
+
+  @override
+  String signOutDialogBodyInQueue(String salon) {
+    return 'عندك دور شغّال في $salon. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.';
+  }
+
+  @override
+  String get signOutDialogBody =>
+      'هتحتاج تسجّل دخول تاني عشان تدخل طابور أو تشوف حجوزاتك.';
+
+  @override
+  String get signOutConfirm => 'اخرج من الحساب';
+
+  @override
+  String get signOutCancel => 'خليني فاضل';
+
+  @override
+  String get guestTitle => 'انت بتتصفّح كضيف';
+
+  @override
+  String get guestBody => 'سجّل دخولك عشان تدخل الطوابير وتتابع دورك';
+
+  @override
+  String get guestSignInCta => 'سجّل دخول أو اعمل حساب';
+
+  @override
+  String get guestLockedHeader => 'اللي محتاج حساب';
+
+  @override
+  String get guestAvailableHeader => 'متاح من غير حساب';
+
+  @override
+  String get guestLockedBadge => 'مقفول';
+
+  @override
+  String get guestLockedQueue => 'دخول الطابور ومتابعة دورك';
+
+  @override
+  String get guestLockedBookings => 'سجل حجوزاتك';
+
+  @override
+  String get guestLockedFavorites => 'الصالونات المفضّلة';
+
+  @override
+  String get guestLockedRating => 'تقييم الصالونات';
+
+  @override
+  String get guestAllowedBrowse => 'تصفّح الصالونات والأسعار';
+
+  @override
+  String get guestAllowedWait => 'شوف وقت الانتظار الحقيقي';
+
+  @override
+  String get profileTitle => 'بياناتي الشخصية';
+
+  @override
+  String get changePhoto => 'غيّر الصورة';
+
+  @override
+  String get firstNameLabel => 'الاسم الأول';
+
+  @override
+  String get lastNameLabel => 'اسم العيلة';
+
+  @override
+  String get phoneLabel => 'رقم الموبايل';
+
+  @override
+  String get phoneVerifiedBadge => 'متأكّد';
+
+  @override
+  String get phoneIsIdentity => 'الرقم هو هويتك في بالتدريج';
+
+  @override
+  String get changePhoneAction => 'غيّر الرقم';
+
+  @override
+  String get emailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get birthDateLabel => 'تاريخ الميلاد';
+
+  @override
+  String get birthDateNote => 'بنستخدمه عشان نبعتلك عرض في عيد ميلادك';
+
+  @override
+  String get areaLabel => 'المنطقة';
+
+  @override
+  String get saveChanges => 'احفظ التعديلات';
+
+  @override
+  String get profileSaved => 'اتحفظت التعديلات';
+
+  @override
+  String get deleteAccount => 'امسح حسابي';
+
+  @override
+  String get deleteAccountTitle => 'تمسح حسابك؟';
+
+  @override
+  String get deleteAccountBody =>
+      'هنمسح بياناتك وحجوزاتك وتقييماتك، ومش هينفع نرجّعها. لو عندك دور شغّال هيتلغى.';
+
+  @override
+  String get deleteAccountConfirm => 'أيوه، امسح حسابي';
+
+  @override
+  String get deleteAccountCancel => 'خليه';
+
+  @override
+  String get nameRequired => 'اكتب اسمك';
+
+  @override
+  String get photoNotSupportedYet => 'الصورة بتتغيّر من التقييمات دلوقتي';
+
+  @override
+  String get notificationSettingsTitle => 'الإشعارات';
+
+  @override
+  String get notifGroupQueue => 'إشعارات الدور';
+
+  @override
+  String get notifQueueUpdates => 'تحديثات الطابور';
+
+  @override
+  String get notifQueueUpdatesBody => 'فاضلك اتنين · فاضلك واحد · حان دورك';
+
+  @override
+  String get notifAlwaysOn => 'دايماً شغّالة';
+
+  @override
+  String get notifQueueLockedNote =>
+      'مش هينفع تقفلها — من غيرها مش هتعرف إمتى جه دورك وهتخسره.';
+
+  @override
+  String get notifGroupOffers => 'العروض والتذكيرات';
+
+  @override
+  String get notifFavoriteOffers => 'عروض الصالونات المفضّلة';
+
+  @override
+  String get notifFavoriteOffersBody => 'خصومات وباقات جديدة';
+
+  @override
+  String get notifFavoriteFree => 'صالون مفضّل بقى فاضي';
+
+  @override
+  String get notifFavoriteFreeBody => 'في الأوقات اللي بتروح فيها عادةً';
+
+  @override
+  String get notifRateReminder => 'ذكّرني أقيّم الزيارة';
+
+  @override
+  String get notifNewSalons => 'عروض صالونات جديدة قريبة مني';
+
+  @override
+  String get notifGroupChannels => 'قنوات الإرسال';
+
+  @override
+  String get notifChannelPush => 'إشعارات التطبيق';
+
+  @override
+  String get notifChannelPushBody => 'الأسرع والأدق';
+
+  @override
+  String get notifChannelSms => 'رسايل نصية';
+
+  @override
+  String get notifChannelSmsBody => 'احتياطي لو التطبيق مقفول';
+
+  @override
+  String get languageTitle => 'اللغة';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageCurrent => 'اللغة الحالية';
+
+  @override
+  String get languageArabicDirection => 'من اليمين للشمال';
+
+  @override
+  String get languageEnglishDirection => 'Left to right';
+
+  @override
+  String languageDialogTitle(String language) {
+    return 'تحوّل التطبيق لـ $language؟';
+  }
+
+  @override
+  String get languageDialogBody =>
+      'الواجهة هتتقلب من اليمين للشمال. أسماء الصالونات والخدمات هتفضل زي ما صاحب الصالون كتبها.';
+
+  @override
+  String languageDialogConfirm(String language) {
+    return 'حوّل لـ $language';
+  }
+
+  @override
+  String get languageDialogCancel => 'خليها زي ما هي';
+
+  @override
+  String get helpTitle => 'المساعدة والدعم';
+
+  @override
+  String get helpSearchHint => 'دوّر على مشكلتك';
+
+  @override
+  String get helpLiveTitle => 'عندك مشكلة في دور دلوقتي؟';
+
+  @override
+  String get helpLiveBody => 'بنرد خلال 5 دقايق من 10 ص لـ 12 ص';
+
+  @override
+  String get helpFaqHeader => 'أكتر أسئلة بتتسأل';
+
+  @override
+  String get helpContactHeader => 'كلّمنا';
+
+  @override
+  String get helpAboutHeader => 'عن التطبيق';
+
+  @override
+  String get helpCallUs => 'اتصل بينا';
+
+  @override
+  String helpCallUsValue(String number) {
+    return '$number · من 10 ص لـ 12 ص';
+  }
+
+  @override
+  String get helpTerms => 'شروط الاستخدام';
+
+  @override
+  String get helpPrivacy => 'سياسة الخصوصية';
+
+  @override
+  String get helpVersion => 'نسخة التطبيق';
+
+  @override
+  String get helpNoResults => 'مفيش نتيجة للي دوّرت عليه. كلّمنا وهنساعدك.';
+
+  @override
+  String get faqCancelledWhileThereQ => 'دوري اتلغى وأنا في المحل — أعمل إيه؟';
+
+  @override
+  String get faqCancelledWhileThereA =>
+      'قول للريسيبشن يدوس \"حاضر\" من شاشة الصالون. لو الدور اتلغى فعلاً، كلّمنا من هنا وهندخّلك تاني في نفس المكان لو الصالون أكّد إنك كنت موجود.';
+
+  @override
+  String get faqWrongEstimateQ => 'الوقت المتوقع طلع غلط';
+
+  @override
+  String get faqWrongEstimateA =>
+      'الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة. قيّم \"دقة الوقت المتوقع\" بعد الزيارة — ده اللي بيأثر على ترتيب الصالونات.';
+
+  @override
+  String get faqNoTurnAlertQ => 'ما وصلنيش إشعار \"حان دورك\"';
+
+  @override
+  String get faqNoTurnAlertA =>
+      'اتأكد إن إشعارات التطبيق مفتوحة من إعدادات الموبايل، وإن شاشة الدور مفتوحة وقت ما تكون قريب. الرسايل النصية احتياطي لو التطبيق مقفول.';
+
+  @override
+  String get faqLeaveQueueQ => 'إزاي أطلع من الطابور؟';
+
+  @override
+  String get faqLeaveQueueA =>
+      'من شاشة \"دورك\" دوس \"اطلع من الطابور\". دورك هيروح لحد تاني ومش هينفع ترجعه، ولو دخلت تاني هتبدأ من آخر الطابور.';
+
+  @override
+  String get faqPriceMismatchQ => 'الصالون حاسبني غير السعر المكتوب';
+
+  @override
+  String get faqPriceMismatchA =>
+      'الأسعار اللي في التطبيق هي اللي الصالون كاتبها. لو حاسبك غير كده، ابعتلنا من هنا بصورة الفاتورة وإحنا بنراجع مع الصالون.';
+
+  @override
+  String get faqChangePhoneQ => 'إزاي أغيّر رقم موبايلي؟';
+
+  @override
+  String get faqChangePhoneA =>
+      'الرقم هو هويتك في بالتدريج، فتغييره بيحتاج تأكيد برقم جديد. كلّمنا وهنعمله معاك، وحجوزاتك وتقييماتك هتنتقل زي ما هي.';
 }

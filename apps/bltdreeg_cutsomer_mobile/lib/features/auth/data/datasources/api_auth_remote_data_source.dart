@@ -67,5 +67,22 @@ final class ApiAuthRemoteDataSource implements AuthRemoteDataSource {
   Future<User> fetchMe() async => UserModel.fromJson(await _api.getJson('/me'));
 
   @override
+  Future<User> updateProfile(ProfileUpdate update) async => UserModel.fromJson(
+    await _api.putJson(
+      '/me',
+      body: {
+        'first_name': update.firstName,
+        'last_name': update.lastName,
+        'email': update.email,
+        'birth_date': update.birthDate?.toIso8601String(),
+        'area_name': update.areaName,
+      },
+    ),
+  );
+
+  @override
+  Future<void> deleteAccount() => _api.deleteJson('/me');
+
+  @override
   Future<void> signOut() => _api.postJson('/auth/logout');
 }

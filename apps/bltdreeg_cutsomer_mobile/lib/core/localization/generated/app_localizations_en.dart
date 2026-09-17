@@ -1820,4 +1820,355 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yUnread => 'Unread';
+
+  @override
+  String get accountTitle => 'My account';
+
+  @override
+  String get accountEdit => 'Edit';
+
+  @override
+  String get statCompletedCuts => 'Haircuts done';
+
+  @override
+  String get statFavoriteSalons => 'Favorite salons';
+
+  @override
+  String get groupAccount => 'Account';
+
+  @override
+  String get groupApp => 'App';
+
+  @override
+  String get groupHelp => 'Help';
+
+  @override
+  String get rowProfile => 'My details';
+
+  @override
+  String get rowBookings => 'My bookings';
+
+  @override
+  String get rowFavorites => 'Favorite salons';
+
+  @override
+  String get rowLanguage => 'Language';
+
+  @override
+  String get rowNotifications => 'Notifications';
+
+  @override
+  String get rowHelp => 'Help & support';
+
+  @override
+  String activeBookingsValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active',
+      one: '1 active',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String appVersionLine(String version) {
+    return 'Beltadreeg — version $version';
+  }
+
+  @override
+  String get signOutDialogTitle => 'Sign out?';
+
+  @override
+  String signOutDialogBodyInQueue(String salon) {
+    return 'You have a live turn at $salon. If you sign out you won\'t get turn updates, but the turn itself stays booked in your name.';
+  }
+
+  @override
+  String get signOutDialogBody =>
+      'You\'ll need to sign in again to join a queue or see your bookings.';
+
+  @override
+  String get signOutConfirm => 'Sign out';
+
+  @override
+  String get signOutCancel => 'Stay signed in';
+
+  @override
+  String get guestTitle => 'You\'re browsing as a guest';
+
+  @override
+  String get guestBody => 'Sign in to join queues and follow your turn';
+
+  @override
+  String get guestSignInCta => 'Sign in or create an account';
+
+  @override
+  String get guestLockedHeader => 'Needs an account';
+
+  @override
+  String get guestAvailableHeader => 'Available without an account';
+
+  @override
+  String get guestLockedBadge => 'Locked';
+
+  @override
+  String get guestLockedQueue => 'Joining queues and following your turn';
+
+  @override
+  String get guestLockedBookings => 'Your bookings history';
+
+  @override
+  String get guestLockedFavorites => 'Favorite salons';
+
+  @override
+  String get guestLockedRating => 'Rating salons';
+
+  @override
+  String get guestAllowedBrowse => 'Browsing salons and prices';
+
+  @override
+  String get guestAllowedWait => 'Seeing real wait times';
+
+  @override
+  String get profileTitle => 'My details';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get firstNameLabel => 'First name';
+
+  @override
+  String get lastNameLabel => 'Last name';
+
+  @override
+  String get phoneLabel => 'Mobile number';
+
+  @override
+  String get phoneVerifiedBadge => 'Verified';
+
+  @override
+  String get phoneIsIdentity => 'Your number is your identity in Beltadreeg';
+
+  @override
+  String get changePhoneAction => 'Change number';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get birthDateLabel => 'Date of birth';
+
+  @override
+  String get birthDateNote => 'We use it to send you a birthday offer';
+
+  @override
+  String get areaLabel => 'Area';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get profileSaved => 'Changes saved';
+
+  @override
+  String get deleteAccount => 'Delete my account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountBody =>
+      'We\'ll delete your details, bookings and ratings, and it can\'t be undone. Any live turn is cancelled.';
+
+  @override
+  String get deleteAccountConfirm => 'Yes, delete it';
+
+  @override
+  String get deleteAccountCancel => 'Keep it';
+
+  @override
+  String get nameRequired => 'Enter your name';
+
+  @override
+  String get photoNotSupportedYet => 'Photos come from your ratings for now';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notifGroupQueue => 'Turn notifications';
+
+  @override
+  String get notifQueueUpdates => 'Queue updates';
+
+  @override
+  String get notifQueueUpdatesBody => 'Two left · one left · your turn';
+
+  @override
+  String get notifAlwaysOn => 'Always on';
+
+  @override
+  String get notifQueueLockedNote =>
+      'You can\'t turn these off — without them you won\'t know when your turn comes and you\'ll lose it.';
+
+  @override
+  String get notifGroupOffers => 'Offers and reminders';
+
+  @override
+  String get notifFavoriteOffers => 'Favorite salon offers';
+
+  @override
+  String get notifFavoriteOffersBody => 'New discounts and bundles';
+
+  @override
+  String get notifFavoriteFree => 'A favorite salon is free';
+
+  @override
+  String get notifFavoriteFreeBody => 'At the times you usually go';
+
+  @override
+  String get notifRateReminder => 'Remind me to rate a visit';
+
+  @override
+  String get notifNewSalons => 'Offers from new salons near me';
+
+  @override
+  String get notifGroupChannels => 'Delivery channels';
+
+  @override
+  String get notifChannelPush => 'App notifications';
+
+  @override
+  String get notifChannelPushBody => 'Fastest and most precise';
+
+  @override
+  String get notifChannelSms => 'Text messages';
+
+  @override
+  String get notifChannelSmsBody => 'Backup when the app is closed';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get languageArabic => 'Arabic';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageCurrent => 'Current language';
+
+  @override
+  String get languageArabicDirection => 'Right to left';
+
+  @override
+  String get languageEnglishDirection => 'Left to right';
+
+  @override
+  String languageDialogTitle(String language) {
+    return 'Switch the app to $language?';
+  }
+
+  @override
+  String get languageDialogBody =>
+      'The interface flips direction. Salon and service names stay exactly as their owners wrote them.';
+
+  @override
+  String languageDialogConfirm(String language) {
+    return 'Switch to $language';
+  }
+
+  @override
+  String get languageDialogCancel => 'Keep it as is';
+
+  @override
+  String get helpTitle => 'Help & support';
+
+  @override
+  String get helpSearchHint => 'Search your problem';
+
+  @override
+  String get helpLiveTitle => 'Problem with a live turn?';
+
+  @override
+  String get helpLiveBody => 'We reply within 5 minutes, 10 AM to 12 AM';
+
+  @override
+  String get helpFaqHeader => 'Most asked questions';
+
+  @override
+  String get helpContactHeader => 'Talk to us';
+
+  @override
+  String get helpAboutHeader => 'About the app';
+
+  @override
+  String get helpCallUs => 'Call us';
+
+  @override
+  String helpCallUsValue(String number) {
+    return '$number · 10 AM to 12 AM';
+  }
+
+  @override
+  String get helpTerms => 'Terms of use';
+
+  @override
+  String get helpPrivacy => 'Privacy policy';
+
+  @override
+  String get helpVersion => 'App version';
+
+  @override
+  String get helpNoResults =>
+      'Nothing matched your search. Talk to us and we\'ll help.';
+
+  @override
+  String get faqCancelledWhileThereQ =>
+      'My turn was cancelled while I was at the salon — what do I do?';
+
+  @override
+  String get faqCancelledWhileThereA =>
+      'Ask reception to press \"present\" on the salon screen. If the turn was really cancelled, contact us and we\'ll put you back in the same place once the salon confirms you were there.';
+
+  @override
+  String get faqWrongEstimateQ => 'The estimated wait was wrong';
+
+  @override
+  String get faqWrongEstimateA =>
+      'The estimate updates live with the active chairs. Rate \"wait estimate accuracy\" after your visit — that\'s what affects salon ranking.';
+
+  @override
+  String get faqNoTurnAlertQ => 'I didn\'t get the \"your turn\" notification';
+
+  @override
+  String get faqNoTurnAlertA =>
+      'Check that app notifications are allowed in your phone settings, and keep the turn screen open when you\'re close. Text messages are the backup when the app is closed.';
+
+  @override
+  String get faqLeaveQueueQ => 'How do I leave the queue?';
+
+  @override
+  String get faqLeaveQueueA =>
+      'On the \"your turn\" screen tap \"leave the queue\". Your place goes to someone else and can\'t be restored; joining again starts at the back.';
+
+  @override
+  String get faqPriceMismatchQ => 'The salon charged me a different price';
+
+  @override
+  String get faqPriceMismatchA =>
+      'Prices in the app are the ones the salon published. If you were charged differently, send us the receipt and we\'ll review it with the salon.';
+
+  @override
+  String get faqChangePhoneQ => 'How do I change my mobile number?';
+
+  @override
+  String get faqChangePhoneA =>
+      'Your number is your identity in Beltadreeg, so changing it needs verification of the new number. Contact us and we\'ll do it with you — your bookings and ratings move over unchanged.';
 }

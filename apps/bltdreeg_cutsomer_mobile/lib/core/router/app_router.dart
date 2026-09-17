@@ -2,6 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/presentation/pages/account_page.dart';
+import '../../features/account/presentation/pages/edit_profile_page.dart';
+import '../../features/account/presentation/pages/help_page.dart';
+import '../../features/account/presentation/pages/language_page.dart';
+import '../../features/account/presentation/pages/notification_settings_page.dart';
 import '../../features/auth/domain/entities/otp_challenge.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/presentation/login/login_cubit.dart';
@@ -29,9 +34,7 @@ import '../../features/search/presentation/pages/search_page.dart';
 import '../dev/design_system_gallery_page.dart';
 import '../storage/app_preferences.dart';
 import '../theme/app_dimens.dart';
-import 'app_navigation.dart';
 import 'app_routes.dart';
-import 'route_placeholder_page.dart';
 import 'shell/fade_branch_container.dart';
 import 'shell/main_shell_scaffold.dart';
 
@@ -158,32 +161,33 @@ final class AppRouter {
               GoRoute(
                 name: AppRoutes.account.name,
                 path: AppRoutes.account.path,
-                builder: (context, _) => RoutePlaceholderPage(
-                  title: 'Account',
-                  links: [
-                    ('→ profile', () => context.pushEditProfile()),
-                    ('→ favorites', () => context.pushFavorites()),
-                    (
-                      '→ notification settings',
-                      () => context.pushNotificationSettings(),
-                    ),
-                    ('→ language', () => context.pushLanguage()),
-                    ('→ help', () => context.pushHelp()),
-                  ],
-                ),
+                builder: (_, _) => const AccountPage(),
                 routes: [
-                  _placeholder(AppRoutes.editProfile, 'Edit profile'),
+                  GoRoute(
+                    name: AppRoutes.editProfile.name,
+                    path: AppRoutes.editProfile.path,
+                    builder: (_, _) => const EditProfilePage(),
+                  ),
                   GoRoute(
                     name: AppRoutes.favorites.name,
                     path: AppRoutes.favorites.path,
                     builder: (_, _) => const FavoritesPage(),
                   ),
-                  _placeholder(
-                    AppRoutes.notificationSettings,
-                    'Notification settings',
+                  GoRoute(
+                    name: AppRoutes.notificationSettings.name,
+                    path: AppRoutes.notificationSettings.path,
+                    builder: (_, _) => const NotificationSettingsPage(),
                   ),
-                  _placeholder(AppRoutes.language, 'Language'),
-                  _placeholder(AppRoutes.help, 'Help & support'),
+                  GoRoute(
+                    name: AppRoutes.language.name,
+                    path: AppRoutes.language.path,
+                    builder: (_, _) => const LanguagePage(),
+                  ),
+                  GoRoute(
+                    name: AppRoutes.help.name,
+                    path: AppRoutes.help.path,
+                    builder: (_, _) => const HelpPage(),
+                  ),
                 ],
               ),
             ],
@@ -336,10 +340,4 @@ final class AppRouter {
     }
     return null;
   }
-
-  static GoRoute _placeholder(AppRoute route, String title) => GoRoute(
-    name: route.name,
-    path: route.path,
-    builder: (_, _) => RoutePlaceholderPage(title: title),
-  );
 }

@@ -6,6 +6,14 @@
 /// dio / WebSocket implementations once the backend exists.
 enum BackendMode { fake, real }
 
+/// Shown on the account and help screens; keep in step with pubspec.
+abstract final class AppInfo {
+  static const version = '1.0.0';
+  static const supportNumber = '19245';
+  static const termsUrl = 'https://beltadreeg.com/terms';
+  static const privacyUrl = 'https://beltadreeg.com/privacy';
+}
+
 final class AppEnvironment {
   const AppEnvironment({
     required this.backendMode,

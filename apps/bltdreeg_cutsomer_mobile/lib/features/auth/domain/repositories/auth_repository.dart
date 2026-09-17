@@ -1,6 +1,7 @@
 import '../../../../core/utils/result.dart';
 import '../entities/auth_session.dart';
 import '../entities/otp_challenge.dart';
+import '../entities/user.dart';
 
 abstract interface class AuthRepository {
   /// Current session, then every change. Drives the router guard.
@@ -32,6 +33,12 @@ abstract interface class AuthRepository {
     required OtpChallenge challenge,
     required String code,
   });
+
+  /// Saves the editable profile fields and updates the session (frame 36).
+  Future<Result<User>> updateProfile(ProfileUpdate update);
+
+  /// Deletes the account, then signs out on the device.
+  Future<Result<void>> deleteAccount();
 
   Future<void> continueAsGuest();
 

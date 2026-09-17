@@ -25,6 +25,25 @@ final class User extends Equatable {
 
   String get fullName => '$firstName $lastName'.trim();
 
+  User copyWith({
+    String? firstName,
+    String? lastName,
+    String? email,
+    bool clearEmail = false,
+    DateTime? birthDate,
+    bool clearBirthDate = false,
+    String? areaName,
+  }) => User(
+    id: id,
+    firstName: firstName ?? this.firstName,
+    lastName: lastName ?? this.lastName,
+    phone: phone,
+    email: clearEmail ? null : email ?? this.email,
+    birthDate: clearBirthDate ? null : birthDate ?? this.birthDate,
+    areaName: areaName ?? this.areaName,
+    phoneVerified: phoneVerified,
+  );
+
   @override
   List<Object?> get props => [
     id,
@@ -36,4 +55,25 @@ final class User extends Equatable {
     areaName,
     phoneVerified,
   ];
+}
+
+/// Editable profile fields (frame 36). The phone is the account identity
+/// and changes through its own verified path, never this form.
+final class ProfileUpdate extends Equatable {
+  const ProfileUpdate({
+    required this.firstName,
+    required this.lastName,
+    this.email,
+    this.birthDate,
+    this.areaName,
+  });
+
+  final String firstName;
+  final String lastName;
+  final String? email;
+  final DateTime? birthDate;
+  final String? areaName;
+
+  @override
+  List<Object?> get props => [firstName, lastName, email, birthDate, areaName];
 }

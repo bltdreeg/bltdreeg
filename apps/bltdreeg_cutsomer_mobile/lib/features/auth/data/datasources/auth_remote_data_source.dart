@@ -19,5 +19,10 @@ abstract interface class AuthRemoteDataSource {
 
   Future<User> fetchMe();
 
+  Future<User> updateProfile(ProfileUpdate update);
+
+  /// Erases the account server-side (frame 36).
+  Future<void> deleteAccount();
+
   Future<void> signOut();
 }

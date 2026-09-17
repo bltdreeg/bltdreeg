@@ -17,8 +17,9 @@ import '../../domain/services/salon_matcher.dart';
 import '../../domain/usecases.dart';
 
 /// Frame 40. Resolves when the user confirms or dismisses.
-Future<void> showAreaPicker(BuildContext context) {
-  return showModalBottomSheet<void>(
+/// Returns the chosen area, or null when dismissed.
+Future<Area?> showAreaPicker(BuildContext context) {
+  return showModalBottomSheet<Area>(
     context: context,
     useRootNavigator: true,
     isScrollControlled: true,
@@ -77,7 +78,12 @@ class _AreaPickerState extends State<_AreaPicker> {
   Future<void> _confirm() async {
     setState(() => _saving = true);
     await _selectArea(_selectedId);
-    if (mounted) Navigator.of(context).pop();
+    if (!mounted) return;
+    final chosen = switch (_areas) {
+      Ok(:final value) => value.where((a) => a.id == _selectedId).firstOrNull,
+      _ => null,
+    };
+    Navigator.of(context).pop(chosen);
   }
 
   @override

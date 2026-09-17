@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:get_it/get_it.dart';
 
+import '../../features/account/account_module.dart';
 import '../../features/auth/auth_module.dart';
 import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
@@ -79,6 +80,7 @@ Future<void> configureDependencies({
   registerQueueModule(sl);
   registerRatingModule(sl, env);
   registerNotificationsModule(sl, env);
+  registerAccountModule(sl);
   if (authLocal != null) {
     sl
       ..unregister<AuthLocalDataSource>()

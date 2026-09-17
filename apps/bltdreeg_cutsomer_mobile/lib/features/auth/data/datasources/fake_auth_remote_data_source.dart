@@ -150,6 +150,29 @@ final class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   });
 
   @override
+  Future<User> updateProfile(ProfileUpdate update) => _server(() {
+    final phone = _currentUserPhone ?? demoPhone;
+    final account = _accounts[phone]!;
+    final updated = account.user.copyWith(
+      firstName: update.firstName,
+      lastName: update.lastName,
+      email: update.email,
+      clearEmail: update.email == null,
+      birthDate: update.birthDate,
+      clearBirthDate: update.birthDate == null,
+      areaName: update.areaName,
+    );
+    _accounts[phone] = (user: updated, password: account.password);
+    return updated;
+  });
+
+  @override
+  Future<void> deleteAccount() => _server(() {
+    _accounts.remove(_currentUserPhone ?? demoPhone);
+    _currentUserPhone = null;
+  });
+
+  @override
   Future<void> signOut() => _server(() => _currentUserPhone = null);
 
   OtpChallenge _issue(String phone, OtpPurpose purpose) {

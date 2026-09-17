@@ -2845,6 +2845,648 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'غير مقروء'**
   String get a11yUnread;
+
+  /// No description provided for @accountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get accountTitle;
+
+  /// No description provided for @accountEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّل'**
+  String get accountEdit;
+
+  /// No description provided for @statCompletedCuts.
+  ///
+  /// In ar, this message translates to:
+  /// **'حلاقة خلصتها'**
+  String get statCompletedCuts;
+
+  /// No description provided for @statFavoriteSalons.
+  ///
+  /// In ar, this message translates to:
+  /// **'صالونات مفضّلة'**
+  String get statFavoriteSalons;
+
+  /// No description provided for @groupAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get groupAccount;
+
+  /// No description provided for @groupApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق'**
+  String get groupApp;
+
+  /// No description provided for @groupHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعدة'**
+  String get groupHelp;
+
+  /// No description provided for @rowProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتي الشخصية'**
+  String get rowProfile;
+
+  /// No description provided for @rowBookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزاتي'**
+  String get rowBookings;
+
+  /// No description provided for @rowFavorites.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالونات المفضّلة'**
+  String get rowFavorites;
+
+  /// No description provided for @rowLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get rowLanguage;
+
+  /// No description provided for @rowNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get rowNotifications;
+
+  /// No description provided for @rowHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get rowHelp;
+
+  /// No description provided for @activeBookingsValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{1 نشط} other{{count} نشطين}}'**
+  String activeBookingsValue(int count);
+
+  /// No description provided for @signOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get signOut;
+
+  /// No description provided for @appVersionLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالتدريج — نسخة {version}'**
+  String appVersionLine(String version);
+
+  /// No description provided for @signOutDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج؟'**
+  String get signOutDialogTitle;
+
+  /// No description provided for @signOutDialogBodyInQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك دور شغّال في {salon}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.'**
+  String signOutDialogBodyInQueue(String salon);
+
+  /// No description provided for @signOutDialogBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هتحتاج تسجّل دخول تاني عشان تدخل طابور أو تشوف حجوزاتك.'**
+  String get signOutDialogBody;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخرج من الحساب'**
+  String get signOutConfirm;
+
+  /// No description provided for @signOutCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليني فاضل'**
+  String get signOutCancel;
+
+  /// No description provided for @guestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انت بتتصفّح كضيف'**
+  String get guestTitle;
+
+  /// No description provided for @guestBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تدخل الطوابير وتتابع دورك'**
+  String get guestBody;
+
+  /// No description provided for @guestSignInCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخول أو اعمل حساب'**
+  String get guestSignInCta;
+
+  /// No description provided for @guestLockedHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي محتاج حساب'**
+  String get guestLockedHeader;
+
+  /// No description provided for @guestAvailableHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح من غير حساب'**
+  String get guestAvailableHeader;
+
+  /// No description provided for @guestLockedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقفول'**
+  String get guestLockedBadge;
+
+  /// No description provided for @guestLockedQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'دخول الطابور ومتابعة دورك'**
+  String get guestLockedQueue;
+
+  /// No description provided for @guestLockedBookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل حجوزاتك'**
+  String get guestLockedBookings;
+
+  /// No description provided for @guestLockedFavorites.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالونات المفضّلة'**
+  String get guestLockedFavorites;
+
+  /// No description provided for @guestLockedRating.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييم الصالونات'**
+  String get guestLockedRating;
+
+  /// No description provided for @guestAllowedBrowse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفّح الصالونات والأسعار'**
+  String get guestAllowedBrowse;
+
+  /// No description provided for @guestAllowedWait.
+  ///
+  /// In ar, this message translates to:
+  /// **'شوف وقت الانتظار الحقيقي'**
+  String get guestAllowedWait;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتي الشخصية'**
+  String get profileTitle;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الصورة'**
+  String get changePhoto;
+
+  /// No description provided for @firstNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم الأول'**
+  String get firstNameLabel;
+
+  /// No description provided for @lastNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم العيلة'**
+  String get lastNameLabel;
+
+  /// No description provided for @phoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل'**
+  String get phoneLabel;
+
+  /// No description provided for @phoneVerifiedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأكّد'**
+  String get phoneVerifiedBadge;
+
+  /// No description provided for @phoneIsIdentity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم هو هويتك في بالتدريج'**
+  String get phoneIsIdentity;
+
+  /// No description provided for @changePhoneAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الرقم'**
+  String get changePhoneAction;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get emailLabel;
+
+  /// No description provided for @birthDateLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الميلاد'**
+  String get birthDateLabel;
+
+  /// No description provided for @birthDateNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنستخدمه عشان نبعتلك عرض في عيد ميلادك'**
+  String get birthDateNote;
+
+  /// No description provided for @areaLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة'**
+  String get areaLabel;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ التعديلات'**
+  String get saveChanges;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتحفظت التعديلات'**
+  String get profileSaved;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح حسابي'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمسح حسابك؟'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنمسح بياناتك وحجوزاتك وتقييماتك، ومش هينفع نرجّعها. لو عندك دور شغّال هيتلغى.'**
+  String get deleteAccountBody;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيوه، امسح حسابي'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @deleteAccountCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليه'**
+  String get deleteAccountCancel;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسمك'**
+  String get nameRequired;
+
+  /// No description provided for @photoNotSupportedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة بتتغيّر من التقييمات دلوقتي'**
+  String get photoNotSupportedYet;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notifGroupQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات الدور'**
+  String get notifGroupQueue;
+
+  /// No description provided for @notifQueueUpdates.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديثات الطابور'**
+  String get notifQueueUpdates;
+
+  /// No description provided for @notifQueueUpdatesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضلك اتنين · فاضلك واحد · حان دورك'**
+  String get notifQueueUpdatesBody;
+
+  /// No description provided for @notifAlwaysOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دايماً شغّالة'**
+  String get notifAlwaysOn;
+
+  /// No description provided for @notifQueueLockedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش هينفع تقفلها — من غيرها مش هتعرف إمتى جه دورك وهتخسره.'**
+  String get notifQueueLockedNote;
+
+  /// No description provided for @notifGroupOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض والتذكيرات'**
+  String get notifGroupOffers;
+
+  /// No description provided for @notifFavoriteOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروض الصالونات المفضّلة'**
+  String get notifFavoriteOffers;
+
+  /// No description provided for @notifFavoriteOffersBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصومات وباقات جديدة'**
+  String get notifFavoriteOffersBody;
+
+  /// No description provided for @notifFavoriteFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'صالون مفضّل بقى فاضي'**
+  String get notifFavoriteFree;
+
+  /// No description provided for @notifFavoriteFreeBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الأوقات اللي بتروح فيها عادةً'**
+  String get notifFavoriteFreeBody;
+
+  /// No description provided for @notifRateReminder.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذكّرني أقيّم الزيارة'**
+  String get notifRateReminder;
+
+  /// No description provided for @notifNewSalons.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروض صالونات جديدة قريبة مني'**
+  String get notifNewSalons;
+
+  /// No description provided for @notifGroupChannels.
+  ///
+  /// In ar, this message translates to:
+  /// **'قنوات الإرسال'**
+  String get notifGroupChannels;
+
+  /// No description provided for @notifChannelPush.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات التطبيق'**
+  String get notifChannelPush;
+
+  /// No description provided for @notifChannelPushBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسرع والأدق'**
+  String get notifChannelPushBody;
+
+  /// No description provided for @notifChannelSms.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسايل نصية'**
+  String get notifChannelSms;
+
+  /// No description provided for @notifChannelSmsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'احتياطي لو التطبيق مقفول'**
+  String get notifChannelSmsBody;
+
+  /// No description provided for @languageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get languageTitle;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageCurrent.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة الحالية'**
+  String get languageCurrent;
+
+  /// No description provided for @languageArabicDirection.
+  ///
+  /// In ar, this message translates to:
+  /// **'من اليمين للشمال'**
+  String get languageArabicDirection;
+
+  /// No description provided for @languageEnglishDirection.
+  ///
+  /// In ar, this message translates to:
+  /// **'Left to right'**
+  String get languageEnglishDirection;
+
+  /// No description provided for @languageDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحوّل التطبيق لـ {language}؟'**
+  String languageDialogTitle(String language);
+
+  /// No description provided for @languageDialogBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الواجهة هتتقلب من اليمين للشمال. أسماء الصالونات والخدمات هتفضل زي ما صاحب الصالون كتبها.'**
+  String get languageDialogBody;
+
+  /// No description provided for @languageDialogConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حوّل لـ {language}'**
+  String languageDialogConfirm(String language);
+
+  /// No description provided for @languageDialogCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'خليها زي ما هي'**
+  String get languageDialogCancel;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get helpTitle;
+
+  /// No description provided for @helpSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر على مشكلتك'**
+  String get helpSearchHint;
+
+  /// No description provided for @helpLiveTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك مشكلة في دور دلوقتي؟'**
+  String get helpLiveTitle;
+
+  /// No description provided for @helpLiveBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنرد خلال 5 دقايق من 10 ص لـ 12 ص'**
+  String get helpLiveBody;
+
+  /// No description provided for @helpFaqHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكتر أسئلة بتتسأل'**
+  String get helpFaqHeader;
+
+  /// No description provided for @helpContactHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلّمنا'**
+  String get helpContactHeader;
+
+  /// No description provided for @helpAboutHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن التطبيق'**
+  String get helpAboutHeader;
+
+  /// No description provided for @helpCallUs.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصل بينا'**
+  String get helpCallUs;
+
+  /// No description provided for @helpCallUsValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{number} · من 10 ص لـ 12 ص'**
+  String helpCallUsValue(String number);
+
+  /// No description provided for @helpTerms.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط الاستخدام'**
+  String get helpTerms;
+
+  /// No description provided for @helpPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
+  String get helpPrivacy;
+
+  /// No description provided for @helpVersion.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة التطبيق'**
+  String get helpVersion;
+
+  /// No description provided for @helpNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش نتيجة للي دوّرت عليه. كلّمنا وهنساعدك.'**
+  String get helpNoResults;
+
+  /// No description provided for @faqCancelledWhileThereQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوري اتلغى وأنا في المحل — أعمل إيه؟'**
+  String get faqCancelledWhileThereQ;
+
+  /// No description provided for @faqCancelledWhileThereA.
+  ///
+  /// In ar, this message translates to:
+  /// **'قول للريسيبشن يدوس \"حاضر\" من شاشة الصالون. لو الدور اتلغى فعلاً، كلّمنا من هنا وهندخّلك تاني في نفس المكان لو الصالون أكّد إنك كنت موجود.'**
+  String get faqCancelledWhileThereA;
+
+  /// No description provided for @faqWrongEstimateQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت المتوقع طلع غلط'**
+  String get faqWrongEstimateQ;
+
+  /// No description provided for @faqWrongEstimateA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة. قيّم \"دقة الوقت المتوقع\" بعد الزيارة — ده اللي بيأثر على ترتيب الصالونات.'**
+  String get faqWrongEstimateA;
+
+  /// No description provided for @faqNoTurnAlertQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما وصلنيش إشعار \"حان دورك\"'**
+  String get faqNoTurnAlertQ;
+
+  /// No description provided for @faqNoTurnAlertA.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتأكد إن إشعارات التطبيق مفتوحة من إعدادات الموبايل، وإن شاشة الدور مفتوحة وقت ما تكون قريب. الرسايل النصية احتياطي لو التطبيق مقفول.'**
+  String get faqNoTurnAlertA;
+
+  /// No description provided for @faqLeaveQueueQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزاي أطلع من الطابور؟'**
+  String get faqLeaveQueueQ;
+
+  /// No description provided for @faqLeaveQueueA.
+  ///
+  /// In ar, this message translates to:
+  /// **'من شاشة \"دورك\" دوس \"اطلع من الطابور\". دورك هيروح لحد تاني ومش هينفع ترجعه، ولو دخلت تاني هتبدأ من آخر الطابور.'**
+  String get faqLeaveQueueA;
+
+  /// No description provided for @faqPriceMismatchQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالون حاسبني غير السعر المكتوب'**
+  String get faqPriceMismatchQ;
+
+  /// No description provided for @faqPriceMismatchA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسعار اللي في التطبيق هي اللي الصالون كاتبها. لو حاسبك غير كده، ابعتلنا من هنا بصورة الفاتورة وإحنا بنراجع مع الصالون.'**
+  String get faqPriceMismatchA;
+
+  /// No description provided for @faqChangePhoneQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزاي أغيّر رقم موبايلي؟'**
+  String get faqChangePhoneQ;
+
+  /// No description provided for @faqChangePhoneA.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم هو هويتك في بالتدريج، فتغييره بيحتاج تأكيد برقم جديد. كلّمنا وهنعمله معاك، وحجوزاتك وتقييماتك هتنتقل زي ما هي.'**
+  String get faqChangePhoneA;
 }
 
 class _AppLocalizationsDelegate
