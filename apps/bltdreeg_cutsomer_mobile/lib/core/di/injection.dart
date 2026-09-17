@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
 
+import '../../features/auth/auth_module.dart';
+import '../../features/auth/data/datasources/auth_local_data_source.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/onboarding/onboarding_module.dart';
 import '../config/app_environment.dart';
 import '../database/app_database.dart';
 import '../localization/locale_cubit.dart';
@@ -23,6 +27,7 @@ Future<void> configureDependencies({
   AppPreferences? preferences,
   AppDatabase? database,
   ConnectivityService? connectivity,
+  AuthLocalDataSource? authLocal,
 }) async {
   final env = environment ?? AppEnvironment.fromDefines();
   sl
@@ -53,8 +58,19 @@ Future<void> configureDependencies({
       () => ConnectivityCubit(sl()),
       dispose: (c) => c.close(),
     )
-    ..registerLazySingleton<AppRouter>(() => AppRouter(preferences: sl()));
+    ..registerLazySingleton<AppRouter>(
+      () => AppRouter(preferences: sl(), session: sl(), authRepository: sl()),
+    );
 
-  // Feature modules register here as they land, e.g.:
-  // registerAuthFeature(sl, env);
+  registerOnboardingModule(sl);
+  registerAuthModule(sl, env);
+  if (authLocal != null) {
+    sl
+      ..unregister<AuthLocalDataSource>()
+      ..registerSingleton<AuthLocalDataSource>(authLocal);
+  }
+
+  // Restore the stored session before the first frame so the router guard
+  // and the account tab start in the right state.
+  await sl<AuthRepository>().restoreSession();
 }

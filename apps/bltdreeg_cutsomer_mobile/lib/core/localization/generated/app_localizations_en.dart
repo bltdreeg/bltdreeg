@@ -206,4 +206,228 @@ class AppLocalizationsEn extends AppLocalizations {
   String reviewsCount(String count) {
     return '($count)';
   }
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboarding1Title => 'Every barber near you,\nall in one place';
+
+  @override
+  String get onboarding1Body =>
+      'Find the closest salon to home or work, and check its prices, services and customer ratings before you head out.';
+
+  @override
+  String get onboarding1Cta => 'Let\'s start';
+
+  @override
+  String get onboarding2Title => 'Wait for your turn\nfrom wherever you are';
+
+  @override
+  String get onboarding2Body =>
+      'Join the queue from your phone and see how many people are ahead and the expected time, live. We\'ll notify you when there are two left.';
+
+  @override
+  String get onboarding2Cta => 'Continue';
+
+  @override
+  String get onboarding3Title => 'Pick your barber,\nknow the price upfront';
+
+  @override
+  String get onboarding3Body =>
+      'Every service shows its price and duration, and you can choose your favorite barber by name. No surprises at the end.';
+
+  @override
+  String get onboarding3Cta => 'Browse salons';
+
+  @override
+  String get onboarding3Login => 'I have an account — Sign in';
+
+  @override
+  String get queueNumberCaption => 'Your number';
+
+  @override
+  String peopleLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people left',
+      one: 'Only 1 left',
+      zero: 'No one ahead',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String approxMinutes(int minutes) {
+    return '~$minutes min';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get authBrowseAsGuest => 'Browse without an account';
+
+  @override
+  String get loginTitle => 'Welcome back';
+
+  @override
+  String get loginSubtitle => 'Sign in to track your turn and your bookings.';
+
+  @override
+  String get loginTabEmail => 'Email';
+
+  @override
+  String get loginTabPhone => 'Mobile number';
+
+  @override
+  String get fieldEmail => 'Email';
+
+  @override
+  String get fieldPassword => 'Password';
+
+  @override
+  String get fieldPhone => 'Mobile number';
+
+  @override
+  String get fieldFirstName => 'First name';
+
+  @override
+  String get fieldLastName => 'Last name';
+
+  @override
+  String get loginForgotPassword => 'Forgot password?';
+
+  @override
+  String get loginSubmit => 'Sign in';
+
+  @override
+  String get orDivider => 'or';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get loginNoAccount => 'Don\'t have an account yet?';
+
+  @override
+  String get loginCreateAccount => 'Create one now';
+
+  @override
+  String get loginOtpNotice =>
+      'We\'ll text a confirmation code to this number.';
+
+  @override
+  String get loginSendOtp => 'Send confirmation code';
+
+  @override
+  String get registerTitle => 'Create your account in a minute';
+
+  @override
+  String get registerSubtitle =>
+      'An account lets you join queues, track your turn and rate the service.';
+
+  @override
+  String passwordRuleLength(int count) {
+    return 'At least $count characters';
+  }
+
+  @override
+  String get passwordRuleDigit => 'At least one number';
+
+  @override
+  String registerTerms(String terms, String privacy) {
+    return 'I agree to Beltadreeg\'s $terms and $privacy.';
+  }
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get registerTermsRequired =>
+      'You need to accept the terms to continue';
+
+  @override
+  String get registerSubmit => 'Create account';
+
+  @override
+  String get registerOrSocial => 'or sign up with';
+
+  @override
+  String get registerHaveAccount => 'Already have an account?';
+
+  @override
+  String get registerSignIn => 'Sign in';
+
+  @override
+  String get otpTitle => 'Enter the confirmation code';
+
+  @override
+  String otpSentTo(int length) {
+    return 'We texted a $length-digit code to';
+  }
+
+  @override
+  String get otpChangeNumber => 'Change number';
+
+  @override
+  String otpResendIn(String time) {
+    return 'You can request a new code in $time';
+  }
+
+  @override
+  String get otpConfirm => 'Confirm';
+
+  @override
+  String get otpHelp =>
+      'Didn\'t get the code? Make sure the number is right and you have signal.';
+
+  @override
+  String get otpWrongTitle => 'That code isn\'t right';
+
+  @override
+  String get otpWrongSubtitle =>
+      'Check the digits again, or request a new code to';
+
+  @override
+  String otpAttemptsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attempts left before we pause requests',
+      one: '1 attempt left before we pause requests',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String otpLocked(int minutes) {
+    return 'Too many attempts. Try again in $minutes minutes.';
+  }
+
+  @override
+  String get otpResend => 'Send me a new code';
+
+  @override
+  String get otpResent => 'We sent you a new code';
+
+  @override
+  String get authInvalidCredentials => 'Email or password is incorrect';
+
+  @override
+  String get authPhoneNotRegistered =>
+      'This number isn\'t registered. Create an account in a minute.';
+
+  @override
+  String get authPhoneTaken =>
+      'This number already has an account. Sign in instead.';
 }

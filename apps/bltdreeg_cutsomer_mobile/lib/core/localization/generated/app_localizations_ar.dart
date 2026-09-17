@@ -203,4 +203,226 @@ class AppLocalizationsAr extends AppLocalizations {
   String reviewsCount(String count) {
     return '($count)';
   }
+
+  @override
+  String get onboardingSkip => 'تخطّي';
+
+  @override
+  String get onboarding1Title => 'الحلاقين اللي جنبك\nكلهم في مكان واحد';
+
+  @override
+  String get onboarding1Body =>
+      'دوّر على أقرب صالون لبيتك أو لشغلك، وشوف أسعاره وخدماته وتقييم الزباين قبل ما تتحرك.';
+
+  @override
+  String get onboarding1Cta => 'يلا نبدأ';
+
+  @override
+  String get onboarding2Title => 'استنى دورك\nوانت في مكانك';
+
+  @override
+  String get onboarding2Body =>
+      'ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة. هنبعتلك إشعار وانت لسه فاضلك اتنين.';
+
+  @override
+  String get onboarding2Cta => 'كمّل';
+
+  @override
+  String get onboarding3Title => 'اختار الصنايعي\nواعرف الحساب من الأول';
+
+  @override
+  String get onboarding3Body =>
+      'كل خدمة سعرها ومدتها واضحين، وتقدر تختار الحلاق اللي بتحبه بالاسم. من غير مفاجآت آخر الحلاقة.';
+
+  @override
+  String get onboarding3Cta => 'ادخل على الصالونات';
+
+  @override
+  String get onboarding3Login => 'عندي حساب — تسجيل الدخول';
+
+  @override
+  String get queueNumberCaption => 'دورك رقم';
+
+  @override
+  String peopleLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فاضلك $count أنفار',
+      one: 'فاضلك واحد بس',
+      zero: 'مفيش حد قدامك',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String approxMinutes(int minutes) {
+    return '~ $minutes دقيقة';
+  }
+
+  @override
+  String durationMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String get authBrowseAsGuest => 'تصفّح من غير حساب';
+
+  @override
+  String get loginTitle => 'أهلاً بيك تاني';
+
+  @override
+  String get loginSubtitle => 'سجّل دخولك عشان تتابع دورك وحجوزاتك.';
+
+  @override
+  String get loginTabEmail => 'بالبريد الإلكتروني';
+
+  @override
+  String get loginTabPhone => 'برقم الموبايل';
+
+  @override
+  String get fieldEmail => 'البريد الإلكتروني';
+
+  @override
+  String get fieldPassword => 'كلمة السر';
+
+  @override
+  String get fieldPhone => 'رقم الموبايل';
+
+  @override
+  String get fieldFirstName => 'الاسم الأول';
+
+  @override
+  String get fieldLastName => 'اسم العيلة';
+
+  @override
+  String get loginForgotPassword => 'نسيت كلمة السر؟';
+
+  @override
+  String get loginSubmit => 'دخول';
+
+  @override
+  String get orDivider => 'أو';
+
+  @override
+  String get continueWithGoogle => 'المتابعة بحساب Google';
+
+  @override
+  String get continueWithApple => 'المتابعة بحساب Apple';
+
+  @override
+  String get loginNoAccount => 'لسه معندكش حساب؟';
+
+  @override
+  String get loginCreateAccount => 'اعمل واحد دلوقتي';
+
+  @override
+  String get loginOtpNotice => 'هنبعتلك كود تأكيد في رسالة على نفس الرقم.';
+
+  @override
+  String get loginSendOtp => 'ابعت كود التأكيد';
+
+  @override
+  String get registerTitle => 'اعمل حسابك في دقيقة';
+
+  @override
+  String get registerSubtitle =>
+      'الحساب بيخليك تدخل الطابور وتتابع دورك وتقيّم الخدمة.';
+
+  @override
+  String passwordRuleLength(int count) {
+    return '$count حروف على الأقل';
+  }
+
+  @override
+  String get passwordRuleDigit => 'رقم واحد على الأقل';
+
+  @override
+  String registerTerms(String terms, String privacy) {
+    return 'موافق على $terms و$privacy بتاعة بالتدريج.';
+  }
+
+  @override
+  String get termsOfUse => 'شروط الاستخدام';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get registerTermsRequired => 'لازم توافق على الشروط عشان تكمل';
+
+  @override
+  String get registerSubmit => 'اعمل الحساب';
+
+  @override
+  String get registerOrSocial => 'أو سجّل بـ';
+
+  @override
+  String get registerHaveAccount => 'عندك حساب قبل كده؟';
+
+  @override
+  String get registerSignIn => 'سجّل دخولك';
+
+  @override
+  String get otpTitle => 'اكتب كود التأكيد';
+
+  @override
+  String otpSentTo(int length) {
+    return 'بعتنالك كود من $length أرقام في رسالة على الرقم';
+  }
+
+  @override
+  String get otpChangeNumber => 'غيّر الرقم';
+
+  @override
+  String otpResendIn(String time) {
+    return 'تقدر تطلب كود جديد بعد $time';
+  }
+
+  @override
+  String get otpConfirm => 'تأكيد';
+
+  @override
+  String get otpHelp =>
+      'ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغّالة.';
+
+  @override
+  String get otpWrongTitle => 'الكود مش مظبوط';
+
+  @override
+  String get otpWrongSubtitle => 'راجع الأرقام تاني، أو اطلب كود جديد على';
+
+  @override
+  String otpAttemptsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فاضلك $count محاولات قبل ما نقفل الطلب مؤقتاً',
+      two: 'فاضلك محاولتين قبل ما نقفل الطلب مؤقتاً',
+      one: 'فاضلك محاولة واحدة قبل ما نقفل الطلب مؤقتاً',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String otpLocked(int minutes) {
+    return 'وقفنا المحاولات مؤقتاً. جرّب تاني بعد $minutes دقايق.';
+  }
+
+  @override
+  String get otpResend => 'ابعتلي كود جديد';
+
+  @override
+  String get otpResent => 'بعتنالك كود جديد';
+
+  @override
+  String get authInvalidCredentials =>
+      'البريد الإلكتروني أو كلمة السر مش مظبوطين';
+
+  @override
+  String get authPhoneNotRegistered =>
+      'الرقم ده مش متسجّل. اعمل حساب جديد في دقيقة.';
+
+  @override
+  String get authPhoneTaken => 'الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.';
 }

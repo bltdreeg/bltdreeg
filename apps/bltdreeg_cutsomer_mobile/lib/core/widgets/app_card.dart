@@ -68,6 +68,7 @@ class AppNotice extends StatelessWidget {
     this.bordered,
     this.emphasized = false,
     this.iconSize = AppSizes.iconSm,
+    this.iconColor,
     super.key,
   });
 
@@ -85,6 +86,9 @@ class AppNotice extends StatelessWidget {
   /// Bolder message text (warnings, teal tips).
   final bool emphasized;
   final double iconSize;
+
+  /// Overrides the tone color for the icon only.
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +109,7 @@ class AppNotice extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 3),
-            child: AppIcon(icon, size: iconSize, color: fg),
+            child: AppIcon(icon, size: iconSize, color: iconColor ?? fg),
           ),
           const SizedBox(width: 10),
           Expanded(

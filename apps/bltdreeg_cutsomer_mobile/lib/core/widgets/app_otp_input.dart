@@ -19,6 +19,7 @@ class AppOtpInput extends StatefulWidget {
     this.onChanged,
     this.onCompleted,
     this.hasError = false,
+    this.isSuccess = false,
     this.enabled = true,
     this.autofocus = true,
     super.key,
@@ -29,6 +30,9 @@ class AppOtpInput extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onCompleted;
   final bool hasError;
+
+  /// Green confirmation state shown briefly before navigating on.
+  final bool isSuccess;
   final bool enabled;
   final bool autofocus;
 
@@ -105,6 +109,7 @@ class _AppOtpInputState extends State<AppOtpInput>
                           i == activeIndex &&
                           text.length < widget.length,
                       error: widget.hasError,
+                      success: widget.isSuccess,
                       caret: _caret,
                     ),
                   ),
@@ -144,59 +149,76 @@ class _OtpBox extends StatelessWidget {
     required this.digit,
     required this.active,
     required this.error,
+    required this.success,
     required this.caret,
   });
 
   final String? digit;
   final bool active;
   final bool error;
+  final bool success;
   final Animation<double> caret;
 
   @override
   Widget build(BuildContext context) {
-    final (bg, border) = error
+    final (bg, border) = success
+        ? (AppColors.okTint, AppColors.success)
+        : error
         ? (AppColors.errTint, AppColors.error)
         : active
         ? (AppColors.bg, AppColors.primary)
         : (AppColors.surf, AppColors.border);
 
-    return AnimatedContainer(
-      duration: AppMotion.fast,
-      height: 64,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: AppRadius.mdAll,
-        border: Border.all(color: border, width: 1.5),
-        boxShadow: active && !error ? AppShadows.focusRing : null,
-      ),
-      alignment: Alignment.center,
-      child: digit != null
-          ? TweenAnimationBuilder<double>(
-              key: ValueKey(digit),
-              tween: Tween(begin: 0.6, end: 1),
-              duration: AppMotion.fast,
-              curve: AppMotion.emphasized,
-              builder: (_, scale, child) =>
-                  Transform.scale(scale: scale, child: child),
-              child: Text(
-                digit!,
-                style: AppTypography.statValue.copyWith(
-                  fontSize: 24,
-                  color: error ? AppColors.errText : AppColors.textPrimary,
+    return AnimatedScale(
+      duration: AppMotion.medium,
+      curve: AppMotion.emphasized,
+      scale: success ? 1.06 : 1,
+      child: AnimatedContainer(
+        duration: AppMotion.fast,
+        height: 64,
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: AppRadius.mdAll,
+          border: Border.all(color: border, width: 1.5),
+          boxShadow: active && !error ? AppShadows.focusRing : null,
+        ),
+        alignment: Alignment.center,
+        child: digit != null
+            ? TweenAnimationBuilder<double>(
+                key: ValueKey(digit),
+                tween: Tween(begin: 0.6, end: 1),
+                duration: AppMotion.fast,
+                curve: AppMotion.emphasized,
+                builder: (_, scale, child) =>
+                    Transform.scale(scale: scale, child: child),
+                child: Text(
+                  digit!,
+                  style: AppTypography.statValue.copyWith(
+                    fontSize: 24,
+                    color: success
+                        ? AppColors.okDark
+                        : error
+                        ? AppColors.errText
+                        : AppColors.textPrimary,
+                  ),
                 ),
-              ),
-            )
-          : active
-          ? FadeTransition(
-              opacity: caret.drive(
-                TweenSequence([
-                  TweenSequenceItem(tween: ConstantTween(1.0), weight: 1),
-                  TweenSequenceItem(tween: ConstantTween(0.0), weight: 1),
-                ]),
-              ),
-              child: Container(width: 2, height: 26, color: AppColors.primary),
-            )
-          : null,
+              )
+            : active
+            ? FadeTransition(
+                opacity: caret.drive(
+                  TweenSequence([
+                    TweenSequenceItem(tween: ConstantTween(1.0), weight: 1),
+                    TweenSequenceItem(tween: ConstantTween(0.0), weight: 1),
+                  ]),
+                ),
+                child: Container(
+                  width: 2,
+                  height: 26,
+                  color: AppColors.primary,
+                ),
+              )
+            : null,
+      ),
     );
   }
 }

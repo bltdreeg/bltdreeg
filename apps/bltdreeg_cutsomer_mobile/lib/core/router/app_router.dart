@@ -2,6 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/domain/entities/otp_challenge.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/presentation/login/login_cubit.dart';
+import '../../features/auth/presentation/login/login_page.dart';
+import '../../features/auth/presentation/otp/otp_page.dart';
+import '../../features/auth/presentation/register/register_page.dart';
+import '../../features/auth/presentation/session/auth_session_cubit.dart';
+import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../dev/design_system_gallery_page.dart';
 import '../storage/app_preferences.dart';
 import 'app_navigation.dart';
@@ -19,59 +27,62 @@ import 'shell/main_shell_scaffold.dart';
 /// * full-screen routes on the root navigator (salon, booking flow, queue,
 ///   rating) that cover the bottom nav
 ///
-/// Placeholder pages are replaced by real screens phase by phase. The auth
-/// guard for [AppRoutes.protectedRoutes] is added with the auth feature.
+/// Placeholder pages are replaced by real screens phase by phase. Routes in
+/// [AppRoutes.protectedRoutes] require a signed-in user; others redirect to
+/// login with a `from` return location.
 final class AppRouter {
-  AppRouter({required this._preferences, this._refresh});
+  AppRouter({
+    required this._preferences,
+    required this.session,
+    required this.authRepository,
+  });
 
   final AppPreferences _preferences;
-  final Listenable? _refresh;
+  final AuthSessionCubit session;
+  final AuthRepository authRepository;
 
   final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
   late final GoRouter config = GoRouter(
     navigatorKey: _rootKey,
     initialLocation: AppRoutes.home.path,
-    refreshListenable: _refresh,
+    refreshListenable: session.routerRefresh,
     redirect: _redirect,
     routes: [
       GoRoute(
         name: AppRoutes.onboarding.name,
         path: AppRoutes.onboarding.path,
-        builder: (context, _) => RoutePlaceholderPage(
-          title: 'Onboarding',
-          links: [
-            (
-              '→ finish onboarding',
-              () async {
-                await _preferences.setOnboardingSeen();
-                if (context.mounted) context.goLogin();
-              },
-            ),
-          ],
-        ),
+        builder: (_, _) => const OnboardingPage(),
       ),
       GoRoute(
         name: AppRoutes.login.name,
         path: AppRoutes.login.path,
-        builder: (context, _) => RoutePlaceholderPage(
-          title: 'Login',
-          links: [
-            ('→ register', () => context.pushRegister()),
-            ('→ otp', () => context.pushOtp(phone: '01023456789')),
-            ('→ home (guest)', () => context.goHome()),
-          ],
+        builder: (_, state) => LoginPage(
+          from: state.uri.queryParameters[RouteQuery.from],
+          initialMethod:
+              state.uri.queryParameters[RouteQuery.loginMethod] == 'phone'
+              ? LoginMethod.phone
+              : LoginMethod.email,
         ),
       ),
       GoRoute(
         name: AppRoutes.register.name,
         path: AppRoutes.register.path,
-        builder: (_, _) => const RoutePlaceholderPage(title: 'Register'),
+        builder: (_, state) =>
+            RegisterPage(from: state.uri.queryParameters[RouteQuery.from]),
       ),
       GoRoute(
         name: AppRoutes.otp.name,
         path: AppRoutes.otp.path,
-        builder: (_, _) => const RoutePlaceholderPage(title: 'OTP'),
+        // Without a pending challenge (e.g. a cold deep link) there's no code
+        // to verify; fall back to the phone login screen.
+        redirect: (_, state) => _pendingChallenge(state) != null
+            ? null
+            : '${AppRoutes.login.path}?${RouteQuery.loginMethod}=phone',
+        builder: (_, state) => OtpPage(
+          challenge: _pendingChallenge(state)!,
+          from: state.uri.queryParameters[RouteQuery.from],
+        ),
       ),
 
       StatefulShellRoute(
@@ -268,12 +279,33 @@ final class AppRouter {
     ],
   );
 
+  OtpChallenge? _pendingChallenge(GoRouterState state) {
+    final phone = state.uri.queryParameters[RouteQuery.phone];
+    return phone == null ? null : authRepository.pendingChallenge(phone);
+  }
+
+  /// Route patterns (e.g. `/queue/:bookingId`) that need an account.
+  static final _protectedPatterns = {
+    for (final route in AppRoutes.protectedRoutes) route.fullPath,
+  };
+
+  static bool isProtected(String? fullPath) =>
+      fullPath != null &&
+      _protectedPatterns.any(
+        (p) => fullPath == p || fullPath.startsWith('$p/'),
+      );
+
   String? _redirect(BuildContext context, GoRouterState state) {
-    final path = state.matchedLocation;
-    final onOnboarding = path == AppRoutes.onboarding.path;
+    final onOnboarding = state.matchedLocation == AppRoutes.onboarding.path;
     if (!_preferences.onboardingSeen && !onOnboarding) {
       // Deep links still work after onboarding is completed once.
       return AppRoutes.onboarding.path;
+    }
+    if (isProtected(state.fullPath) && !session.state.isAuthenticated) {
+      return Uri(
+        path: AppRoutes.login.path,
+        queryParameters: {RouteQuery.from: state.uri.toString()},
+      ).toString();
     }
     return null;
   }

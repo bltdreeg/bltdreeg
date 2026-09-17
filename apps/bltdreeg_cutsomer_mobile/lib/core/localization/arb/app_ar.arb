@@ -136,5 +136,132 @@
         "type": "String"
       }
     }
-  }
+  },
+  "onboardingSkip": "تخطّي",
+  "onboarding1Title": "الحلاقين اللي جنبك\nكلهم في مكان واحد",
+  "onboarding1Body": "دوّر على أقرب صالون لبيتك أو لشغلك، وشوف أسعاره وخدماته وتقييم الزباين قبل ما تتحرك.",
+  "onboarding1Cta": "يلا نبدأ",
+  "onboarding2Title": "استنى دورك\nوانت في مكانك",
+  "onboarding2Body": "ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة. هنبعتلك إشعار وانت لسه فاضلك اتنين.",
+  "onboarding2Cta": "كمّل",
+  "onboarding3Title": "اختار الصنايعي\nواعرف الحساب من الأول",
+  "onboarding3Body": "كل خدمة سعرها ومدتها واضحين، وتقدر تختار الحلاق اللي بتحبه بالاسم. من غير مفاجآت آخر الحلاقة.",
+  "onboarding3Cta": "ادخل على الصالونات",
+  "onboarding3Login": "عندي حساب — تسجيل الدخول",
+  "queueNumberCaption": "دورك رقم",
+  "peopleLeft": "{count, plural, =0{مفيش حد قدامك} =1{فاضلك واحد بس} other{فاضلك {count} أنفار}}",
+  "@peopleLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "approxMinutes": "~ {minutes} دقيقة",
+  "@approxMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "durationMinutes": "{minutes} دقيقة",
+  "@durationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "authBrowseAsGuest": "تصفّح من غير حساب",
+  "loginTitle": "أهلاً بيك تاني",
+  "loginSubtitle": "سجّل دخولك عشان تتابع دورك وحجوزاتك.",
+  "loginTabEmail": "بالبريد الإلكتروني",
+  "loginTabPhone": "برقم الموبايل",
+  "fieldEmail": "البريد الإلكتروني",
+  "fieldPassword": "كلمة السر",
+  "fieldPhone": "رقم الموبايل",
+  "fieldFirstName": "الاسم الأول",
+  "fieldLastName": "اسم العيلة",
+  "loginForgotPassword": "نسيت كلمة السر؟",
+  "loginSubmit": "دخول",
+  "orDivider": "أو",
+  "continueWithGoogle": "المتابعة بحساب Google",
+  "continueWithApple": "المتابعة بحساب Apple",
+  "loginNoAccount": "لسه معندكش حساب؟",
+  "loginCreateAccount": "اعمل واحد دلوقتي",
+  "loginOtpNotice": "هنبعتلك كود تأكيد في رسالة على نفس الرقم.",
+  "loginSendOtp": "ابعت كود التأكيد",
+  "registerTitle": "اعمل حسابك في دقيقة",
+  "registerSubtitle": "الحساب بيخليك تدخل الطابور وتتابع دورك وتقيّم الخدمة.",
+  "passwordRuleLength": "{count} حروف على الأقل",
+  "@passwordRuleLength": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "passwordRuleDigit": "رقم واحد على الأقل",
+  "registerTerms": "موافق على {terms} و{privacy} بتاعة بالتدريج.",
+  "@registerTerms": {
+    "placeholders": {
+      "terms": {
+        "type": "String"
+      },
+      "privacy": {
+        "type": "String"
+      }
+    }
+  },
+  "termsOfUse": "شروط الاستخدام",
+  "privacyPolicy": "سياسة الخصوصية",
+  "registerTermsRequired": "لازم توافق على الشروط عشان تكمل",
+  "registerSubmit": "اعمل الحساب",
+  "registerOrSocial": "أو سجّل بـ",
+  "registerHaveAccount": "عندك حساب قبل كده؟",
+  "registerSignIn": "سجّل دخولك",
+  "otpTitle": "اكتب كود التأكيد",
+  "otpSentTo": "بعتنالك كود من {length} أرقام في رسالة على الرقم",
+  "@otpSentTo": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "otpChangeNumber": "غيّر الرقم",
+  "otpResendIn": "تقدر تطلب كود جديد بعد {time}",
+  "@otpResendIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "otpConfirm": "تأكيد",
+  "otpHelp": "ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغّالة.",
+  "otpWrongTitle": "الكود مش مظبوط",
+  "otpWrongSubtitle": "راجع الأرقام تاني، أو اطلب كود جديد على",
+  "otpAttemptsLeft": "{count, plural, =1{فاضلك محاولة واحدة قبل ما نقفل الطلب مؤقتاً} =2{فاضلك محاولتين قبل ما نقفل الطلب مؤقتاً} other{فاضلك {count} محاولات قبل ما نقفل الطلب مؤقتاً}}",
+  "@otpAttemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "otpLocked": "وقفنا المحاولات مؤقتاً. جرّب تاني بعد {minutes} دقايق.",
+  "@otpLocked": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "otpResend": "ابعتلي كود جديد",
+  "otpResent": "بعتنالك كود جديد",
+  "authInvalidCredentials": "البريد الإلكتروني أو كلمة السر مش مظبوطين",
+  "authPhoneNotRegistered": "الرقم ده مش متسجّل. اعمل حساب جديد في دقيقة.",
+  "authPhoneTaken": "الرقم ده عليه حساب بالفعل. سجّل دخولك بيه."
 }

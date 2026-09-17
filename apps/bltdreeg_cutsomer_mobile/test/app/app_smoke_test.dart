@@ -18,8 +18,10 @@ void main() {
 
     testWidgets('redirects to onboarding', (tester) async {
       await tester.pumpWidget(const BeltadreegApp());
-      await tester.pumpAndSettle();
-      expect(find.text('Onboarding'), findsOneWidget);
+      // Onboarding art loops, so pump a fixed time instead of settling.
+      await tester.pump(const Duration(seconds: 2));
+      expect(find.text('تخطّي'), findsOneWidget);
+      expect(find.text('يلا نبدأ'), findsOneWidget);
     });
   });
 

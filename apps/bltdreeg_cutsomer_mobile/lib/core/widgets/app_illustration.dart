@@ -73,15 +73,49 @@ class IllustrationCanvas extends StatelessWidget {
 }
 
 /// Full-canvas SVG layer inside an [IllustrationCanvas].
+///
+/// Transforms are expressed in viewBox units: [offset] translates, and
+/// [scale] / [rotation] (radians) pivot around [pivot] (defaults to the
+/// canvas origin). Layers never mirror in RTL.
 class IllustrationLayer extends StatelessWidget {
-  const IllustrationLayer(this.asset, {super.key});
+  const IllustrationLayer(
+    this.asset, {
+    this.opacity = 1,
+    this.offset = Offset.zero,
+    this.scale = 1,
+    this.rotation = 0,
+    this.pivot = Offset.zero,
+    super.key,
+  });
 
   final String asset;
+  final double opacity;
+  final Offset offset;
+  final double scale;
+  final double rotation;
+  final Offset pivot;
 
   @override
-  Widget build(BuildContext context) => Positioned.fill(
-    child: SvgPicture.asset(asset, excludeFromSemantics: true),
-  );
+  Widget build(BuildContext context) {
+    Widget child = SvgPicture.asset(asset, excludeFromSemantics: true);
+    if (scale != 1 || rotation != 0) {
+      child = Transform(
+        alignment: Alignment.topLeft,
+        origin: pivot,
+        transform: Matrix4.identity()
+          ..rotateZ(rotation)
+          ..scaleByDouble(scale, scale, 1, 1),
+        child: child,
+      );
+    }
+    if (offset != Offset.zero) {
+      child = Transform.translate(offset: offset, child: child);
+    }
+    if (opacity < 1) {
+      child = Opacity(opacity: opacity.clamp(0, 1), child: child);
+    }
+    return Positioned.fill(child: child);
+  }
 }
 
 /// Widget centered on a point given in viewBox coordinates.

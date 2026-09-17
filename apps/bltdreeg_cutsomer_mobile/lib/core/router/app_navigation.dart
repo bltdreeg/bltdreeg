@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/domain/entities/otp_challenge.dart';
 import 'app_routes.dart';
 
 /// Typed navigation helpers. Screens call these instead of passing route
@@ -22,11 +23,20 @@ extension AppNavigation on BuildContext {
     queryParameters: {RouteQuery.from: ?from},
   );
 
-  Future<void> pushRegister() => pushNamed(AppRoutes.register.name);
+  Future<void> pushRegister({String? from}) => pushNamed(
+    AppRoutes.register.name,
+    queryParameters: {RouteQuery.from: ?from},
+  );
 
-  Future<void> pushOtp({required String phone, String? from}) => pushNamed(
+  /// The route carries only the phone; the OTP screen reads the pending
+  /// challenge for it from the auth repository, so it survives router
+  /// refreshes (route `extra` does not).
+  Future<void> pushOtp(OtpChallenge challenge, {String? from}) => pushNamed(
     AppRoutes.otp.name,
-    queryParameters: {RouteQuery.phone: phone, RouteQuery.from: ?from},
+    queryParameters: {
+      RouteQuery.phone: challenge.phone,
+      RouteQuery.from: ?from,
+    },
   );
 
   // ---- tabs -------------------------------------------------------------------

@@ -35,6 +35,7 @@ dependencies:
   intl: ^0.20.3
   url_launcher: ^6.3.2
   stream_transform: ^2.1.2
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,8 @@ flutter:
     - assets/icons/
     - assets/illustrations/
     - assets/illustrations/onboarding_choose_barber/
+    - assets/illustrations/onboarding_find_salons/
+    - assets/illustrations/onboarding_live_queue/
 
   fonts:
     - family: Cairo

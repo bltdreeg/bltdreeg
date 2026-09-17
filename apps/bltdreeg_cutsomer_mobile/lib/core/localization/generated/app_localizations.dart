@@ -439,6 +439,372 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'({count})'**
   String reviewsCount(String count);
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطّي'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboarding1Title.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحلاقين اللي جنبك\nكلهم في مكان واحد'**
+  String get onboarding1Title;
+
+  /// No description provided for @onboarding1Body.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر على أقرب صالون لبيتك أو لشغلك، وشوف أسعاره وخدماته وتقييم الزباين قبل ما تتحرك.'**
+  String get onboarding1Body;
+
+  /// No description provided for @onboarding1Cta.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نبدأ'**
+  String get onboarding1Cta;
+
+  /// No description provided for @onboarding2Title.
+  ///
+  /// In ar, this message translates to:
+  /// **'استنى دورك\nوانت في مكانك'**
+  String get onboarding2Title;
+
+  /// No description provided for @onboarding2Body.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة. هنبعتلك إشعار وانت لسه فاضلك اتنين.'**
+  String get onboarding2Body;
+
+  /// No description provided for @onboarding2Cta.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمّل'**
+  String get onboarding2Cta;
+
+  /// No description provided for @onboarding3Title.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الصنايعي\nواعرف الحساب من الأول'**
+  String get onboarding3Title;
+
+  /// No description provided for @onboarding3Body.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل خدمة سعرها ومدتها واضحين، وتقدر تختار الحلاق اللي بتحبه بالاسم. من غير مفاجآت آخر الحلاقة.'**
+  String get onboarding3Body;
+
+  /// No description provided for @onboarding3Cta.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل على الصالونات'**
+  String get onboarding3Cta;
+
+  /// No description provided for @onboarding3Login.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندي حساب — تسجيل الدخول'**
+  String get onboarding3Login;
+
+  /// No description provided for @queueNumberCaption.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك رقم'**
+  String get queueNumberCaption;
+
+  /// No description provided for @peopleLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش حد قدامك} =1{فاضلك واحد بس} other{فاضلك {count} أنفار}}'**
+  String peopleLeft(int count);
+
+  /// No description provided for @approxMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'~ {minutes} دقيقة'**
+  String approxMinutes(int minutes);
+
+  /// No description provided for @durationMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} دقيقة'**
+  String durationMinutes(int minutes);
+
+  /// No description provided for @authBrowseAsGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفّح من غير حساب'**
+  String get authBrowseAsGuest;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً بيك تاني'**
+  String get loginTitle;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تتابع دورك وحجوزاتك.'**
+  String get loginSubtitle;
+
+  /// No description provided for @loginTabEmail.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالبريد الإلكتروني'**
+  String get loginTabEmail;
+
+  /// No description provided for @loginTabPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'برقم الموبايل'**
+  String get loginTabPhone;
+
+  /// No description provided for @fieldEmail.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get fieldEmail;
+
+  /// No description provided for @fieldPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر'**
+  String get fieldPassword;
+
+  /// No description provided for @fieldPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل'**
+  String get fieldPhone;
+
+  /// No description provided for @fieldFirstName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم الأول'**
+  String get fieldFirstName;
+
+  /// No description provided for @fieldLastName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم العيلة'**
+  String get fieldLastName;
+
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسيت كلمة السر؟'**
+  String get loginForgotPassword;
+
+  /// No description provided for @loginSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'دخول'**
+  String get loginSubmit;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو'**
+  String get orDivider;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتابعة بحساب Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتابعة بحساب Apple'**
+  String get continueWithApple;
+
+  /// No description provided for @loginNoAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه معندكش حساب؟'**
+  String get loginNoAccount;
+
+  /// No description provided for @loginCreateAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعمل واحد دلوقتي'**
+  String get loginCreateAccount;
+
+  /// No description provided for @loginOtpNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنبعتلك كود تأكيد في رسالة على نفس الرقم.'**
+  String get loginOtpNotice;
+
+  /// No description provided for @loginSendOtp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعت كود التأكيد'**
+  String get loginSendOtp;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعمل حسابك في دقيقة'**
+  String get registerTitle;
+
+  /// No description provided for @registerSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب بيخليك تدخل الطابور وتتابع دورك وتقيّم الخدمة.'**
+  String get registerSubtitle;
+
+  /// No description provided for @passwordRuleLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} حروف على الأقل'**
+  String passwordRuleLength(int count);
+
+  /// No description provided for @passwordRuleDigit.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم واحد على الأقل'**
+  String get passwordRuleDigit;
+
+  /// No description provided for @registerTerms.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافق على {terms} و{privacy} بتاعة بالتدريج.'**
+  String registerTerms(String terms, String privacy);
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط الاستخدام'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
+  String get privacyPolicy;
+
+  /// No description provided for @registerTermsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'لازم توافق على الشروط عشان تكمل'**
+  String get registerTermsRequired;
+
+  /// No description provided for @registerSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعمل الحساب'**
+  String get registerSubmit;
+
+  /// No description provided for @registerOrSocial.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو سجّل بـ'**
+  String get registerOrSocial;
+
+  /// No description provided for @registerHaveAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك حساب قبل كده؟'**
+  String get registerHaveAccount;
+
+  /// No description provided for @registerSignIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك'**
+  String get registerSignIn;
+
+  /// No description provided for @otpTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كود التأكيد'**
+  String get otpTitle;
+
+  /// No description provided for @otpSentTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعتنالك كود من {length} أرقام في رسالة على الرقم'**
+  String otpSentTo(int length);
+
+  /// No description provided for @otpChangeNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الرقم'**
+  String get otpChangeNumber;
+
+  /// No description provided for @otpResendIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدر تطلب كود جديد بعد {time}'**
+  String otpResendIn(String time);
+
+  /// No description provided for @otpConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get otpConfirm;
+
+  /// No description provided for @otpHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغّالة.'**
+  String get otpHelp;
+
+  /// No description provided for @otpWrongTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكود مش مظبوط'**
+  String get otpWrongTitle;
+
+  /// No description provided for @otpWrongSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع الأرقام تاني، أو اطلب كود جديد على'**
+  String get otpWrongSubtitle;
+
+  /// No description provided for @otpAttemptsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فاضلك محاولة واحدة قبل ما نقفل الطلب مؤقتاً} =2{فاضلك محاولتين قبل ما نقفل الطلب مؤقتاً} other{فاضلك {count} محاولات قبل ما نقفل الطلب مؤقتاً}}'**
+  String otpAttemptsLeft(int count);
+
+  /// No description provided for @otpLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقفنا المحاولات مؤقتاً. جرّب تاني بعد {minutes} دقايق.'**
+  String otpLocked(int minutes);
+
+  /// No description provided for @otpResend.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعتلي كود جديد'**
+  String get otpResend;
+
+  /// No description provided for @otpResent.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعتنالك كود جديد'**
+  String get otpResent;
+
+  /// No description provided for @authInvalidCredentials.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني أو كلمة السر مش مظبوطين'**
+  String get authInvalidCredentials;
+
+  /// No description provided for @authPhoneNotRegistered.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم ده مش متسجّل. اعمل حساب جديد في دقيقة.'**
+  String get authPhoneNotRegistered;
+
+  /// No description provided for @authPhoneTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.'**
+  String get authPhoneTaken;
 }
 
 class _AppLocalizationsDelegate

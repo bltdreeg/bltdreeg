@@ -83,8 +83,16 @@ abstract final class AppAssets {
       'assets/illustrations/onboarding_choose_barber/star_right.svg';
   static const illustrationOnboardingFindSalons =
       'assets/illustrations/onboarding_find_salons.svg';
+  static const illustrationOnboardingFindSalonsPin =
+      'assets/illustrations/onboarding_find_salons/pin.svg';
+  static const illustrationOnboardingFindSalonsScene =
+      'assets/illustrations/onboarding_find_salons/scene.svg';
   static const illustrationOnboardingLiveQueue =
       'assets/illustrations/onboarding_live_queue.svg';
+  static const illustrationOnboardingLiveQueueClockHands =
+      'assets/illustrations/onboarding_live_queue/clock_hands.svg';
+  static const illustrationOnboardingLiveQueueScene =
+      'assets/illustrations/onboarding_live_queue/scene.svg';
   static const illustrationQueueJoined =
       'assets/illustrations/queue_joined.svg';
   static const illustrationRatingSent = 'assets/illustrations/rating_sent.svg';
@@ -161,7 +169,11 @@ abstract final class AppAssets {
     illustrationOnboardingChooseBarberStarLeft,
     illustrationOnboardingChooseBarberStarRight,
     illustrationOnboardingFindSalons,
+    illustrationOnboardingFindSalonsPin,
+    illustrationOnboardingFindSalonsScene,
     illustrationOnboardingLiveQueue,
+    illustrationOnboardingLiveQueueClockHands,
+    illustrationOnboardingLiveQueueScene,
     illustrationQueueJoined,
     illustrationRatingSent,
     illustrationSearchNoResults,

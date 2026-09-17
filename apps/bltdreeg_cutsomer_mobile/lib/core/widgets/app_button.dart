@@ -49,9 +49,11 @@ class AppButton extends StatelessWidget {
     this.variant = AppButtonVariant.primary,
     this.size = AppButtonSize.lg,
     this.icon,
+    this.leading,
     this.isLoading = false,
     this.expand = true,
     this.height,
+    this.fontSize,
     super.key,
   });
 
@@ -64,6 +66,9 @@ class AppButton extends StatelessWidget {
 
   /// Leading icon asset (`AppAssets.icon*`).
   final String? icon;
+
+  /// Custom leading widget (e.g. the multicolor Google mark).
+  final Widget? leading;
   final bool isLoading;
 
   /// Fill the available width (default) or hug content.
@@ -71,6 +76,9 @@ class AppButton extends StatelessWidget {
 
   /// Overrides the size's height for one-off board measurements.
   final double? height;
+
+  /// Overrides the size's font size for one-off board measurements.
+  final double? fontSize;
 
   bool get _enabled => onPressed != null;
 
@@ -135,19 +143,24 @@ class AppButton extends StatelessWidget {
                 : AppTypography.buttonSm)
             .copyWith(
               color: colors.fg,
-              fontSize: switch (size) {
-                AppButtonSize.lg => 16,
-                AppButtonSize.md => 15,
-                AppButtonSize.sm => 14,
-                AppButtonSize.xs => 13.5,
-              },
+              fontSize:
+                  fontSize ??
+                  switch (size) {
+                    AppButtonSize.lg => 16,
+                    AppButtonSize.md => 15,
+                    AppButtonSize.sm => 14,
+                    AppButtonSize.xs => 13.5,
+                  },
             );
 
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (icon != null) ...[
+        if (leading != null) ...[
+          leading!,
+          const SizedBox(width: AppSpacing.sm),
+        ] else if (icon != null) ...[
           AppIcon(icon!, size: AppSizes.iconSm, color: colors.fg),
           const SizedBox(width: AppSpacing.sm),
         ],
