@@ -1694,4 +1694,141 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backToHomeDone => 'تمام، ارجعني للرئيسية';
+
+  @override
+  String get bookingsTitle => 'حجوزاتي';
+
+  @override
+  String get bookingsTabCurrent => 'الحالية';
+
+  @override
+  String get bookingsTabPast => 'السابقة';
+
+  @override
+  String get bookingsActiveNow => 'دورك شغّال دلوقتي';
+
+  @override
+  String get bookingsUpcomingBadge => 'معاد محجوز';
+
+  @override
+  String get bookingsDetails => 'تفاصيل الحجز';
+
+  @override
+  String get bookingsNotifyNote =>
+      'هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.';
+
+  @override
+  String get bookingDone => 'خدمة تمّت';
+
+  @override
+  String get bookingMissedBadge => 'اتلغى — ما حضرتش';
+
+  @override
+  String get bookingCancelledBadge => 'اتلغى';
+
+  @override
+  String get bookingMissedReason => 'عدّى وقت الاستدعاء بـ 5 دقايق';
+
+  @override
+  String rateBarberAndSalon(String barber) {
+    return 'قيّم $barber والصالون';
+  }
+
+  @override
+  String get rateSalonPrompt => 'قيّم زيارتك';
+
+  @override
+  String get rateNowAction => 'قيّم دلوقتي';
+
+  @override
+  String get rebookSameChoices => 'احجز تاني بنفس الاختيارات';
+
+  @override
+  String get bookingsEmptyTitle => 'لسه ما حجزتش أي حاجة';
+
+  @override
+  String get bookingsEmptyBody =>
+      'أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.';
+
+  @override
+  String get bookingsEmptyCta => 'دوّر على صالون قريب منك';
+
+  @override
+  String get bookingsPastEmptyTitle => 'مفيش زيارات سابقة';
+
+  @override
+  String get bookingsPastEmptyBody =>
+      'زياراتك اللي خلصت هتظهر هنا، وتقدر تقيّمها أو تحجز تاني بضغطة.';
+
+  @override
+  String get bookingsLoadFailed => 'معرفناش نجيب حجوزاتك.';
+
+  @override
+  String withBarber(String barber) {
+    return 'مع $barber';
+  }
+
+  @override
+  String get favoritesTitle => 'الصالونات المفضّلة';
+
+  @override
+  String favoritesSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صالون',
+      few: '$count صالونات',
+      two: 'صالونين',
+      one: 'صالون واحد',
+    );
+    return '$_temp0 · مرتّبة بأقل انتظار';
+  }
+
+  @override
+  String get favoritesNotifyNote =>
+      'بنبعتلك إشعار لما صالون مفضّل عندك يبقى فاضي في وقت بتروح فيه عادةً.';
+
+  @override
+  String get favoritesEmptyTitle => 'مفيش صالونات مفضّلة';
+
+  @override
+  String get favoritesEmptyBody =>
+      'دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة.';
+
+  @override
+  String get favoritesEmptyCta => 'اكتشف صالونات قريبة';
+
+  @override
+  String get favoritesLoadFailed => 'معرفناش نجيب المفضلة.';
+
+  @override
+  String get viewSalon => 'شوف الصالون';
+
+  @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get markAllRead => 'علّم الكل كمقروء';
+
+  @override
+  String get groupToday => 'النهارده';
+
+  @override
+  String get groupThisWeek => 'الأسبوع ده';
+
+  @override
+  String get groupEarlier => 'أقدم';
+
+  @override
+  String get notificationsEmptyTitle => 'مفيش إشعارات لسه';
+
+  @override
+  String get notificationsEmptyBody =>
+      'أول ما تدخل طابور، هنبعتلك هنا كل تحديث لدورك وأي عروض من الصالونات اللي بتحبها.';
+
+  @override
+  String get notificationsEmptyCta => 'دوّر على صالون';
+
+  @override
+  String get a11yUnread => 'غير مقروء';
 }

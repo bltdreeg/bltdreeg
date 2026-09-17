@@ -171,6 +171,13 @@ final class Booking extends Equatable {
 
   bool get isQueue => timing is JoinNow;
 
+  /// The time this booking is sorted and dated by: its slot, when it was
+  /// served, or when it was created.
+  DateTime get reference => switch (timing) {
+    ScheduledSlot(:final start) => start,
+    JoinNow() => servedAt ?? createdAt,
+  };
+
   DateTime? get turnDeadline => turnStartedAt?.add(turnGrace);
 
   Booking copyWith({
@@ -232,6 +239,50 @@ final class Booking extends Equatable {
     quotedWaitMinutes,
     servedAt,
   ];
+}
+
+final class BookingsSnapshot extends Equatable {
+  const BookingsSnapshot({
+    this.bookings = const [],
+    this.isLoaded = false,
+    this.failure,
+  });
+
+  final List<Booking> bookings;
+
+  /// False until a cached or server copy arrived.
+  final bool isLoaded;
+  final Failure? failure;
+
+  List<Booking> get active => [
+    for (final b in bookings)
+      if (b.status.isActive) b,
+  ]..sort(_byUrgency);
+
+  List<Booking> get past => [
+    for (final b in bookings)
+      if (!b.status.isActive) b,
+  ]..sort((a, b) => b.reference.compareTo(a.reference));
+
+  /// Queue bookings before scheduled ones, then by appointment time.
+  static int _byUrgency(Booking a, Booking b) {
+    if (a.isQueue != b.isQueue) return a.isQueue ? -1 : 1;
+    return a.reference.compareTo(b.reference);
+  }
+
+  BookingsSnapshot copyWith({
+    List<Booking>? bookings,
+    bool? isLoaded,
+    Failure? failure,
+    bool clearFailure = false,
+  }) => BookingsSnapshot(
+    bookings: bookings ?? this.bookings,
+    isLoaded: isLoaded ?? this.isLoaded,
+    failure: clearFailure ? null : failure ?? this.failure,
+  );
+
+  @override
+  List<Object?> get props => [bookings, isLoaded, failure];
 }
 
 final class TimeSlot extends Equatable {
@@ -371,6 +422,11 @@ abstract interface class BookingRepository {
 
   /// Offline-first live booking: cache, then server, then pushes.
   Stream<BookingSnapshot> watch(String bookingId);
+
+  /// The customer's bookings, newest first (frames 09-10).
+  Stream<BookingsSnapshot> watchMine();
+
+  Future<void> refreshMine();
 
   Future<void> refresh(String bookingId);
 

@@ -6,6 +6,7 @@ import '../../../../core/storage/app_preferences.dart';
 import '../../../../core/utils/result.dart';
 import '../../domain/entities/area.dart';
 import '../../domain/entities/catalog_snapshot.dart';
+import '../../domain/entities/salon_summary.dart';
 import '../../domain/repositories/salon_catalog_repository.dart';
 import '../datasources/salon_catalog_local_data_source.dart';
 import '../datasources/salon_catalog_remote_data_source.dart';
@@ -121,6 +122,128 @@ final class SalonCatalogRepositoryImpl implements SalonCatalogRepository {
     );
     return controller.stream;
   }
+
+  @override
+  Stream<CatalogSnapshot> watchSalons(Set<String> ids) {
+    final key = _idsKey(ids);
+    late final StreamController<CatalogSnapshot> controller;
+    var current = const CatalogSnapshot();
+    StreamSubscription<bool>? connectivitySub;
+    final liveSubs = <StreamSubscription<Object?>>[];
+    var fetching = false;
+
+    void emit(CatalogSnapshot next) {
+      current = next;
+      if (!controller.isClosed) controller.add(next);
+    }
+
+    Future<void> stopLive() async {
+      for (final sub in liveSubs) {
+        await sub.cancel();
+      }
+      liveSubs.clear();
+    }
+
+    void startLive(List<SalonSummary> salons) {
+      unawaited(stopLive());
+      // Favorites can span areas; follow each area's queue pushes.
+      for (final areaId in {for (final s in salons) s.areaId}) {
+        liveSubs.add(
+          _remote.watchQueueLoads(areaId).listen((loads) {
+            final known = current.salons;
+            if (known == null || loads.isEmpty) return;
+            final merged = [
+              for (final s in known)
+                if (loads[s.id] case final load?) s.withQueue(load) else s,
+            ];
+            emit(
+              current.copyWith(
+                salons: merged,
+                updatedAt: _clock(),
+                isLive: true,
+              ),
+            );
+            unawaited(_local.saveCatalog(key, merged));
+          }, onError: (Object _) => emit(current.copyWith(isLive: false))),
+        );
+      }
+    }
+
+    Future<void> fetch() async {
+      if (fetching || ids.isEmpty) return;
+      fetching = true;
+      emit(current.copyWith(isRefreshing: true));
+      final result = await guardResult(() => _remote.fetchByIds(ids));
+      fetching = false;
+      if (controller.isClosed) return;
+      switch (result) {
+        case Ok(value: final salons):
+          await _local.saveCatalog(key, salons);
+          emit(
+            CatalogSnapshot(
+              salons: salons,
+              updatedAt: _clock(),
+              isLive: _connectivity.isOnline,
+            ),
+          );
+          startLive(salons);
+        case Err(:final failure):
+          emit(
+            current.copyWith(
+              isRefreshing: false,
+              isLive: false,
+              failure: failure,
+            ),
+          );
+      }
+    }
+
+    controller = StreamController<CatalogSnapshot>(
+      onListen: () async {
+        if (ids.isEmpty) {
+          emit(CatalogSnapshot(salons: const [], updatedAt: _clock()));
+          return;
+        }
+        final cached = await _local.readCatalog(key);
+        if (cached != null) {
+          emit(
+            CatalogSnapshot(salons: cached.salons, updatedAt: cached.updatedAt),
+          );
+        }
+        _refreshers[key] = fetch;
+        connectivitySub = _connectivity.watch().distinct().listen((online) {
+          if (online) {
+            unawaited(fetch());
+          } else {
+            unawaited(stopLive());
+            emit(
+              current.copyWith(
+                isLive: false,
+                failure: current.hasData ? null : const NetworkFailure(),
+              ),
+            );
+          }
+        });
+      },
+      onCancel: () async {
+        _refreshers.remove(key);
+        await connectivitySub?.cancel();
+        await stopLive();
+        await controller.close();
+      },
+    );
+    return controller.stream;
+  }
+
+  @override
+  Future<void> refreshSalons(Set<String> ids) async {
+    await _connectivity.recheck();
+    await _refreshers[_idsKey(ids)]?.call();
+  }
+
+  /// Cache key for a set of salons, independent of order.
+  static String _idsKey(Set<String> ids) =>
+      'salons:${(ids.toList()..sort()).join(',')}';
 
   @override
   Future<void> refresh(String areaId) async {

@@ -27,6 +27,15 @@ final class ApiSalonCatalogRemoteDataSource
   }
 
   @override
+  Future<List<SalonSummary>> fetchByIds(Set<String> ids) async {
+    final json = await _api.getJson('/salons', query: {'ids': ids.join(',')});
+    return [
+      for (final s in json['salons']! as List<Object?>)
+        SalonSummaryModel.fromJson(s! as Map<String, Object?>),
+    ];
+  }
+
+  @override
   Future<List<Area>> fetchAreas() async {
     final json = await _api.getJson('/areas');
     return [

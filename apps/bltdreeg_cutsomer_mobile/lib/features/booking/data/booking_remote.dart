@@ -5,6 +5,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../core/config/app_environment.dart';
 import '../../../core/error/exceptions.dart';
+import '../../../core/l10n_data/localized_text.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/fake_server.dart';
 import '../../salon_details/data/salon_details_remote.dart';
@@ -25,8 +26,14 @@ abstract interface class BookingRemoteDataSource {
 
   Future<Booking> fetch(String bookingId);
 
+  /// The signed-in customer's bookings.
+  Future<List<Booking>> fetchMine();
+
   /// Live pushes of the booking as the queue moves.
   Stream<Booking> watch(String bookingId);
+
+  /// Live pushes for any of the customer's bookings (the list screen).
+  Stream<Booking> watchMinePushes();
 
   Future<Booking> checkIn(String bookingId);
 
@@ -72,9 +79,30 @@ final class ApiBookingRemoteDataSource implements BookingRemoteDataSource {
       BookingModel.fromJson(await _api.getJson('/bookings/$bookingId'));
 
   @override
+  Future<List<Booking>> fetchMine() async {
+    final json = await _api.getJson('/me/bookings');
+    return [
+      for (final b in json['bookings']! as List<Object?>)
+        BookingModel.fromJson(b! as Map<String, Object?>),
+    ];
+  }
+
+  @override
   Stream<Booking> watch(String bookingId) {
     final channel = WebSocketChannel.connect(
       Uri.parse('${_env.queueSocketUrl}/bookings/$bookingId'),
+    );
+    return channel.stream.map(
+      (message) => BookingModel.fromJson(
+        jsonDecode(message as String) as Map<String, Object?>,
+      ),
+    );
+  }
+
+  @override
+  Stream<Booking> watchMinePushes() {
+    final channel = WebSocketChannel.connect(
+      Uri.parse('${_env.queueSocketUrl}/me/bookings'),
     );
     return channel.stream.map(
       (message) => BookingModel.fromJson(
@@ -113,7 +141,9 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
     required this._details,
     this.queueStepInterval,
     DateTime Function()? clock,
-  }) : _clock = clock ?? DateTime.now;
+  }) : _clock = clock ?? DateTime.now {
+    _seedHistory();
+  }
 
   /// Null: the queue only moves through [tick] (tests).
   final Duration? queueStepInterval;
@@ -168,8 +198,119 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
   Future<Booking> fetch(String bookingId) => _server(() => _require(bookingId));
 
   @override
+  Future<List<Booking>> fetchMine() => _server(() => _bookings.values.toList());
+
+  /// Past visits so the bookings list has history on a fresh install
+  /// (frame 10): one rated, one waiting for a rating, one no-show.
+  void _seedHistory() {
+    final now = _clock();
+    Booking past({
+      required String id,
+      required String salonId,
+      required String name,
+      required LocalizedText area,
+      required List<SelectedService> services,
+      required BookingStatus status,
+      required Duration ago,
+      String? barberName,
+      int discount = 0,
+    }) {
+      final at = now.subtract(ago);
+      return Booking(
+        id: id,
+        salonId: salonId,
+        salonName: name,
+        salonArea: area,
+        salonAddress: area,
+        latitude: 29.96,
+        longitude: 31.25,
+        services: services,
+        timing: const JoinNow(),
+        status: status,
+        quote: BookingQuote(
+          subtotal: services.fold(0, (sum, s) => sum + s.price),
+          discounts: discount == 0
+              ? const []
+              : [AppliedDiscount(offerId: '$salonId-o2', amount: discount)],
+        ),
+        createdAt: at.subtract(const Duration(minutes: 25)),
+        barberName: barberName,
+        barberId: barberName == null ? null : '$salonId-b1',
+        ticketNumber: 4,
+        quotedWaitMinutes: 20,
+        servedAt: status == BookingStatus.missed ? null : at,
+      );
+    }
+
+    const maadi = LocalizedText(ar: 'المعادي', en: 'Maadi');
+    for (final booking in [
+      past(
+        id: 'bk-past-1',
+        salonId: 's1',
+        name: 'صالون الكابتن حسام',
+        area: maadi,
+        services: const [
+          SelectedService(
+            id: 's1-haircut',
+            name: 'قصة شعر',
+            durationMinutes: 25,
+            price: 70,
+          ),
+          SelectedService(
+            id: 's1-beard',
+            name: 'حلاقة دقن',
+            durationMinutes: 15,
+            price: 50,
+          ),
+        ],
+        status: BookingStatus.completed,
+        ago: const Duration(days: 6, hours: 2),
+        barberName: 'أحمد مجدي',
+      ),
+      past(
+        id: 'bk-past-2',
+        salonId: 's3',
+        name: 'بربر لاونج المعادي',
+        area: const LocalizedText(ar: 'المعادي الجديدة', en: 'New Maadi'),
+        services: const [
+          SelectedService(
+            id: 's3-haircut',
+            name: 'قصة شعر',
+            durationMinutes: 25,
+            price: 90,
+          ),
+        ],
+        status: BookingStatus.completed,
+        ago: const Duration(days: 18, hours: 3),
+        barberName: 'محمود السيد',
+      ),
+      past(
+        id: 'bk-past-3',
+        salonId: 's5',
+        name: 'حلاق الأسطى رجب',
+        area: maadi,
+        services: const [
+          SelectedService(
+            id: 's5-beard',
+            name: 'حلاقة دقن',
+            durationMinutes: 15,
+            price: 45,
+          ),
+        ],
+        status: BookingStatus.missed,
+        ago: const Duration(days: 29, hours: 5),
+      ),
+    ]) {
+      _bookings[booking.id] = booking;
+    }
+  }
+
+  @override
   Stream<Booking> watch(String bookingId) =>
       _pushes.stream.where((b) => b.id == bookingId);
+
+  @override
+  Stream<Booking> watchMinePushes() => _pushes.stream;
 
   @override
   Future<Booking> checkIn(String bookingId) => _server(() {

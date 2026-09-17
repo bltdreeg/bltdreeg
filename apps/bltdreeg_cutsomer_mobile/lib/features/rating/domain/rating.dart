@@ -69,6 +69,9 @@ abstract interface class RatingRepository {
   /// The rating already given for [bookingId], if any.
   Future<VisitRating?> ratingFor(String bookingId);
 
+  /// Ratings for past bookings, by booking id (bookings list).
+  Future<Map<String, VisitRating>> ratingsFor(Iterable<String> bookingIds);
+
   /// Still waiting in the outbox (offline when submitted).
   Future<bool> isPending(String bookingId);
 }
@@ -82,6 +85,15 @@ final class SubmitRating {
     assert(rating.overall >= 1 && rating.overall <= 5, 'Overall is required');
     return _repository.submit(rating);
   }
+}
+
+final class GetVisitRatings {
+  const GetVisitRatings(this._repository);
+
+  final RatingRepository _repository;
+
+  Future<Map<String, VisitRating>> call(Iterable<String> bookingIds) =>
+      _repository.ratingsFor(bookingIds);
 }
 
 final class GetVisitRating {

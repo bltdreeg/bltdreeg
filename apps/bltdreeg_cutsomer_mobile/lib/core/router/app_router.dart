@@ -13,7 +13,10 @@ import '../../features/booking/presentation/pages/booking_barber_page.dart';
 import '../../features/booking/presentation/pages/booking_confirmed_page.dart';
 import '../../features/booking/presentation/pages/booking_review_page.dart';
 import '../../features/booking/presentation/pages/booking_slot_page.dart';
+import '../../features/booking/presentation/pages/bookings_page.dart';
+import '../../features/favorites/presentation/pages/favorites_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/queue/presentation/pages/queue_page.dart';
 import '../../features/rating/presentation/pages/rate_visit_page.dart';
@@ -120,8 +123,7 @@ final class AppRouter {
                   GoRoute(
                     name: AppRoutes.notifications.name,
                     path: AppRoutes.notifications.path,
-                    builder: (_, _) =>
-                        const RoutePlaceholderPage(title: 'Notifications'),
+                    builder: (_, _) => const NotificationsPage(),
                   ),
                 ],
               ),
@@ -132,13 +134,7 @@ final class AppRouter {
               GoRoute(
                 name: AppRoutes.bookings.name,
                 path: AppRoutes.bookings.path,
-                builder: (context, _) => RoutePlaceholderPage(
-                  title: 'My bookings',
-                  links: [
-                    ('→ queue b1', () => context.pushQueue('b1')),
-                    ('→ rate b1', () => context.pushRateVisit('b1')),
-                  ],
-                ),
+                builder: (_, _) => const BookingsPage(),
               ),
             ],
           ),
@@ -177,7 +173,11 @@ final class AppRouter {
                 ),
                 routes: [
                   _placeholder(AppRoutes.editProfile, 'Edit profile'),
-                  _placeholder(AppRoutes.favorites, 'Favorites'),
+                  GoRoute(
+                    name: AppRoutes.favorites.name,
+                    path: AppRoutes.favorites.path,
+                    builder: (_, _) => const FavoritesPage(),
+                  ),
                   _placeholder(
                     AppRoutes.notificationSettings,
                     'Notification settings',

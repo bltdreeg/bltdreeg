@@ -24,7 +24,11 @@ final class BookingRepositoryImpl implements BookingRepository {
   /// in, and "try again" refetches through them.
   final _watchers = <String, Set<_BookingWatcher>>{};
 
+  /// Open [watchMine] streams, so actions and "try again" refresh them.
+  final _listRefreshers = <Future<void> Function()>[];
+
   static String _key(String id) => 'booking:$id';
+  static const _listKey = 'bookings:mine';
 
   @override
   Future<Result<DaySchedule>> daySchedule({
@@ -42,8 +46,14 @@ final class BookingRepositoryImpl implements BookingRepository {
   // Not queued in the outbox: the customer needs the queue number (or the
   // slot rejection) right away, so confirming requires a connection.
   @override
-  Future<Result<Booking>> confirm(BookingRequest request) =>
-      guardResult(() async => _save(await _remote.confirm(request)));
+  Future<Result<Booking>> confirm(BookingRequest request) async {
+    final result = await guardResult(
+      () async => _save(await _remote.confirm(request)),
+    );
+    // A new booking belongs at the top of an open bookings list.
+    if (result case Ok(:final value)) _publish(value);
+    return result;
+  }
 
   @override
   Future<Result<Booking>> booking(String bookingId) async {
@@ -68,6 +78,99 @@ final class BookingRepositoryImpl implements BookingRepository {
     );
     watcher = _BookingWatcher(this, bookingId, controller);
     return controller.stream;
+  }
+
+  @override
+  Stream<BookingsSnapshot> watchMine() {
+    late final StreamController<BookingsSnapshot> controller;
+    var current = const BookingsSnapshot();
+    StreamSubscription<bool>? connectivitySub;
+    StreamSubscription<Booking>? liveSub;
+
+    void emit(BookingsSnapshot next) {
+      current = next;
+      if (!controller.isClosed) controller.add(next);
+    }
+
+    /// Replaces one booking in the list (live push or an action result).
+    void merge(Booking booking) {
+      final index = current.bookings.indexWhere((b) => b.id == booking.id);
+      emit(
+        current.copyWith(
+          bookings:
+              index == -1
+                    ? [booking, ...current.bookings]
+                    : [...current.bookings]
+                ..[index] = booking,
+          isLoaded: true,
+        ),
+      );
+    }
+
+    Future<void> fetch() async {
+      final result = await guardResult(_remote.fetchMine);
+      if (controller.isClosed) return;
+      switch (result) {
+        case Ok(:final value):
+          await _db.writeCache(
+            _listKey,
+            jsonEncode([for (final b in value) BookingModel.toJson(b)]),
+          );
+          emit(BookingsSnapshot(bookings: value, isLoaded: true));
+          unawaited(liveSub?.cancel());
+          // Any booking can move while the list is open.
+          liveSub = _remote.watchMinePushes().listen(
+            merge,
+            onError: (Object _) {},
+          );
+        case Err(:final failure):
+          emit(current.copyWith(isLoaded: true, failure: failure));
+      }
+    }
+
+    controller = StreamController<BookingsSnapshot>(
+      onListen: () async {
+        final cached = await _db.readCache(_listKey);
+        if (cached != null) {
+          emit(
+            BookingsSnapshot(
+              bookings: [
+                for (final b in jsonDecode(cached.payload) as List<Object?>)
+                  BookingModel.fromJson(b! as Map<String, Object?>),
+              ],
+              isLoaded: true,
+            ),
+          );
+        }
+        _listRefreshers.add(fetch);
+        connectivitySub = _connectivity.watch().distinct().listen((online) {
+          if (online) {
+            unawaited(fetch());
+          } else {
+            unawaited(liveSub?.cancel());
+            liveSub = null;
+            if (!current.isLoaded) {
+              emit(current.copyWith(failure: const NetworkFailure()));
+            }
+          }
+        });
+      },
+      onCancel: () async {
+        _listRefreshers.remove(fetch);
+        await connectivitySub?.cancel();
+        await liveSub?.cancel();
+        await controller.close();
+      },
+    );
+    return controller.stream;
+  }
+
+  @override
+  Future<void> refreshMine() async {
+    await _connectivity.recheck();
+    for (final refresh in [..._listRefreshers]) {
+      await refresh();
+    }
   }
 
   @override
@@ -107,6 +210,9 @@ final class BookingRepositoryImpl implements BookingRepository {
   void _publish(Booking booking) {
     for (final w in [...?_watchers[booking.id]]) {
       w.receive(booking);
+    }
+    for (final refresh in [..._listRefreshers]) {
+      unawaited(refresh());
     }
   }
 

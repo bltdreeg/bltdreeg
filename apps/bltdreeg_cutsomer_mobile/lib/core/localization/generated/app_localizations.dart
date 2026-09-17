@@ -2611,6 +2611,240 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تمام، ارجعني للرئيسية'**
   String get backToHomeDone;
+
+  /// No description provided for @bookingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزاتي'**
+  String get bookingsTitle;
+
+  /// No description provided for @bookingsTabCurrent.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالية'**
+  String get bookingsTabCurrent;
+
+  /// No description provided for @bookingsTabPast.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابقة'**
+  String get bookingsTabPast;
+
+  /// No description provided for @bookingsActiveNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك شغّال دلوقتي'**
+  String get bookingsActiveNow;
+
+  /// No description provided for @bookingsUpcomingBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاد محجوز'**
+  String get bookingsUpcomingBadge;
+
+  /// No description provided for @bookingsDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الحجز'**
+  String get bookingsDetails;
+
+  /// No description provided for @bookingsNotifyNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.'**
+  String get bookingsNotifyNote;
+
+  /// No description provided for @bookingDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة تمّت'**
+  String get bookingDone;
+
+  /// No description provided for @bookingMissedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتلغى — ما حضرتش'**
+  String get bookingMissedBadge;
+
+  /// No description provided for @bookingCancelledBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتلغى'**
+  String get bookingCancelledBadge;
+
+  /// No description provided for @bookingMissedReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّى وقت الاستدعاء بـ 5 دقايق'**
+  String get bookingMissedReason;
+
+  /// No description provided for @rateBarberAndSalon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم {barber} والصالون'**
+  String rateBarberAndSalon(String barber);
+
+  /// No description provided for @rateSalonPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم زيارتك'**
+  String get rateSalonPrompt;
+
+  /// No description provided for @rateNowAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم دلوقتي'**
+  String get rateNowAction;
+
+  /// No description provided for @rebookSameChoices.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز تاني بنفس الاختيارات'**
+  String get rebookSameChoices;
+
+  /// No description provided for @bookingsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه ما حجزتش أي حاجة'**
+  String get bookingsEmptyTitle;
+
+  /// No description provided for @bookingsEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.'**
+  String get bookingsEmptyBody;
+
+  /// No description provided for @bookingsEmptyCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر على صالون قريب منك'**
+  String get bookingsEmptyCta;
+
+  /// No description provided for @bookingsPastEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش زيارات سابقة'**
+  String get bookingsPastEmptyTitle;
+
+  /// No description provided for @bookingsPastEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'زياراتك اللي خلصت هتظهر هنا، وتقدر تقيّمها أو تحجز تاني بضغطة.'**
+  String get bookingsPastEmptyBody;
+
+  /// No description provided for @bookingsLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نجيب حجوزاتك.'**
+  String get bookingsLoadFailed;
+
+  /// No description provided for @withBarber.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {barber}'**
+  String withBarber(String barber);
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالونات المفضّلة'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{صالون واحد} =2{صالونين} few{{count} صالونات} other{{count} صالون}} · مرتّبة بأقل انتظار'**
+  String favoritesSubtitle(int count);
+
+  /// No description provided for @favoritesNotifyNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنبعتلك إشعار لما صالون مفضّل عندك يبقى فاضي في وقت بتروح فيه عادةً.'**
+  String get favoritesNotifyNote;
+
+  /// No description provided for @favoritesEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش صالونات مفضّلة'**
+  String get favoritesEmptyTitle;
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة.'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @favoritesEmptyCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتشف صالونات قريبة'**
+  String get favoritesEmptyCta;
+
+  /// No description provided for @favoritesLoadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نجيب المفضلة.'**
+  String get favoritesLoadFailed;
+
+  /// No description provided for @viewSalon.
+  ///
+  /// In ar, this message translates to:
+  /// **'شوف الصالون'**
+  String get viewSalon;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationsTitle;
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم الكل كمقروء'**
+  String get markAllRead;
+
+  /// No description provided for @groupToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهارده'**
+  String get groupToday;
+
+  /// No description provided for @groupThisWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع ده'**
+  String get groupThisWeek;
+
+  /// No description provided for @groupEarlier.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقدم'**
+  String get groupEarlier;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش إشعارات لسه'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول ما تدخل طابور، هنبعتلك هنا كل تحديث لدورك وأي عروض من الصالونات اللي بتحبها.'**
+  String get notificationsEmptyBody;
+
+  /// No description provided for @notificationsEmptyCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر على صالون'**
+  String get notificationsEmptyCta;
+
+  /// No description provided for @a11yUnread.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مقروء'**
+  String get a11yUnread;
 }
 
 class _AppLocalizationsDelegate

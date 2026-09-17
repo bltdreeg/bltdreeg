@@ -9,6 +9,7 @@ import '../core/network/connectivity_cubit.dart';
 import '../core/router/app_router.dart';
 import '../core/theme/app_theme.dart';
 import '../features/auth/presentation/session/auth_session_cubit.dart';
+import '../features/notifications/presentation/notifications_cubit.dart';
 
 class BeltadreegApp extends StatelessWidget {
   const BeltadreegApp({super.key});
@@ -20,6 +21,9 @@ class BeltadreegApp extends StatelessWidget {
         BlocProvider<LocaleCubit>.value(value: sl<LocaleCubit>()),
         BlocProvider<ConnectivityCubit>.value(value: sl<ConnectivityCubit>()),
         BlocProvider<AuthSessionCubit>.value(value: sl<AuthSessionCubit>()),
+        BlocProvider<UnreadNotificationsCubit>.value(
+          value: sl<UnreadNotificationsCubit>(),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) => MaterialApp.router(

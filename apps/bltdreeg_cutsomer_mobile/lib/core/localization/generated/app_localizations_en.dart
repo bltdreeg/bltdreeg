@@ -1685,4 +1685,139 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToHomeDone => 'Done, take me home';
+
+  @override
+  String get bookingsTitle => 'My bookings';
+
+  @override
+  String get bookingsTabCurrent => 'Current';
+
+  @override
+  String get bookingsTabPast => 'Past';
+
+  @override
+  String get bookingsActiveNow => 'Your turn is live';
+
+  @override
+  String get bookingsUpcomingBadge => 'Booked time';
+
+  @override
+  String get bookingsDetails => 'Booking details';
+
+  @override
+  String get bookingsNotifyNote =>
+      'We\'ll notify you when two are left ahead of you, then one, then when it\'s your turn.';
+
+  @override
+  String get bookingDone => 'Service done';
+
+  @override
+  String get bookingMissedBadge => 'Cancelled — no show';
+
+  @override
+  String get bookingCancelledBadge => 'Cancelled';
+
+  @override
+  String get bookingMissedReason => 'Missed the 5-minute call window';
+
+  @override
+  String rateBarberAndSalon(String barber) {
+    return 'Rate $barber and the salon';
+  }
+
+  @override
+  String get rateSalonPrompt => 'Rate your visit';
+
+  @override
+  String get rateNowAction => 'Rate now';
+
+  @override
+  String get rebookSameChoices => 'Book again with the same choices';
+
+  @override
+  String get bookingsEmptyTitle => 'No bookings yet';
+
+  @override
+  String get bookingsEmptyBody =>
+      'Once you join a salon\'s queue, your number and expected wait show up here.';
+
+  @override
+  String get bookingsEmptyCta => 'Find a salon near you';
+
+  @override
+  String get bookingsPastEmptyTitle => 'No past visits';
+
+  @override
+  String get bookingsPastEmptyBody =>
+      'Finished visits show up here to rate or rebook in one tap.';
+
+  @override
+  String get bookingsLoadFailed => 'Couldn\'t load your bookings.';
+
+  @override
+  String withBarber(String barber) {
+    return 'with $barber';
+  }
+
+  @override
+  String get favoritesTitle => 'Favorite salons';
+
+  @override
+  String favoritesSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count salons',
+      one: '1 salon',
+    );
+    return '$_temp0 · sorted by shortest wait';
+  }
+
+  @override
+  String get favoritesNotifyNote =>
+      'We\'ll notify you when a favorite salon is free at the time you usually go.';
+
+  @override
+  String get favoritesEmptyTitle => 'No favorite salons';
+
+  @override
+  String get favoritesEmptyBody =>
+      'Tap the heart on any salon to keep it here, see its queue and join in one tap.';
+
+  @override
+  String get favoritesEmptyCta => 'Discover nearby salons';
+
+  @override
+  String get favoritesLoadFailed => 'Couldn\'t load your favorites.';
+
+  @override
+  String get viewSalon => 'View salon';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get markAllRead => 'Mark all as read';
+
+  @override
+  String get groupToday => 'Today';
+
+  @override
+  String get groupThisWeek => 'This week';
+
+  @override
+  String get groupEarlier => 'Earlier';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications yet';
+
+  @override
+  String get notificationsEmptyBody =>
+      'Once you join a queue, every update on your turn and offers from salons you like show up here.';
+
+  @override
+  String get notificationsEmptyCta => 'Find a salon';
+
+  @override
+  String get a11yUnread => 'Unread';
 }

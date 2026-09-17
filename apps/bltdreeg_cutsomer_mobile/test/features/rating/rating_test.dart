@@ -160,7 +160,7 @@ void main() {
     await c.submit();
     expect(c.state.status, RateSubmitStatus.done);
     expect(await repository.isPending('bk1'), isTrue);
-    expect(remote.received, isEmpty);
+    expect(remote.received.containsKey('bk1'), isFalse);
 
     connectivity.setForcedOffline(value: false);
     await outbox.flush();

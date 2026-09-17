@@ -23,6 +23,7 @@ void registerRatingModule(GetIt sl, AppEnvironment env) {
     )
     ..registerFactory(() => SubmitRating(sl()))
     ..registerFactory(() => GetVisitRating(sl()))
+    ..registerFactory(() => GetVisitRatings(sl()))
     ..registerFactoryParam<RateVisitCubit, String, void>(
       (bookingId, _) => RateVisitCubit(
         bookingId: bookingId,

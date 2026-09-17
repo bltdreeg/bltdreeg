@@ -6,6 +6,9 @@ import '../../domain/entities/salon_summary.dart';
 abstract interface class SalonCatalogRemoteDataSource {
   Future<List<SalonSummary>> fetchCatalog(String areaId);
 
+  /// Specific salons (favorites, which can be outside the chosen area).
+  Future<List<SalonSummary>> fetchByIds(Set<String> ids);
+
   Future<List<Area>> fetchAreas();
 
   /// Emits changed queue loads keyed by salon id.

@@ -5,6 +5,7 @@ import '../../core/sync/outbox_processor.dart';
 import '../favorites/data/favorites_data.dart';
 import '../favorites/domain/favorites_repository.dart';
 import '../favorites/domain/usecases.dart';
+import '../favorites/presentation/favorites_cubit.dart';
 import '../salons/data/datasources/fake_salon_catalog_remote_data_source.dart';
 import '../salons/data/datasources/salon_catalog_remote_data_source.dart';
 import '../salons/data/repositories/recently_viewed_repository.dart';
@@ -50,6 +51,13 @@ void registerSalonDetailsModule(GetIt sl, AppEnvironment env) {
     )
     ..registerFactory(() => WatchFavoriteIds(sl()))
     ..registerFactory(() => ToggleFavorite(sl()))
+    ..registerFactory(
+      () => FavoritesCubit(
+        watchFavorites: sl(),
+        catalog: sl(),
+        toggleFavorite: sl(),
+      ),
+    )
     ..registerLazySingleton(() => RecentlyViewedRepository(sl()))
     ..registerFactoryParam<SalonDetailsCubit, String, void>(
       (salonId, _) => SalonDetailsCubit(

@@ -1160,5 +1160,65 @@
   "addToFavoritesBody": "هنقولك لما يبقى فاضي في وقتك المعتاد",
   "addToFavoritesAction": "ضيفه للمفضلة",
   "addedToFavorites": "اتضاف للمفضلة",
-  "backToHomeDone": "تمام، ارجعني للرئيسية"
+  "backToHomeDone": "تمام، ارجعني للرئيسية",
+  "bookingsTitle": "حجوزاتي",
+  "bookingsTabCurrent": "الحالية",
+  "bookingsTabPast": "السابقة",
+  "bookingsActiveNow": "دورك شغّال دلوقتي",
+  "bookingsUpcomingBadge": "معاد محجوز",
+  "bookingsDetails": "تفاصيل الحجز",
+  "bookingsNotifyNote": "هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.",
+  "bookingDone": "خدمة تمّت",
+  "bookingMissedBadge": "اتلغى — ما حضرتش",
+  "bookingCancelledBadge": "اتلغى",
+  "bookingMissedReason": "عدّى وقت الاستدعاء بـ 5 دقايق",
+  "rateBarberAndSalon": "قيّم {barber} والصالون",
+  "@rateBarberAndSalon": {
+    "placeholders": {
+      "barber": {
+        "type": "String"
+      }
+    }
+  },
+  "rateSalonPrompt": "قيّم زيارتك",
+  "rateNowAction": "قيّم دلوقتي",
+  "rebookSameChoices": "احجز تاني بنفس الاختيارات",
+  "bookingsEmptyTitle": "لسه ما حجزتش أي حاجة",
+  "bookingsEmptyBody": "أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.",
+  "bookingsEmptyCta": "دوّر على صالون قريب منك",
+  "bookingsPastEmptyTitle": "مفيش زيارات سابقة",
+  "bookingsPastEmptyBody": "زياراتك اللي خلصت هتظهر هنا، وتقدر تقيّمها أو تحجز تاني بضغطة.",
+  "bookingsLoadFailed": "معرفناش نجيب حجوزاتك.",
+  "withBarber": "مع {barber}",
+  "@withBarber": {
+    "placeholders": {
+      "barber": {
+        "type": "String"
+      }
+    }
+  },
+  "favoritesTitle": "الصالونات المفضّلة",
+  "favoritesSubtitle": "{count, plural, =1{صالون واحد} =2{صالونين} few{{count} صالونات} other{{count} صالون}} · مرتّبة بأقل انتظار",
+  "@favoritesSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "favoritesNotifyNote": "بنبعتلك إشعار لما صالون مفضّل عندك يبقى فاضي في وقت بتروح فيه عادةً.",
+  "favoritesEmptyTitle": "مفيش صالونات مفضّلة",
+  "favoritesEmptyBody": "دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة.",
+  "favoritesEmptyCta": "اكتشف صالونات قريبة",
+  "favoritesLoadFailed": "معرفناش نجيب المفضلة.",
+  "viewSalon": "شوف الصالون",
+  "notificationsTitle": "الإشعارات",
+  "markAllRead": "علّم الكل كمقروء",
+  "groupToday": "النهارده",
+  "groupThisWeek": "الأسبوع ده",
+  "groupEarlier": "أقدم",
+  "notificationsEmptyTitle": "مفيش إشعارات لسه",
+  "notificationsEmptyBody": "أول ما تدخل طابور، هنبعتلك هنا كل تحديث لدورك وأي عروض من الصالونات اللي بتحبها.",
+  "notificationsEmptyCta": "دوّر على صالون",
+  "a11yUnread": "غير مقروء"
 }

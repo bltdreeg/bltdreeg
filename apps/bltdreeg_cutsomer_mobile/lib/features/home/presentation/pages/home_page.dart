@@ -12,6 +12,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../notifications/presentation/notifications_cubit.dart';
 import '../../../salons/domain/entities/search_criteria.dart';
 import '../../../salons/presentation/widgets/area_picker_sheet.dart';
 import '../../../salons/presentation/widgets/salon_items.dart';
@@ -147,12 +148,24 @@ class _HomeHeader extends StatelessWidget {
               ),
             ),
           ),
-          AppIconButton(
-            icon: AppAssets.iconBell,
-            size: 42,
-            semanticLabel: l10n.a11yNotifications,
-            onPressed: context.pushNotifications,
-            onLongPress: () => showDevMenu(context),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AppIconButton(
+                icon: AppAssets.iconBell,
+                size: 42,
+                semanticLabel: l10n.a11yNotifications,
+                onPressed: context.pushNotifications,
+                onLongPress: () => showDevMenu(context),
+              ),
+              if (context.watch<UnreadNotificationsCubit>().state
+                  case final unread when unread > 0)
+                PositionedDirectional(
+                  top: -4,
+                  end: -4,
+                  child: CountBadge(count: unread),
+                ),
+            ],
           ),
         ],
       ),

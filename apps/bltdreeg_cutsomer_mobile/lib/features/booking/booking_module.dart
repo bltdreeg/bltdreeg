@@ -11,6 +11,7 @@ import 'domain/booking.dart';
 import 'domain/booking_draft.dart';
 import 'domain/usecases.dart';
 import 'presentation/booking_flow_cubits.dart';
+import 'presentation/bookings_cubit.dart';
 
 /// Booking flow: the draft started on the salon page, slots, confirmation.
 void registerBookingModule(GetIt sl, AppEnvironment env) {
@@ -63,6 +64,9 @@ void registerBookingModule(GetIt sl, AppEnvironment env) {
         drafts: sl(),
         confirmBooking: sl(),
       ),
+    )
+    ..registerFactory(
+      () => BookingsCubit(repository: sl(), drafts: sl(), getRatings: sl()),
     )
     ..registerFactoryParam<BookingConfirmedCubit, String, void>(
       (bookingId, _) =>

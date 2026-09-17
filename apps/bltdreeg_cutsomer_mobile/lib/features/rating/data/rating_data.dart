@@ -48,12 +48,26 @@ abstract final class VisitRatingModel {
 
 abstract interface class RatingRemoteDataSource {
   Future<void> submit(VisitRating rating);
+
+  /// Ratings the customer already sent, by booking id.
+  Future<Map<String, VisitRating>> fetchMine();
 }
 
 final class ApiRatingRemoteDataSource implements RatingRemoteDataSource {
   const ApiRatingRemoteDataSource(this._api);
 
   final ApiClient _api;
+
+  @override
+  Future<Map<String, VisitRating>> fetchMine() async {
+    final json = await _api.getJson('/me/ratings');
+    return {
+      for (final r in json['ratings']! as List<Object?>)
+        if (VisitRatingModel.fromJson(r! as Map<String, Object?>)
+            case final rating)
+          rating.bookingId: rating,
+    };
+  }
 
   @override
   Future<void> submit(VisitRating rating) async {
@@ -71,10 +85,27 @@ final class ApiRatingRemoteDataSource implements RatingRemoteDataSource {
 }
 
 final class FakeRatingRemoteDataSource implements RatingRemoteDataSource {
-  FakeRatingRemoteDataSource(this._server);
+  FakeRatingRemoteDataSource(this._server, {DateTime Function()? clock})
+    : received = {
+        // The older seeded visit was already rated (frame 10).
+        'bk-past-2': VisitRating(
+          bookingId: 'bk-past-2',
+          salonId: 's3',
+          overall: 4,
+          quality: 4,
+          cleanliness: 4,
+          timeAccuracy: 3,
+          submittedAt: (clock ?? DateTime.now)().subtract(
+            const Duration(days: 18),
+          ),
+        ),
+      };
 
   final FakeServer _server;
-  final received = <String, VisitRating>{};
+  final Map<String, VisitRating> received;
+
+  @override
+  Future<Map<String, VisitRating>> fetchMine() => _server(() => {...received});
 
   @override
   Future<void> submit(VisitRating rating) => _server(
@@ -133,6 +164,35 @@ final class RatingRepositoryImpl implements RatingRepository {
         await _outbox.enqueue(outboxType, json);
         return rating;
       });
+
+  @override
+  Future<Map<String, VisitRating>> ratingsFor(
+    Iterable<String> bookingIds,
+  ) async {
+    final result = <String, VisitRating>{};
+    final missing = <String>[];
+    for (final id in bookingIds) {
+      final local = await ratingFor(id);
+      if (local != null) {
+        result[id] = local;
+      } else {
+        missing.add(id);
+      }
+    }
+    if (missing.isEmpty) return result;
+    // Ratings sent from another device, or before a reinstall.
+    final remote = await guardResult(_remote.fetchMine);
+    for (final id in missing) {
+      if (remote.valueOrNull?[id] case final rating?) {
+        await _db.writeCache(
+          _key(id),
+          jsonEncode(VisitRatingModel.toJson(rating)),
+        );
+        result[id] = rating;
+      }
+    }
+    return result;
+  }
 
   @override
   Future<VisitRating?> ratingFor(String bookingId) async {

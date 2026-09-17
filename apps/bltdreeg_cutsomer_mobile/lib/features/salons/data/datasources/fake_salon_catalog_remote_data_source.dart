@@ -343,6 +343,14 @@ final class FakeSalonCatalogRemoteDataSource
   }
 
   /// Current state of one salon (fake salon-details backend).
+  @override
+  Future<List<SalonSummary>> fetchByIds(Set<String> ids) => _server(
+    () => [
+      for (final s in _salons)
+        if (ids.contains(s.id)) s,
+    ],
+  );
+
   SalonSummary? salonById(String id) =>
       _salons.where((s) => s.id == id).firstOrNull;
 

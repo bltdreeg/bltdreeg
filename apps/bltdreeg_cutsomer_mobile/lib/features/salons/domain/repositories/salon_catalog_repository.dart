@@ -7,6 +7,12 @@ abstract interface class SalonCatalogRepository {
   /// server copy, then live queue updates while online.
   Stream<CatalogSnapshot> watchCatalog(String areaId);
 
+  /// Offline-first stream for specific salons (favorites), with live queue
+  /// updates for the areas they sit in.
+  Stream<CatalogSnapshot> watchSalons(Set<String> ids);
+
+  Future<void> refreshSalons(Set<String> ids);
+
   /// Forces a network refresh for an active [watchCatalog] stream.
   Future<void> refresh(String areaId);
 

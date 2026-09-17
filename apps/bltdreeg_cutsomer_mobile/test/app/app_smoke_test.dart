@@ -46,7 +46,7 @@ void main() {
       // Push notifications inside the home branch.
       unawaited(sl<AppRouter>().config.pushNamed(AppRoutes.notifications.name));
       await tester.pumpAndSettle();
-      expect(find.text('Notifications'), findsOneWidget);
+      expect(find.text('الإشعارات'), findsOneWidget);
 
       // Switch to search, then back to home: notifications is still on top.
       await tester.tap(find.text('البحث'));
@@ -54,7 +54,7 @@ void main() {
       expect(find.text('قريب منك دلوقتي'), findsOneWidget);
       await tester.tap(find.text('الرئيسية'));
       await tester.pumpAndSettle();
-      expect(find.text('Notifications'), findsOneWidget);
+      expect(find.text('الإشعارات'), findsOneWidget);
     });
 
     testWidgets('full-screen routes cover the bottom nav', (tester) async {

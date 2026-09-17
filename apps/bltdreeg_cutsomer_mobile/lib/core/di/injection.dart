@@ -7,6 +7,7 @@ import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/booking/booking_module.dart';
 import '../../features/favorites/domain/favorites_repository.dart';
+import '../../features/notifications/notifications_module.dart';
 import '../../features/onboarding/onboarding_module.dart';
 import '../../features/queue/queue_module.dart';
 import '../../features/rating/rating_module.dart';
@@ -77,6 +78,7 @@ Future<void> configureDependencies({
   registerBookingModule(sl, env);
   registerQueueModule(sl);
   registerRatingModule(sl, env);
+  registerNotificationsModule(sl, env);
   if (authLocal != null) {
     sl
       ..unregister<AuthLocalDataSource>()
