@@ -1,0 +1,60 @@
+// هيكل تحميل الرئيسية — نفس أبعاد الكارت الحقيقي بالظبط، مفيش قفزة
+import { Skeleton } from "@/components/atoms/skeleton";
+
+/** نفس مقاسات ShopCard: 250/308 عرض، صورة 4:3، فاصل متقطع */
+function CardSkeleton() {
+  return (
+    <div className="w-[250px] shrink-0 overflow-hidden rounded-[14px] border border-border bg-card md:w-[308px]">
+      <Skeleton className="aspect-[4/3] w-full rounded-none" />
+      <div className="flex flex-col gap-[7px] px-[17px] pt-[15px]">
+        <Skeleton className="h-[15px] w-[72%]" />
+        <Skeleton className="h-[11px] w-[44%]" />
+        <Skeleton className="h-[11px] w-[56%]" />
+      </div>
+      <div className="mt-[15px] border-t border-dashed border-perforation" />
+      <div className="flex items-end justify-between gap-3 px-[17px] pb-4 pt-3.5">
+        <div className="flex flex-col gap-[7px]">
+          <Skeleton className="h-[9px] w-[86px]" />
+          <Skeleton className="h-[26px] w-[104px]" />
+        </div>
+        <Skeleton className="mb-1 h-3 w-[62px]" />
+      </div>
+    </div>
+  );
+}
+
+function RailSkeleton() {
+  return (
+    <div className="flex flex-col gap-3 pt-6 md:pt-11">
+      <div className="mx-auto w-full max-w-[1312px] px-4 md:px-16">
+        <Skeleton className="h-6 w-40" />
+      </div>
+      <div className="flex gap-4 overflow-hidden px-4 md:gap-5 md:px-16">
+        {Array.from({ length: 4 }, (_, i) => (
+          <CardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HomeSkeleton() {
+  return (
+    <div role="status" aria-label="جاري التحميل">
+      <div className="border-b border-tint-border bg-tint">
+        <div className="mx-auto flex w-full max-w-[1312px] flex-col gap-8 px-4 py-8 md:flex-row md:px-16 md:py-13">
+          <div className="flex flex-1 flex-col gap-4">
+            <Skeleton className="h-10 w-full max-w-[520px]" />
+            <Skeleton className="h-10 w-full max-w-[460px]" />
+            <Skeleton className="h-5 w-64" />
+          </div>
+          <Skeleton className="h-[132px] w-full shrink-0 rounded-[14px] md:w-[560px]" />
+        </div>
+      </div>
+      <RailSkeleton />
+      <RailSkeleton />
+    </div>
+  );
+}
+
+export { HomeSkeleton };
