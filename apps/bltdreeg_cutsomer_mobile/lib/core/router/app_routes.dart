@@ -111,6 +111,12 @@ abstract final class AppRoutes {
     fullPath: '/booking/:bookingId/rate/sent',
   ); // 41
 
+  /// Debug-only component gallery.
+  static const devDesignSystem = AppRoute(
+    'devDesignSystem',
+    '/dev/design-system',
+  );
+
   /// Routes that need a signed-in user; guests are sent to [login].
   static const protectedRoutes = {
     bookingSlot,

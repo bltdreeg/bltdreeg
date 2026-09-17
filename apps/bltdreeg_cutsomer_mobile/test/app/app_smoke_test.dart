@@ -1,6 +1,7 @@
 import 'package:bltdreeg_cutsomer_mobile/app/app.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/di/injection.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/localization/locale_cubit.dart';
+import 'package:bltdreeg_cutsomer_mobile/core/widgets/app_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -57,7 +58,7 @@ void main() {
       await tester.tap(find.text('→ salon 1'));
       await tester.pumpAndSettle();
       expect(find.text('Salon 1'), findsOneWidget);
-      expect(find.byType(NavigationBar), findsNothing);
+      expect(find.byType(AppBottomNavBar), findsNothing);
       expect(find.byType(BackButton), findsOneWidget);
     });
 

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../assets/app_assets.dart';
 import '../../utils/context_extensions.dart';
+import '../../widgets/app_bottom_nav_bar.dart';
 
-/// Scaffold for the four bottom-nav tabs. The navigation bar is replaced by
-/// the design-system `AppBottomNavBar` in phase 2.
+/// Scaffold for the four bottom-nav tabs.
 class MainShellScaffold extends StatelessWidget {
   const MainShellScaffold({
     required this.navigationShell,
@@ -26,24 +27,28 @@ class MainShellScaffold extends StatelessWidget {
     final l10n = context.l10n;
     return Scaffold(
       body: body,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: _onTap,
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.home_outlined),
+      bottomNavigationBar: AppBottomNavBar(
+        currentIndex: navigationShell.currentIndex,
+        onTap: _onTap,
+        items: [
+          AppNavItem(
+            icon: AppAssets.iconHome,
+            activeIcon: AppAssets.iconHomeBold,
             label: l10n.navHome,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.calendar_month_outlined),
+          AppNavItem(
+            icon: AppAssets.iconCalendar,
+            activeIcon: AppAssets.iconCalendarBold,
             label: l10n.navBookings,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.search),
+          AppNavItem(
+            icon: AppAssets.iconSearch,
+            activeIcon: AppAssets.iconSearchBold,
             label: l10n.navSearch,
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.person_outline),
+          AppNavItem(
+            icon: AppAssets.iconUser,
+            activeIcon: AppAssets.iconUserBold,
             label: l10n.navAccount,
           ),
         ],

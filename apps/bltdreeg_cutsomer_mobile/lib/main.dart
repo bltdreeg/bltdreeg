@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'app/app.dart';
@@ -10,6 +11,7 @@ Future<void> main() async {
   // AppFormatters additionally normalizes every formatted string.
   DateFormat.useNativeDigitsByDefaultFor('ar', false);
   DateFormat.useNativeDigitsByDefaultFor('ar_EG', false);
+  await initializeDateFormatting();
   await configureDependencies();
   runApp(const BeltadreegApp());
 }

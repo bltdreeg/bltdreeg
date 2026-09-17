@@ -3,15 +3,14 @@
   "@_NOTE": {
     "description": "Digits rule: never use NumberFormat/DateFormat placeholder formats here. Pass numbers pre-formatted via AppFormatters as String placeholders (or plain int without a format) so output stays 0-9 in Arabic."
   },
-
   "appName": "بالتدريج",
-  "@appName": {"description": "Brand name"},
-
+  "@appName": {
+    "description": "Brand name"
+  },
   "navHome": "الرئيسية",
   "navBookings": "حجوزاتي",
   "navSearch": "البحث",
   "navAccount": "حسابي",
-
   "actionBack": "رجوع",
   "actionClose": "إغلاق",
   "actionRetry": "جرّب تاني",
@@ -20,20 +19,122 @@
   "actionClearAll": "امسح الكل",
   "actionChange": "غيّر",
   "actionEdit": "عدّل",
-
   "offlineBanner": "مفيش نت — الأرقام دي آخر تحديث الساعة {time}",
   "@offlineBanner": {
-    "placeholders": {"time": {"type": "String", "example": "9:32"}}
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "9:32"
+      }
+    }
   },
   "offlineTitle": "النت فاصل",
   "offlineBody": "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
-
   "errorGeneric": "حصلت مشكلة. جرّب تاني بعد شوية.",
   "errorNetwork": "مفيش اتصال بالنت.",
-
   "comingSoonTitle": "الشاشة دي لسه بتتبني",
   "debugRouteLabel": "المسار: {route}",
   "@debugRouteLabel": {
-    "placeholders": {"route": {"type": "String"}}
+    "placeholders": {
+      "route": {
+        "type": "String"
+      }
+    }
+  },
+  "optionalSuffix": "(اختياري)",
+  "stepOf": "الخطوة {current} من {total}",
+  "@stepOf": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "liveLabel": "لايف",
+  "closedTag": "مقفول",
+  "a11yClearSearch": "امسح البحث",
+  "a11yShowPassword": "اظهر كلمة السر",
+  "a11yHidePassword": "اخفي كلمة السر",
+  "a11yNotifications": "الإشعارات",
+  "a11yFilter": "فلترة وترتيب",
+  "a11yRemove": "شيل {label}",
+  "@a11yRemove": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "a11yStarRating": "{stars} من 5 نجوم",
+  "@a11yStarRating": {
+    "placeholders": {
+      "stars": {
+        "type": "String"
+      }
+    }
+  },
+  "validationRequired": "الحقل ده مطلوب",
+  "validationEmail": "اكتب بريد إلكتروني صحيح",
+  "validationPhone": "الرقم لازم يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015",
+  "validationPasswordShort": "كلمة السر لازم تكون 8 حروف على الأقل",
+  "validationPasswordDigit": "كلمة السر لازم يكون فيها رقم واحد على الأقل",
+  "validationOtp": "اكتب الكود كامل",
+  "validationNameShort": "الاسم قصير أوي",
+  "errorServer": "السيرفر مش بيرد دلوقتي. جرّب تاني كمان شوية.",
+  "errorUnauthorized": "جلستك انتهت. سجّل دخولك تاني.",
+  "offlineSearchDisabled": "البحث محتاج نت",
+  "offlineWaitStale": "الانتظار مش متحدّث",
+  "offlineQueueBlocked": "مش هينفع تدخل الطابور وانت من غير نت — استنى ما الشبكة ترجع.",
+  "offlineOpenLastBooking": "افتح آخر حجز شوفته",
+  "offlineTipsTitle": "جرّب الحاجات دي:",
+  "offlineTipData": "اتأكد إن بيانات الموبايل أو الواي فاي شغّالين",
+  "offlineTipAirplane": "قفل وضع الطيران لو مفتوح",
+  "ratingLabel1": "وحش",
+  "ratingLabel2": "مش أحسن حاجة",
+  "ratingLabel3": "كويس",
+  "ratingLabel4": "حلو جداً",
+  "ratingLabel5": "ممتاز",
+  "priceEgp": "{amount} ج.م",
+  "@priceEgp": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "priceFrom": "من {price}",
+  "@priceFrom": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceKm": "{distance} كم",
+  "@distanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "minutesShort": "{minutes} د",
+  "@minutesShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewsCount": "({count})",
+  "@reviewsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }

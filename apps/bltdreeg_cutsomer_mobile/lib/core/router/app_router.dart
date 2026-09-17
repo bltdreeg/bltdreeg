@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../dev/design_system_gallery_page.dart';
 import '../storage/app_preferences.dart';
 import 'app_navigation.dart';
 import 'app_routes.dart';
@@ -94,6 +96,11 @@ final class AppRouter {
                     ('→ notifications', () => context.pushNotifications()),
                     ('→ salon 1', () => context.pushSalon('1')),
                     ('→ onboarding', () => context.goOnboarding()),
+                    if (kDebugMode)
+                      (
+                        '→ design system',
+                        () => context.pushNamed(AppRoutes.devDesignSystem.name),
+                      ),
                   ],
                 ),
                 routes: [
@@ -251,6 +258,13 @@ final class AppRouter {
         ),
         routes: [_placeholder(AppRoutes.ratingSent, 'Rating sent')],
       ),
+      if (kDebugMode)
+        GoRoute(
+          parentNavigatorKey: _rootKey,
+          name: AppRoutes.devDesignSystem.name,
+          path: AppRoutes.devDesignSystem.path,
+          builder: (_, _) => const DesignSystemGalleryPage(),
+        ),
     ],
   );
 
