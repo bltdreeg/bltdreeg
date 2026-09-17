@@ -38,6 +38,11 @@ abstract final class BookingModel {
       _ => null,
     },
     postponeUsed: j['postpone_used'] as bool? ?? false,
+    quotedWaitMinutes: j['quoted_wait_minutes'] as int?,
+    servedAt: switch (j['served_at']) {
+      final String iso => DateTime.parse(iso),
+      _ => null,
+    },
   );
 
   static Map<String, Object?> toJson(Booking b) => {
@@ -64,6 +69,8 @@ abstract final class BookingModel {
     'wait_minutes': b.waitMinutes,
     'turn_started_at': b.turnStartedAt?.toIso8601String(),
     'postpone_used': b.postponeUsed,
+    'quoted_wait_minutes': b.quotedWaitMinutes,
+    'served_at': b.servedAt?.toIso8601String(),
   };
 
   static Map<String, Object?> requestToJson(BookingRequest r) => {

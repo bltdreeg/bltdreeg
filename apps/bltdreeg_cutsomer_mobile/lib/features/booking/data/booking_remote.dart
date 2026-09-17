@@ -183,6 +183,7 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
       booking.copyWith(
         status: BookingStatus.inService,
         clearTurnStartedAt: true,
+        servedAt: _clock(),
       ),
     );
   });
@@ -404,6 +405,7 @@ final class FakeBookingRemoteDataSource implements BookingRemoteDataSource {
       ticketNumber: ticketNumber,
       peopleAhead: peopleAhead,
       waitMinutes: waitMinutes,
+      quotedWaitMinutes: request.timing is JoinNow ? waitMinutes : null,
     );
 
     final result = switch (request.timing) {

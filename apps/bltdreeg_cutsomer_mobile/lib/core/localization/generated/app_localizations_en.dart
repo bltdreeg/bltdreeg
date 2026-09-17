@@ -1559,4 +1559,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get durationLabel => 'Duration';
+
+  @override
+  String get rateVisitTitle => 'Rate your visit';
+
+  @override
+  String get rateLater => 'Later';
+
+  @override
+  String get rateOverallQuestion => 'How was the service?';
+
+  @override
+  String get starLabel1 => 'Bad';
+
+  @override
+  String get starLabel2 => 'Not great';
+
+  @override
+  String get starLabel3 => 'Okay';
+
+  @override
+  String get starLabel4 => 'Very good';
+
+  @override
+  String get starLabel5 => 'Excellent';
+
+  @override
+  String get rateDetailsHeader => 'Rate the details';
+
+  @override
+  String get rateQuality => 'Haircut quality';
+
+  @override
+  String get rateCleanliness => 'Cleanliness';
+
+  @override
+  String get rateTimeAccuracy => 'Wait estimate accuracy';
+
+  @override
+  String rateTimeAccuracyNote(int quoted, int actual) {
+    return 'The app said $quoted min, you waited $actual min';
+  }
+
+  @override
+  String get rateTagsHeader => 'What did you like?';
+
+  @override
+  String get tagLightHand => 'Gentle hands';
+
+  @override
+  String get tagCleanPlace => 'Clean place';
+
+  @override
+  String get tagRespectful => 'Respectful';
+
+  @override
+  String get tagFairPrice => 'Fair price';
+
+  @override
+  String get tagAccurateQueue => 'Accurate queue';
+
+  @override
+  String get rateCommentLabel => 'Anything to add?';
+
+  @override
+  String get rateCommentHint => 'Write a few words to help the next customer…';
+
+  @override
+  String get rateAddPhoto => 'Add a photo of the cut';
+
+  @override
+  String get rateAddAnotherPhoto => 'Add another photo';
+
+  @override
+  String get photoFromCamera => 'Take a photo';
+
+  @override
+  String get photoFromGallery => 'Choose from photos';
+
+  @override
+  String get a11yRemovePhoto => 'Remove photo';
+
+  @override
+  String get photoPickFailed => 'Couldn\'t open the camera or photos.';
+
+  @override
+  String get rateAnonymous => 'Post anonymously';
+
+  @override
+  String get rateSubmit => 'Send rating';
+
+  @override
+  String get rateNotAvailableTitle => 'Rating isn\'t open yet';
+
+  @override
+  String get rateNotAvailableBody =>
+      'You can rate the visit once the service is done.';
+
+  @override
+  String get ratingSentTitle => 'Thanks — your rating was sent';
+
+  @override
+  String get ratingSentBody =>
+      'Your opinion helps others choose well. It will appear on the salon page within an hour.';
+
+  @override
+  String get ratingSentOfflineNote =>
+      'Saved on your phone — it\'ll be sent when you\'re back online.';
+
+  @override
+  String get yourRatingCaption => 'Your rating';
+
+  @override
+  String get addToFavoritesTitle => 'Add it to favorites?';
+
+  @override
+  String get addToFavoritesBody =>
+      'We\'ll tell you when it\'s free at your usual time';
+
+  @override
+  String get addToFavoritesAction => 'Add to favorites';
+
+  @override
+  String get addedToFavorites => 'Added to favorites';
+
+  @override
+  String get backToHomeDone => 'Done, take me home';
 }

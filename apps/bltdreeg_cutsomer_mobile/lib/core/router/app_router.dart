@@ -16,6 +16,8 @@ import '../../features/booking/presentation/pages/booking_slot_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/queue/presentation/pages/queue_page.dart';
+import '../../features/rating/presentation/pages/rate_visit_page.dart';
+import '../../features/rating/presentation/pages/rating_sent_page.dart';
 import '../../features/salon_details/domain/salon_details.dart';
 import '../../features/salon_details/presentation/pages/salon_details_page.dart';
 import '../../features/salon_details/presentation/pages/salon_gallery_page.dart';
@@ -275,18 +277,24 @@ final class AppRouter {
         parentNavigatorKey: _rootKey,
         name: AppRoutes.rateVisit.name,
         path: AppRoutes.rateVisit.path,
-        builder: (context, state) => RoutePlaceholderPage(
-          title: 'Rate visit',
-          links: [
-            (
-              '→ sent',
-              () => context.goRatingSent(
-                state.pathParameters[RouteParams.bookingId]!,
+        builder: (_, state) => RateVisitPage(
+          bookingId: state.pathParameters[RouteParams.bookingId]!,
+        ),
+        routes: [
+          GoRoute(
+            name: AppRoutes.ratingSent.name,
+            path: AppRoutes.ratingSent.path,
+            pageBuilder: (_, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              transitionDuration: AppMotion.medium,
+              transitionsBuilder: (_, animation, _, child) =>
+                  FadeTransition(opacity: animation, child: child),
+              child: RatingSentPage(
+                bookingId: state.pathParameters[RouteParams.bookingId]!,
               ),
             ),
-          ],
-        ),
-        routes: [_placeholder(AppRoutes.ratingSent, 'Rating sent')],
+          ),
+        ],
       ),
       if (kDebugMode)
         GoRoute(

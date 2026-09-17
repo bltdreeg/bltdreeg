@@ -9,6 +9,7 @@ import '../../features/booking/booking_module.dart';
 import '../../features/favorites/domain/favorites_repository.dart';
 import '../../features/onboarding/onboarding_module.dart';
 import '../../features/queue/queue_module.dart';
+import '../../features/rating/rating_module.dart';
 import '../../features/salon_details/salon_details_module.dart';
 import '../../features/salons/salons_module.dart';
 import '../config/app_environment.dart';
@@ -75,6 +76,7 @@ Future<void> configureDependencies({
   registerSalonDetailsModule(sl, env);
   registerBookingModule(sl, env);
   registerQueueModule(sl);
+  registerRatingModule(sl, env);
   if (authLocal != null) {
     sl
       ..unregister<AuthLocalDataSource>()

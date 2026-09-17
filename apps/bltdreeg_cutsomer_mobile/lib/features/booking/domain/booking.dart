@@ -125,6 +125,8 @@ final class Booking extends Equatable {
     this.waitMinutes = 0,
     this.turnStartedAt,
     this.postponeUsed = false,
+    this.quotedWaitMinutes,
+    this.servedAt,
   });
 
   /// How long the customer has to show up once it's their turn (frame 29).
@@ -158,6 +160,15 @@ final class Booking extends Equatable {
   /// "أجّلني واحد" can be used once per booking.
   final bool postponeUsed;
 
+  /// Wait promised when joining, kept to rate the estimate's accuracy.
+  final int? quotedWaitMinutes;
+
+  /// When the service started (check-in).
+  final DateTime? servedAt;
+
+  /// Minutes actually waited from joining to the chair.
+  int? get actualWaitMinutes => servedAt?.difference(createdAt).inMinutes;
+
   bool get isQueue => timing is JoinNow;
 
   DateTime? get turnDeadline => turnStartedAt?.add(turnGrace);
@@ -169,6 +180,7 @@ final class Booking extends Equatable {
     DateTime? turnStartedAt,
     bool clearTurnStartedAt = false,
     bool? postponeUsed,
+    DateTime? servedAt,
   }) => Booking(
     id: id,
     salonId: salonId,
@@ -191,6 +203,8 @@ final class Booking extends Equatable {
         ? null
         : turnStartedAt ?? this.turnStartedAt,
     postponeUsed: postponeUsed ?? this.postponeUsed,
+    quotedWaitMinutes: quotedWaitMinutes,
+    servedAt: servedAt ?? this.servedAt,
   );
   int get totalMinutes => services.fold(0, (sum, s) => sum + s.durationMinutes);
 
@@ -215,6 +229,8 @@ final class Booking extends Equatable {
     waitMinutes,
     turnStartedAt,
     postponeUsed,
+    quotedWaitMinutes,
+    servedAt,
   ];
 }
 

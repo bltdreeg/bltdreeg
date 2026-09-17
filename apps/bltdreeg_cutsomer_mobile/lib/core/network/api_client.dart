@@ -54,6 +54,26 @@ final class ApiClient {
     () => _dio.put<Map<String, Object?>>(path, data: body, options: _options()),
   );
 
+  /// Multipart upload: [fields] plus files under [fileField].
+  Future<Map<String, Object?>> postMultipart(
+    String path, {
+    required Map<String, Object?> fields,
+    String fileField = 'files',
+    List<String> filePaths = const [],
+  }) async {
+    final form = FormData.fromMap({
+      ...fields,
+      fileField: [for (final p in filePaths) await MultipartFile.fromFile(p)],
+    });
+    return _send(
+      () => _dio.post<Map<String, Object?>>(
+        path,
+        data: form,
+        options: _options(),
+      ),
+    );
+  }
+
   Future<Map<String, Object?>> deleteJson(String path) =>
       _send(() => _dio.delete<Map<String, Object?>>(path, options: _options()));
 

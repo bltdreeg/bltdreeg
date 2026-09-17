@@ -1110,5 +1110,55 @@
   "queueErrorFinished": "الحجز ده خلص خلاص.",
   "queueActionOffline": "محتاج نت عشان تعمل ده.",
   "a11yLiveOffline": "مش متحدّث",
-  "durationLabel": "مدة الخدمة"
+  "durationLabel": "مدة الخدمة",
+  "rateVisitTitle": "قيّم زيارتك",
+  "rateLater": "بعدين",
+  "rateOverallQuestion": "إيه رأيك في الخدمة؟",
+  "starLabel1": "وحش",
+  "starLabel2": "مش أحسن حاجة",
+  "starLabel3": "عادي",
+  "starLabel4": "حلو جداً",
+  "starLabel5": "ممتاز",
+  "rateDetailsHeader": "قيّم التفاصيل",
+  "rateQuality": "جودة القصة",
+  "rateCleanliness": "نظافة المكان",
+  "rateTimeAccuracy": "دقة الوقت المتوقع",
+  "rateTimeAccuracyNote": "التطبيق قال {quoted} د واستنيت {actual} د",
+  "@rateTimeAccuracyNote": {
+    "placeholders": {
+      "quoted": {
+        "type": "int"
+      },
+      "actual": {
+        "type": "int"
+      }
+    }
+  },
+  "rateTagsHeader": "إيه اللي عجبك؟",
+  "tagLightHand": "ايده خفيفة",
+  "tagCleanPlace": "المكان نضيف",
+  "tagRespectful": "معاملة محترمة",
+  "tagFairPrice": "السعر مناسب",
+  "tagAccurateQueue": "الدور كان دقيق",
+  "rateCommentLabel": "تحب تضيف كلمة؟",
+  "rateCommentHint": "اكتب رأيك عشان تساعد اللي بعدك…",
+  "rateAddPhoto": "ضيف صورة للقصة",
+  "rateAddAnotherPhoto": "ضيف صورة تانية",
+  "photoFromCamera": "صوّر دلوقتي",
+  "photoFromGallery": "اختار من الصور",
+  "a11yRemovePhoto": "شيل الصورة",
+  "photoPickFailed": "معرفناش نفتح الكاميرا أو الصور.",
+  "rateAnonymous": "انشر التقييم باسم مستعار",
+  "rateSubmit": "ابعت التقييم",
+  "rateNotAvailableTitle": "التقييم لسه مش متاح",
+  "rateNotAvailableBody": "تقدر تقيّم الزيارة بعد ما الخدمة تخلص.",
+  "ratingSentTitle": "شكراً — تقييمك اتبعت",
+  "ratingSentBody": "رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.",
+  "ratingSentOfflineNote": "متسجّل عندك وهيتبعت أول ما النت يرجع.",
+  "yourRatingCaption": "تقييمك",
+  "addToFavoritesTitle": "تضيفه للمفضلة؟",
+  "addToFavoritesBody": "هنقولك لما يبقى فاضي في وقتك المعتاد",
+  "addToFavoritesAction": "ضيفه للمفضلة",
+  "addedToFavorites": "اتضاف للمفضلة",
+  "backToHomeDone": "تمام، ارجعني للرئيسية"
 }

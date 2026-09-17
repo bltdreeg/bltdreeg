@@ -2371,6 +2371,246 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مدة الخدمة'**
   String get durationLabel;
+
+  /// No description provided for @rateVisitTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم زيارتك'**
+  String get rateVisitTitle;
+
+  /// No description provided for @rateLater.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعدين'**
+  String get rateLater;
+
+  /// No description provided for @rateOverallQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيه رأيك في الخدمة؟'**
+  String get rateOverallQuestion;
+
+  /// No description provided for @starLabel1.
+  ///
+  /// In ar, this message translates to:
+  /// **'وحش'**
+  String get starLabel1;
+
+  /// No description provided for @starLabel2.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش أحسن حاجة'**
+  String get starLabel2;
+
+  /// No description provided for @starLabel3.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادي'**
+  String get starLabel3;
+
+  /// No description provided for @starLabel4.
+  ///
+  /// In ar, this message translates to:
+  /// **'حلو جداً'**
+  String get starLabel4;
+
+  /// No description provided for @starLabel5.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتاز'**
+  String get starLabel5;
+
+  /// No description provided for @rateDetailsHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم التفاصيل'**
+  String get rateDetailsHeader;
+
+  /// No description provided for @rateQuality.
+  ///
+  /// In ar, this message translates to:
+  /// **'جودة القصة'**
+  String get rateQuality;
+
+  /// No description provided for @rateCleanliness.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظافة المكان'**
+  String get rateCleanliness;
+
+  /// No description provided for @rateTimeAccuracy.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقة الوقت المتوقع'**
+  String get rateTimeAccuracy;
+
+  /// No description provided for @rateTimeAccuracyNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق قال {quoted} د واستنيت {actual} د'**
+  String rateTimeAccuracyNote(int quoted, int actual);
+
+  /// No description provided for @rateTagsHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيه اللي عجبك؟'**
+  String get rateTagsHeader;
+
+  /// No description provided for @tagLightHand.
+  ///
+  /// In ar, this message translates to:
+  /// **'ايده خفيفة'**
+  String get tagLightHand;
+
+  /// No description provided for @tagCleanPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكان نضيف'**
+  String get tagCleanPlace;
+
+  /// No description provided for @tagRespectful.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاملة محترمة'**
+  String get tagRespectful;
+
+  /// No description provided for @tagFairPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر مناسب'**
+  String get tagFairPrice;
+
+  /// No description provided for @tagAccurateQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدور كان دقيق'**
+  String get tagAccurateQueue;
+
+  /// No description provided for @rateCommentLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحب تضيف كلمة؟'**
+  String get rateCommentLabel;
+
+  /// No description provided for @rateCommentHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب رأيك عشان تساعد اللي بعدك…'**
+  String get rateCommentHint;
+
+  /// No description provided for @rateAddPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف صورة للقصة'**
+  String get rateAddPhoto;
+
+  /// No description provided for @rateAddAnotherPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف صورة تانية'**
+  String get rateAddAnotherPhoto;
+
+  /// No description provided for @photoFromCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر دلوقتي'**
+  String get photoFromCamera;
+
+  /// No description provided for @photoFromGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار من الصور'**
+  String get photoFromGallery;
+
+  /// No description provided for @a11yRemovePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل الصورة'**
+  String get a11yRemovePhoto;
+
+  /// No description provided for @photoPickFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفناش نفتح الكاميرا أو الصور.'**
+  String get photoPickFailed;
+
+  /// No description provided for @rateAnonymous.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر التقييم باسم مستعار'**
+  String get rateAnonymous;
+
+  /// No description provided for @rateSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعت التقييم'**
+  String get rateSubmit;
+
+  /// No description provided for @rateNotAvailableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم لسه مش متاح'**
+  String get rateNotAvailableTitle;
+
+  /// No description provided for @rateNotAvailableBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدر تقيّم الزيارة بعد ما الخدمة تخلص.'**
+  String get rateNotAvailableBody;
+
+  /// No description provided for @ratingSentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكراً — تقييمك اتبعت'**
+  String get ratingSentTitle;
+
+  /// No description provided for @ratingSentBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.'**
+  String get ratingSentBody;
+
+  /// No description provided for @ratingSentOfflineNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'متسجّل عندك وهيتبعت أول ما النت يرجع.'**
+  String get ratingSentOfflineNote;
+
+  /// No description provided for @yourRatingCaption.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمك'**
+  String get yourRatingCaption;
+
+  /// No description provided for @addToFavoritesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تضيفه للمفضلة؟'**
+  String get addToFavoritesTitle;
+
+  /// No description provided for @addToFavoritesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنقولك لما يبقى فاضي في وقتك المعتاد'**
+  String get addToFavoritesBody;
+
+  /// No description provided for @addToFavoritesAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيفه للمفضلة'**
+  String get addToFavoritesAction;
+
+  /// No description provided for @addedToFavorites.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتضاف للمفضلة'**
+  String get addedToFavorites;
+
+  /// No description provided for @backToHomeDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام، ارجعني للرئيسية'**
+  String get backToHomeDone;
 }
 
 class _AppLocalizationsDelegate

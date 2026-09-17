@@ -1571,4 +1571,127 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get durationLabel => 'مدة الخدمة';
+
+  @override
+  String get rateVisitTitle => 'قيّم زيارتك';
+
+  @override
+  String get rateLater => 'بعدين';
+
+  @override
+  String get rateOverallQuestion => 'إيه رأيك في الخدمة؟';
+
+  @override
+  String get starLabel1 => 'وحش';
+
+  @override
+  String get starLabel2 => 'مش أحسن حاجة';
+
+  @override
+  String get starLabel3 => 'عادي';
+
+  @override
+  String get starLabel4 => 'حلو جداً';
+
+  @override
+  String get starLabel5 => 'ممتاز';
+
+  @override
+  String get rateDetailsHeader => 'قيّم التفاصيل';
+
+  @override
+  String get rateQuality => 'جودة القصة';
+
+  @override
+  String get rateCleanliness => 'نظافة المكان';
+
+  @override
+  String get rateTimeAccuracy => 'دقة الوقت المتوقع';
+
+  @override
+  String rateTimeAccuracyNote(int quoted, int actual) {
+    return 'التطبيق قال $quoted د واستنيت $actual د';
+  }
+
+  @override
+  String get rateTagsHeader => 'إيه اللي عجبك؟';
+
+  @override
+  String get tagLightHand => 'ايده خفيفة';
+
+  @override
+  String get tagCleanPlace => 'المكان نضيف';
+
+  @override
+  String get tagRespectful => 'معاملة محترمة';
+
+  @override
+  String get tagFairPrice => 'السعر مناسب';
+
+  @override
+  String get tagAccurateQueue => 'الدور كان دقيق';
+
+  @override
+  String get rateCommentLabel => 'تحب تضيف كلمة؟';
+
+  @override
+  String get rateCommentHint => 'اكتب رأيك عشان تساعد اللي بعدك…';
+
+  @override
+  String get rateAddPhoto => 'ضيف صورة للقصة';
+
+  @override
+  String get rateAddAnotherPhoto => 'ضيف صورة تانية';
+
+  @override
+  String get photoFromCamera => 'صوّر دلوقتي';
+
+  @override
+  String get photoFromGallery => 'اختار من الصور';
+
+  @override
+  String get a11yRemovePhoto => 'شيل الصورة';
+
+  @override
+  String get photoPickFailed => 'معرفناش نفتح الكاميرا أو الصور.';
+
+  @override
+  String get rateAnonymous => 'انشر التقييم باسم مستعار';
+
+  @override
+  String get rateSubmit => 'ابعت التقييم';
+
+  @override
+  String get rateNotAvailableTitle => 'التقييم لسه مش متاح';
+
+  @override
+  String get rateNotAvailableBody => 'تقدر تقيّم الزيارة بعد ما الخدمة تخلص.';
+
+  @override
+  String get ratingSentTitle => 'شكراً — تقييمك اتبعت';
+
+  @override
+  String get ratingSentBody =>
+      'رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.';
+
+  @override
+  String get ratingSentOfflineNote => 'متسجّل عندك وهيتبعت أول ما النت يرجع.';
+
+  @override
+  String get yourRatingCaption => 'تقييمك';
+
+  @override
+  String get addToFavoritesTitle => 'تضيفه للمفضلة؟';
+
+  @override
+  String get addToFavoritesBody => 'هنقولك لما يبقى فاضي في وقتك المعتاد';
+
+  @override
+  String get addToFavoritesAction => 'ضيفه للمفضلة';
+
+  @override
+  String get addedToFavorites => 'اتضاف للمفضلة';
+
+  @override
+  String get backToHomeDone => 'تمام، ارجعني للرئيسية';
 }
