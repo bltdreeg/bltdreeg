@@ -1,0 +1,39 @@
+{
+  "@@locale": "ar",
+  "@_NOTE": {
+    "description": "Digits rule: never use NumberFormat/DateFormat placeholder formats here. Pass numbers pre-formatted via AppFormatters as String placeholders (or plain int without a format) so output stays 0-9 in Arabic."
+  },
+
+  "appName": "بالتدريج",
+  "@appName": {"description": "Brand name"},
+
+  "navHome": "الرئيسية",
+  "navBookings": "حجوزاتي",
+  "navSearch": "البحث",
+  "navAccount": "حسابي",
+
+  "actionBack": "رجوع",
+  "actionClose": "إغلاق",
+  "actionRetry": "جرّب تاني",
+  "actionCancel": "إلغاء",
+  "actionSeeAll": "شوف الكل",
+  "actionClearAll": "امسح الكل",
+  "actionChange": "غيّر",
+  "actionEdit": "عدّل",
+
+  "offlineBanner": "مفيش نت — الأرقام دي آخر تحديث الساعة {time}",
+  "@offlineBanner": {
+    "placeholders": {"time": {"type": "String", "example": "9:32"}}
+  },
+  "offlineTitle": "النت فاصل",
+  "offlineBody": "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
+
+  "errorGeneric": "حصلت مشكلة. جرّب تاني بعد شوية.",
+  "errorNetwork": "مفيش اتصال بالنت.",
+
+  "comingSoonTitle": "الشاشة دي لسه بتتبني",
+  "debugRouteLabel": "المسار: {route}",
+  "@debugRouteLabel": {
+    "placeholders": {"route": {"type": "String"}}
+  }
+}

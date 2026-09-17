@@ -1,0 +1,29 @@
+{
+  "@@locale": "en",
+
+  "appName": "Beltadreeg",
+
+  "navHome": "Home",
+  "navBookings": "Bookings",
+  "navSearch": "Search",
+  "navAccount": "Account",
+
+  "actionBack": "Back",
+  "actionClose": "Close",
+  "actionRetry": "Try again",
+  "actionCancel": "Cancel",
+  "actionSeeAll": "See all",
+  "actionClearAll": "Clear all",
+  "actionChange": "Change",
+  "actionEdit": "Edit",
+
+  "offlineBanner": "No internet — numbers last updated at {time}",
+  "offlineTitle": "You're offline",
+  "offlineBody": "We can't load salons and wait times right now. Don't worry — if you're in a queue, your spot is saved at the salon and hasn't changed.",
+
+  "errorGeneric": "Something went wrong. Please try again shortly.",
+  "errorNetwork": "No internet connection.",
+
+  "comingSoonTitle": "This screen is under construction",
+  "debugRouteLabel": "Route: {route}"
+}
