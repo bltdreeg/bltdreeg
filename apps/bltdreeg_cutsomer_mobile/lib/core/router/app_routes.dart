@@ -24,6 +24,8 @@ abstract final class RouteQuery {
   static const phone = 'phone';
   static const loginMethod = 'method';
   static const barberId = 'barberId';
+  static const sort = 'sort';
+  static const openNow = 'open';
 }
 
 abstract final class AppRoutes {

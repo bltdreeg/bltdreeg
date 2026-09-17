@@ -16,6 +16,10 @@ abstract final class AppTypography {
 
   static const _base = TextStyle(
     fontFamily: fontFamily,
+    // Explicit 0: otherwise Material's default letter spacing (0.25–0.5)
+    // leaks in, which pulls joined Arabic letters apart and makes text
+    // wider than designed.
+    letterSpacing: 0,
     leadingDistribution: TextLeadingDistribution.even,
   );
 

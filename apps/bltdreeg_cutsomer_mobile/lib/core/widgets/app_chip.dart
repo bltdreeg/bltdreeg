@@ -44,7 +44,8 @@ class AppChip extends StatelessWidget {
   /// Multi-select chips show a check when on (filter "service" group).
   final bool showCheckWhenSelected;
 
-  /// Shows a trailing ✕; tapping the chip removes it.
+  /// Shows a trailing ✕. Without [onTap] the whole chip removes; with both,
+  /// the ✕ removes and the label triggers [onTap] (recent searches).
   final VoidCallback? onRemove;
   final double height;
   final double fontSize;
@@ -78,9 +79,12 @@ class AppChip extends StatelessWidget {
         ? AppAssets.iconCheckBold
         : icon;
 
+    final splitActions = onTap != null && onRemove != null;
     return AppPressable(
-      onTap: onRemove ?? onTap,
-      semanticLabel: onRemove != null ? context.l10n.a11yRemove(label) : label,
+      onTap: splitActions ? onTap : onRemove ?? onTap,
+      semanticLabel: onRemove != null && !splitActions
+          ? context.l10n.a11yRemove(label)
+          : label,
       child: Semantics(
         selected: selected,
         child: AnimatedContainer(
@@ -89,7 +93,7 @@ class AppChip extends StatelessWidget {
           height: height,
           padding: EdgeInsetsDirectional.only(
             start: 14,
-            end: onRemove != null ? 10 : 14,
+            end: splitActions ? 6 : (onRemove != null ? 10 : 14),
           ),
           decoration: BoxDecoration(
             color: bg,
@@ -113,7 +117,26 @@ class AppChip extends StatelessWidget {
               ),
               if (onRemove != null) ...[
                 const SizedBox(width: 6),
-                AppIcon(AppAssets.iconClose, size: AppSizes.iconSm, color: fg),
+                if (splitActions)
+                  AppPressable(
+                    onTap: onRemove,
+                    pressedScale: 0.8,
+                    semanticLabel: context.l10n.a11yRemove(label),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: AppIcon(
+                        AppAssets.iconClose,
+                        size: AppSizes.iconSm,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  )
+                else
+                  AppIcon(
+                    AppAssets.iconClose,
+                    size: AppSizes.iconSm,
+                    color: fg,
+                  ),
               ],
             ],
           ),

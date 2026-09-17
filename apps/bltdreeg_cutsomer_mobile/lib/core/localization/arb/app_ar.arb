@@ -263,5 +263,239 @@
   "otpResent": "بعتنالك كود جديد",
   "authInvalidCredentials": "البريد الإلكتروني أو كلمة السر مش مظبوطين",
   "authPhoneNotRegistered": "الرقم ده مش متسجّل. اعمل حساب جديد في دقيقة.",
-  "authPhoneTaken": "الرقم ده عليه حساب بالفعل. سجّل دخولك بيه."
+  "authPhoneTaken": "الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.",
+  "homeNearCaption": "بنعرضلك اللي قريب من",
+  "areaWithCity": "{area}، {city}",
+  "@areaWithCity": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "homeSearchHint": "دوّر باسم الصالون أو الخدمة",
+  "homeAvailableNow": "تقدر تدخل دلوقتي",
+  "homeRecommended": "مرشّح ليك",
+  "homeNewInArea": "جديد في منطقتك",
+  "homeLastSeen": "آخر صالونات شوفتها",
+  "homeAreaEmptyTitle": "لسه مفيش صالونات هنا",
+  "homeAreaEmptyBody": "بنضيف صالونات جديدة في {area} قريب. جرّب منطقة قريبة منك.",
+  "@homeAreaEmptyBody": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "homeChangeArea": "غيّر المنطقة",
+  "loadErrorTitle": "مش قادرين نحمّل الصالونات",
+  "sortLeastWait": "أقل انتظار دلوقتي",
+  "sortNearest": "الأقرب ليك",
+  "sortTopRated": "الأعلى تقييماً",
+  "sortCheapest": "أرخص سعر",
+  "sortNewest": "أحدث الصالونات",
+  "serviceHaircut": "قصة شعر",
+  "serviceBeard": "حلاقة دقن",
+  "serviceKids": "حلاقة أطفال",
+  "serviceColor": "صبغة",
+  "serviceSkincare": "عناية بالبشرة",
+  "waitFreeNow": "فاضي دلوقتي",
+  "waitFreeWalkIn": "فاضي دلوقتي — ادخل على طول",
+  "pinPeopleLeft": "{count, plural, =1{فاضل 1 بس} other{فاضل {count}}}",
+  "@pinPeopleLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitPeopleMinutes": "{count, plural, =1{فاضل 1 — استنى ~{minutes} د} other{فاضل {count} أنفار — استنى ~{minutes} د}}",
+  "@waitPeopleMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "waitPeopleHour": "{count, plural, =1{فاضل 1 — استنى ~ساعة} other{فاضل {count} أنفار — استنى ~ساعة}}",
+  "@waitPeopleHour": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "waitNotUpdated": "الانتظار مش متحدّث",
+  "opensTodayAt": "بيفتح الساعة {time}",
+  "@opensTodayAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "opensTomorrowAt": "بيفتح بكرة {time}",
+  "@opensTomorrowAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "opensOnDayAt": "بيفتح {day} {time}",
+  "@opensOnDayAt": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "openedDaysAgo": "{days, plural, =0{فتح النهارده} =1{فتح امبارح} =2{فتح من يومين} other{فتح من {days} أيام}}",
+  "@openedDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "openedWeeksAgo": "{weeks, plural, =1{فتح من أسبوع} =2{فتح من أسبوعين} other{فتح من {weeks} أسابيع}}",
+  "@openedWeeksAgo": {
+    "placeholders": {
+      "weeks": {
+        "type": "int"
+      }
+    }
+  },
+  "searchHint": "دوّر باسم الصالون",
+  "searchRecent": "آخر ما دوّرت عليه",
+  "searchNearbyNow": "قريب منك دلوقتي",
+  "searchResultsForQuery": "{count, plural, =1{صالون واحد فيه \"{query}\"} other{{count} صالونات فيها \"{query}\"}}",
+  "@searchResultsForQuery": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "searchResultsCount": "{count, plural, =1{صالون واحد} other{{count} صالونات}}",
+  "@searchResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "withinKm": "داخل {km} كم",
+  "@withinKm": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "searchNoResultsTitle": "مفيش صالون بالاسم ده",
+  "searchNoResultsBody": "ما لقيناش \"{query}\" في {area}. جرّب تشيل الفلاتر أو تدوّر باسم تاني.",
+  "@searchNoResultsBody": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      },
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "searchNoFilterResultsTitle": "مفيش صالونات بالفلاتر دي",
+  "searchNoFilterResultsBody": "جرّب تشيل فلتر أو توسّع نطاق البحث.",
+  "searchClearFiltersShowAll": "امسح الفلاتر واعرض كل الصالونات",
+  "searchExpandRadius": "وسّع نطاق البحث لـ {km} كم",
+  "@searchExpandRadius": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "searchDidYouMean": "يمكن تكون بتقصد",
+  "filterTitle": "فلترة وترتيب",
+  "filterSortBy": "رتّب النتايج بـ",
+  "filterService": "الخدمة اللي عايزها",
+  "filterAvailableOn": "متاح في يوم",
+  "filterPrice": "السعر",
+  "filterOpenNow": "مفتوح دلوقتي بس",
+  "filterOpenNowHint": "اخفي الصالونات المقفولة",
+  "filterShowResults": "{count, plural, =0{مفيش نتايج} =1{اعرض نتيجة واحدة} other{اعرض {count} نتايج}}",
+  "@filterShowResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dayToday": "النهارده",
+  "dayTomorrow": "بكرة",
+  "dayChipLabel": "{day} {date}",
+  "@dayChipLabel": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "priceRangeLabel": "{min} – {max}",
+  "@priceRangeLabel": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "areaSheetTitle": "اختار المنطقة",
+  "areaSearchHint": "دوّر على منطقة",
+  "areaUseLocation": "استخدم موقعي الحالي",
+  "areaUseLocationHint": "هنطلب إذن الموقع مرة واحدة",
+  "areaNearby": "مناطق قريبة منك",
+  "areaOthers": "مناطق تانية في {city}",
+  "@areaOthers": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "areaSalonsCount": "{count, plural, =1{صالون واحد} =2{صالونين} few{{count} صالونات} other{{count} صالون}}",
+  "@areaSalonsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "areaConfirm": "أكّد المنطقة",
+  "areaLocated": "حددنا منطقتك: {area}",
+  "@areaLocated": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  }
 }

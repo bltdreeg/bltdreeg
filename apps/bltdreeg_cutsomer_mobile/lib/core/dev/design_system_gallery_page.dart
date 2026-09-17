@@ -400,7 +400,6 @@ class _DesignSystemGalleryPageState extends State<DesignSystemGalleryPage> {
                 ),
                 const Gap(12),
                 HorizontalRail(
-                  height: 190,
                   itemCount: 3,
                   itemBuilder: (_, i) => SalonRailCard(
                     name: 'صالون الكابتن حسام',

@@ -425,4 +425,304 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get authPhoneTaken => 'الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.';
+
+  @override
+  String get homeNearCaption => 'بنعرضلك اللي قريب من';
+
+  @override
+  String areaWithCity(String area, String city) {
+    return '$area، $city';
+  }
+
+  @override
+  String get homeSearchHint => 'دوّر باسم الصالون أو الخدمة';
+
+  @override
+  String get homeAvailableNow => 'تقدر تدخل دلوقتي';
+
+  @override
+  String get homeRecommended => 'مرشّح ليك';
+
+  @override
+  String get homeNewInArea => 'جديد في منطقتك';
+
+  @override
+  String get homeLastSeen => 'آخر صالونات شوفتها';
+
+  @override
+  String get homeAreaEmptyTitle => 'لسه مفيش صالونات هنا';
+
+  @override
+  String homeAreaEmptyBody(String area) {
+    return 'بنضيف صالونات جديدة في $area قريب. جرّب منطقة قريبة منك.';
+  }
+
+  @override
+  String get homeChangeArea => 'غيّر المنطقة';
+
+  @override
+  String get loadErrorTitle => 'مش قادرين نحمّل الصالونات';
+
+  @override
+  String get sortLeastWait => 'أقل انتظار دلوقتي';
+
+  @override
+  String get sortNearest => 'الأقرب ليك';
+
+  @override
+  String get sortTopRated => 'الأعلى تقييماً';
+
+  @override
+  String get sortCheapest => 'أرخص سعر';
+
+  @override
+  String get sortNewest => 'أحدث الصالونات';
+
+  @override
+  String get serviceHaircut => 'قصة شعر';
+
+  @override
+  String get serviceBeard => 'حلاقة دقن';
+
+  @override
+  String get serviceKids => 'حلاقة أطفال';
+
+  @override
+  String get serviceColor => 'صبغة';
+
+  @override
+  String get serviceSkincare => 'عناية بالبشرة';
+
+  @override
+  String get waitFreeNow => 'فاضي دلوقتي';
+
+  @override
+  String get waitFreeWalkIn => 'فاضي دلوقتي — ادخل على طول';
+
+  @override
+  String pinPeopleLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فاضل $count',
+      one: 'فاضل 1 بس',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String waitPeopleMinutes(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فاضل $count أنفار — استنى ~$minutes د',
+      one: 'فاضل 1 — استنى ~$minutes د',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String waitPeopleHour(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'فاضل $count أنفار — استنى ~ساعة',
+      one: 'فاضل 1 — استنى ~ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get waitNotUpdated => 'الانتظار مش متحدّث';
+
+  @override
+  String opensTodayAt(String time) {
+    return 'بيفتح الساعة $time';
+  }
+
+  @override
+  String opensTomorrowAt(String time) {
+    return 'بيفتح بكرة $time';
+  }
+
+  @override
+  String opensOnDayAt(String day, String time) {
+    return 'بيفتح $day $time';
+  }
+
+  @override
+  String openedDaysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'فتح من $days أيام',
+      two: 'فتح من يومين',
+      one: 'فتح امبارح',
+      zero: 'فتح النهارده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String openedWeeksAgo(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: 'فتح من $weeks أسابيع',
+      two: 'فتح من أسبوعين',
+      one: 'فتح من أسبوع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchHint => 'دوّر باسم الصالون';
+
+  @override
+  String get searchRecent => 'آخر ما دوّرت عليه';
+
+  @override
+  String get searchNearbyNow => 'قريب منك دلوقتي';
+
+  @override
+  String searchResultsForQuery(int count, String query) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صالونات فيها \"$query\"',
+      one: 'صالون واحد فيه \"$query\"',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String searchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صالونات',
+      one: 'صالون واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String withinKm(String km) {
+    return 'داخل $km كم';
+  }
+
+  @override
+  String get searchNoResultsTitle => 'مفيش صالون بالاسم ده';
+
+  @override
+  String searchNoResultsBody(String query, String area) {
+    return 'ما لقيناش \"$query\" في $area. جرّب تشيل الفلاتر أو تدوّر باسم تاني.';
+  }
+
+  @override
+  String get searchNoFilterResultsTitle => 'مفيش صالونات بالفلاتر دي';
+
+  @override
+  String get searchNoFilterResultsBody => 'جرّب تشيل فلتر أو توسّع نطاق البحث.';
+
+  @override
+  String get searchClearFiltersShowAll => 'امسح الفلاتر واعرض كل الصالونات';
+
+  @override
+  String searchExpandRadius(String km) {
+    return 'وسّع نطاق البحث لـ $km كم';
+  }
+
+  @override
+  String get searchDidYouMean => 'يمكن تكون بتقصد';
+
+  @override
+  String get filterTitle => 'فلترة وترتيب';
+
+  @override
+  String get filterSortBy => 'رتّب النتايج بـ';
+
+  @override
+  String get filterService => 'الخدمة اللي عايزها';
+
+  @override
+  String get filterAvailableOn => 'متاح في يوم';
+
+  @override
+  String get filterPrice => 'السعر';
+
+  @override
+  String get filterOpenNow => 'مفتوح دلوقتي بس';
+
+  @override
+  String get filterOpenNowHint => 'اخفي الصالونات المقفولة';
+
+  @override
+  String filterShowResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'اعرض $count نتايج',
+      one: 'اعرض نتيجة واحدة',
+      zero: 'مفيش نتايج',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dayToday => 'النهارده';
+
+  @override
+  String get dayTomorrow => 'بكرة';
+
+  @override
+  String dayChipLabel(String day, String date) {
+    return '$day $date';
+  }
+
+  @override
+  String priceRangeLabel(String min, String max) {
+    return '$min – $max';
+  }
+
+  @override
+  String get areaSheetTitle => 'اختار المنطقة';
+
+  @override
+  String get areaSearchHint => 'دوّر على منطقة';
+
+  @override
+  String get areaUseLocation => 'استخدم موقعي الحالي';
+
+  @override
+  String get areaUseLocationHint => 'هنطلب إذن الموقع مرة واحدة';
+
+  @override
+  String get areaNearby => 'مناطق قريبة منك';
+
+  @override
+  String areaOthers(String city) {
+    return 'مناطق تانية في $city';
+  }
+
+  @override
+  String areaSalonsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صالون',
+      few: '$count صالونات',
+      two: 'صالونين',
+      one: 'صالون واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get areaConfirm => 'أكّد المنطقة';
+
+  @override
+  String areaLocated(String area) {
+    return 'حددنا منطقتك: $area';
+  }
 }

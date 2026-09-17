@@ -9,7 +9,10 @@ import '../../features/auth/presentation/login/login_page.dart';
 import '../../features/auth/presentation/otp/otp_page.dart';
 import '../../features/auth/presentation/register/register_page.dart';
 import '../../features/auth/presentation/session/auth_session_cubit.dart';
+import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/salons/domain/entities/search_criteria.dart';
+import '../../features/search/presentation/pages/search_page.dart';
 import '../dev/design_system_gallery_page.dart';
 import '../storage/app_preferences.dart';
 import 'app_navigation.dart';
@@ -101,19 +104,7 @@ final class AppRouter {
               GoRoute(
                 name: AppRoutes.home.name,
                 path: AppRoutes.home.path,
-                builder: (context, _) => RoutePlaceholderPage(
-                  title: 'Home',
-                  links: [
-                    ('→ notifications', () => context.pushNotifications()),
-                    ('→ salon 1', () => context.pushSalon('1')),
-                    ('→ onboarding', () => context.goOnboarding()),
-                    if (kDebugMode)
-                      (
-                        '→ design system',
-                        () => context.pushNamed(AppRoutes.devDesignSystem.name),
-                      ),
-                  ],
-                ),
+                builder: (_, _) => const HomePage(),
                 routes: [
                   GoRoute(
                     name: AppRoutes.notifications.name,
@@ -145,7 +136,13 @@ final class AppRouter {
               GoRoute(
                 name: AppRoutes.search.name,
                 path: AppRoutes.search.path,
-                builder: (_, _) => const RoutePlaceholderPage(title: 'Search'),
+                builder: (_, state) {
+                  final query = state.uri.queryParameters;
+                  return SearchPage(
+                    sort: SalonSort.values.asNameMap()[query[RouteQuery.sort]],
+                    openNowOnly: query[RouteQuery.openNow] == '1',
+                  );
+                },
               ),
             ],
           ),

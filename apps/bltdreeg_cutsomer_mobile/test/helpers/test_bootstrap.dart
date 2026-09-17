@@ -1,8 +1,11 @@
 import 'package:bltdreeg_cutsomer_mobile/core/config/app_environment.dart';
+import 'package:bltdreeg_cutsomer_mobile/core/database/app_database.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/di/injection.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/network/connectivity_service.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/storage/app_preferences.dart';
 import 'package:bltdreeg_cutsomer_mobile/features/auth/data/datasources/auth_local_data_source.dart';
+import 'package:drift/drift.dart' show driftRuntimeOptions;
+import 'package:drift/native.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
@@ -11,6 +14,7 @@ const testEnvironment = AppEnvironment(
   apiBaseUrl: 'https://test.invalid',
   queueSocketUrl: 'wss://test.invalid',
   simulatedLatency: Duration.zero,
+  fakeLiveUpdateInterval: null,
 );
 
 /// Resets the service locator with in-memory preferences and a fake
@@ -27,7 +31,9 @@ Future<AppPreferences> bootstrapForTest({
   final prefs = await AppPreferences.create();
   if (onboardingSeen) await prefs.setOnboardingSeen();
   if (localeCode != null) await prefs.setLocaleCode(localeCode);
+  driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   await configureDependencies(
+    database: AppDatabase(NativeDatabase.memory()),
     environment: testEnvironment,
     preferences: prefs,
     connectivity: FakeConnectivityService(online: online),

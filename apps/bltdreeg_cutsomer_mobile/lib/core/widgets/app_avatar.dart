@@ -58,11 +58,14 @@ class AppAvatar extends StatelessWidget {
       width: size,
       height: size,
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: bg,
-        shape: BoxShape.circle,
-        border: bordered ? Border.all(color: border) : null,
-      ),
+      decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
+      // Border painted above a photo so it isn't covered at the edge.
+      foregroundDecoration: bordered
+          ? BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: border),
+            )
+          : null,
       alignment: Alignment.center,
       child: imageUrl == null
           ? initials

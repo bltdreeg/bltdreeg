@@ -237,6 +237,7 @@ class AppIconButton extends StatelessWidget {
     this.matchTextDirection = false,
     this.showDot = false,
     this.count,
+    this.onLongPress,
     super.key,
   });
 
@@ -254,6 +255,8 @@ class AppIconButton extends StatelessWidget {
 
   /// Numeric badge (active filters count).
   final int? count;
+
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -278,6 +281,7 @@ class AppIconButton extends StatelessWidget {
 
     return AppPressable(
       onTap: onPressed,
+      onLongPress: onLongPress,
       semanticLabel: semanticLabel,
       child: SizedBox.square(
         dimension: size,

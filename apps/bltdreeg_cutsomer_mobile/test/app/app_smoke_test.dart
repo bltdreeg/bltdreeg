@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:bltdreeg_cutsomer_mobile/app/app.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/di/injection.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/localization/locale_cubit.dart';
+import 'package:bltdreeg_cutsomer_mobile/core/router/app_router.dart';
+import 'package:bltdreeg_cutsomer_mobile/core/router/app_routes.dart';
 import 'package:bltdreeg_cutsomer_mobile/core/widgets/app_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -34,20 +38,20 @@ void main() {
       await tester.pumpWidget(const BeltadreegApp());
       await tester.pumpAndSettle();
 
-      // Arabic by default, RTL.
-      expect(find.text('الرئيسية'), findsOneWidget);
-      final homeContext = tester.element(find.text('Home'));
+      // Arabic by default, RTL, real home content.
+      expect(find.text('تقدر تدخل دلوقتي'), findsOneWidget);
+      final homeContext = tester.element(find.text('تقدر تدخل دلوقتي'));
       expect(Directionality.of(homeContext), TextDirection.rtl);
 
       // Push notifications inside the home branch.
-      await tester.tap(find.text('→ notifications'));
+      unawaited(sl<AppRouter>().config.pushNamed(AppRoutes.notifications.name));
       await tester.pumpAndSettle();
       expect(find.text('Notifications'), findsOneWidget);
 
       // Switch to search, then back to home: notifications is still on top.
       await tester.tap(find.text('البحث'));
       await tester.pumpAndSettle();
-      expect(find.text('Search'), findsOneWidget);
+      expect(find.text('قريب منك دلوقتي'), findsOneWidget);
       await tester.tap(find.text('الرئيسية'));
       await tester.pumpAndSettle();
       expect(find.text('Notifications'), findsOneWidget);
@@ -57,7 +61,12 @@ void main() {
       await tester.pumpWidget(const BeltadreegApp());
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('→ salon 1'));
+      unawaited(
+        sl<AppRouter>().config.pushNamed(
+          AppRoutes.salon.name,
+          pathParameters: {RouteParams.salonId: '1'},
+        ),
+      );
       await tester.pumpAndSettle();
       expect(find.text('Salon 1'), findsOneWidget);
       expect(find.byType(AppBottomNavBar), findsNothing);
@@ -71,7 +80,7 @@ void main() {
       sl<LocaleCubit>().emit(const Locale('en'));
       await tester.pumpAndSettle();
 
-      final context = tester.element(find.text('Search'));
+      final context = tester.element(find.text('Walk in now'));
       expect(Directionality.of(context), TextDirection.ltr);
       expect(find.text('Home'), findsWidgets);
     });

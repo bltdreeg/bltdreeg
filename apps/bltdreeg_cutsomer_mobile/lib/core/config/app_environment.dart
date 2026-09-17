@@ -12,6 +12,7 @@ final class AppEnvironment {
     required this.apiBaseUrl,
     required this.queueSocketUrl,
     this.simulatedLatency = const Duration(milliseconds: 650),
+    this.fakeLiveUpdateInterval = const Duration(seconds: 15),
   });
 
   factory AppEnvironment.fromDefines() {
@@ -35,6 +36,10 @@ final class AppEnvironment {
 
   /// Base round-trip delay applied by the fake backend.
   final Duration simulatedLatency;
+
+  /// How often the fake backend pushes live queue changes. Null disables
+  /// pushes (widget tests, static demos).
+  final Duration? fakeLiveUpdateInterval;
 
   bool get usesFakeBackend => backendMode == BackendMode.fake;
 }

@@ -430,4 +430,301 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authPhoneTaken =>
       'This number already has an account. Sign in instead.';
+
+  @override
+  String get homeNearCaption => 'Showing salons near';
+
+  @override
+  String areaWithCity(String area, String city) {
+    return '$area, $city';
+  }
+
+  @override
+  String get homeSearchHint => 'Search by salon or service';
+
+  @override
+  String get homeAvailableNow => 'Walk in now';
+
+  @override
+  String get homeRecommended => 'Recommended for you';
+
+  @override
+  String get homeNewInArea => 'New in your area';
+
+  @override
+  String get homeLastSeen => 'Salons you viewed recently';
+
+  @override
+  String get homeAreaEmptyTitle => 'No salons here yet';
+
+  @override
+  String homeAreaEmptyBody(String area) {
+    return 'We\'re adding salons in $area soon. Try a nearby area.';
+  }
+
+  @override
+  String get homeChangeArea => 'Change area';
+
+  @override
+  String get loadErrorTitle => 'We couldn\'t load salons';
+
+  @override
+  String get sortLeastWait => 'Shortest wait now';
+
+  @override
+  String get sortNearest => 'Nearest';
+
+  @override
+  String get sortTopRated => 'Top rated';
+
+  @override
+  String get sortCheapest => 'Lowest price';
+
+  @override
+  String get sortNewest => 'Newest salons';
+
+  @override
+  String get serviceHaircut => 'Haircut';
+
+  @override
+  String get serviceBeard => 'Beard trim';
+
+  @override
+  String get serviceKids => 'Kids haircut';
+
+  @override
+  String get serviceColor => 'Hair color';
+
+  @override
+  String get serviceSkincare => 'Skin care';
+
+  @override
+  String get waitFreeNow => 'Free now';
+
+  @override
+  String get waitFreeWalkIn => 'Free now — walk right in';
+
+  @override
+  String pinPeopleLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead',
+      one: 'Only 1 ahead',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String waitPeopleMinutes(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead — ~$minutes min wait',
+      one: '1 ahead — ~$minutes min wait',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String waitPeopleHour(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead — ~1 hr wait',
+      one: '1 ahead — ~1 hr wait',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get waitNotUpdated => 'Wait time not updated';
+
+  @override
+  String opensTodayAt(String time) {
+    return 'Opens at $time';
+  }
+
+  @override
+  String opensTomorrowAt(String time) {
+    return 'Opens tomorrow $time';
+  }
+
+  @override
+  String opensOnDayAt(String day, String time) {
+    return 'Opens $day $time';
+  }
+
+  @override
+  String openedDaysAgo(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Opened $days days ago',
+      one: 'Opened yesterday',
+      zero: 'Opened today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String openedWeeksAgo(int weeks) {
+    String _temp0 = intl.Intl.pluralLogic(
+      weeks,
+      locale: localeName,
+      other: 'Opened $weeks weeks ago',
+      one: 'Opened a week ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchHint => 'Search by salon name';
+
+  @override
+  String get searchRecent => 'Recent searches';
+
+  @override
+  String get searchNearbyNow => 'Near you now';
+
+  @override
+  String searchResultsForQuery(int count, String query) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count salons matching \"$query\"',
+      one: '1 salon matching \"$query\"',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String searchResultsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count salons',
+      one: '1 salon',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String withinKm(String km) {
+    return 'Within $km km';
+  }
+
+  @override
+  String get searchNoResultsTitle => 'No salon with that name';
+
+  @override
+  String searchNoResultsBody(String query, String area) {
+    return 'We couldn\'t find \"$query\" in $area. Try removing filters or searching another name.';
+  }
+
+  @override
+  String get searchNoFilterResultsTitle => 'No salons match these filters';
+
+  @override
+  String get searchNoFilterResultsBody =>
+      'Try removing a filter or widening the search area.';
+
+  @override
+  String get searchClearFiltersShowAll => 'Clear filters and show all salons';
+
+  @override
+  String searchExpandRadius(String km) {
+    return 'Widen search to $km km';
+  }
+
+  @override
+  String get searchDidYouMean => 'Did you mean';
+
+  @override
+  String get filterTitle => 'Filter & sort';
+
+  @override
+  String get filterSortBy => 'Sort results by';
+
+  @override
+  String get filterService => 'Service you want';
+
+  @override
+  String get filterAvailableOn => 'Available on';
+
+  @override
+  String get filterPrice => 'Price';
+
+  @override
+  String get filterOpenNow => 'Open now only';
+
+  @override
+  String get filterOpenNowHint => 'Hide closed salons';
+
+  @override
+  String filterShowResults(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $count results',
+      one: 'Show 1 result',
+      zero: 'No results',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dayToday => 'Today';
+
+  @override
+  String get dayTomorrow => 'Tomorrow';
+
+  @override
+  String dayChipLabel(String day, String date) {
+    return '$day $date';
+  }
+
+  @override
+  String priceRangeLabel(String min, String max) {
+    return '$min – $max';
+  }
+
+  @override
+  String get areaSheetTitle => 'Choose area';
+
+  @override
+  String get areaSearchHint => 'Search for an area';
+
+  @override
+  String get areaUseLocation => 'Use my current location';
+
+  @override
+  String get areaUseLocationHint => 'We\'ll ask for location permission once';
+
+  @override
+  String get areaNearby => 'Areas near you';
+
+  @override
+  String areaOthers(String city) {
+    return 'Other areas in $city';
+  }
+
+  @override
+  String areaSalonsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count salons',
+      one: '1 salon',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get areaConfirm => 'Confirm area';
+
+  @override
+  String areaLocated(String area) {
+    return 'We found your area: $area';
+  }
 }

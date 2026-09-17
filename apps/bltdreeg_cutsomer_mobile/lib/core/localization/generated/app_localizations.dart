@@ -805,6 +805,402 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.'**
   String get authPhoneTaken;
+
+  /// No description provided for @homeNearCaption.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنعرضلك اللي قريب من'**
+  String get homeNearCaption;
+
+  /// No description provided for @areaWithCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'{area}، {city}'**
+  String areaWithCity(String area, String city);
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر باسم الصالون أو الخدمة'**
+  String get homeSearchHint;
+
+  /// No description provided for @homeAvailableNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدر تدخل دلوقتي'**
+  String get homeAvailableNow;
+
+  /// No description provided for @homeRecommended.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرشّح ليك'**
+  String get homeRecommended;
+
+  /// No description provided for @homeNewInArea.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد في منطقتك'**
+  String get homeNewInArea;
+
+  /// No description provided for @homeLastSeen.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر صالونات شوفتها'**
+  String get homeLastSeen;
+
+  /// No description provided for @homeAreaEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش صالونات هنا'**
+  String get homeAreaEmptyTitle;
+
+  /// No description provided for @homeAreaEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنضيف صالونات جديدة في {area} قريب. جرّب منطقة قريبة منك.'**
+  String homeAreaEmptyBody(String area);
+
+  /// No description provided for @homeChangeArea.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر المنطقة'**
+  String get homeChangeArea;
+
+  /// No description provided for @loadErrorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش قادرين نحمّل الصالونات'**
+  String get loadErrorTitle;
+
+  /// No description provided for @sortLeastWait.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل انتظار دلوقتي'**
+  String get sortLeastWait;
+
+  /// No description provided for @sortNearest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقرب ليك'**
+  String get sortNearest;
+
+  /// No description provided for @sortTopRated.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعلى تقييماً'**
+  String get sortTopRated;
+
+  /// No description provided for @sortCheapest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرخص سعر'**
+  String get sortCheapest;
+
+  /// No description provided for @sortNewest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحدث الصالونات'**
+  String get sortNewest;
+
+  /// No description provided for @serviceHaircut.
+  ///
+  /// In ar, this message translates to:
+  /// **'قصة شعر'**
+  String get serviceHaircut;
+
+  /// No description provided for @serviceBeard.
+  ///
+  /// In ar, this message translates to:
+  /// **'حلاقة دقن'**
+  String get serviceBeard;
+
+  /// No description provided for @serviceKids.
+  ///
+  /// In ar, this message translates to:
+  /// **'حلاقة أطفال'**
+  String get serviceKids;
+
+  /// No description provided for @serviceColor.
+  ///
+  /// In ar, this message translates to:
+  /// **'صبغة'**
+  String get serviceColor;
+
+  /// No description provided for @serviceSkincare.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناية بالبشرة'**
+  String get serviceSkincare;
+
+  /// No description provided for @waitFreeNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضي دلوقتي'**
+  String get waitFreeNow;
+
+  /// No description provided for @waitFreeWalkIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضي دلوقتي — ادخل على طول'**
+  String get waitFreeWalkIn;
+
+  /// No description provided for @pinPeopleLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فاضل 1 بس} other{فاضل {count}}}'**
+  String pinPeopleLeft(int count);
+
+  /// No description provided for @waitPeopleMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فاضل 1 — استنى ~{minutes} د} other{فاضل {count} أنفار — استنى ~{minutes} د}}'**
+  String waitPeopleMinutes(int count, int minutes);
+
+  /// No description provided for @waitPeopleHour.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فاضل 1 — استنى ~ساعة} other{فاضل {count} أنفار — استنى ~ساعة}}'**
+  String waitPeopleHour(int count);
+
+  /// No description provided for @waitNotUpdated.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانتظار مش متحدّث'**
+  String get waitNotUpdated;
+
+  /// No description provided for @opensTodayAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيفتح الساعة {time}'**
+  String opensTodayAt(String time);
+
+  /// No description provided for @opensTomorrowAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيفتح بكرة {time}'**
+  String opensTomorrowAt(String time);
+
+  /// No description provided for @opensOnDayAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيفتح {day} {time}'**
+  String opensOnDayAt(String day, String time);
+
+  /// No description provided for @openedDaysAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'{days, plural, =0{فتح النهارده} =1{فتح امبارح} =2{فتح من يومين} other{فتح من {days} أيام}}'**
+  String openedDaysAgo(int days);
+
+  /// No description provided for @openedWeeksAgo.
+  ///
+  /// In ar, this message translates to:
+  /// **'{weeks, plural, =1{فتح من أسبوع} =2{فتح من أسبوعين} other{فتح من {weeks} أسابيع}}'**
+  String openedWeeksAgo(int weeks);
+
+  /// No description provided for @searchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر باسم الصالون'**
+  String get searchHint;
+
+  /// No description provided for @searchRecent.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر ما دوّرت عليه'**
+  String get searchRecent;
+
+  /// No description provided for @searchNearbyNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريب منك دلوقتي'**
+  String get searchNearbyNow;
+
+  /// No description provided for @searchResultsForQuery.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{صالون واحد فيه \"{query}\"} other{{count} صالونات فيها \"{query}\"}}'**
+  String searchResultsForQuery(int count, String query);
+
+  /// No description provided for @searchResultsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{صالون واحد} other{{count} صالونات}}'**
+  String searchResultsCount(int count);
+
+  /// No description provided for @withinKm.
+  ///
+  /// In ar, this message translates to:
+  /// **'داخل {km} كم'**
+  String withinKm(String km);
+
+  /// No description provided for @searchNoResultsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش صالون بالاسم ده'**
+  String get searchNoResultsTitle;
+
+  /// No description provided for @searchNoResultsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقيناش \"{query}\" في {area}. جرّب تشيل الفلاتر أو تدوّر باسم تاني.'**
+  String searchNoResultsBody(String query, String area);
+
+  /// No description provided for @searchNoFilterResultsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش صالونات بالفلاتر دي'**
+  String get searchNoFilterResultsTitle;
+
+  /// No description provided for @searchNoFilterResultsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب تشيل فلتر أو توسّع نطاق البحث.'**
+  String get searchNoFilterResultsBody;
+
+  /// No description provided for @searchClearFiltersShowAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الفلاتر واعرض كل الصالونات'**
+  String get searchClearFiltersShowAll;
+
+  /// No description provided for @searchExpandRadius.
+  ///
+  /// In ar, this message translates to:
+  /// **'وسّع نطاق البحث لـ {km} كم'**
+  String searchExpandRadius(String km);
+
+  /// No description provided for @searchDidYouMean.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن تكون بتقصد'**
+  String get searchDidYouMean;
+
+  /// No description provided for @filterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلترة وترتيب'**
+  String get filterTitle;
+
+  /// No description provided for @filterSortBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'رتّب النتايج بـ'**
+  String get filterSortBy;
+
+  /// No description provided for @filterService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة اللي عايزها'**
+  String get filterService;
+
+  /// No description provided for @filterAvailableOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح في يوم'**
+  String get filterAvailableOn;
+
+  /// No description provided for @filterPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get filterPrice;
+
+  /// No description provided for @filterOpenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح دلوقتي بس'**
+  String get filterOpenNow;
+
+  /// No description provided for @filterOpenNowHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخفي الصالونات المقفولة'**
+  String get filterOpenNowHint;
+
+  /// No description provided for @filterShowResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش نتايج} =1{اعرض نتيجة واحدة} other{اعرض {count} نتايج}}'**
+  String filterShowResults(int count);
+
+  /// No description provided for @dayToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهارده'**
+  String get dayToday;
+
+  /// No description provided for @dayTomorrow.
+  ///
+  /// In ar, this message translates to:
+  /// **'بكرة'**
+  String get dayTomorrow;
+
+  /// No description provided for @dayChipLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{day} {date}'**
+  String dayChipLabel(String day, String date);
+
+  /// No description provided for @priceRangeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{min} – {max}'**
+  String priceRangeLabel(String min, String max);
+
+  /// No description provided for @areaSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار المنطقة'**
+  String get areaSheetTitle;
+
+  /// No description provided for @areaSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوّر على منطقة'**
+  String get areaSearchHint;
+
+  /// No description provided for @areaUseLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم موقعي الحالي'**
+  String get areaUseLocation;
+
+  /// No description provided for @areaUseLocationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'هنطلب إذن الموقع مرة واحدة'**
+  String get areaUseLocationHint;
+
+  /// No description provided for @areaNearby.
+  ///
+  /// In ar, this message translates to:
+  /// **'مناطق قريبة منك'**
+  String get areaNearby;
+
+  /// No description provided for @areaOthers.
+  ///
+  /// In ar, this message translates to:
+  /// **'مناطق تانية في {city}'**
+  String areaOthers(String city);
+
+  /// No description provided for @areaSalonsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{صالون واحد} =2{صالونين} few{{count} صالونات} other{{count} صالون}}'**
+  String areaSalonsCount(int count);
+
+  /// No description provided for @areaConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد المنطقة'**
+  String get areaConfirm;
+
+  /// No description provided for @areaLocated.
+  ///
+  /// In ar, this message translates to:
+  /// **'حددنا منطقتك: {area}'**
+  String areaLocated(String area);
 }
 
 class _AppLocalizationsDelegate

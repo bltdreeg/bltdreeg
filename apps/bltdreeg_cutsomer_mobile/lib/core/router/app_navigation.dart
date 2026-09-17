@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/domain/entities/otp_challenge.dart';
+import '../../features/salons/domain/entities/search_criteria.dart';
 import 'app_routes.dart';
 
 /// Typed navigation helpers. Screens call these instead of passing route
@@ -42,7 +43,16 @@ extension AppNavigation on BuildContext {
   // ---- tabs -------------------------------------------------------------------
   void goHome() => goNamed(AppRoutes.home.name);
   void goBookings() => goNamed(AppRoutes.bookings.name);
-  void goSearch() => goNamed(AppRoutes.search.name);
+
+  /// Opens the search tab, optionally pre-applying a sort / open-now filter
+  /// (home "see all" links). Encoded in the URL so it deep-links.
+  void goSearch({SalonSort? sort, bool openNowOnly = false}) => goNamed(
+    AppRoutes.search.name,
+    queryParameters: {
+      RouteQuery.sort: ?sort?.name,
+      if (openNowOnly) RouteQuery.openNow: '1',
+    },
+  );
   void goAccount() => goNamed(AppRoutes.account.name);
 
   Future<void> pushNotifications() => pushNamed(AppRoutes.notifications.name);

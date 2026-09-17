@@ -91,13 +91,18 @@ class SalonThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(radius);
     return Container(
       width: size,
       height: size,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surf,
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: borderRadius,
+      ),
+      // Border painted above the image so the rounded corners stay intact.
+      foregroundDecoration: BoxDecoration(
+        borderRadius: borderRadius,
         border: Border.all(color: AppColors.border),
       ),
       child: Stack(

@@ -8,11 +8,12 @@ final class AppPreferences {
   static const _kLocale = 'locale_code';
   static const _kOnboardingSeen = 'onboarding_seen';
   static const _kGuestMode = 'guest_mode';
+  static const _kSelectedArea = 'selected_area_id';
 
   static Future<AppPreferences> create() async {
     final prefs = await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(
-        allowList: {_kLocale, _kOnboardingSeen, _kGuestMode},
+        allowList: {_kLocale, _kOnboardingSeen, _kGuestMode, _kSelectedArea},
       ),
     );
     return AppPreferences._(prefs);
@@ -30,4 +31,9 @@ final class AppPreferences {
   bool get guestMode => _prefs.getBool(_kGuestMode) ?? false;
   Future<void> setGuestMode({required bool value}) =>
       _prefs.setBool(_kGuestMode, value);
+
+  /// Area the discovery feed is showing (frame 40).
+  String? get selectedAreaId => _prefs.getString(_kSelectedArea);
+  Future<void> setSelectedAreaId(String id) =>
+      _prefs.setString(_kSelectedArea, id);
 }

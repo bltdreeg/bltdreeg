@@ -199,8 +199,12 @@ class SalonRailCard extends StatelessWidget {
       child: Container(
         width: width,
         clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: AppColors.bg,
+          borderRadius: AppRadius.cardAll,
+        ),
+        // Border painted above the photo so the rounded corners stay intact.
+        foregroundDecoration: BoxDecoration(
           borderRadius: AppRadius.cardAll,
           border: Border.all(color: AppColors.border),
         ),
@@ -246,31 +250,45 @@ class SalonRailCard extends StatelessWidget {
   }
 }
 
-/// Horizontal list with gutters (`.rail`), lazily built.
+/// Horizontal list with gutters (`.rail`).
+///
+/// Sizes itself to its tallest card instead of a fixed height, so font
+/// metrics, accessibility text scaling or longer translations can't overflow
+/// the cards; all cards stretch to the same height. Rails are short by design
+/// (a handful of salons), so items are built eagerly; long horizontal lists
+/// should use a lazy `ListView` instead.
 class HorizontalRail extends StatelessWidget {
   const HorizontalRail({
     required this.itemCount,
     required this.itemBuilder,
-    required this.height,
     this.spacing = AppSpacing.md,
     super.key,
   });
 
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
-  final double height;
   final double spacing;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-        itemCount: itemCount,
-        separatorBuilder: (_, _) => SizedBox(width: spacing),
-        itemBuilder: itemBuilder,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.gutter,
+        2,
+        AppSpacing.gutter,
+        4,
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < itemCount; i++) ...[
+              if (i > 0) SizedBox(width: spacing),
+              itemBuilder(context, i),
+            ],
+          ],
+        ),
       ),
     );
   }
