@@ -1,2 +1,1 @@
-// حقل إدخال
-export {};
+export { Input } from "./input";

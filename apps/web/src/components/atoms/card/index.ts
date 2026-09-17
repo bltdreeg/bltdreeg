@@ -1,2 +1,1 @@
-// كارت
-export {};
+export { Card } from "./card";

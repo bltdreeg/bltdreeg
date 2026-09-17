@@ -1,2 +1,1 @@
-// كارت المحل بشكل التذكرة: صورة، فاصل متقطع، الميعاد
-export {};
+export { ShopCard } from "./shop-card";

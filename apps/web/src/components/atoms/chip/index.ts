@@ -1,2 +1,1 @@
-// شريحة: عادية، مختارة، قابلة للإزالة
-export {};
+export { Chip, chipVariants } from "./chip";

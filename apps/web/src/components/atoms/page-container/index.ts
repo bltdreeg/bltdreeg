@@ -1,2 +1,1 @@
-// حاوية الصفحة: أقصى عرض 1240px وشبكة 12 عمود
-export {};
+export { PageContainer } from "./page-container";

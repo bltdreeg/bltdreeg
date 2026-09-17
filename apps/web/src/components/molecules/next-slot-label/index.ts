@@ -1,2 +1,1 @@
-// أقرب ميعاد: النهارده 6:30 م
-export {};
+export { NextSlotLabel } from "./next-slot-label";

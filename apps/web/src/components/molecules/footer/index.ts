@@ -1,2 +1,1 @@
-// الفوتر
-export {};
+export { Footer } from "./footer";

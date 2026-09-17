@@ -1,2 +1,1 @@
-// الهيدر
-export {};
+export { Header } from "./header";

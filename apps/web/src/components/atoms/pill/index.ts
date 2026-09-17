@@ -1,2 +1,1 @@
-// حالة: مؤكد · مستني · تم · اتلغى
-export {};
+export { Pill, pillVariants } from "./pill";

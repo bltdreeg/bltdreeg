@@ -1,2 +1,1 @@
-// صورة المستخدم مع الأحرف الأولى كبديل
-export {};
+export { Avatar, initials } from "./avatar";

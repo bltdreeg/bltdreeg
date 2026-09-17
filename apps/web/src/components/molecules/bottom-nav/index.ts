@@ -1,2 +1,1 @@
-// شريط التنقل السفلي: الرئيسية · حجوزاتي · البحث · حسابي
-export {};
+export { BottomNav } from "./bottom-nav";

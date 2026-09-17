@@ -1,2 +1,1 @@
-// عرض النجوم مع العدد
-export {};
+export { Rating, Star, STAR_CLIP } from "./rating";

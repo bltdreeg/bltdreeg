@@ -9,7 +9,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-cairo);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: ui-monospace, Menlo, monospace;
   --font-heading: var(--font-cairo);
 
   /* ألوان التصميم اللي مالهاش مكان في متغيرات shadcn */
@@ -157,5 +157,9 @@
   }
   html {
     @apply font-sans;
+  }
+  /* الأرقام دايماً tabular عشان الوقت والسعر يتراصّوا فوق بعض */
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 }
