@@ -44,6 +44,7 @@ class AppFieldFrame extends StatelessWidget {
     this.height = AppSizes.field,
     this.padding = const EdgeInsetsDirectional.symmetric(horizontal: 14),
     this.alignment = CrossAxisAlignment.center,
+    this.fieldDirection,
     super.key,
   });
 
@@ -59,6 +60,10 @@ class AppFieldFrame extends StatelessWidget {
   final double? height;
   final EdgeInsetsGeometry padding;
   final CrossAxisAlignment alignment;
+
+  /// Direction of the input box only; the label and error line keep the app
+  /// language direction. Null follows the app language.
+  final TextDirection? fieldDirection;
 
   _FieldState get _state {
     if (locked) return _FieldState.locked;
@@ -113,9 +118,12 @@ class AppFieldFrame extends StatelessWidget {
                 ? AppShadows.focusRing
                 : null,
           ),
-          child: Row(
-            crossAxisAlignment: alignment,
-            children: [Expanded(child: child)],
+          child: Directionality(
+            textDirection: fieldDirection ?? Directionality.of(context),
+            child: Row(
+              crossAxisAlignment: alignment,
+              children: [Expanded(child: child)],
+            ),
           ),
         ),
         AnimatedSize(
@@ -195,6 +203,7 @@ class AppTextField extends StatefulWidget {
     this.locked = false,
     this.autofocus = false,
     this.autofillHints,
+    this.direction,
     this.textDirection,
     this.textAlign = TextAlign.start,
     this.maxLines = 1,
@@ -232,6 +241,14 @@ class AppTextField extends StatefulWidget {
   final bool locked;
   final bool autofocus;
   final Iterable<String>? autofillHints;
+
+  /// Direction of the input box: icons order, typed text and hint. The label
+  /// and error line keep the app language direction. Null follows the
+  /// current app language.
+  final TextDirection? direction;
+
+  /// Direction of the typed text only (e.g. LTR phone digits inside an RTL
+  /// field). Null follows [direction].
   final TextDirection? textDirection;
   final TextAlign textAlign;
   final int? maxLines;
@@ -281,6 +298,7 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final direction = widget.direction ?? Directionality.of(context);
     final multiline = widget.maxLines != 1;
     final iconColor = widget.locked
         ? AppColors.textDisabled
@@ -300,7 +318,7 @@ class _AppTextFieldState extends State<AppTextField> {
       onSubmitted: widget.onSubmitted,
       onTap: widget.onTap,
       autofillHints: widget.autofillHints,
-      textDirection: widget.textDirection,
+      textDirection: widget.textDirection ?? direction,
       textAlign: widget.textAlign,
       maxLines: widget.isPassword ? 1 : widget.maxLines,
       minLines: widget.minLines,
@@ -323,6 +341,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
     return AppFieldFrame(
       label: widget.label,
+      fieldDirection: widget.direction,
       optional: widget.optional,
       focused: _hasFocus,
       errorText: widget.errorText,
@@ -420,6 +439,7 @@ class AppPhoneField extends StatelessWidget {
     this.helper,
     this.autofocus = false,
     this.textInputAction,
+    this.direction,
     super.key,
   });
 
@@ -434,8 +454,14 @@ class AppPhoneField extends StatelessWidget {
   final bool autofocus;
   final TextInputAction? textInputAction;
 
+  /// Direction of the input box (prefix order); the label keeps the app
+  /// language direction. Digits are always typed LTR. Null follows the app
+  /// language.
+  final TextDirection? direction;
+
   @override
   Widget build(BuildContext context) {
+    final boxDirection = direction ?? Directionality.of(context);
     return AppTextField(
       controller: controller,
       label: label,
@@ -449,9 +475,12 @@ class AppPhoneField extends StatelessWidget {
       prefix: CountryCodePrefix(muted: locked),
       keyboardType: TextInputType.phone,
       textInputAction: textInputAction,
+      direction: direction,
       textDirection: TextDirection.ltr,
       // Keep the number next to the +20 prefix in both directions.
-      textAlign: context.isRtl ? TextAlign.right : TextAlign.left,
+      textAlign: boxDirection == TextDirection.rtl
+          ? TextAlign.right
+          : TextAlign.left,
       autofillHints: const [AutofillHints.telephoneNumberNational],
       inputFormatters: [
         const LatinDigitsFormatter(),

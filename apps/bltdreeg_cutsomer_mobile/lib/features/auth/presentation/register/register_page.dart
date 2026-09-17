@@ -88,12 +88,14 @@ class _RegisterView extends StatelessWidget {
                   AppPhoneField(
                     label: l10n.fieldPhone,
                     textInputAction: TextInputAction.next,
+                    direction: TextDirection.ltr,
                     errorText: state.phoneError?.message(l10n),
                     onChanged: cubit.phoneChanged,
                   ),
                   const SizedBox(height: 14),
                   AppTextField(
                     label: l10n.fieldEmail,
+                    direction: TextDirection.ltr,
                     optional: true,
                     hint: 'karim@example.com',
                     keyboardType: TextInputType.emailAddress,
@@ -105,6 +107,7 @@ class _RegisterView extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   AppTextField(
+                    direction: TextDirection.ltr,
                     label: l10n.fieldPassword,
                     isPassword: true,
                     textInputAction: TextInputAction.done,

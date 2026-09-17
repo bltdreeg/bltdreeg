@@ -174,6 +174,7 @@ class _EmailForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AppTextField(
+              direction: TextDirection.ltr,
               label: l10n.fieldEmail,
               hint: 'karim@example.com',
               prefixIcon: AppAssets.iconUser,
@@ -186,6 +187,7 @@ class _EmailForm extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             AppTextField(
+              direction: TextDirection.ltr,
               label: l10n.fieldPassword,
               isPassword: true,
               textInputAction: TextInputAction.done,
@@ -241,6 +243,7 @@ class _PhoneForm extends StatelessWidget {
             focusNode: focusNode,
             skipTraversal: true,
             child: AppPhoneField(
+              direction: TextDirection.ltr,
               label: l10n.fieldPhone,
               errorText: state.visiblePhoneError?.message(l10n),
               textInputAction: TextInputAction.send,

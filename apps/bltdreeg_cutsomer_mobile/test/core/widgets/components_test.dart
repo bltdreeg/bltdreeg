@@ -49,7 +49,67 @@ void main() {
     });
   });
 
+  group('AppTextField', () {
+    TextDirection? fieldDirection(WidgetTester tester) =>
+        tester.widget<EditableText>(find.byType(EditableText)).textDirection;
+
+    testWidgets('follows the app language when direction is null', (
+      tester,
+    ) async {
+      await tester.pumpComponent(
+        const SizedBox(width: 320, child: AppTextField()),
+      );
+      expect(fieldDirection(tester), TextDirection.rtl);
+
+      await tester.pumpComponent(
+        const SizedBox(width: 320, child: AppTextField()),
+        locale: const Locale('en'),
+      );
+      expect(fieldDirection(tester), TextDirection.ltr);
+    });
+
+    testWidgets('direction flips the input box, not the label', (tester) async {
+      await tester.pumpComponent(
+        const SizedBox(
+          width: 320,
+          child: AppTextField(label: 'Email', direction: TextDirection.ltr),
+        ),
+      );
+      expect(fieldDirection(tester), TextDirection.ltr);
+      final label = tester.element(find.text('Email'));
+      expect(Directionality.of(label), TextDirection.rtl);
+    });
+
+    testWidgets('textDirection overrides only the typed text', (tester) async {
+      await tester.pumpComponent(
+        const SizedBox(
+          width: 320,
+          child: AppTextField(label: 'رقم', textDirection: TextDirection.ltr),
+        ),
+      );
+      expect(fieldDirection(tester), TextDirection.ltr);
+      final label = tester.element(find.text('رقم'));
+      expect(Directionality.of(label), TextDirection.rtl);
+    });
+  });
+
   group('AppPhoneField', () {
+    testWidgets('direction flips the input box, not the label', (tester) async {
+      await tester.pumpComponent(
+        const SizedBox(
+          width: 340,
+          child: AppPhoneField(label: 'موبايل', direction: TextDirection.ltr),
+        ),
+      );
+      final editable = tester.widget<EditableText>(find.byType(EditableText));
+      expect(editable.textDirection, TextDirection.ltr);
+      expect(editable.textAlign, TextAlign.left);
+      final prefix = tester.element(find.byType(CountryCodePrefix));
+      expect(Directionality.of(prefix), TextDirection.ltr);
+      final label = tester.element(find.text('موبايل'));
+      expect(Directionality.of(label), TextDirection.rtl);
+    });
+
     testWidgets('keeps digits only, max 11, Western digits', (tester) async {
       final controller = TextEditingController();
       addTearDown(controller.dispose);
