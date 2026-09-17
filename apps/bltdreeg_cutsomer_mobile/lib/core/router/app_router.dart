@@ -11,10 +11,14 @@ import '../../features/auth/presentation/register/register_page.dart';
 import '../../features/auth/presentation/session/auth_session_cubit.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/salon_details/domain/salon_details.dart';
+import '../../features/salon_details/presentation/pages/salon_details_page.dart';
+import '../../features/salon_details/presentation/pages/salon_gallery_page.dart';
 import '../../features/salons/domain/entities/search_criteria.dart';
 import '../../features/search/presentation/pages/search_page.dart';
 import '../dev/design_system_gallery_page.dart';
 import '../storage/app_preferences.dart';
+import '../theme/app_dimens.dart';
 import 'app_navigation.dart';
 import 'app_routes.dart';
 import 'route_placeholder_page.dart';
@@ -184,18 +188,40 @@ final class AppRouter {
         parentNavigatorKey: _rootKey,
         name: AppRoutes.salon.name,
         path: AppRoutes.salon.path,
-        builder: (context, state) {
-          final id = state.pathParameters[RouteParams.salonId]!;
-          return RoutePlaceholderPage(
-            title: 'Salon $id',
-            links: [
-              ('→ gallery', () => context.pushSalonGallery(id)),
-              ('→ book', () => context.pushBookingSlot(id)),
-            ],
-          );
-        },
+        builder: (_, state) => SalonDetailsPage(
+          salonId: state.pathParameters[RouteParams.salonId]!,
+        ),
         routes: [
-          _placeholder(AppRoutes.salonGallery, 'Gallery'),
+          GoRoute(
+            name: AppRoutes.salonGallery.name,
+            path: AppRoutes.salonGallery.path,
+            builder: (_, state) => SalonGalleryPage(
+              salonId: state.pathParameters[RouteParams.salonId]!,
+            ),
+            routes: [
+              GoRoute(
+                name: AppRoutes.salonPhoto.name,
+                path: AppRoutes.salonPhoto.path,
+                pageBuilder: (_, state) {
+                  final query = state.uri.queryParameters;
+                  return CustomTransitionPage<void>(
+                    key: state.pageKey,
+                    opaque: false,
+                    transitionDuration: AppMotion.medium,
+                    transitionsBuilder: (_, animation, _, child) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: SalonPhotoViewerPage(
+                      salonId: state.pathParameters[RouteParams.salonId]!,
+                      initialIndex:
+                          int.tryParse(query[RouteQuery.index] ?? '') ?? 0,
+                      kind: GalleryKind.values
+                          .asNameMap()[query[RouteQuery.kind]],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
           GoRoute(
             name: AppRoutes.bookingSlot.name,
             path: AppRoutes.bookingSlot.path,

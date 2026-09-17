@@ -37,6 +37,7 @@ dependencies:
   stream_transform: ^2.1.2
   flutter_secure_storage: ^11.2.0
   web_socket_channel: ^3.0.3
+  share_plus: ^13.3.0
 
 dev_dependencies:
   flutter_test:

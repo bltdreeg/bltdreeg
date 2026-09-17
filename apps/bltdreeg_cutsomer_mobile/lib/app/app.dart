@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../core/di/injection.dart';
@@ -29,6 +30,12 @@ class BeltadreegApp extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           routerConfig: sl<AppRouter>().config,
+          // Default status bar for every screen, including those without an
+          // AppBar. Dark screens (photo viewer) override it deeper.
+          builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+            value: AppTheme.systemOverlay,
+            child: child!,
+          ),
         ),
       ),
     );

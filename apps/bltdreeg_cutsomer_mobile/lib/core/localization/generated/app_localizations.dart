@@ -1201,6 +1201,396 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حددنا منطقتك: {area}'**
   String areaLocated(String area);
+
+  /// No description provided for @salonReviewsWithCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{(تقييم واحد)} other{({count} تقييم)}}'**
+  String salonReviewsWithCount(int count);
+
+  /// No description provided for @statusFreeNoQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضي دلوقتي — مفيش دور'**
+  String get statusFreeNoQueue;
+
+  /// No description provided for @statusClosedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقفول دلوقتي'**
+  String get statusClosedNow;
+
+  /// No description provided for @chairsActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{كرسي واحد شغّال} =2{كرسيين شغّالين} other{{count} كراسي شغّالة}}'**
+  String chairsActive(int count);
+
+  /// No description provided for @barbersOnShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{مفيش حلاقين في الشيفت} =1{حلاق واحد في الشيفت} other{{count} حلاقين في الشيفت}}'**
+  String barbersOnShift(int count);
+
+  /// No description provided for @dotSeparated.
+  ///
+  /// In ar, this message translates to:
+  /// **'{a} · {b}'**
+  String dotSeparated(String a, String b);
+
+  /// No description provided for @actionDirections.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتجاهات'**
+  String get actionDirections;
+
+  /// No description provided for @actionCall.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصل'**
+  String get actionCall;
+
+  /// No description provided for @a11yShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك الصالون'**
+  String get a11yShare;
+
+  /// No description provided for @a11yAddFavorite.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف للمفضلة'**
+  String get a11yAddFavorite;
+
+  /// No description provided for @a11yRemoveFavorite.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل من المفضلة'**
+  String get a11yRemoveFavorite;
+
+  /// No description provided for @photosCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{صورة واحدة} =2{صورتين} few{{count} صور} other{{count} صورة}}'**
+  String photosCount(int count);
+
+  /// No description provided for @videosCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{فيديو واحد} =2{فيديوهين} other{{count} فيديو}}'**
+  String videosCount(int count);
+
+  /// No description provided for @videoChip.
+  ///
+  /// In ar, this message translates to:
+  /// **'فيديو'**
+  String get videoChip;
+
+  /// No description provided for @tabServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات'**
+  String get tabServices;
+
+  /// No description provided for @tabBarbers.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحلاقين'**
+  String get tabBarbers;
+
+  /// No description provided for @tabOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض'**
+  String get tabOffers;
+
+  /// No description provided for @tabReviews.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييمات'**
+  String get tabReviews;
+
+  /// No description provided for @tabHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواعيد'**
+  String get tabHours;
+
+  /// No description provided for @a11yAddService.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف {service}'**
+  String a11yAddService(String service);
+
+  /// No description provided for @a11yRemoveService.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيل {service}'**
+  String a11yRemoveService(String service);
+
+  /// No description provided for @barberQueueAhead.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{قدامه 1 — ~{minutes} د} other{قدامه {count} — ~{minutes} د}}'**
+  String barberQueueAhead(int count, int minutes);
+
+  /// No description provided for @barberOffReturns.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة النهارده — بيرجع {day}'**
+  String barberOffReturns(String day);
+
+  /// No description provided for @yearsExperience.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{سنة خبرة} =2{سنتين خبرة} few{{count} سنين خبرة} other{{count} سنة خبرة}}'**
+  String yearsExperience(int count);
+
+  /// No description provided for @barberNamedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو اخترت حلاق بالاسم هتستنى في طابوره لوحده. أسرع حاجة إنك تسيبها \"أي حلاق متاح\".'**
+  String get barberNamedNote;
+
+  /// No description provided for @offersHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروض شغّالة دلوقتي'**
+  String get offersHeader;
+
+  /// No description provided for @offerExpiresIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'{days, plural, =0{ينتهي النهارده} =1{ينتهي بكرة} =2{ينتهي بعد يومين} other{ينتهي بعد {days} أيام}}'**
+  String offerExpiresIn(int days);
+
+  /// No description provided for @offerBundleSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدل {original} — توفّر {saving}'**
+  String offerBundleSaving(String original, String saving);
+
+  /// No description provided for @offerLoyaltyProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك {done} من {target} زيارات'**
+  String offerLoyaltyProgress(int done, int target);
+
+  /// No description provided for @reviewsTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{تقييم واحد} =2{تقييمين} few{{count} تقييمات} other{{count} تقييم}}'**
+  String reviewsTotal(int count);
+
+  /// No description provided for @breakdownQuality.
+  ///
+  /// In ar, this message translates to:
+  /// **'جودة القصة'**
+  String get breakdownQuality;
+
+  /// No description provided for @breakdownCleanliness.
+  ///
+  /// In ar, this message translates to:
+  /// **'النظافة'**
+  String get breakdownCleanliness;
+
+  /// No description provided for @breakdownTimeAccuracy.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقة الوقت'**
+  String get breakdownTimeAccuracy;
+
+  /// No description provided for @reviewFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get reviewFilterAll;
+
+  /// No description provided for @reviewFilterFiveStars.
+  ///
+  /// In ar, this message translates to:
+  /// **'5 نجوم'**
+  String get reviewFilterFiveStars;
+
+  /// No description provided for @reviewFilterWithPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'فيه صور'**
+  String get reviewFilterWithPhotos;
+
+  /// No description provided for @salonReply.
+  ///
+  /// In ar, this message translates to:
+  /// **'رد الصالون'**
+  String get salonReply;
+
+  /// No description provided for @reviewsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش تقييمات على الصالون ده.'**
+  String get reviewsEmpty;
+
+  /// No description provided for @reviewsFilterEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش تقييمات بالفلتر ده.'**
+  String get reviewsFilterEmpty;
+
+  /// No description provided for @timeAgoMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{دلوقتي} =1{من دقيقة} =2{من دقيقتين} few{من {count} دقايق} other{من {count} دقيقة}}'**
+  String timeAgoMinutes(int count);
+
+  /// No description provided for @timeAgoHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{من ساعة} =2{من ساعتين} few{من {count} ساعات} other{من {count} ساعة}}'**
+  String timeAgoHours(int count);
+
+  /// No description provided for @timeAgoDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{من يوم} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}'**
+  String timeAgoDays(int count);
+
+  /// No description provided for @timeAgoWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{من أسبوع} =2{من أسبوعين} other{من {count} أسابيع}}'**
+  String timeAgoWeeks(int count);
+
+  /// No description provided for @timeAgoMonths.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{من شهر} =2{من شهرين} few{من {count} شهور} other{من {count} شهر}}'**
+  String timeAgoMonths(int count);
+
+  /// No description provided for @hoursHeader.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد العمل'**
+  String get hoursHeader;
+
+  /// No description provided for @openNowBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح دلوقتي'**
+  String get openNowBadge;
+
+  /// No description provided for @todayWithDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهارده — {day}'**
+  String todayWithDay(String day);
+
+  /// No description provided for @dayOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة'**
+  String get dayOff;
+
+  /// No description provided for @hoursRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'{from} — {to}'**
+  String hoursRange(String from, String to);
+
+  /// No description provided for @selectionCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{اختار خدمة} =1{خدمة واحدة} =2{خدمتين} few{{count} خدمات} other{{count} خدمة}}'**
+  String selectionCount(int count);
+
+  /// No description provided for @joinQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل الطابور'**
+  String get joinQueue;
+
+  /// No description provided for @pickServiceFirst.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار خدمة واحدة على الأقل عشان تدخل الطابور'**
+  String get pickServiceFirst;
+
+  /// No description provided for @salonNotFoundTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصالون ده مش موجود'**
+  String get salonNotFoundTitle;
+
+  /// No description provided for @salonNotFoundBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممكن يكون اتقفل أو الرابط مش مظبوط.'**
+  String get salonNotFoundBody;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارجع للرئيسية'**
+  String get backToHome;
+
+  /// No description provided for @shareSalonText.
+  ///
+  /// In ar, this message translates to:
+  /// **'شوف {salon} على بالتدريج: {link}'**
+  String shareSalonText(String salon, String link);
+
+  /// No description provided for @cantOpenApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش قادرين نفتح التطبيق ده على موبايلك'**
+  String get cantOpenApp;
+
+  /// No description provided for @galleryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور {salon}'**
+  String galleryTitle(String salon);
+
+  /// No description provided for @galleryFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل {count}'**
+  String galleryFilterAll(int count);
+
+  /// No description provided for @galleryFilterWork.
+  ///
+  /// In ar, this message translates to:
+  /// **'شغل الحلاقين {count}'**
+  String galleryFilterWork(int count);
+
+  /// No description provided for @galleryFilterPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكان {count}'**
+  String galleryFilterPlace(int count);
+
+  /// No description provided for @galleryFilterVideo.
+  ///
+  /// In ar, this message translates to:
+  /// **'فيديو {count}'**
+  String galleryFilterVideo(int count);
+
+  /// No description provided for @galleryMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{count}'**
+  String galleryMore(int count);
+
+  /// No description provided for @galleryReviewPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور من تقييمات الزباين'**
+  String get galleryReviewPhotos;
+
+  /// No description provided for @photoCounter.
+  ///
+  /// In ar, this message translates to:
+  /// **'{index} / {total}'**
+  String photoCounter(int index, int total);
 }
 
 class _AppLocalizationsDelegate

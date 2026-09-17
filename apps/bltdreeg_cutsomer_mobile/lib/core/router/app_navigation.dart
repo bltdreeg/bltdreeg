@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/domain/entities/otp_challenge.dart';
+import '../../features/salon_details/domain/salon_details.dart';
 import '../../features/salons/domain/entities/search_criteria.dart';
 import 'app_routes.dart';
 
@@ -73,6 +74,16 @@ extension AppNavigation on BuildContext {
     AppRoutes.salonGallery.name,
     pathParameters: {RouteParams.salonId: salonId},
   );
+
+  Future<void> pushSalonPhoto(String salonId, int index, {GalleryKind? kind}) =>
+      pushNamed(
+        AppRoutes.salonPhoto.name,
+        pathParameters: {RouteParams.salonId: salonId},
+        queryParameters: {
+          RouteQuery.index: '$index',
+          RouteQuery.kind: ?kind?.name,
+        },
+      );
 
   // ---- booking flow -----------------------------------------------------------
   Future<void> pushBookingSlot(String salonId) => pushNamed(

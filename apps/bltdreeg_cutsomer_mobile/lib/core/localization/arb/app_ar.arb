@@ -497,5 +497,308 @@
         "type": "String"
       }
     }
+  },
+  "salonReviewsWithCount": "{count, plural, =1{(تقييم واحد)} other{({count} تقييم)}}",
+  "@salonReviewsWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statusFreeNoQueue": "فاضي دلوقتي — مفيش دور",
+  "statusClosedNow": "مقفول دلوقتي",
+  "chairsActive": "{count, plural, =1{كرسي واحد شغّال} =2{كرسيين شغّالين} other{{count} كراسي شغّالة}}",
+  "@chairsActive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "barbersOnShift": "{count, plural, =0{مفيش حلاقين في الشيفت} =1{حلاق واحد في الشيفت} other{{count} حلاقين في الشيفت}}",
+  "@barbersOnShift": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dotSeparated": "{a} · {b}",
+  "@dotSeparated": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "actionDirections": "الاتجاهات",
+  "actionCall": "اتصل",
+  "a11yShare": "شارك الصالون",
+  "a11yAddFavorite": "ضيف للمفضلة",
+  "a11yRemoveFavorite": "شيل من المفضلة",
+  "photosCount": "{count, plural, =1{صورة واحدة} =2{صورتين} few{{count} صور} other{{count} صورة}}",
+  "@photosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "videosCount": "{count, plural, =1{فيديو واحد} =2{فيديوهين} other{{count} فيديو}}",
+  "@videosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "videoChip": "فيديو",
+  "tabServices": "الخدمات",
+  "tabBarbers": "الحلاقين",
+  "tabOffers": "العروض",
+  "tabReviews": "التقييمات",
+  "tabHours": "المواعيد",
+  "a11yAddService": "ضيف {service}",
+  "@a11yAddService": {
+    "placeholders": {
+      "service": {
+        "type": "String"
+      }
+    }
+  },
+  "a11yRemoveService": "شيل {service}",
+  "@a11yRemoveService": {
+    "placeholders": {
+      "service": {
+        "type": "String"
+      }
+    }
+  },
+  "barberQueueAhead": "{count, plural, =1{قدامه 1 — ~{minutes} د} other{قدامه {count} — ~{minutes} د}}",
+  "@barberQueueAhead": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "barberOffReturns": "إجازة النهارده — بيرجع {day}",
+  "@barberOffReturns": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "yearsExperience": "{count, plural, =1{سنة خبرة} =2{سنتين خبرة} few{{count} سنين خبرة} other{{count} سنة خبرة}}",
+  "@yearsExperience": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "barberNamedNote": "لو اخترت حلاق بالاسم هتستنى في طابوره لوحده. أسرع حاجة إنك تسيبها \"أي حلاق متاح\".",
+  "offersHeader": "عروض شغّالة دلوقتي",
+  "offerExpiresIn": "{days, plural, =0{ينتهي النهارده} =1{ينتهي بكرة} =2{ينتهي بعد يومين} other{ينتهي بعد {days} أيام}}",
+  "@offerExpiresIn": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "offerBundleSaving": "بدل {original} — توفّر {saving}",
+  "@offerBundleSaving": {
+    "placeholders": {
+      "original": {
+        "type": "String"
+      },
+      "saving": {
+        "type": "String"
+      }
+    }
+  },
+  "offerLoyaltyProgress": "عندك {done} من {target} زيارات",
+  "@offerLoyaltyProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewsTotal": "{count, plural, =1{تقييم واحد} =2{تقييمين} few{{count} تقييمات} other{{count} تقييم}}",
+  "@reviewsTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "breakdownQuality": "جودة القصة",
+  "breakdownCleanliness": "النظافة",
+  "breakdownTimeAccuracy": "دقة الوقت",
+  "reviewFilterAll": "الكل",
+  "reviewFilterFiveStars": "5 نجوم",
+  "reviewFilterWithPhotos": "فيه صور",
+  "salonReply": "رد الصالون",
+  "reviewsEmpty": "لسه مفيش تقييمات على الصالون ده.",
+  "reviewsFilterEmpty": "مفيش تقييمات بالفلتر ده.",
+  "timeAgoMinutes": "{count, plural, =0{دلوقتي} =1{من دقيقة} =2{من دقيقتين} few{من {count} دقايق} other{من {count} دقيقة}}",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoHours": "{count, plural, =1{من ساعة} =2{من ساعتين} few{من {count} ساعات} other{من {count} ساعة}}",
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoDays": "{count, plural, =1{من يوم} =2{من يومين} few{من {count} أيام} other{من {count} يوم}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoWeeks": "{count, plural, =1{من أسبوع} =2{من أسبوعين} other{من {count} أسابيع}}",
+  "@timeAgoWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoMonths": "{count, plural, =1{من شهر} =2{من شهرين} few{من {count} شهور} other{من {count} شهر}}",
+  "@timeAgoMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursHeader": "مواعيد العمل",
+  "openNowBadge": "مفتوح دلوقتي",
+  "todayWithDay": "النهارده — {day}",
+  "@todayWithDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dayOff": "إجازة",
+  "hoursRange": "{from} — {to}",
+  "@hoursRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "selectionCount": "{count, plural, =0{اختار خدمة} =1{خدمة واحدة} =2{خدمتين} few{{count} خدمات} other{{count} خدمة}}",
+  "@selectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "joinQueue": "ادخل الطابور",
+  "pickServiceFirst": "اختار خدمة واحدة على الأقل عشان تدخل الطابور",
+  "salonNotFoundTitle": "الصالون ده مش موجود",
+  "salonNotFoundBody": "ممكن يكون اتقفل أو الرابط مش مظبوط.",
+  "backToHome": "ارجع للرئيسية",
+  "shareSalonText": "شوف {salon} على بالتدريج: {link}",
+  "@shareSalonText": {
+    "placeholders": {
+      "salon": {
+        "type": "String"
+      },
+      "link": {
+        "type": "String"
+      }
+    }
+  },
+  "cantOpenApp": "مش قادرين نفتح التطبيق ده على موبايلك",
+  "galleryTitle": "صور {salon}",
+  "@galleryTitle": {
+    "placeholders": {
+      "salon": {
+        "type": "String"
+      }
+    }
+  },
+  "galleryFilterAll": "الكل {count}",
+  "@galleryFilterAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "galleryFilterWork": "شغل الحلاقين {count}",
+  "@galleryFilterWork": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "galleryFilterPlace": "المكان {count}",
+  "@galleryFilterPlace": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "galleryFilterVideo": "فيديو {count}",
+  "@galleryFilterVideo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "galleryMore": "+{count}",
+  "@galleryMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "galleryReviewPhotos": "صور من تقييمات الزباين",
+  "photoCounter": "{index} / {total}",
+  "@photoCounter": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }

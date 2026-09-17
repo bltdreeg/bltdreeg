@@ -727,4 +727,356 @@ class AppLocalizationsEn extends AppLocalizations {
   String areaLocated(String area) {
     return 'We found your area: $area';
   }
+
+  @override
+  String salonReviewsWithCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '($count reviews)',
+      one: '(1 review)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statusFreeNoQueue => 'Free now — no queue';
+
+  @override
+  String get statusClosedNow => 'Closed now';
+
+  @override
+  String chairsActive(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count chairs active',
+      one: '1 chair active',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String barbersOnShift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count barbers on shift',
+      one: '1 barber on shift',
+      zero: 'No barbers on shift',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dotSeparated(String a, String b) {
+    return '$a · $b';
+  }
+
+  @override
+  String get actionDirections => 'Directions';
+
+  @override
+  String get actionCall => 'Call';
+
+  @override
+  String get a11yShare => 'Share salon';
+
+  @override
+  String get a11yAddFavorite => 'Add to favorites';
+
+  @override
+  String get a11yRemoveFavorite => 'Remove from favorites';
+
+  @override
+  String photosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String videosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count videos',
+      one: '1 video',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get videoChip => 'Video';
+
+  @override
+  String get tabServices => 'Services';
+
+  @override
+  String get tabBarbers => 'Barbers';
+
+  @override
+  String get tabOffers => 'Offers';
+
+  @override
+  String get tabReviews => 'Reviews';
+
+  @override
+  String get tabHours => 'Hours';
+
+  @override
+  String a11yAddService(String service) {
+    return 'Add $service';
+  }
+
+  @override
+  String a11yRemoveService(String service) {
+    return 'Remove $service';
+  }
+
+  @override
+  String barberQueueAhead(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ahead — ~$minutes min',
+      one: '1 ahead — ~$minutes min',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String barberOffReturns(String day) {
+    return 'Off today — back $day';
+  }
+
+  @override
+  String yearsExperience(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years experience',
+      one: '1 year experience',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get barberNamedNote =>
+      'If you choose a barber by name you\'ll wait in their own queue. The fastest option is \"any available barber\".';
+
+  @override
+  String get offersHeader => 'Offers running now';
+
+  @override
+  String offerExpiresIn(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Ends in $days days',
+      one: 'Ends tomorrow',
+      zero: 'Ends today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String offerBundleSaving(String original, String saving) {
+    return 'Instead of $original — save $saving';
+  }
+
+  @override
+  String offerLoyaltyProgress(int done, int target) {
+    return 'You have $done of $target visits';
+  }
+
+  @override
+  String reviewsTotal(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reviews',
+      one: '1 review',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get breakdownQuality => 'Cut quality';
+
+  @override
+  String get breakdownCleanliness => 'Cleanliness';
+
+  @override
+  String get breakdownTimeAccuracy => 'Time accuracy';
+
+  @override
+  String get reviewFilterAll => 'All';
+
+  @override
+  String get reviewFilterFiveStars => '5 stars';
+
+  @override
+  String get reviewFilterWithPhotos => 'With photos';
+
+  @override
+  String get salonReply => 'Salon\'s reply';
+
+  @override
+  String get reviewsEmpty => 'No reviews for this salon yet.';
+
+  @override
+  String get reviewsFilterEmpty => 'No reviews match this filter.';
+
+  @override
+  String timeAgoMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count min ago',
+      one: '1 min ago',
+      zero: 'just now',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count weeks ago',
+      one: '1 week ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count months ago',
+      one: '1 month ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hoursHeader => 'Opening hours';
+
+  @override
+  String get openNowBadge => 'Open now';
+
+  @override
+  String todayWithDay(String day) {
+    return 'Today — $day';
+  }
+
+  @override
+  String get dayOff => 'Closed';
+
+  @override
+  String hoursRange(String from, String to) {
+    return '$from – $to';
+  }
+
+  @override
+  String selectionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count services',
+      one: '1 service',
+      zero: 'Pick a service',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get joinQueue => 'Join the queue';
+
+  @override
+  String get pickServiceFirst => 'Pick at least one service to join the queue';
+
+  @override
+  String get salonNotFoundTitle => 'Salon not found';
+
+  @override
+  String get salonNotFoundBody => 'It may have closed or the link is wrong.';
+
+  @override
+  String get backToHome => 'Back to home';
+
+  @override
+  String shareSalonText(String salon, String link) {
+    return 'Check out $salon on Beltadreeg: $link';
+  }
+
+  @override
+  String get cantOpenApp => 'Couldn\'t open that on your phone';
+
+  @override
+  String galleryTitle(String salon) {
+    return '$salon photos';
+  }
+
+  @override
+  String galleryFilterAll(int count) {
+    return 'All $count';
+  }
+
+  @override
+  String galleryFilterWork(int count) {
+    return 'Barbers\' work $count';
+  }
+
+  @override
+  String galleryFilterPlace(int count) {
+    return 'The place $count';
+  }
+
+  @override
+  String galleryFilterVideo(int count) {
+    return 'Video $count';
+  }
+
+  @override
+  String galleryMore(int count) {
+    return '+$count';
+  }
+
+  @override
+  String get galleryReviewPhotos => 'Photos from customer reviews';
+
+  @override
+  String photoCounter(int index, int total) {
+    return '$index / $total';
+  }
 }

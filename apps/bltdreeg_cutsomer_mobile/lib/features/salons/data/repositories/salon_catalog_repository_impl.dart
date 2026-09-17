@@ -123,7 +123,11 @@ final class SalonCatalogRepositoryImpl implements SalonCatalogRepository {
   }
 
   @override
-  Future<void> refresh(String areaId) async => _refreshers[areaId]?.call();
+  Future<void> refresh(String areaId) async {
+    // "Try again" first re-asks the OS: its offline signal can be stale.
+    await _connectivity.recheck();
+    await _refreshers[areaId]?.call();
+  }
 
   @override
   Future<Result<List<Area>>> getAreas() async {

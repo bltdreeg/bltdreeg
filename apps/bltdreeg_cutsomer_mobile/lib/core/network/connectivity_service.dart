@@ -17,6 +17,9 @@ abstract interface class ConnectivityService {
   bool get isForcedOffline;
   void setForcedOffline({required bool value});
 
+  /// Asks the platform again. Resolves with the fresh [isOnline].
+  Future<bool> recheck();
+
   Future<void> dispose();
 }
 
@@ -27,9 +30,15 @@ final class AppConnectivityService implements ConnectivityService {
     unawaited(_connectivity.checkConnectivity().then(_onPlatform));
   }
 
+  /// How often to re-query while the platform says offline. The OS monitor
+  /// can report a stale "no network" (e.g. after a hot restart or waking
+  /// from background) and then never send the recovery event.
+  static const offlineRecheckInterval = Duration(seconds: 10);
+
   final Connectivity _connectivity;
   final _controller = StreamController<bool>.broadcast();
   late final StreamSubscription<List<ConnectivityResult>> _subscription;
+  Timer? _recheckTimer;
 
   bool _platformOnline = true;
   bool _forcedOffline = false;
@@ -55,10 +64,30 @@ final class AppConnectivityService implements ConnectivityService {
   void _onPlatform(List<ConnectivityResult> results) {
     _platformOnline = results.any((r) => r != ConnectivityResult.none);
     _controller.add(isOnline);
+    if (_platformOnline) {
+      _recheckTimer?.cancel();
+      _recheckTimer = null;
+    } else {
+      _recheckTimer ??= Timer.periodic(
+        offlineRecheckInterval,
+        (_) => unawaited(recheck()),
+      );
+    }
+  }
+
+  @override
+  Future<bool> recheck() async {
+    try {
+      _onPlatform(await _connectivity.checkConnectivity());
+    } on Object {
+      // Keep the last known state if the platform call fails.
+    }
+    return isOnline;
   }
 
   @override
   Future<void> dispose() async {
+    _recheckTimer?.cancel();
     await _subscription.cancel();
     // Broadcast `close()` only completes once every listener is gone; don't
     // block disposal on subscribers that outlive the service.
@@ -90,6 +119,9 @@ final class FakeConnectivityService implements ConnectivityService {
     yield _online;
     yield* _controller.stream;
   }
+
+  @override
+  Future<bool> recheck() async => _online;
 
   @override
   Future<void> dispose() async => unawaited(_controller.close());

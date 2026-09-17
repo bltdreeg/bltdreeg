@@ -37,6 +37,9 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
   final ConnectivityService _service;
   late final StreamSubscription<bool> _subscription;
 
+  /// Re-queries the platform ("جرّب تاني" on offline views).
+  Future<bool> recheck() => _service.recheck();
+
   void toggleSimulatedOffline() =>
       _service.setForcedOffline(value: !_service.isForcedOffline);
 

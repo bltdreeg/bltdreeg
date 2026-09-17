@@ -47,6 +47,7 @@ void registerSalonsModule(GetIt sl, AppEnvironment env) {
         watchCatalog: sl(),
         refreshCatalog: sl(),
         getAreas: sl(),
+        recentlyViewed: sl(),
       ),
     )
     ..registerFactory(

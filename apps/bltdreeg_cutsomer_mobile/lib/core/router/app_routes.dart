@@ -26,6 +26,8 @@ abstract final class RouteQuery {
   static const barberId = 'barberId';
   static const sort = 'sort';
   static const openNow = 'open';
+  static const index = 'index';
+  static const kind = 'kind';
 }
 
 abstract final class AppRoutes {
@@ -80,6 +82,11 @@ abstract final class AppRoutes {
     'gallery',
     fullPath: '/salon/:salonId/gallery',
   ); // 39
+  static const salonPhoto = AppRoute(
+    'salonPhoto',
+    'photo',
+    fullPath: '/salon/:salonId/gallery/photo',
+  );
 
   /// Booking flow (new slot step + 24-25). Shares one draft cubit.
   static const bookingSlot = AppRoute(

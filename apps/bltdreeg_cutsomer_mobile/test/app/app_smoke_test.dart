@@ -68,9 +68,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Salon 1'), findsOneWidget);
+      // Unknown id: the real salon page shows its not-found state.
+      expect(find.text('الصالون ده مش موجود'), findsOneWidget);
       expect(find.byType(AppBottomNavBar), findsNothing);
-      expect(find.byType(BackButton), findsOneWidget);
+      expect(find.bySemanticsLabel('رجوع'), findsOneWidget);
     });
 
     testWidgets('switching locale flips direction live', (tester) async {

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:get_it/get_it.dart';
 
 import '../../features/auth/auth_module.dart';
 import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/favorites/domain/favorites_repository.dart';
 import '../../features/onboarding/onboarding_module.dart';
+import '../../features/salon_details/salon_details_module.dart';
 import '../../features/salons/salons_module.dart';
 import '../config/app_environment.dart';
 import '../database/app_database.dart';
@@ -66,6 +70,7 @@ Future<void> configureDependencies({
   registerOnboardingModule(sl);
   registerAuthModule(sl, env);
   registerSalonsModule(sl, env);
+  registerSalonDetailsModule(sl, env);
   if (authLocal != null) {
     sl
       ..unregister<AuthLocalDataSource>()
@@ -75,4 +80,8 @@ Future<void> configureDependencies({
   // Restore the stored session before the first frame so the router guard
   // and the account tab start in the right state.
   await sl<AuthRepository>().restoreSession();
+  // Pull server favorites for a signed-in user (keeps local copy offline).
+  if (sl<AuthRepository>().currentSession.isAuthenticated) {
+    unawaited(sl<FavoritesRepository>().sync());
+  }
 }

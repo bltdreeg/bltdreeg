@@ -725,4 +725,376 @@ class AppLocalizationsAr extends AppLocalizations {
   String areaLocated(String area) {
     return 'حددنا منطقتك: $area';
   }
+
+  @override
+  String salonReviewsWithCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '($count تقييم)',
+      one: '(تقييم واحد)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get statusFreeNoQueue => 'فاضي دلوقتي — مفيش دور';
+
+  @override
+  String get statusClosedNow => 'مقفول دلوقتي';
+
+  @override
+  String chairsActive(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count كراسي شغّالة',
+      two: 'كرسيين شغّالين',
+      one: 'كرسي واحد شغّال',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String barbersOnShift(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count حلاقين في الشيفت',
+      one: 'حلاق واحد في الشيفت',
+      zero: 'مفيش حلاقين في الشيفت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dotSeparated(String a, String b) {
+    return '$a · $b';
+  }
+
+  @override
+  String get actionDirections => 'الاتجاهات';
+
+  @override
+  String get actionCall => 'اتصل';
+
+  @override
+  String get a11yShare => 'شارك الصالون';
+
+  @override
+  String get a11yAddFavorite => 'ضيف للمفضلة';
+
+  @override
+  String get a11yRemoveFavorite => 'شيل من المفضلة';
+
+  @override
+  String photosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صورة',
+      few: '$count صور',
+      two: 'صورتين',
+      one: 'صورة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String videosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count فيديو',
+      two: 'فيديوهين',
+      one: 'فيديو واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get videoChip => 'فيديو';
+
+  @override
+  String get tabServices => 'الخدمات';
+
+  @override
+  String get tabBarbers => 'الحلاقين';
+
+  @override
+  String get tabOffers => 'العروض';
+
+  @override
+  String get tabReviews => 'التقييمات';
+
+  @override
+  String get tabHours => 'المواعيد';
+
+  @override
+  String a11yAddService(String service) {
+    return 'ضيف $service';
+  }
+
+  @override
+  String a11yRemoveService(String service) {
+    return 'شيل $service';
+  }
+
+  @override
+  String barberQueueAhead(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'قدامه $count — ~$minutes د',
+      one: 'قدامه 1 — ~$minutes د',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String barberOffReturns(String day) {
+    return 'إجازة النهارده — بيرجع $day';
+  }
+
+  @override
+  String yearsExperience(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count سنة خبرة',
+      few: '$count سنين خبرة',
+      two: 'سنتين خبرة',
+      one: 'سنة خبرة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get barberNamedNote =>
+      'لو اخترت حلاق بالاسم هتستنى في طابوره لوحده. أسرع حاجة إنك تسيبها \"أي حلاق متاح\".';
+
+  @override
+  String get offersHeader => 'عروض شغّالة دلوقتي';
+
+  @override
+  String offerExpiresIn(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'ينتهي بعد $days أيام',
+      two: 'ينتهي بعد يومين',
+      one: 'ينتهي بكرة',
+      zero: 'ينتهي النهارده',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String offerBundleSaving(String original, String saving) {
+    return 'بدل $original — توفّر $saving';
+  }
+
+  @override
+  String offerLoyaltyProgress(int done, int target) {
+    return 'عندك $done من $target زيارات';
+  }
+
+  @override
+  String reviewsTotal(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تقييم',
+      few: '$count تقييمات',
+      two: 'تقييمين',
+      one: 'تقييم واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get breakdownQuality => 'جودة القصة';
+
+  @override
+  String get breakdownCleanliness => 'النظافة';
+
+  @override
+  String get breakdownTimeAccuracy => 'دقة الوقت';
+
+  @override
+  String get reviewFilterAll => 'الكل';
+
+  @override
+  String get reviewFilterFiveStars => '5 نجوم';
+
+  @override
+  String get reviewFilterWithPhotos => 'فيه صور';
+
+  @override
+  String get salonReply => 'رد الصالون';
+
+  @override
+  String get reviewsEmpty => 'لسه مفيش تقييمات على الصالون ده.';
+
+  @override
+  String get reviewsFilterEmpty => 'مفيش تقييمات بالفلتر ده.';
+
+  @override
+  String timeAgoMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'من $count دقيقة',
+      few: 'من $count دقايق',
+      two: 'من دقيقتين',
+      one: 'من دقيقة',
+      zero: 'دلوقتي',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'من $count ساعة',
+      few: 'من $count ساعات',
+      two: 'من ساعتين',
+      one: 'من ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'من $count يوم',
+      few: 'من $count أيام',
+      two: 'من يومين',
+      one: 'من يوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'من $count أسابيع',
+      two: 'من أسبوعين',
+      one: 'من أسبوع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String timeAgoMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'من $count شهر',
+      few: 'من $count شهور',
+      two: 'من شهرين',
+      one: 'من شهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hoursHeader => 'مواعيد العمل';
+
+  @override
+  String get openNowBadge => 'مفتوح دلوقتي';
+
+  @override
+  String todayWithDay(String day) {
+    return 'النهارده — $day';
+  }
+
+  @override
+  String get dayOff => 'إجازة';
+
+  @override
+  String hoursRange(String from, String to) {
+    return '$from — $to';
+  }
+
+  @override
+  String selectionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count خدمة',
+      few: '$count خدمات',
+      two: 'خدمتين',
+      one: 'خدمة واحدة',
+      zero: 'اختار خدمة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get joinQueue => 'ادخل الطابور';
+
+  @override
+  String get pickServiceFirst => 'اختار خدمة واحدة على الأقل عشان تدخل الطابور';
+
+  @override
+  String get salonNotFoundTitle => 'الصالون ده مش موجود';
+
+  @override
+  String get salonNotFoundBody => 'ممكن يكون اتقفل أو الرابط مش مظبوط.';
+
+  @override
+  String get backToHome => 'ارجع للرئيسية';
+
+  @override
+  String shareSalonText(String salon, String link) {
+    return 'شوف $salon على بالتدريج: $link';
+  }
+
+  @override
+  String get cantOpenApp => 'مش قادرين نفتح التطبيق ده على موبايلك';
+
+  @override
+  String galleryTitle(String salon) {
+    return 'صور $salon';
+  }
+
+  @override
+  String galleryFilterAll(int count) {
+    return 'الكل $count';
+  }
+
+  @override
+  String galleryFilterWork(int count) {
+    return 'شغل الحلاقين $count';
+  }
+
+  @override
+  String galleryFilterPlace(int count) {
+    return 'المكان $count';
+  }
+
+  @override
+  String galleryFilterVideo(int count) {
+    return 'فيديو $count';
+  }
+
+  @override
+  String galleryMore(int count) {
+    return '+$count';
+  }
+
+  @override
+  String get galleryReviewPhotos => 'صور من تقييمات الزباين';
+
+  @override
+  String photoCounter(int index, int total) {
+    return '$index / $total';
+  }
 }

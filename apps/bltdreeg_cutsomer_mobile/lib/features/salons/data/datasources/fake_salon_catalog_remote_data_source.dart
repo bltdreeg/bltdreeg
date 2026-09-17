@@ -283,17 +283,40 @@ final class FakeSalonCatalogRemoteDataSource
 
   @override
   Stream<Map<String, QueueLoad>> watchQueueLoads(String areaId) {
-    final interval = driftInterval;
-    if (interval == null || !maadiCluster.contains(areaId)) {
+    if (driftInterval == null || !maadiCluster.contains(areaId)) {
       return const Stream.empty();
     }
-    return Stream<void>.periodic(interval).map((_) {
-      if (!_connectivity.isOnline) {
-        throw const NetworkException('fake-socket: disconnected');
-      }
-      return _drift();
-    });
+    return _driftStream;
   }
+
+  /// One shared drift ticker for all listeners (home, search, salon page),
+  /// like a single server-side queue. Runs only while someone listens.
+  late final Stream<Map<String, QueueLoad>> _driftStream = () {
+    Timer? timer;
+    // Lives as long as this data source (an app-lifetime singleton).
+    // ignore: close_sinks
+    late final StreamController<Map<String, QueueLoad>> controller;
+    controller = StreamController<Map<String, QueueLoad>>.broadcast(
+      onListen: () => timer = Timer.periodic(driftInterval!, (_) {
+        if (!_connectivity.isOnline) {
+          controller.addError(
+            const NetworkException('fake-socket: disconnected'),
+          );
+          return;
+        }
+        final changed = _drift();
+        if (changed.isNotEmpty) controller.add(changed);
+      }),
+      onCancel: () => timer?.cancel(),
+    );
+    return controller.stream;
+  }();
+
+  /// Current state of one salon (fake salon-details backend).
+  SalonSummary? salonById(String id) =>
+      _salons.where((s) => s.id == id).firstOrNull;
+
+  int minutesPerPerson(String salonId) => _minutesPerPerson[salonId] ?? 9;
 
   Map<String, QueueLoad> _drift() {
     final open = [
