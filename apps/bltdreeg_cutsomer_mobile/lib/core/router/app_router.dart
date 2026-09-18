@@ -200,6 +200,7 @@ final class AppRouter {
         name: AppRoutes.salon.name,
         path: AppRoutes.salon.path,
         builder: (_, state) => SalonDetailsPage(
+          key: ValueKey(state.pathParameters[RouteParams.salonId]),
           salonId: state.pathParameters[RouteParams.salonId]!,
         ),
         routes: [
@@ -207,6 +208,7 @@ final class AppRouter {
             name: AppRoutes.salonGallery.name,
             path: AppRoutes.salonGallery.path,
             builder: (_, state) => SalonGalleryPage(
+              key: ValueKey(state.pathParameters[RouteParams.salonId]),
               salonId: state.pathParameters[RouteParams.salonId]!,
             ),
             routes: [
@@ -222,6 +224,7 @@ final class AppRouter {
                     transitionsBuilder: (_, animation, _, child) =>
                         FadeTransition(opacity: animation, child: child),
                     child: SalonPhotoViewerPage(
+                      key: ValueKey(state.pathParameters[RouteParams.salonId]),
                       salonId: state.pathParameters[RouteParams.salonId]!,
                       initialIndex:
                           int.tryParse(query[RouteQuery.index] ?? '') ?? 0,
@@ -237,6 +240,7 @@ final class AppRouter {
             name: AppRoutes.bookingSlot.name,
             path: AppRoutes.bookingSlot.path,
             builder: (_, state) => BookingSlotPage(
+              key: ValueKey(state.pathParameters[RouteParams.salonId]),
               salonId: state.pathParameters[RouteParams.salonId]!,
             ),
           ),
@@ -244,6 +248,7 @@ final class AppRouter {
             name: AppRoutes.bookingBarber.name,
             path: AppRoutes.bookingBarber.path,
             builder: (_, state) => BookingBarberPage(
+              key: ValueKey(state.pathParameters[RouteParams.salonId]),
               salonId: state.pathParameters[RouteParams.salonId]!,
             ),
           ),
@@ -251,6 +256,7 @@ final class AppRouter {
             name: AppRoutes.bookingReview.name,
             path: AppRoutes.bookingReview.path,
             builder: (_, state) => BookingReviewPage(
+              key: ValueKey(state.pathParameters[RouteParams.salonId]),
               salonId: state.pathParameters[RouteParams.salonId]!,
             ),
           ),
@@ -266,6 +272,7 @@ final class AppRouter {
           transitionsBuilder: (_, animation, _, child) =>
               FadeTransition(opacity: animation, child: child),
           child: BookingConfirmedPage(
+            key: ValueKey(state.pathParameters[RouteParams.bookingId]),
             bookingId: state.pathParameters[RouteParams.bookingId]!,
           ),
         ),
@@ -274,14 +281,17 @@ final class AppRouter {
         parentNavigatorKey: _rootKey,
         name: AppRoutes.queue.name,
         path: AppRoutes.queue.path,
-        builder: (_, state) =>
-            QueuePage(bookingId: state.pathParameters[RouteParams.bookingId]!),
+        builder: (_, state) => QueuePage(
+          key: ValueKey(state.pathParameters[RouteParams.bookingId]),
+          bookingId: state.pathParameters[RouteParams.bookingId]!,
+        ),
       ),
       GoRoute(
         parentNavigatorKey: _rootKey,
         name: AppRoutes.rateVisit.name,
         path: AppRoutes.rateVisit.path,
         builder: (_, state) => RateVisitPage(
+          key: ValueKey(state.pathParameters[RouteParams.bookingId]),
           bookingId: state.pathParameters[RouteParams.bookingId]!,
         ),
         routes: [
@@ -294,6 +304,7 @@ final class AppRouter {
               transitionsBuilder: (_, animation, _, child) =>
                   FadeTransition(opacity: animation, child: child),
               child: RatingSentPage(
+                key: ValueKey(state.pathParameters[RouteParams.bookingId]),
                 bookingId: state.pathParameters[RouteParams.bookingId]!,
               ),
             ),

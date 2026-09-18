@@ -10,7 +10,7 @@ languages, always. Built from a 43-frame design board
 Arabic copy.
 
 - **Flutter** 3.47.4 · **Dart** 3.13.3
-- `flutter analyze` clean · `flutter test` → **155 passing**
+- `flutter analyze` clean · `flutter test` → **157 passing**
 - Verified on both an iPhone 17 simulator and an Android emulator (API 36)
 
 ---
@@ -57,8 +57,9 @@ flutter test
 
 ### Platform notes
 
-The app name comes from `android/app/src/main/res/values/strings.xml` (with an
-Arabic `values-ar/`) and iOS `CFBundleDisplayName`. The `INTERNET` permission
+The app name is localized on both platforms: Android via
+`res/values/strings.xml` + `values-ar/`, iOS via `CFBundleDisplayName` plus
+`en.lproj` / `ar.lproj` `InfoPlist.strings`. The `INTERNET` permission
 is declared in the **main** Android manifest, not just debug/profile, so
 release builds can reach the API and the queue socket.
 
@@ -142,7 +143,9 @@ guests to login with a `from` query so they land back where they were headed.
 The `beltadreeg://` scheme is registered on both platforms (Android
 intent-filter, iOS `CFBundleURLTypes`). Links arrive as full URIs, so
 `AppRouter.normalizeAppLink` folds the scheme's host back into the first path
-segment before go_router matches.
+segment before go_router matches. Every route with a path parameter keys its
+page on that parameter, so arriving at `/salon/s9` while `/salon/s2` is open
+rebuilds the page (and its cubit) instead of reusing the old one.
 
 ---
 
@@ -221,15 +224,6 @@ These are deliberate, and each needs a backend or a platform package that is
 not in scope:
 
 - **No push notifications** and no keep-screen-awake on the queue screen.
-- **On Android, deep links only navigate on a cold start.** iOS handles both
-  cold and warm links. On Android the intent is delivered either way, but when
-  the app is already running it resumes the existing route instead of
-  navigating — `onNewIntent` is never forwarded to Dart. Fixing it means a
-  platform channel in `MainActivity` or the `app_links` package; neither is
-  wired up.
-- The Arabic launcher name is Android-only (`res/values-ar/strings.xml`). iOS
-  shows "Beltadreeg" in every locale; localizing it needs an
-  `ar.lproj/InfoPlist.strings` added to the Xcode target.
 - Favorites' closed-salon button is "شوف الصالون" rather than frame 34's
   "فكّرني لما يفتح" — there is no notification system to remind with.
 - Frame 37's "system notifications are off" warning is omitted; detecting that
