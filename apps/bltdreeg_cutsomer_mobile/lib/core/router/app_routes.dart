@@ -13,6 +13,11 @@ final class AppRoute {
   final String fullPath;
 }
 
+/// Custom URL scheme registered on both platforms (Android intent-filter,
+/// iOS `CFBundleURLTypes`). Incoming links arrive as full URIs, so
+/// `AppRouter` normalizes `beltadreeg://salon/42` to `/salon/42`.
+const appLinkScheme = 'beltadreeg';
+
 abstract final class RouteParams {
   static const salonId = 'salonId';
   static const bookingId = 'bookingId';

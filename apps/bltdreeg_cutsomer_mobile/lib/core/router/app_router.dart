@@ -326,7 +326,18 @@ final class AppRouter {
         (p) => fullPath == p || fullPath.startsWith('$p/'),
       );
 
+  /// `beltadreeg://salon/42` arrives as a full URI; go_router only matches
+  /// paths, so fold the scheme's host back into the first path segment.
+  static String? normalizeAppLink(Uri uri) {
+    if (uri.scheme != appLinkScheme) return null;
+    final path = '/${uri.host}${uri.path}';
+    return uri.hasQuery ? '$path?${uri.query}' : path;
+  }
+
   String? _redirect(BuildContext context, GoRouterState state) {
+    final appLink = normalizeAppLink(state.uri);
+    if (appLink != null) return appLink;
+
     final onOnboarding = state.matchedLocation == AppRoutes.onboarding.path;
     if (!_preferences.onboardingSeen && !onOnboarding) {
       // Deep links still work after onboarding is completed once.

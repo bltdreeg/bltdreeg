@@ -111,6 +111,7 @@ class _EditProfileView extends StatelessWidget {
             // A plain locked field, not [AppPhoneField]: this one only
             // displays the grouped number, it never accepts typing.
             AppTextField(
+              direction: TextDirection.ltr,
               label: l10n.phoneLabel,
               locked: true,
               readOnly: true,
