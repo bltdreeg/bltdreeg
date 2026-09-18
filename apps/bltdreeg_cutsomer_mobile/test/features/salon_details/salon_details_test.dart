@@ -116,7 +116,7 @@ void main() {
         database: db,
         outbox: outbox,
       );
-      final recents = RecentlyViewedRepository(db);
+      final recents = RecentlyViewedRepositoryImpl(db);
       final drafts = InMemoryBookingDraftRepository();
       final cubit = SalonDetailsCubit(
         salonId: 's1',

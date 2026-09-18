@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import '../../../../core/database/app_database.dart';
+import '../../domain/repositories/recently_viewed_repository.dart';
 
-/// Salons the user opened, newest first (offline home "آخر صالونات شوفتها").
-final class RecentlyViewedRepository {
-  const RecentlyViewedRepository(this._db);
+final class RecentlyViewedRepositoryImpl implements RecentlyViewedRepository {
+  const RecentlyViewedRepositoryImpl(this._db);
 
   static const _key = 'salons:recently_viewed';
   static const maxEntries = 10;
 
   final AppDatabase _db;
 
+  @override
   Stream<List<String>> watch() => _db
       .watchCache(_key)
       .map(
@@ -22,6 +23,7 @@ final class RecentlyViewedRepository {
               ],
       );
 
+  @override
   Future<void> record(String salonId) async {
     final current = await watch().first;
     await _db.writeCache(

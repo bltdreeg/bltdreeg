@@ -9,6 +9,7 @@ import '../favorites/presentation/favorites_cubit.dart';
 import '../salons/data/datasources/fake_salon_catalog_remote_data_source.dart';
 import '../salons/data/datasources/salon_catalog_remote_data_source.dart';
 import '../salons/data/repositories/recently_viewed_repository.dart';
+import '../salons/domain/repositories/recently_viewed_repository.dart';
 import 'data/salon_details_remote.dart';
 import 'data/salon_details_repository_impl.dart';
 import 'domain/salon_details.dart';
@@ -58,7 +59,9 @@ void registerSalonDetailsModule(GetIt sl, AppEnvironment env) {
         toggleFavorite: sl(),
       ),
     )
-    ..registerLazySingleton(() => RecentlyViewedRepository(sl()))
+    ..registerLazySingleton<RecentlyViewedRepository>(
+      () => RecentlyViewedRepositoryImpl(sl()),
+    )
     ..registerFactoryParam<SalonDetailsCubit, String, void>(
       (salonId, _) => SalonDetailsCubit(
         salonId: salonId,

@@ -18,7 +18,7 @@ import '../../../booking/domain/booking.dart';
 import '../../../booking/domain/booking_draft.dart';
 import '../../../booking/presentation/widgets/booking_widgets.dart';
 import '../../../salons/presentation/widgets/salon_labels.dart';
-import '../../data/photo_picker.dart';
+import '../../domain/photo_capture.dart';
 import '../../domain/rating.dart';
 import '../rating_cubits.dart';
 

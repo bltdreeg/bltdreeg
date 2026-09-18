@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import '../../core/config/app_environment.dart';
 import 'data/photo_picker.dart';
 import 'data/rating_data.dart';
+import 'domain/photo_capture.dart';
 import 'domain/rating.dart';
 import 'presentation/rating_cubits.dart';
 

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/assets/app_assets.dart';
 import '../../../../core/config/app_environment.dart';
+import '../../../../core/dev/demo_credentials.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -14,7 +15,6 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../data/datasources/fake_auth_remote_data_source.dart';
 import '../../domain/entities/otp_challenge.dart';
 import '../widgets/auth_widgets.dart';
 import 'otp_cubit.dart';
@@ -213,7 +213,7 @@ class _OtpViewState extends State<_OtpView> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text(
-                    'Demo code: ${FakeAuthRemoteDataSource.demoOtp}',
+                    'Demo code: ${DemoCredentials.otp}',
                     textAlign: TextAlign.center,
                     style: AppTypography.caption,
                   ),

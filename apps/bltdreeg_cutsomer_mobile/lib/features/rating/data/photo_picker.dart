@@ -1,11 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 
-enum PhotoSource { camera, gallery }
-
-/// Picks one photo; null when the customer cancels.
-abstract interface class PhotoPicker {
-  Future<String?> pick(PhotoSource source);
-}
+import '../domain/photo_capture.dart';
 
 final class ImagePickerPhotoPicker implements PhotoPicker {
   ImagePickerPhotoPicker([ImagePicker? picker])

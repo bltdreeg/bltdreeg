@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/usecase/usecase.dart';
 import '../../../core/utils/result.dart';
-import '../../salons/data/repositories/recently_viewed_repository.dart';
 import '../../salons/domain/entities/area.dart';
 import '../../salons/domain/entities/catalog_snapshot.dart';
 import '../../salons/domain/entities/salon_summary.dart';
 import '../../salons/domain/entities/search_criteria.dart';
+import '../../salons/domain/repositories/recently_viewed_repository.dart';
 import '../../salons/domain/services/salon_matcher.dart';
 import '../../salons/domain/usecases.dart';
 

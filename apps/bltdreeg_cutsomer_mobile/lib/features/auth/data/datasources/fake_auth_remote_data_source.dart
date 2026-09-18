@@ -1,3 +1,4 @@
+import '../../../../core/dev/demo_credentials.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/fake_server.dart';
 import '../../domain/auth_failure_codes.dart';
@@ -16,10 +17,10 @@ final class FakeAuthRemoteDataSource implements AuthRemoteDataSource {
   FakeAuthRemoteDataSource({required this._server, DateTime Function()? clock})
     : _clock = clock ?? DateTime.now;
 
-  static const demoEmail = 'karim.abdelrahman@gmail.com';
-  static const demoPassword = 'barber2026';
-  static const demoPhone = '01023456789';
-  static const demoOtp = '1234';
+  static const demoEmail = DemoCredentials.email;
+  static const demoPassword = DemoCredentials.password;
+  static const demoPhone = DemoCredentials.phone;
+  static const demoOtp = DemoCredentials.otp;
 
   static const codeLength = 4;
   static const maxAttempts = 3;

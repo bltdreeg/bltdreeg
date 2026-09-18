@@ -8,8 +8,7 @@ import '../../../core/utils/result.dart';
 import '../../booking/domain/booking.dart';
 import '../../booking/domain/usecases.dart';
 import '../../favorites/domain/usecases.dart';
-import '../data/photo_picker.dart';
-import '../data/rating_data.dart';
+import '../domain/photo_capture.dart';
 import '../domain/rating.dart';
 
 enum RateSubmitStatus { editing, submitting, done }

@@ -15,6 +15,8 @@ dart run tool/generate_app_assets.dart   # after adding/renaming/removing an SVG
 
 ## Fix log (vs. the board)
 
+74 SVGs ship: **53 icons**, **11 illustrations**, and **10 layer files** across the three layered onboarding illustrations. The board defines 32 `<symbol>`s; 20 of them extracted clean and are not listed below. Everything else is either drawn from scratch (first section) or repaired (the tables).
+
 ### Missing icons (referenced by `<use>` but never defined, so blank on the board)
 `message`, `camera`, `share`, `heart_filled`, `play`, `navigation`, `phone`, `gift`, `chair`, `trash` were drawn from scratch. Added for app needs: `star_filled`, `plus`, `lock`, `sun` / `sunset` / `moon` (slot times of day), `check_bold`, and the bold nav variants.
 

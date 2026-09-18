@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../booking/domain/booking_draft.dart';
 import '../../favorites/domain/usecases.dart';
-import '../../salons/data/repositories/recently_viewed_repository.dart';
+import '../../salons/domain/repositories/recently_viewed_repository.dart';
 import '../domain/salon_details.dart';
 
 sealed class ReviewFilter extends Equatable {

@@ -8,6 +8,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/fake_server.dart';
 import '../../../core/sync/outbox_processor.dart';
 import '../../../core/utils/result.dart';
+import '../domain/photo_capture.dart';
 import '../domain/rating.dart';
 
 abstract final class VisitRatingModel {
@@ -112,12 +113,6 @@ final class FakeRatingRemoteDataSource implements RatingRemoteDataSource {
     () => received[rating.bookingId] = rating,
     latency: const Duration(milliseconds: 900),
   );
-}
-
-/// Keeps attached photos alive until the rating is sent: picker files live
-/// in a temp folder the OS may clear before an offline rating is replayed.
-abstract interface class RatingPhotoStore {
-  Future<String> keep(String bookingId, String sourcePath, int index);
 }
 
 final class AppDocumentsRatingPhotoStore implements RatingPhotoStore {

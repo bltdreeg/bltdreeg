@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/assets/app_assets.dart';
 import '../../../../core/config/app_environment.dart';
+import '../../../../core/dev/demo_credentials.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/localization/l10n_mappers.dart';
 import '../../../../core/router/app_navigation.dart';
@@ -14,7 +15,6 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../data/datasources/fake_auth_remote_data_source.dart';
 import '../session/auth_session_cubit.dart';
 import '../widgets/auth_widgets.dart';
 import 'login_cubit.dart';
@@ -146,10 +146,10 @@ class _LoginViewState extends State<_LoginView> {
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: Text(
-                'Demo: ${FakeAuthRemoteDataSource.demoEmail} / '
-                '${FakeAuthRemoteDataSource.demoPassword} · '
-                '${FakeAuthRemoteDataSource.demoPhone} · '
-                'OTP ${FakeAuthRemoteDataSource.demoOtp}',
+                'Demo: ${DemoCredentials.email} / '
+                '${DemoCredentials.password} · '
+                '${DemoCredentials.phone} · '
+                'OTP ${DemoCredentials.otp}',
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.ltr,
                 style: AppTypography.caption,
