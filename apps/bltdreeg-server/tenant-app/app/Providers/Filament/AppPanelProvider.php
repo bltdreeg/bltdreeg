@@ -21,6 +21,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -30,10 +31,12 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('')
-            ->login()
+            ->login(\App\Filament\Auth\Pages\Login::class)
+            ->font('Cairo')
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
             ->tenant(Tenant::class, ownershipRelationship: 'tenants', slugAttribute: 'slug')
             ->discoverResources(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')
             ->discoverPages(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Modules\V1\Branches\Filament\Resources\Branches\BranchResource;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\CatalogServiceCategoryResource;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\CatalogServiceResource;
 use App\Modules\V1\Catalog\Filament\Resources\JobTypes\JobTypeResource;
@@ -23,6 +24,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -33,15 +35,18 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('')
             ->login()
+            ->font('Cairo')
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
             ->resources([
                 TenantResource::class,
                 UserResource::class,
                 CatalogServiceCategoryResource::class,
                 CatalogServiceResource::class,
                 JobTypeResource::class,
+                BranchResource::class,
                 RoleTemplateResource::class,
             ])
             ->pages([

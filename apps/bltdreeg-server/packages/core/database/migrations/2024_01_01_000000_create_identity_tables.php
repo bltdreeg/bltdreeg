@@ -8,6 +8,33 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('tenants', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('email')->unique();
+            $table->string('phone');
+            $table->string('logo')->nullable();
+            $table->text('address');
+            $table->tinyInteger('currency');
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('branches', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
+            $table->json('name');
+            $table->string('phone')->nullable();
+            $table->json('address')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
+            $table->index('tenant_id');
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -18,6 +45,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_super_admin')->default(false);
+            $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,19 +65,6 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        Schema::create('tenants', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->string('logo')->nullable();
-            $table->text('address');
-            $table->tinyInteger('currency');
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
-
         Schema::create('tenant_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->constrained('tenants')->cascadeOnDelete();
@@ -66,5 +81,6 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
+        Schema::dropIfExists('branches');
     }
 };

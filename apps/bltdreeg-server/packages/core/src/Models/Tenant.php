@@ -67,6 +67,11 @@ class Tenant extends Model implements HasName
         return $this->hasMany(JobType::class);
     }
 
+    public function branches(): HasMany
+    {
+        return $this->hasMany(Branch::class);
+    }
+
     public function roles(): HasMany
     {
         $roleClass = config('permission.models.role', Role::class);

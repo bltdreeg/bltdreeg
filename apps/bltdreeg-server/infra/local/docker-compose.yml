@@ -18,6 +18,7 @@ x-app: &app
     start_period: 180s
   environment: &app-env
     APP_ENV: local
+    APP_LOCALE: ar
     APP_DEBUG: "true"
     OCTANE_SERVER: frankenphp
     AUTH_MODEL: Bltdreeg\Core\Models\User

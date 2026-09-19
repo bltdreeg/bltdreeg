@@ -22,5 +22,8 @@ down:
 migrate:
 	$(COMPOSE) exec -T $(TENANT) php artisan migrate --force --no-interaction
 
+fresh-seed:
+	$(COMPOSE) exec -T $(TENANT) php artisan migrate:fresh --seed
+
 seed:
 	$(COMPOSE) exec -T $(TENANT) php artisan db:seed --force --no-interaction
