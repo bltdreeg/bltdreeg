@@ -20,6 +20,7 @@ final class TenantPermissions
         'job-types' => ['import'],
         'services' => ['import'],
         'categories' => ['import'],
+        'branches' => [],
     ];
 
     /**
@@ -31,6 +32,7 @@ final class TenantPermissions
         'job-types' => 'Job types',
         'services' => 'Services',
         'categories' => 'Categories',
+        'branches' => 'Branches',
     ];
 
     /**

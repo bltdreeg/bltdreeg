@@ -8,6 +8,7 @@ use App\Modules\V1\Hr\Filament\Resources\Employees\Pages\ListEmployees;
 use App\Modules\V1\Roles\Models\Role;
 use App\Modules\V1\Services\Models\Service;
 use BackedEnum;
+use Bltdreeg\Core\Models\Branch;
 use Bltdreeg\Core\Models\JobType;
 use Bltdreeg\Core\Models\User;
 use Filament\Actions\BulkActionGroup;
@@ -74,6 +75,17 @@ class EmployeeResource extends Resource
                     ->revealable()
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->dehydrated(fn (?string $state): bool => filled($state)),
+                Select::make('branch_id')
+                    ->label(__('core::branches.branch'))
+                    ->options(function (): array {
+                        return Branch::query()
+                            ->where('is_active', true)
+                            ->get()
+                            ->mapWithKeys(fn (Branch $branch): array => [$branch->getKey() => $branch->name])
+                            ->all();
+                    })
+                    ->searchable()
+                    ->required(),
                 Select::make('job_type_id')
                     ->label('Job type')
                     ->options(function (): array {

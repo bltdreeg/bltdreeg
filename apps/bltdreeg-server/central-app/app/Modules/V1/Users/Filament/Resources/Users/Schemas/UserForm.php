@@ -2,6 +2,7 @@
 
 namespace App\Modules\V1\Users\Filament\Resources\Users\Schemas;
 
+use Bltdreeg\Core\Models\Branch;
 use Bltdreeg\Core\Models\User;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -44,6 +45,20 @@ class UserForm
                     ->preload()
                     ->searchable()
                     ->helperText('Which salons this person can sign into in the tenant app.'),
+                Select::make('branch_id')
+                    ->label(__('core::branches.branch'))
+                    ->options(function (): array {
+                        return Branch::query()
+                            ->where('is_active', true)
+                            ->with(['tenant:id,name'])
+                            ->get()
+                            ->mapWithKeys(fn (Branch $branch): array => [
+                                $branch->getKey() => $branch->tenant->name.' — '.$branch->name,
+                            ])
+                            ->all();
+                    })
+                    ->searchable()
+                    ->helperText('Optional. Leave empty so the user can access all branches in the tenant app.'),
                 Toggle::make('is_active')
                     ->label('Active')
                     ->default(true),

@@ -15,21 +15,36 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use UnitEnum;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationLabel = 'Users';
-
     protected static ?string $slug = 'users';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Administration';
 
     protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::global.administration');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::users.users');
+    }
+
+    public static function getLabel(): string
+    {
+        return __('core::users.user');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('core::users.users');
+    }
 
     public static function canViewAny(): bool
     {

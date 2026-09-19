@@ -3,6 +3,7 @@
 namespace Bltdreeg\Core\Support;
 
 use Bltdreeg\Core\Enums\CurrencyEnum;
+use Bltdreeg\Core\Models\Branch;
 use Bltdreeg\Core\Models\Tenant;
 use Bltdreeg\Core\Models\User;
 use Illuminate\Support\Str;
@@ -30,10 +31,48 @@ class DemoData
 
             $provisioner->provision($tenant);
             $importer->importCatalog($tenant);
-            self::ensureOwner($tenant, $owner, $provisioner);
+            $ownerUser = self::ensureOwner($tenant, $owner, $provisioner);
+            self::seedTenantBranches($tenant);
+            self::assignOwnerBranch($ownerUser, $tenant);
         }
 
         app(PermissionRegistrar::class)->setPermissionsTeamId(null);
+    }
+
+    /**
+     * Demo branches owned by the given tenant.
+     */
+    private static function seedTenantBranches(Tenant $tenant): void
+    {
+        foreach ([
+            [
+                'name' => ['en' => 'Downtown', 'ar' => 'وسط البلد'],
+                'phone' => '2000000001',
+                'address' => ['en' => '1 Main Street, Cairo', 'ar' => '١ شارع رئيسي، القاهرة'],
+            ],
+            [
+                'name' => ['en' => 'Old Town', 'ar' => 'المدينة القديمة'],
+                'phone' => '2000000002',
+                'address' => ['en' => '5 Old Market, Giza', 'ar' => '٥ سوق قديم، الجيزة'],
+            ],
+        ] as $branch) {
+            $alreadySeeded = Branch::query()
+                ->where('tenant_id', $tenant->id)
+                ->where('name->en', $branch['name']['en'])
+                ->exists();
+
+            if ($alreadySeeded) {
+                continue;
+            }
+
+            Branch::query()->create([
+                'tenant_id' => $tenant->id,
+                'name' => $branch['name'],
+                'phone' => $branch['phone'],
+                'address' => $branch['address'],
+                'is_active' => true,
+            ]);
+        }
     }
 
     /**
@@ -125,5 +164,14 @@ class DemoData
             'password',
             $owner['phone'],
         );
+    }
+
+    private static function assignOwnerBranch(User $owner, Tenant $tenant): void
+    {
+        $branch = $tenant->branches()->orderBy('id')->first();
+
+        if ($branch) {
+            $owner->update(['branch_id' => $branch->getKey()]);
+        }
     }
 }

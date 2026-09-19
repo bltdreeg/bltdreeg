@@ -1,5 +1,6 @@
 <?php
 
+use Bltdreeg\Core\Support\BranchContext;
 use Bltdreeg\Core\Support\TenantContext;
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
@@ -137,6 +138,7 @@ return [
 
     'flush' => [
         TenantContext::class,
+        BranchContext::class,
     ],
 
     /*

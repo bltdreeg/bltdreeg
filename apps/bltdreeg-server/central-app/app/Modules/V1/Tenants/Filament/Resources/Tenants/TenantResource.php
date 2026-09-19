@@ -5,6 +5,7 @@ namespace App\Modules\V1\Tenants\Filament\Resources\Tenants;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages\CreateTenant;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages\EditTenant;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages\ListTenants;
+use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\BranchesRelationManager;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\JobTypesRelationManager;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\RolesRelationManager;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\ServiceCategoriesRelationManager;
@@ -19,19 +20,34 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
-use UnitEnum;
 
 class TenantResource extends Resource
 {
     protected static ?string $model = Tenant::class;
 
-    protected static ?string $navigationLabel = 'Tenants';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Administration';
-
     protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::global.administration');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::tenants.tenants');
+    }
+
+    public static function getLabel(): string
+    {
+        return __('core::tenants.tenant');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('core::tenants.tenants');
+    }
 
     public static function canViewAny(): bool
     {
@@ -55,6 +71,7 @@ class TenantResource extends Resource
             ServiceCategoriesRelationManager::class,
             ServicesRelationManager::class,
             JobTypesRelationManager::class,
+            BranchesRelationManager::class,
             RolesRelationManager::class,
         ];
     }

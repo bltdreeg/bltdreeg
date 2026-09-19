@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Bltdreeg\Core\Support\BranchContext;
 use Bltdreeg\Core\Support\TenantContext;
 use Closure;
 use Filament\Facades\Filament;
@@ -15,9 +16,17 @@ class BindTenantContext
     {
         $tenant = Filament::getTenant();
 
+        app(BranchContext::class)->flush();
+
         if ($tenant) {
             app(TenantContext::class)->set($tenant);
             app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
+
+            $branch = Filament::auth()->user()?->branch;
+
+            if ($branch && $branch->tenant_id === $tenant->getKey()) {
+                app(BranchContext::class)->set($branch);
+            }
         }
 
         return $next($request);

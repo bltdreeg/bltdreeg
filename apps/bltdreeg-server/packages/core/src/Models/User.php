@@ -11,13 +11,14 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'avatar', 'is_active', 'is_super_admin'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'avatar', 'is_active', 'is_super_admin', 'branch_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentHasTenants, FilamentUser
 {
@@ -77,5 +78,10 @@ class User extends Authenticatable implements FilamentHasTenants, FilamentUser
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class, 'user_services')->withTimestamps();
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 }
