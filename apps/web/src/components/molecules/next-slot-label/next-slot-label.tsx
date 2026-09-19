@@ -24,12 +24,12 @@ function NextSlotLabel({ slotAt, muted = false, className }: NextSlotLabelProps)
 
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <span className="text-[11.5px] font-semibold tracking-[0.04em] text-muted-foreground">
+      <span className="text-[10.5px] sm:text-[11.5px] font-semibold tracking-[0.02em] sm:tracking-[0.04em] text-muted-foreground leading-tight">
         أقرب ميعاد · {formatDayLabel(slotAt)}
       </span>
       <span
         className={cn(
-          "tabular text-[26px] font-bold leading-none md:text-[30px]",
+          "tabular text-[20px] sm:text-[24px] md:text-[30px] font-bold leading-none",
           muted ? "text-muted-foreground" : "text-foreground",
         )}
       >

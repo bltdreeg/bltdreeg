@@ -1,10 +1,10 @@
 // هيكل تحميل الرئيسية — نفس أبعاد الكارت الحقيقي بالظبط، مفيش قفزة
 import { Skeleton } from "@/components/atoms/skeleton";
 
-/** نفس مقاسات ShopCard: 250/308 عرض، صورة 4:3، فاصل متقطع */
+/** نفس مقاسات ShopCard: عرض مرن جوه الشبكة، صورة 4:3، فاصل متقطع */
 function CardSkeleton() {
   return (
-    <div className="w-[250px] shrink-0 overflow-hidden rounded-[14px] border border-border bg-card md:w-[308px]">
+    <div className="w-full min-w-0 overflow-hidden rounded-[14px] border border-border bg-card">
       <Skeleton className="aspect-[4/3] w-full rounded-none" />
       <div className="flex flex-col gap-[7px] px-[17px] pt-[15px]">
         <Skeleton className="h-[15px] w-[72%]" />
@@ -29,7 +29,7 @@ function RailSkeleton() {
       <div className="mx-auto w-full max-w-[1312px] px-4 md:px-16">
         <Skeleton className="h-6 w-40" />
       </div>
-      <div className="flex gap-4 overflow-hidden px-4 md:gap-5 md:px-16">
+      <div className="mx-auto grid w-full max-w-[1312px] grid-cols-2 gap-4 px-4 md:grid-cols-4 md:gap-5 md:px-16">
         {Array.from({ length: 4 }, (_, i) => (
           <CardSkeleton key={i} />
         ))}

@@ -16,4 +16,9 @@ export interface Booking {
   /** رقمك في الدور */
   queueNumber: number;
   status: BookingStatus;
+  /** كود الحجز المختصر مثل 4B7-219 */
+  bookingCode?: string;
+  /** تقييم الحجز السابق (من 1 إلى 5) */
+  rating?: number;
 }
+

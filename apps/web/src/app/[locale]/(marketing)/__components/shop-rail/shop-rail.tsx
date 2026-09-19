@@ -1,4 +1,5 @@
 // سكة أفقية من التذاكر — بتتكرر لكل قسم في الرئيسية
+import { PageContainer } from "@/components/atoms/page-container";
 import { ShopCard } from "@/components/molecules/shop-card";
 import { Link } from "@/i18n/navigation";
 import type { Shop } from "@/lib/types/shop/shop.interface";
@@ -15,8 +16,8 @@ function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
   if (shops.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-3 pt-6 md:pt-11">
-      <div className="mx-auto flex w-full max-w-[1312px] items-baseline justify-between gap-4 px-4 md:px-16">
+    <PageContainer as="section" className="flex flex-col gap-3 pt-6 md:pt-11">
+      <div className="flex items-baseline justify-between gap-4">
         <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
           <h2 className="text-lg font-bold md:text-[21px]">{title}</h2>
           {subtitle && <p className="text-[13.5px] text-muted-foreground">{subtitle}</p>}
@@ -33,13 +34,13 @@ function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
         </Link>
       </div>
 
-      {/* السكة بتنزف في الهامش عشان تبان إنها بتكمل */}
-      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 md:gap-5 md:px-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* شبكة 4 في الصف — الزيادة بتنزل سطر تحت، مفيش كارت بيتقص */}
+      <div className="grid grid-cols-2 gap-4 pb-2 md:grid-cols-4 md:gap-5">
         {shops.map((shop) => (
-          <ShopCard key={shop.id} shop={shop} className="snap-start" />
+          <ShopCard key={shop.id} shop={shop} />
         ))}
       </div>
-    </section>
+    </PageContainer>
   );
 }
 

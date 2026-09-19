@@ -9,6 +9,8 @@ export interface ShopFilters {
   maxDistanceKm?: number;
   /** الصالونات اللي فيها ميعاد النهارده بس */
   todayOnly?: boolean;
+  /** خدمة واحدة على الأقل من دول */
+  services?: string[];
   sort?: ShopSort;
 }
 

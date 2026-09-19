@@ -12,6 +12,7 @@ const PARAMS: Record<keyof ShopFilters, string> = {
   maxPrice: "maxPrice",
   maxDistanceKm: "maxDistance",
   todayOnly: "today",
+  services: "service",
   sort: "sort",
 };
 
@@ -19,7 +20,10 @@ function toQuery(filters: ShopFilters) {
   const p = new URLSearchParams();
   for (const [key, value] of Object.entries(filters)) {
     if (value === undefined || value === "" || value === false) continue;
-    p.set(PARAMS[key as keyof ShopFilters], String(value));
+    const param = PARAMS[key as keyof ShopFilters];
+    // services مصفوفة — كل خدمة بتضاف كمفتاح منفصل عشان ماتتمسحش القيم التانية
+    if (Array.isArray(value)) for (const v of value) p.append(param, String(v));
+    else p.set(param, String(value));
   }
   const qs = p.toString();
   return qs ? `${API_SHOPS}?${qs}` : API_SHOPS;

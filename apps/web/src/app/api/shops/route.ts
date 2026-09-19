@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     maxPrice: num(p.get("maxPrice")),
     maxDistanceKm: num(p.get("maxDistance")),
     todayOnly: p.get("today") === "true",
+    services: p.getAll("service"),
     sort: sort && SORTS.has(sort) ? (sort as ShopSort) : undefined,
   };
 

@@ -1,6 +1,8 @@
-// أفعال المصادقة على السيرفر — الواجهة جاهزة، التنفيذ لسه
+// أفعال المصادقة على السيرفر
 "use server";
 
+import { cookies } from "next/headers";
+import { SESSION_COOKIE } from "@/lib/data/constants/app.constants";
 import type { AuthSession, ForgotPasswordDto, LoginDto, RegisterDto, VerifyOtpDto } from "@/lib/types/auth";
 
 const NOT_IMPLEMENTED = "المصادقة مش متاحة لسه";
@@ -26,5 +28,6 @@ export async function refreshSession(): Promise<AuthSession> {
 }
 
 export async function logout(): Promise<void> {
-  throw new Error(NOT_IMPLEMENTED);
+  const store = await cookies();
+  store.delete(SESSION_COOKIE);
 }

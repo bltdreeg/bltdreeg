@@ -4,4 +4,8 @@ export interface User {
   name: string;
   phone: string;
   areaId: string | null;
+  joinedDate?: string;
+  completedBookingsCount?: number;
+  favoriteShopIds?: string[];
 }
+

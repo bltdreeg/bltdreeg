@@ -1,2 +1,1 @@
-// شريط الميعاد الثابت في الهيدر يوم الحجز
-export {};
+export * from "./appointment-strip";

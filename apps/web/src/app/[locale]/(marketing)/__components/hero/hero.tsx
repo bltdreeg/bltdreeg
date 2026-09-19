@@ -1,57 +1,207 @@
-// الهيرو: العنوان + كارت البحث + إحصائيتين
+// الهيرو: العنوان + شريط البحث + كارت التذكرة الحالية
+import { Clock, Footprints, MapPin, Scissors, Check, Car } from "lucide-react";
+import { GradientWaves } from "@/components/atoms/gradient-waves";
+import { Avatar } from "@/components/atoms/avatar";
 import { Button } from "@/components/atoms/button";
-import { Chip } from "@/components/atoms/chip";
-import { Input } from "@/components/atoms/input";
+import { PageContainer } from "@/components/atoms/page-container";
+import { Pill } from "@/components/atoms/pill";
 import { Link } from "@/i18n/navigation";
-import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
+import { ROUTE_BOOKINGS, ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
 
-function Stat({ value, label }: { value: string; label: string }) {
+// اسم واحد لكل صورة — الحرف الواحد بيقعد جوه دايرة الـ26 صح
+const PROOF_FACES = ["كريم", "أحمد", "محمود"];
+
+// خطوات الطابور — الحالية هي رقم 1 (تم الحجز خلص)
+const STEPS = [
+  { label: "تم الحجز", icon: Check },
+  { label: "في الانتظار", icon: Footprints },
+  { label: "تحرك للصالون", icon: Car },
+  { label: "جاء دورك", icon: Scissors },
+];
+const CURRENT_STEP = 1;
+
+function SearchField({
+  label,
+  value,
+  icon,
+  className,
+}: {
+  label: string;
+  value: React.ReactNode;
+  icon?: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="flex items-baseline gap-2">
-      <span className="tabular text-[21px] font-extrabold text-primary-pressed">{value}</span>
-      <span className="text-[13.5px] font-medium">{label}</span>
+    <div className={cn("flex min-w-0 flex-1 flex-col gap-0.5 px-4 py-2.5", className)}>
+      <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
+      <span className="flex items-center gap-1.5 truncate text-[14px] font-semibold text-foreground">
+        {icon}
+        {value}
+      </span>
     </div>
   );
 }
 
 function Hero({ areaName }: { areaName: string }) {
   return (
-    <section className="border-b border-tint-border bg-tint">
-      <div className="mx-auto flex w-full max-w-[1312px] flex-col items-start justify-between gap-8 px-4 py-8 md:flex-row md:gap-14 md:px-16 md:py-13">
-        <div className="flex min-w-0 flex-1 flex-col gap-4 pt-1.5">
+    <section className="relative overflow-hidden border-b border-tint-border bg-tint">
+      {/* موجات متدرجة بألوان النظام — ديكور بحت، ورا المحتوى */}
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-30">
+        <GradientWaves
+          horizonColor="#f0faf8"
+          waveColor="#0b5a54"
+          crestColor="#0f766e"
+          speed={0.8}
+          fogDepth={70}
+          tilt={1.2}
+          grain={false}
+          mouseInteraction={false}
+        />
+      </div>
+
+      <PageContainer className="relative z-10 flex flex-col items-start justify-between gap-8 py-8 md:flex-row md:items-center md:gap-14 md:py-13">
+        {/* العمود النصي */}
+        <div className="flex min-w-0 flex-1 flex-col gap-5">
           <h1 className="text-[25px] font-black leading-[1.35] text-balance md:text-[40px]">
-            احجز ميعادك في أقرب صالون حلاقة
-            <br />
-            <span className="text-primary-pressed">واعرف رقمك في الدور قبل ما تخرج من بيتك</span>
+            احجز حلاقتك واعرف دورك في الطابور{" "}
+            <span className="text-primary-pressed">لحظة بلحظة</span>
           </h1>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-            <Stat value="1,240" label="صالون في القاهرة والجيزة" />
-            <span aria-hidden className="hidden h-[18px] w-px bg-[#C5DFDB] md:block" />
-            <Stat value="7" label="دقايق متوسط الانتظار" />
+
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center">
+              {PROOF_FACES.map((name) => (
+                <Avatar
+                  key={name}
+                  name={name}
+                  size={26}
+                  className="-ms-2 ring-2 ring-tint first:ms-0"
+                />
+              ))}
+            </div>
+            <p className="text-[13px] font-medium text-muted-foreground">
+              أكثر من <span className="tabular font-bold text-foreground">50,000</span> حلاقة هذا
+              الشهر
+            </p>
+          </div>
+
+          {/* شريط البحث: خدمة / منطقة / موعد */}
+          <div className="flex w-full flex-col gap-2 rounded-[14px] border border-border bg-background p-2 md:flex-row md:items-center md:gap-0 md:p-1.5">
+            <SearchField label="الخدمة" value="الخدمة أو الصالون" />
+            <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
+            <SearchField
+              label="المنطقة"
+              value="المنطقة أو العنوان"
+              icon={<MapPin aria-hidden className="size-3.5 shrink-0 text-primary" />}
+            />
+            <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
+            <SearchField
+              label="الموعد"
+              value={
+                <>
+                  <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-success" />
+                  متاح فوراً / اليوم
+                </>
+              }
+            />
+            <Button
+              size="lg"
+              nativeButton={false}
+              className="h-11 shrink-0 px-8 text-[14.5px] font-bold md:ms-2"
+              render={<Link href={ROUTE_SEARCH} />}
+            >
+              بحث
+            </Button>
           </div>
         </div>
 
-        <div className="flex w-full shrink-0 flex-col gap-3 md:w-[560px]">
-          <div className="flex flex-col gap-3.5 rounded-[14px] border border-border bg-background p-4.5">
-            <Input placeholder="ابحث باسم الصالون أو المنطقة" aria-label="ابحث باسم الصالون أو المنطقة" />
-            <div className="flex items-center gap-2">
-              <Chip variant="selected">النهارده</Chip>
-              <Chip>بكرة</Chip>
-              <Chip className="hidden sm:inline-flex">تاريخ تاني</Chip>
-              <div className="flex-1" />
-              <Button size="lg" className="h-10 px-6 text-[14.5px]" render={<Link href={ROUTE_SEARCH} />}>
-                ابحث
-              </Button>
-            </div>
+        {/* كارت التذكرة الحالية */}
+        <div className="flex w-full shrink-0 flex-col gap-4 rounded-[18px] border border-border bg-background p-5 shadow-sm md:w-[420px]">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-[14px] font-bold">تذكرتك الحالية</h2>
+            <Pill tone="neutral" dot>
+              في الطابور
+            </Pill>
           </div>
-          <p className="text-[13px] leading-relaxed">
-            أو اكتشف الصالونات القريبة منك في <span className="font-bold">{areaName}، القاهرة</span> ·{" "}
-            <Link href={ROUTE_SEARCH} className="font-bold text-primary hover:text-primary-pressed">
-              تغيير المنطقة
-            </Link>
+
+          <div className="flex flex-col items-center gap-1 py-1">
+            <p className="text-[13px] font-medium text-muted-foreground">رقم دورك</p>
+            <p className="tabular text-[56px] font-black leading-none text-primary">#4</p>
+            <p className="flex items-center gap-1.5 text-[13.5px] font-semibold">
+              <Clock aria-hidden className="size-4 text-muted-foreground" />
+              <span className="tabular">~15</span> دقيقة انتظار
+            </p>
+          </div>
+
+          {/* خطوات الطابور */}
+          <ol className="flex items-start">
+            {STEPS.map((step, i) => {
+              const done = i <= CURRENT_STEP;
+              const Icon = step.icon;
+              return (
+                <li
+                  key={step.label}
+                  aria-current={i === CURRENT_STEP ? "step" : undefined}
+                  className="flex min-w-0 flex-1 flex-col items-center gap-1.5"
+                >
+                  <div className="flex w-full items-center">
+                    {/* نص الخط: شفاف عند الطرفين عشان الدواير تفضل في النص */}
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "h-px flex-1",
+                        i === 0 ? "bg-transparent" : done ? "bg-primary" : "bg-border",
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "flex size-8 shrink-0 items-center justify-center rounded-full",
+                        done ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      <Icon aria-hidden className="size-4" />
+                    </span>
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "h-px flex-1",
+                        i === STEPS.length - 1
+                          ? "bg-transparent"
+                          : i < CURRENT_STEP
+                            ? "bg-primary"
+                            : "bg-border",
+                      )}
+                    />
+                  </div>
+                  <span
+                    className={cn(
+                      "truncate text-[11px] font-semibold",
+                      done ? "text-primary-pressed" : "text-muted-foreground",
+                    )}
+                  >
+                    {step.label}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+
+          <Button
+            variant="outline"
+            size="lg"
+            nativeButton={false}
+            className="h-11 w-full gap-2 text-[14px] font-bold"
+            render={<Link href={ROUTE_BOOKINGS} />}
+          >
+            <MapPin aria-hidden className="size-4" />
+            تتبع مكانك على الخريطة
+          </Button>
+
+          <p className="text-center text-[12px] text-muted-foreground">
+            الصالونات القريبة منك في <span className="font-bold text-foreground">{areaName}</span>
           </p>
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }
