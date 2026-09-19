@@ -55,6 +55,45 @@ assert.deepEqual(
 // البحث بيلاقي بالمنطقة زي ما بيلاقي بالاسم
 assert.deepEqual(filterShops(all, { q: "الدقي" }).map((s) => s.id), ["tomorrow"]);
 
+// فلتر الخدمة — أي خدمة من اللي اتحددوا كفاية
+const withServices = [
+  shop({ id: "haircut", services: ["قص شعر"] }),
+  shop({ id: "beard", services: ["تحديد دقن"] }),
+  shop({ id: "both", services: ["قص شعر", "تحديد دقن"] }),
+];
+assert.deepEqual(
+  filterShops(withServices, { services: ["تحديد دقن"] }).map((s) => s.id),
+  ["beard", "both"],
+);
+
+// الأسماء المنقولة بتتكتب بألف وبدونها — «بربر» لازم تلاقي «باربر» والعكس
+const barbarA = shop({ id: "barbar-a", name: "بربر لاونج المعادي" });
+const barbarB = shop({ id: "barbar-b", name: "باربر تايم الدقي" });
+const spelling = [barbarA, barbarB];
+assert.deepEqual(
+  filterShops(spelling, { q: "بربر" }).map((s) => s.id).sort(),
+  ["barbar-a", "barbar-b"],
+);
+assert.deepEqual(
+  filterShops(spelling, { q: "باربر" }).map((s) => s.id).sort(),
+  ["barbar-a", "barbar-b"],
+);
+
+// التطبيع بيشيل فرق الهمزات والتاء المربوطة
+assert.deepEqual(
+  filterShops([shop({ id: "hamza", name: "صالون الأمير" })], { q: "الامير" }).map((s) => s.id),
+  ["hamza"],
+);
+
+// الألف في أول الكلمة مابتتشالش — «اسكندر» بتفضل بألفها ومابتبقاش «سكندر»
+assert.deepEqual(
+  filterShops([shop({ id: "isk", name: "صالون اسكندر" })], { q: "اسكندر" }).map((s) => s.id),
+  ["isk"],
+);
+
+// بحث مالوش نتايج بيرجّع فاضي — حالة «مفيش صالون بالاسم ده»
+assert.deepEqual(filterShops(spelling, { q: "بربرر لاونج" }), []);
+
 // الفلاتر بتتجمع مع بعض — today برّه بالسعر (200)، وtomorrow/none برّه بالمسافة (8/9)
 assert.deepEqual(
   filterShops(all, { maxPrice: 100, maxDistanceKm: 4 }).map((s) => s.id),

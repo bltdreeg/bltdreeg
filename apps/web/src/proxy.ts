@@ -18,7 +18,7 @@ export default function proxy(request: NextRequest) {
 
   if (isProtectedPath(pathWithoutLocale) && !request.cookies.has(SESSION_COOKIE)) {
     const login = new URL(`/${locale}${ROUTE_LOGIN}`, request.url);
-    login.searchParams.set(CALLBACK_PARAM, pathWithoutLocale);
+    login.searchParams.set(CALLBACK_PARAM, pathWithoutLocale + request.nextUrl.search);
     return NextResponse.redirect(login);
   }
 

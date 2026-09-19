@@ -1,15 +1,19 @@
-// عرض التقييم: 4.8 ★ 214 تقييم — النجمة clip-path زي التصميم، من غير مكتبة أيقونات
+// عرض التقييم: 4.8 ★ 214 تقييم — مطابق لـ iconStarFilled في الموبايل
+import { Star as LucideStar } from "lucide-react";
 import { cn } from "@/lib/utils/cn.utils";
 
 const STAR_CLIP =
   "polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)";
 
-function Star({ filled = true, size = 11 }: { filled?: boolean; size?: number }) {
+function Star({ filled = true, size = 12 }: { filled?: boolean; size?: number }) {
   return (
-    <span
+    <LucideStar
       aria-hidden
-      className={cn("inline-block shrink-0", filled ? "bg-foreground" : "bg-border")}
-      style={{ width: size, height: size, clipPath: STAR_CLIP }}
+      className={cn(
+        "shrink-0",
+        filled ? "fill-amber-400 text-amber-400" : "fill-border text-border",
+      )}
+      style={{ width: size, height: size }}
     />
   );
 }

@@ -1,13 +1,25 @@
-// تخطيط التطبيق: هيدر وشريط تنقل سفلي للموبايل
+// تخطيط التطبيق: هيدر وفوتر وشريط تنقل سفلي للموبايل — الهيدر وشريط التنقل بيتخفوا في مسار الحجز
+"use client";
+
+import { usePathname } from "@/i18n/navigation";
 import { BottomNav } from "@/components/molecules/bottom-nav";
+import { Footer } from "@/components/molecules/footer";
 import { Header } from "@/components/molecules/header";
+import { OfflineBanner } from "@/components/molecules/offline-banner";
+import { ROUTE_BOOK_ROOT } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const inBookingFlow = pathname.startsWith(ROUTE_BOOK_ROOT);
+
   return (
-    <>
-      <Header />
-      <main className="flex-1">{children}</main>
-      <BottomNav />
-    </>
+    <div className="flex min-h-screen flex-col">
+      {!inBookingFlow && <Header />}
+      <OfflineBanner />
+      <main className={cn("flex-1", !inBookingFlow && "pb-20 md:pb-0")}>{children}</main>
+      <Footer />
+      {!inBookingFlow && <BottomNav />}
+    </div>
   );
 }

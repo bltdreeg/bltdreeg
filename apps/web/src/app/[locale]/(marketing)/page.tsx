@@ -5,7 +5,6 @@ import { shops } from "@/lib/data/shops.constants";
 import { isToday } from "@/lib/utils/format/date.utils";
 import { AppDownload } from "./__components/app-download";
 import { AreasGrid } from "./__components/areas-grid";
-import { FilterBar } from "./__components/filter-bar";
 import { Hero } from "./__components/hero";
 import { HomeReviews } from "./__components/home-reviews";
 import { ShopRail } from "./__components/shop-rail";
@@ -15,16 +14,17 @@ export const metadata = METADATA_HOME;
 const DEFAULT_AREA = "المعادي";
 
 export default function HomePage() {
+  // عدد مختلف لكل قسم عشان الصفحة ما تبقاش شبكة مكررة — 4 في الصف والزيادة تنزل تحت
   const recentlyViewed = shops.slice(0, 5);
   const recommended = shops.filter((s) => s.rating >= 4.4 && !s.isNew).slice(0, 4);
-  const newInArea = shops.filter((s) => s.isNew);
-  const mostBooked = [...shops].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 4);
+  // الجديد الأول، وبعدين الباقي عشان نوصل 6 — الفلتر لوحده بيرجّع 4 بس
+  const newInArea = [...shops].sort((a, b) => Number(b.isNew) - Number(a.isNew)).slice(0, 6);
+  const mostBooked = [...shops].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 7);
   const availableToday = shops.filter((s) => s.nextSlotAt && isToday(s.nextSlotAt)).length;
 
   return (
     <>
       <Hero areaName={DEFAULT_AREA} />
-      <FilterBar />
 
       <ShopRail title="آخر ما شفته" shops={recentlyViewed} href={ROUTE_SEARCH} />
       <ShopRail

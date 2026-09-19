@@ -1,4 +1,5 @@
 // الفوتر: خلفية غامقة، 4 أعمدة روابط
+import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/data/constants/app.constants";
 import {
@@ -45,16 +46,16 @@ const COLUMNS = [
 function Footer() {
   return (
     <footer className="mt-auto bg-foreground">
-      <div className="mx-auto w-full max-w-[1312px] px-4 pb-7 pt-11 md:px-16">
-        <div className="flex flex-col justify-between gap-10 md:flex-row md:gap-14">
-          <div className="flex w-full shrink-0 flex-col gap-3.5 md:w-[300px]">
+      <PageContainer className="pb-24 pt-11 md:pb-7">
+        <div className="flex flex-col justify-between gap-10 lg:flex-row lg:gap-14">
+          <div className="flex w-full shrink-0 flex-col gap-3.5 lg:w-[300px]">
             <span className="text-[21px] font-black text-background">{APP_NAME}</span>
             <p className="text-[13.5px] leading-[1.8] text-disabled-fg">
               احجز ميعادك في أقرب صالون، واعرف رقمك في الدور من قبل ما تخرج من البيت.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 md:flex md:gap-18">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:flex lg:gap-12 xl:gap-18">
             {COLUMNS.map((col) => (
               <div key={col.title} className="flex flex-col gap-3">
                 <span className="text-[13px] font-bold text-background">{col.title}</span>
@@ -78,7 +79,7 @@ function Footer() {
           </span>
           <span className="text-[12.5px] text-muted-foreground">القاهرة، مصر</span>
         </div>
-      </div>
+      </PageContainer>
     </footer>
   );
 }

@@ -1,2 +1,18 @@
 // مخطط التحقق والأنواع لنموذج إنشاء حساب — بدون JSX
-export type RegisterFormValues = Record<string, never>;
+export interface RegisterFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  password: string;
+  agreeToTerms: boolean;
+}
+
+export interface RegisterFormErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  agreeToTerms?: string;
+}

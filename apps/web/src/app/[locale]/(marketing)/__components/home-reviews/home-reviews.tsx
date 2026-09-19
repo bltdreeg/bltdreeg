@@ -1,5 +1,6 @@
 // آراء العملاء — 3 شهادات على الرئيسية
 import { Avatar } from "@/components/atoms/avatar";
+import { PageContainer } from "@/components/atoms/page-container";
 import { Rating } from "@/components/atoms/rating";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
@@ -30,7 +31,7 @@ const TESTIMONIALS = [
 
 function HomeReviews() {
   return (
-    <section className="mx-auto w-full max-w-[1312px] px-4 pt-10 md:px-16 md:pt-12">
+    <PageContainer as="section" className="pt-10 md:pt-12">
       <div className="mb-4.5 flex items-baseline justify-between gap-4">
         <h2 className="text-lg font-bold md:text-[21px]">آراء العملاء</h2>
         <Link
@@ -59,7 +60,7 @@ function HomeReviews() {
           </li>
         ))}
       </ul>
-    </section>
+    </PageContainer>
   );
 }
 

@@ -1,2 +1,1 @@
-// نافذة منبثقة
-export {};
+export * from "./modal";
