@@ -103,12 +103,17 @@ export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
         );
       })}
 
-      <Link
-        href={nextUrl}
-        className="flex h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-[15px] font-bold text-white transition-colors hover:bg-primary-pressed cursor-pointer"
-      >
-        كمّل — راجع الحجز
-      </Link>
+      {/* شريط الإجراء: ثابت بالأسفل على الموبايل والتابلت، ومكانه الطبيعي على الويب (الديسكتوب) */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-5 pt-3 pb-[max(1.375rem,env(safe-area-inset-bottom))] shadow-[0_-6px_24px_rgba(14,15,17,0.07)] lg:static lg:z-auto lg:border-t-0 lg:bg-transparent lg:p-0 lg:shadow-none">
+        <div className="mx-auto w-full max-w-lg lg:max-w-none">
+          <Link
+            href={nextUrl}
+            className="flex h-[52px] lg:h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-base lg:text-[15px] font-bold text-white shadow-sm lg:shadow-none transition-colors hover:bg-primary-pressed cursor-pointer"
+          >
+            كمّل — راجع الحجز
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,6 @@ import { METADATA_BOOK } from "@/lib/data/constants/metadata.constants";
 import { createBooking } from "@/lib/actions/bookings/bookings.action";
 import { formatDayLabel, formatTime } from "@/lib/utils/format/date.utils";
 import { BookingShell } from "../__components/booking-shell";
-import { BookingSummaryPanel } from "../__components/booking-summary-panel";
 import { BookingReview } from "../__components/booking-review";
 import {
   resolveSelectedBarber,
@@ -67,22 +66,7 @@ export default async function BookingReviewPage({
       serviceSummary={serviceSummary}
       slotSummary={slotSummary}
       barberSummary={barberSummary}
-      panel={
-        <BookingSummaryPanel salon={salon} services={services} cta={null}>
-          <div className="flex items-center justify-between border-b border-border px-4.5 py-3">
-            <span className="text-[13.5px] font-semibold text-muted-foreground">المعاد</span>
-            <span className="text-sm font-bold text-foreground">
-              {query.when === "now" ? "دلوقتي" : `${formatDayLabel(query.when)} · ${formatTime(query.when)}`}
-            </span>
-          </div>
-          <div className="flex items-center justify-between border-b border-border px-4.5 py-3">
-            <span className="text-[13.5px] font-semibold text-muted-foreground">الحلاق</span>
-            <span className="text-sm font-bold text-foreground">
-              {barber?.name ?? "أي حلاق متاح"}
-            </span>
-          </div>
-        </BookingSummaryPanel>
-      }
+      panel={null}
     >
       <BookingReview
         salon={salon}

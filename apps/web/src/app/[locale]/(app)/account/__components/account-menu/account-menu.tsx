@@ -18,6 +18,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/atoms/sheet";
 import {
   ROUTE_BOOKINGS,
   ROUTE_FAVORITES,
+  ROUTE_ACCOUNT_PROFILE,
+  ROUTE_ACCOUNT_LANGUAGE,
+  ROUTE_ACCOUNT_HELP,
 } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
 
@@ -47,18 +50,18 @@ export function AccountMenu({
 
         <div className="divide-y divide-border/60">
           {/* الملف الشخصي */}
-          <Sheet>
-            <SheetTrigger className="flex w-full items-center gap-3.5 px-[18px] py-4 text-start transition-colors hover:bg-muted/40 cursor-pointer">
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
-                <User className="size-4 text-muted-foreground" />
-              </div>
-              <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-                الملف الشخصي
-              </span>
-              <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
-            </SheetTrigger>
-            <SheetContent title="الملف الشخصي">{COMING_SOON}</SheetContent>
-          </Sheet>
+          <Link
+            href={ROUTE_ACCOUNT_PROFILE}
+            className="flex items-center gap-3.5 px-[18px] py-4 transition-colors hover:bg-muted/40 cursor-pointer"
+          >
+            <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
+              <User className="size-4 text-muted-foreground" />
+            </div>
+            <span className="flex-1 text-[14.5px] font-semibold text-foreground">
+              الملف الشخصي
+            </span>
+            <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
+          </Link>
 
           {/* الصالونات المفضلة */}
           <Link
@@ -108,21 +111,21 @@ export function AccountMenu({
 
         <div className="divide-y divide-border/60">
           {/* لغة التطبيق */}
-          <Sheet>
-            <SheetTrigger className="flex w-full items-center gap-3.5 px-[18px] py-4 text-start transition-colors hover:bg-muted/40 cursor-pointer">
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
-                <Globe className="size-4 text-muted-foreground" />
-              </div>
-              <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-                لغة التطبيق
-              </span>
-              <span className="text-[13.5px] font-semibold text-muted-foreground">
-                العربية
-              </span>
-              <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
-            </SheetTrigger>
-            <SheetContent title="لغة التطبيق">{COMING_SOON}</SheetContent>
-          </Sheet>
+          <Link
+            href={ROUTE_ACCOUNT_LANGUAGE}
+            className="flex items-center gap-3.5 px-[18px] py-4 transition-colors hover:bg-muted/40 cursor-pointer"
+          >
+            <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
+              <Globe className="size-4 text-muted-foreground" />
+            </div>
+            <span className="flex-1 text-[14.5px] font-semibold text-foreground">
+              لغة التطبيق
+            </span>
+            <span className="text-[13.5px] font-semibold text-muted-foreground">
+              العربية
+            </span>
+            <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
+          </Link>
 
           {/* الإشعارات */}
           <Sheet>
@@ -169,23 +172,23 @@ export function AccountMenu({
 
         <div className="divide-y divide-border/60">
           {/* الدعم والمساعدة */}
-          <Sheet>
-            <SheetTrigger className="flex w-full items-center gap-3.5 px-[18px] py-4 text-start transition-colors hover:bg-muted/40 cursor-pointer">
-              <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
-                <HelpCircle className="size-4 text-muted-foreground" />
-              </div>
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="text-[14.5px] font-semibold text-foreground">
-                  الدعم والمساعدة
-                </span>
-                <span className="text-[12.5px] text-muted-foreground">
-                  شكوى على حجز أو مشكلة في الدور
-                </span>
-              </div>
-              <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
-            </SheetTrigger>
-            <SheetContent title="الدعم والمساعدة">{COMING_SOON}</SheetContent>
-          </Sheet>
+          <Link
+            href={ROUTE_ACCOUNT_HELP}
+            className="flex items-center gap-3.5 px-[18px] py-4 transition-colors hover:bg-muted/40 cursor-pointer"
+          >
+            <div className="flex size-[34px] shrink-0 items-center justify-center rounded-[9px] border border-border bg-muted/50">
+              <HelpCircle className="size-4 text-muted-foreground" />
+            </div>
+            <div className="flex flex-1 flex-col gap-0.5">
+              <span className="text-[14.5px] font-semibold text-foreground">
+                الدعم والمساعدة
+              </span>
+              <span className="text-[12.5px] text-muted-foreground">
+                شكوى على حجز أو مشكلة في الدور
+              </span>
+            </div>
+            <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
+          </Link>
 
           {/* الشروط والخصوصية */}
           <Sheet>

@@ -4,7 +4,6 @@
 import { Scissors, X } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Rating } from "@/components/atoms/rating";
 import { ROUTE_BOOK, ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import type { Shop } from "@/lib/types/shop/shop.interface";
 import { cn } from "@/lib/utils/cn.utils";

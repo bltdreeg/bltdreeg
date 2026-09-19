@@ -1,4 +1,4 @@
-// بيانات تجريبية: حجز النهارده للمتابعة الحية، وحجز قادم، و3 حجوزات سابقة
+// بيانات تجريبية: حجز النهارده للمتابعة الحية، وحجز قادم، وحجز مستني تأكيد الصالون، و3 حجوزات سابقة
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 
 const todayAt = (h: number, m = 0) => {
@@ -43,6 +43,21 @@ export const bookings: Booking[] = [
     queueNumber: 7,
     status: BookingStatus.CONFIRMED,
     bookingCode: "8C2-406",
+  },
+  {
+    id: "bk-waiting",
+    shopId: "shop-4",
+    shopName: "صالون البرنس المودرن",
+    barberId: "barber-4-1",
+    barberName: "سعيد",
+    serviceIds: ["svc-4-1"],
+    serviceNames: ["قص شعر"],
+    durationMinutes: 30,
+    totalPrice: 80,
+    startAt: daysFromNow(3, 17),
+    queueNumber: 5,
+    status: BookingStatus.WAITING,
+    bookingCode: "2R8-334",
   },
   {
     id: "bk-past-1",

@@ -22,136 +22,144 @@ export function BookingReview({ salon, services, barber, when, queryString, subm
   const totalPrice = services.reduce((n, s) => n + s.price, 0);
 
   return (
-    <form action={submit} className="flex flex-col gap-5">
-      <div className="flex items-center gap-3 rounded-[14px] border border-border p-4">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-[10px] bg-muted text-muted-foreground">
-          <Store className="size-5" />
+    <form action={submit} className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+      {/* 1 — معلومات الصالون — مطابق لفريم ٢٥ */}
+      <div className="flex items-center gap-3.5 rounded-[14px] border border-border bg-card p-4">
+        <div className="flex size-[54px] shrink-0 items-center justify-center rounded-[11px] bg-secondary text-primary">
+          <Store className="size-6 text-primary" />
         </div>
-        <div>
-          <div className="text-[14.5px] font-bold text-foreground">{salon.name}</div>
-          <div className="text-xs text-muted-foreground">{salon.areaName}</div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between rounded-[14px] border border-border p-3.5">
-        <div className="flex items-center gap-2">
-          <User className="size-4 text-muted-foreground" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">الحلاق</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-foreground">{barber?.name ?? "أي حلاق متاح"}</span>
-          <Link href={`${ROUTE_BOOK_BARBER(salon.id)}?${queryString}`} className="text-xs font-bold text-primary">
-            غيّر
-          </Link>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between rounded-[14px] border border-border p-3.5">
-        <div className="flex items-center gap-2">
-          <Calendar className="size-4 text-muted-foreground" />
-          <span className="text-[13.5px] font-semibold text-muted-foreground">المعاد</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-foreground">
-            {isNow ? "دلوقتي" : `${formatDayLabel(when)} · ${formatTime(when)}`}
+        <div className="flex flex-col gap-0.5 min-w-0">
+          <span className="truncate text-[15px] font-bold text-foreground">{salon.name}</span>
+          <span className="text-xs text-muted-foreground">{salon.address || salon.areaName}</span>
+          <span className="text-xs text-muted-foreground">
+            {salon.distanceKm} كم — {Math.round(salon.distanceKm * 5)} دقايق بالعربية
           </span>
-          <Link href={`${ROUTE_BOOK_SLOT(salon.id)}?${queryString}`} className="text-xs font-bold text-primary">
-            غيّر
-          </Link>
         </div>
       </div>
 
-      {isNow ? (
-        <div className="rounded-xl bg-accent p-3.5">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Clock className="size-4.5 text-primary-pressed shrink-0" />
-              <span className="text-sm font-bold text-primary-pressed">
-                {salon.queue.peopleAhead === 0 ? "هتدخل على طول" : `دورك خلال ${salon.queue.waitMinutes} لـ ${salon.queue.waitMinutes + 10} دقيقة`}
-              </span>
+      {/* 2 — الخدمات — مطابق لفريم ٢٥ */}
+      <div className="flex flex-col gap-2">
+        <span className="text-[13px] font-bold text-muted-foreground">الخدمات</span>
+        <div className="flex flex-col divide-y divide-border rounded-[14px] border border-border bg-card px-4">
+          {services.map((svc) => (
+            <div key={svc.id} className="flex items-center justify-between py-3">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[14.5px] font-bold text-foreground">{svc.name}</span>
+                <span className="tabular text-xs text-muted-foreground">{svc.durationMinutes} دقيقة</span>
+              </div>
+              <span className="tabular text-[14.5px] font-bold text-foreground">{formatPrice(svc.price)}</span>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
-              <span className="relative flex size-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex size-1.5 rounded-full bg-emerald-600" />
-              </span>
-              <span>لايف</span>
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {salon.queue.peopleAhead === 0 ? "محدش قدامك" : `قدامك ${salon.queue.peopleAhead}`} · مدة خدمتك {totalMinutes} دقيقة
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground">الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.</p>
+          ))}
         </div>
-      ) : (
-        <div className="rounded-xl bg-accent p-3.5">
-          <div className="flex items-center gap-2">
-            <Clock className="size-4.5 text-primary-pressed shrink-0" />
-            <span className="text-sm font-bold text-primary-pressed">
-              معادك {formatDayLabel(when)} الساعة {formatTime(when)}
+      </div>
+
+      {/* 3 — الحلاق — مطابق لفريم ٢٥ */}
+      <div className="flex items-center justify-between rounded-[14px] border border-border bg-card p-3.5">
+        <div className="flex items-center gap-2.5">
+          <User className="size-4.5 text-muted-foreground" />
+          <span className="text-[13.5px] font-semibold text-muted-foreground">الحلاق</span>
+          <span className="text-[14px] font-bold text-foreground">{barber?.name ?? "أي حلاق متاح"}</span>
+        </div>
+        <Link
+          href={`${ROUTE_BOOK_BARBER(salon.id)}?${queryString}`}
+          className="text-xs font-bold text-primary hover:underline"
+        >
+          غيّر
+        </Link>
+      </div>
+
+      {/* 4 — المعاد (إذا لم يكن طابور فوري) */}
+      {!isNow && (
+        <div className="flex items-center justify-between rounded-[14px] border border-border bg-card p-3.5">
+          <div className="flex items-center gap-2.5">
+            <Calendar className="size-4.5 text-muted-foreground" />
+            <span className="text-[13.5px] font-semibold text-muted-foreground">المعاد</span>
+            <span className="text-[14px] font-bold text-foreground">
+              {formatDayLabel(when)} · {formatTime(when)}
             </span>
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.</p>
+          <Link
+            href={`${ROUTE_BOOK_SLOT(salon.id)}?${queryString}`}
+            className="text-xs font-bold text-primary hover:underline"
+          >
+            غيّر
+          </Link>
         </div>
       )}
 
-      {/* سياسة الإلغاء مطابق لتصميم FRAME 08 */}
-      <div className="flex flex-col gap-3 rounded-[14px] border border-border bg-muted/60 p-5">
-        <div className="flex items-center gap-2">
-          <AlertCircle className="size-4 text-warning shrink-0" />
-          <span className="text-[15px] font-bold text-foreground">سياسة الإلغاء</span>
-        </div>
-
-        <div className="flex flex-col gap-2.5">
-          <div className="flex items-start gap-2.5">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-success" />
-            <span className="text-[13.5px] leading-relaxed text-foreground">
-              تقدر تلغي أو تأجّل لحد ساعتين قبل الميعاد من غير أي مشكلة.
-            </span>
+      {/* 5 — كارت توقيت الدور / المعاد — مطابق لفريم ٢٥ */}
+      {isNow ? (
+        <div className="rounded-xl bg-accent p-3.5">
+          <div className="flex items-center gap-2.5">
+            <Clock className="size-4.5 text-primary-pressed shrink-0" />
+            <div className="flex-1">
+              <div className="text-[14.5px] font-extrabold text-primary-pressed">
+                {salon.queue.peopleAhead === 0
+                  ? "هتدخل على طول"
+                  : `دورك خلال ${salon.queue.waitMinutes} لـ ${salon.queue.waitMinutes + 10} دقيقة`}
+              </div>
+              <div className="mt-0.5 text-xs font-semibold text-primary-pressed/80">
+                {salon.queue.peopleAhead === 0 ? "محدش قدامك" : `قدامك ${salon.queue.peopleAhead} بس`} · مدة خدمتك {totalMinutes} دقيقة
+              </div>
+            </div>
           </div>
-
-          <div className="flex items-start gap-2.5">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-warning" />
-            <span className="text-[13.5px] leading-relaxed text-foreground">
-              لو ألغيت في أقل من ساعتين، الصالون ممكن يحسبها مرة غياب.
-            </span>
-          </div>
-
-          <div className="flex items-start gap-2.5">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-destructive" />
-            <span className="text-[13.5px] leading-relaxed text-foreground">
-              لو معدّيتش ومجيتش 3 مرات، حسابك بيتوقف عن الحجز في الصالون ده أسبوع.
-            </span>
+          <div className="mt-2.5 border-t border-primary/15 pt-2.5 text-xs leading-relaxed text-primary-pressed/80">
+            الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.
           </div>
         </div>
+      ) : (
+        <div className="rounded-xl bg-accent p-3.5">
+          <div className="flex items-center gap-2.5">
+            <Clock className="size-4.5 text-primary-pressed shrink-0" />
+            <div className="flex-1">
+              <div className="text-[14.5px] font-extrabold text-primary-pressed">
+                معادك {formatDayLabel(when)} الساعة {formatTime(when)}
+              </div>
+              <div className="mt-0.5 text-xs font-semibold text-primary-pressed/80">
+                مدة خدمتك {totalMinutes} دقيقة
+              </div>
+            </div>
+          </div>
+          <div className="mt-2.5 border-t border-primary/15 pt-2.5 text-xs leading-relaxed text-primary-pressed/80">
+            تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.
+          </div>
+        </div>
+      )}
 
-        <span className="border-t border-border/60 pt-2 text-[12.5px] leading-relaxed text-muted-foreground">
-          لو وصلت متأخر أكتر من 10 دقايق، ممكن يتاخد اللي بعدك في الدور وترجع بعده.
-        </span>
+      {/* 6 — تنبيه سياسة الـ ٥ دقائق — مطابق لفريم ٢٥ */}
+      <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200/60 p-3.5">
+        <AlertCircle className="size-4.5 shrink-0 mt-0.5 text-amber-700" />
+        <p className="text-[13px] font-semibold leading-relaxed text-amber-900">
+          لما يجي دورك عندك ٥ دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.
+        </p>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-[14px] border border-border p-4">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">مجموع الخدمات</span>
+      {/* 7 — ملخص الحساب — مطابق لفريم ٢٥ */}
+      <div className="flex flex-col gap-2 rounded-[14px] border border-border bg-card p-4">
+        <div className="flex items-center justify-between text-[13.5px]">
+          <span className="font-semibold text-muted-foreground">مجموع الخدمات</span>
           <span className="tabular font-bold text-foreground">{formatPrice(totalPrice)}</span>
         </div>
-        <div className="flex items-baseline justify-between border-t border-border pt-2">
-          <span className="font-bold text-foreground">الإجمالي</span>
-          <span className="tabular text-[17px] font-extrabold text-foreground">{formatPrice(totalPrice)}</span>
+        <div className="flex items-baseline justify-between border-t border-border pt-2.5">
+          <span className="text-[15px] font-extrabold text-foreground">الإجمالي</span>
+          <span className="tabular text-xl font-extrabold text-foreground">{formatPrice(totalPrice)}</span>
         </div>
-        <p className="text-center text-[11px] text-muted-foreground">الدفع كاش في الفرع بعد الخدمة</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">الدفع كاش في الفرع بعد الخدمة</p>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <button
-          type="submit"
-          className="flex h-13 w-full items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed cursor-pointer"
-        >
-          {isNow ? "أكّد ودخّلني الطابور" : "أكّد الحجز"}
-        </button>
-        <span className="text-center text-xs text-muted-foreground">
-          بتأكيدك أنت موافق على سياسة الإلغاء
-        </span>
+      {/* 8 — شريط الإجراء: ثابت بالأسفل على الموبايل والتابلت، ومكانه الطبيعي على الويب (الديسكتوب) */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-5 pt-3 pb-[max(1.375rem,env(safe-area-inset-bottom))] shadow-[0_-6px_24px_rgba(14,15,17,0.07)] lg:static lg:z-auto lg:border-t-0 lg:bg-transparent lg:p-0 lg:shadow-none">
+        <div className="mx-auto flex w-full max-w-lg flex-col gap-2 lg:max-w-none">
+          <button
+            type="submit"
+            className="flex h-[52px] lg:h-13 w-full items-center justify-center rounded-[10px] bg-primary text-base lg:text-[16px] font-bold text-white shadow-sm lg:shadow-none transition-colors hover:bg-primary-pressed cursor-pointer"
+          >
+            أكّد ودخّلني الطابور
+          </button>
+          <span className="text-center text-xs text-muted-foreground">
+            بتأكيدك أنت موافق على سياسة الإلغاء
+          </span>
+        </div>
       </div>
     </form>
   );

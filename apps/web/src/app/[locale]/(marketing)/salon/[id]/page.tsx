@@ -40,7 +40,7 @@ export default async function SalonPage({
     <div className="min-h-screen bg-background" dir="rtl">
       <div className="w-full max-w-[1440px] mx-auto px-0 lg:px-12 py-0 lg:py-6">
         {/* معرض الصور العلوي */}
-        <SalonGallery photos={salon.photos} name={salon.name} />
+        <SalonGallery photos={salon.photos} name={salon.name} salonId={salon.id} />
 
         {/* جسم الصفحة المقسم لعمودين مع الجزيرة التفاعلية */}
         <SalonBooking

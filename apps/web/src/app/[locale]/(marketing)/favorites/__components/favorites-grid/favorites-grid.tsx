@@ -1,19 +1,22 @@
-// شبكة الصالونات المفضلة مع شريط التنقل والترتيب — FRAME 12B
+// شبكة وقائمة الصالونات المفضلة المتجاوبة — FRAME 12B و FRAME 34
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronLeft } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useRouter } from "@/i18n/navigation";
 import { PageContainer } from "@/components/atoms/page-container";
-import { ROUTE_ACCOUNT } from "@/lib/data/constants/routes.constants";
+import { ProfileBreadcrumb } from "@/components/molecules/profile-breadcrumb";
 import { shops } from "@/lib/data/shops.constants";
 import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
 import { FavoriteCard } from "../favorite-card";
+import { FavoriteMobileCard } from "../favorite-mobile-card";
 import { FavoritesEmpty } from "../favorites-empty";
+import { FavoritesTipBox } from "../favorites-tip-box";
 
 type SortOption = "slot" | "rating" | "distance";
 
 export function FavoritesGrid() {
+  const router = useRouter();
   const { favoriteIds, removeFavorite } = useFavorites();
   const [sortBy, setSortBy] = useState<SortOption>("slot");
 
@@ -36,25 +39,35 @@ export function FavoritesGrid() {
 
   return (
     <div className="flex flex-col">
-      {/* 1 — شريط المسار (Breadcrumb) */}
-      <div className="border-b border-border bg-card">
-        <PageContainer className="flex h-14 items-center gap-3">
-          <Link
-            href={ROUTE_ACCOUNT}
-            className="text-[13px] font-semibold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            حسابي
-          </Link>
-          <ChevronLeft className="size-3.5 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
-          <span className="text-[13px] font-bold text-foreground">
-            الصالونات المفضلة
-          </span>
-        </PageContainer>
-      </div>
+      {/* 1 — شريط المسار (Breadcrumb) يظهر في التابلت والدسكتوب */}
+      <ProfileBreadcrumb
+        items={[{ label: "الصالونات المفضلة" }]}
+        className="hidden md:block"
+      />
 
-      <PageContainer className="flex flex-col gap-6 py-8 md:py-9">
-        {/* 2 — رأس الصفحة مع الفلتر */}
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-baseline">
+      <PageContainer className="flex flex-col gap-4 py-4 md:gap-6 md:py-9">
+        {/* 2 — رأس الصفحة لشاشات الموبايل (FRAME 34) */}
+        <div className="flex items-center gap-3 md:hidden">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            aria-label="الرجوع"
+            className="flex size-[38px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-card text-foreground transition-colors hover:bg-muted cursor-pointer"
+          >
+            <ChevronRight className="size-5" />
+          </button>
+          <div className="flex-1">
+            <h1 className="text-[18px] font-extrabold text-foreground">
+              الصالونات المفضّلة
+            </h1>
+            <p className="text-[12px] font-medium text-muted-foreground">
+              {favoriteShops.length} صالونات · مرتّبة بأقل انتظار
+            </p>
+          </div>
+        </div>
+
+        {/* 3 — رأس الصفحة لشاشات التابلت والدسكتوب (FRAME 12B) */}
+        <div className="hidden md:flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-baseline">
           <div className="flex flex-wrap items-baseline gap-3">
             <h1 className="text-[26px] font-extrabold text-foreground md:text-[28px]">
               الصالونات المفضلة
@@ -64,7 +77,7 @@ export function FavoritesGrid() {
             </span>
           </div>
 
-          {/* اختيار الترتيب */}
+          {/* اختيار الترتيب في الدسكتوب */}
           {favoriteShops.length > 0 && (
             <div className="relative inline-flex items-center">
               <select
@@ -85,22 +98,38 @@ export function FavoritesGrid() {
           )}
         </div>
 
-        {/* 3 — المحتوى: إما الكروت أو الحالة الفاضية */}
+        {/* 4 — المحتوى: إما الكروت أو الحالة الفاضية */}
         {favoriteShops.length === 0 ? (
           <FavoritesEmpty />
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {favoriteShops.map((shop) => (
-              <FavoriteCard
-                key={shop.id}
-                shop={shop}
-                onRemove={removeFavorite}
-              />
-            ))}
-          </div>
+          <>
+            {/* عرض الموبايل: قائمة صفوف مدمجة + صندوق التنبيه (FRAME 34) */}
+            <div className="flex flex-col md:hidden">
+              <div className="flex flex-col divide-y divide-border">
+                {favoriteShops.map((shop) => (
+                  <FavoriteMobileCard
+                    key={shop.id}
+                    shop={shop}
+                    onRemove={removeFavorite}
+                  />
+                ))}
+              </div>
+              <FavoritesTipBox />
+            </div>
+
+            {/* عرض التابلت والدسكتوب: شبكة كروت التذاكر (FRAME 12B) */}
+            <div className="hidden md:grid grid-cols-2 gap-5 lg:grid-cols-4">
+              {favoriteShops.map((shop) => (
+                <FavoriteCard
+                  key={shop.id}
+                  shop={shop}
+                  onRemove={removeFavorite}
+                />
+              ))}
+            </div>
+          </>
         )}
       </PageContainer>
     </div>
   );
 }
-

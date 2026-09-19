@@ -3,9 +3,9 @@
 // تفاصيل الحجز — قبل يوم الميعاد (مطابق لتصميم FRAME 11A في web app design.html)
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, Copy, Check, Phone, ArrowLeft, CalendarSync } from "lucide-react";
+import { ChevronLeft, Copy, Check, Phone, ArrowLeft, CalendarSync, Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { ROUTE_BOOKINGS, ROUTE_BOOK_SLOT } from "@/lib/data/constants/routes.constants";
+import { ROUTE_ACCOUNT, ROUTE_BOOKINGS, ROUTE_BOOK_SLOT, ROUTE_BOOKING_RATE } from "@/lib/data/constants/routes.constants";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import type { SalonDetails } from "@/lib/types/salon";
 import type { Barber } from "@/lib/types/barber/barber.interface";
@@ -92,12 +92,19 @@ export function BookingDetailView({
       >
         <div className="flex items-center gap-3 text-[13px]">
           <Link
+            href={ROUTE_ACCOUNT}
+            className="font-semibold text-[#6B7280] transition-colors hover:text-[#0E0F11]"
+          >
+            حسابي
+          </Link>
+          <ChevronLeft className="size-3.5 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
+          <Link
             href={ROUTE_BOOKINGS}
             className="font-semibold text-[#6B7280] transition-colors hover:text-[#0E0F11]"
           >
             حجوزاتي
           </Link>
-          <ChevronLeft className="size-3.5 text-[#CFD4DA]" />
+          <ChevronLeft className="size-3.5 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           <span className="font-bold text-[#0E0F11]">تفاصيل الحجز</span>
         </div>
         <div className="text-[12.5px] tabular-nums text-[#6B7280]">
@@ -225,6 +232,35 @@ export function BookingDetailView({
                 </span>
               )}
             </div>
+
+            {/* لافتة دعوة التقييم إذا كانت الزيارة منتهية ولم يتم التقييم */}
+            {currentStatus === BookingStatus.DONE && typeof booking.rating !== "number" && (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-[#FDF1DE] p-4 border border-[#FDE68A]">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                    <Star className="size-5 fill-[#B45309] text-[#B45309]" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-bold text-[#B45309]">قيّم زيارتك للصالون</span>
+                    <span className="text-xs text-[#92400E]">رأيك بيساعد زباين تانية تختار صح وبيكشف دقة الطابور</span>
+                  </div>
+                </div>
+                <Link
+                  href={ROUTE_BOOKING_RATE(booking.id)}
+                  className="inline-flex h-9 items-center justify-center rounded-lg bg-[#B45309] px-4 text-xs font-bold text-white hover:bg-[#92400E] transition-colors self-start sm:self-auto cursor-pointer"
+                >
+                  قيّم دلوقتي
+                </Link>
+              </div>
+            )}
+            {typeof booking.rating === "number" && (
+              <div className="flex items-center gap-2 rounded-xl bg-amber-50/80 px-4 py-2.5 border border-amber-200/80 w-fit">
+                <Star className="size-4 fill-[#B45309] text-[#B45309]" />
+                <span className="text-xs font-bold text-[#B45309]">
+                  تقييمك لهذه الزيارة: {booking.rating} من 5 نجوم
+                </span>
+              </div>
+            )}
 
             {/* كارت التذكرة — مطابق تماماً لتصميم FRAME 11A */}
             <div className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]">

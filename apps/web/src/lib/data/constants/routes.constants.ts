@@ -20,5 +20,11 @@ export const ROUTE_BOOK_SLOT = (salonId: string) => `${ROUTE_BOOK(salonId)}/slot
 export const ROUTE_BOOK_BARBER = (salonId: string) => `${ROUTE_BOOK(salonId)}/barber`;
 export const ROUTE_BOOK_REVIEW = (salonId: string) => `${ROUTE_BOOK(salonId)}/review`;
 export const ROUTE_BOOKING_DETAILS = (id: string) => `${ROUTE_BOOKINGS}/${id}`;
+export const ROUTE_BOOKING_RATE = (id: string) => `${ROUTE_BOOKINGS}/${id}/rate`;
+export const ROUTE_BOOKING_RATE_SENT = (id: string) => `${ROUTE_BOOKINGS}/${id}/rate/sent`;
+export const ROUTE_ACCOUNT_PROFILE = `${ROUTE_ACCOUNT}/profile`;
+export const ROUTE_ACCOUNT_LANGUAGE = `${ROUTE_ACCOUNT}/language`;
+export const ROUTE_ACCOUNT_HELP = `${ROUTE_ACCOUNT}/help`;
 export const ROUTE_BOOKING_CONFIRMATION = (salonId: string, bookingId: string) =>
   `${ROUTE_BOOK_ROOT}/${salonId}/confirmation/${bookingId}`;
+export const ROUTE_OFFLINE = "/offline";

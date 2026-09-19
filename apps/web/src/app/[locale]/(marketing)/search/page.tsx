@@ -1,4 +1,5 @@
 // البحث والفلاتر — من غير بحث بنعرض آخر ما بحثت عنه، ومع بحث بنعرض النتايج أو حالة «مفيش صالون»
+import { SlidersHorizontal } from "lucide-react";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { areas } from "@/lib/data/areas.constants";
@@ -12,6 +13,7 @@ import { formatDistance, formatPrice } from "@/lib/utils/format/price.utils";
 import { ActiveFiltersBar, type ActiveFilter } from "./__components/active-filters-bar";
 import { DateStrip } from "./__components/date-strip";
 import { FilterRail } from "./__components/filter-rail";
+import { FilterSheet } from "./__components/filter-sheet";
 import { NearbyNow } from "./__components/nearby-now";
 import { NoResults } from "./__components/no-results";
 import { QuickSearch } from "./__components/quick-search";
@@ -152,10 +154,10 @@ export default async function SearchPage({
     <div className="flex flex-col">
       {/* الشريط التاني: البحث الحقيقي + تبديل العرض — الشريط العلوي فيه الهيدر المشترك بس */}
       <div className="sticky top-[60px] z-30 border-b border-border bg-background">
-        <PageContainer className="flex items-center gap-4 py-3.5">
+        <PageContainer className="flex items-center gap-2.5 py-3.5 sm:gap-4">
           <SearchBar key={query} autoFocus={!query} className="max-w-[480px] flex-1" />
           {query && (
-            <div className="flex overflow-hidden rounded-[9px] border border-border" role="tablist">
+            <div className="flex shrink-0 overflow-hidden rounded-[9px] border border-border" role="tablist">
               <Link
                 href={`${ROUTE_SEARCH}?q=${encodeURIComponent(query)}`}
                 role="tab"
@@ -180,6 +182,20 @@ export default async function SearchPage({
               </Link>
             </div>
           )}
+          {query && (
+            <FilterSheet
+              q={query}
+              sort={sort}
+              services={services}
+              serviceOptions={serviceOptions}
+              maxPrice={maxPrice}
+              priceBounds={priceBounds}
+              maxDistanceKm={maxDistanceKm}
+              todayOnly={todayOnly}
+              activeCount={activeFilters.length}
+              resultCount={results.length}
+            />
+          )}
         </PageContainer>
       </div>
 
@@ -203,7 +219,32 @@ export default async function SearchPage({
                   resultCount={0}
                 />
               </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-10">
+              <div className="flex min-w-0 flex-1 flex-col gap-8">
+                <div className="flex justify-center lg:hidden">
+                  <FilterSheet
+                    q={query}
+                    sort={sort}
+                    services={services}
+                    serviceOptions={serviceOptions}
+                    maxPrice={maxPrice}
+                    priceBounds={priceBounds}
+                    maxDistanceKm={maxDistanceKm}
+                    todayOnly={todayOnly}
+                    activeCount={activeFilters.length}
+                    resultCount={0}
+                    trigger={
+                      <span className="inline-flex h-11 items-center gap-2 rounded-[11px] border border-border bg-card px-5 text-[14px] font-bold text-foreground shadow-xs transition-colors hover:bg-muted cursor-pointer">
+                        <SlidersHorizontal className="size-4 text-primary" />
+                        <span>تعديل الفلاتر والترتيب</span>
+                        {activeFilters.length > 0 && (
+                          <span className="tabular rounded-[6px] bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground">
+                            {activeFilters.length} مفعّلة
+                          </span>
+                        )}
+                      </span>
+                    }
+                  />
+                </div>
                 <NoResults
                   query={query}
                   areaName={DEFAULT_AREA}
@@ -216,40 +257,7 @@ export default async function SearchPage({
             </div>
           ) : (
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
-              {/* الفلاتر للموبايل والتابلت داخل أكورديون سلس */}
-              <div className="lg:hidden">
-                <details className="group rounded-[14px] border border-border bg-card overflow-hidden">
-                  <summary className="flex cursor-pointer items-center justify-between p-3.5 font-bold text-foreground select-none transition-colors hover:bg-muted/50">
-                    <span className="flex items-center gap-2 text-[14px]">
-                      <span>تصفية وترتيب النتايج</span>
-                      {activeFilters.length > 0 && (
-                        <span className="tabular rounded-[6px] bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground">
-                          {activeFilters.length} مفعّلة
-                        </span>
-                      )}
-                    </span>
-                    <span className="text-xs text-muted-foreground transition-transform duration-200 group-open:rotate-180">
-                      ▼
-                    </span>
-                  </summary>
-                  <div className="border-t border-border p-2">
-                    <FilterRail
-                      q={query}
-                      sort={sort}
-                      services={services}
-                      serviceOptions={serviceOptions}
-                      maxPrice={maxPrice}
-                      priceBounds={priceBounds}
-                      maxDistanceKm={maxDistanceKm}
-                      todayOnly={todayOnly}
-                      activeCount={activeFilters.length}
-                      resultCount={results.length}
-                    />
-                  </div>
-                </details>
-              </div>
-
-              {/* رف الفلاتر الثابت على الديسكتوب */}
+              {/* رف الفلاتر الثابت على الديسكتوب فقط */}
               <div className="hidden lg:block lg:sticky lg:top-[132px] lg:w-[300px] lg:shrink-0">
                 <FilterRail
                   q={query}
@@ -266,13 +274,40 @@ export default async function SearchPage({
               </div>
 
               <div className="flex min-w-0 flex-1 flex-col gap-5">
-                <header className="flex flex-col gap-1">
-                  <h1 className="tabular text-[21px] font-bold">
-                    {results.length} صالونات فيها «{query}»
-                  </h1>
-                  <p className="text-[13px] text-muted-foreground">
-                    في {DEFAULT_AREA} وحواليها · لحد {formatDistance(maxDistanceKm)}
-                  </p>
+                <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col gap-1">
+                    <h1 className="tabular text-[21px] font-bold">
+                      {results.length} صالونات فيها «{query}»
+                    </h1>
+                    <p className="text-[13px] text-muted-foreground">
+                      في {DEFAULT_AREA} وحواليها · لحد {formatDistance(maxDistanceKm)}
+                    </p>
+                  </div>
+                  <div className="lg:hidden">
+                    <FilterSheet
+                      q={query}
+                      sort={sort}
+                      services={services}
+                      serviceOptions={serviceOptions}
+                      maxPrice={maxPrice}
+                      priceBounds={priceBounds}
+                      maxDistanceKm={maxDistanceKm}
+                      todayOnly={todayOnly}
+                      activeCount={activeFilters.length}
+                      resultCount={results.length}
+                      trigger={
+                        <span className="inline-flex h-10 items-center gap-2 rounded-[10px] border border-border bg-card px-3.5 text-[13px] font-bold text-foreground shadow-xs transition-colors hover:bg-muted cursor-pointer">
+                          <SlidersHorizontal className="size-3.5 text-primary" />
+                          <span>الفلاتر والترتيب</span>
+                          {activeFilters.length > 0 && (
+                            <span className="tabular rounded-[6px] bg-primary px-1.5 py-0.5 text-[11px] font-bold text-primary-foreground">
+                              {activeFilters.length}
+                            </span>
+                          )}
+                        </span>
+                      }
+                    />
+                  </div>
                 </header>
 
                 <ActiveFiltersBar q={query} filters={activeFilters} />
