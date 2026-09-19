@@ -3,15 +3,24 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Dialog } from "@base-ui/react/dialog";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
+import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
+import { useToast } from "@/components/atoms/toast";
+import { ROUTE_FAVORITES } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
 
 type SalonGalleryProps = {
   photos: string[];
   name: string;
+  salonId?: string;
 };
 
-export function SalonGallery({ photos, name }: SalonGalleryProps) {
+export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { toast } = useToast();
+  const isFav = salonId ? isFavorite(salonId) : false;
+
   const [main, ...rest] = photos;
   const side = rest.slice(0, 2);
   const total = photos.length;
@@ -24,6 +33,21 @@ export function SalonGallery({ photos, name }: SalonGalleryProps) {
   function showNext() {
     setOpenIndex((i) => (i === null ? i : (i + 1) % total));
   }
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!salonId) return;
+    toggleFavorite(salonId);
+    if (!isFav) {
+      toast.success(
+        "تمت الإضافة للمفضلة",
+        `تقدر تلاقي ${name} في الصالونات المفضلة وتتابع مواعيده`,
+        { label: "شوف المفضلة", href: ROUTE_FAVORITES }
+      );
+    } else {
+      toast.info("اتمسح من المفضلة", `تمت إزالة ${name} من قائمة الصالونات المفضلة`);
+    }
+  };
 
   return (
     <>
@@ -64,6 +88,26 @@ export function SalonGallery({ photos, name }: SalonGalleryProps) {
               <span>كل الصور</span>
               <span className="text-slate-300">·</span>
               <span className="tabular font-bold">{total}</span>
+            </button>
+          )}
+
+          {/* زر المفضلة العائم على الصورة — مطابق لتصميم الموبايل */}
+          {salonId && (
+            <button
+              type="button"
+              onClick={handleToggleFavorite}
+              className={cn(
+                "absolute top-3 end-3 z-10 flex size-9 sm:size-10 items-center justify-center rounded-xl border border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xs transition-all hover:bg-white cursor-pointer active:scale-95",
+                isFav ? "text-destructive" : "text-slate-600 hover:text-destructive"
+              )}
+              aria-label={isFav ? "إزالة من الصالونات المفضلة" : "إضافة إلى الصالونات المفضلة"}
+            >
+              <Heart
+                className={cn(
+                  "size-5 transition-transform",
+                  isFav ? "fill-destructive text-destructive" : "text-slate-600"
+                )}
+              />
             </button>
           )}
         </div>

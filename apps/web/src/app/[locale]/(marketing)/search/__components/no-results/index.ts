@@ -1,2 +1,2 @@
 // مفيش نتايج
-export { NoResults } from "./no-results";
+export { NoResults, NoResultsIllustration } from "./no-results";

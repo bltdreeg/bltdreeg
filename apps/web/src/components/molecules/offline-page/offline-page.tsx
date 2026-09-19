@@ -3,19 +3,25 @@
 import React from "react";
 import Link from "next/link";
 import { useOnline } from "@/lib/hooks/use-online.hook";
+import { ROUTE_BOOKINGS } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
 
 export interface OfflinePageProps {
   onRetry?: () => void;
   onBrowseCached?: () => void;
   cachedHref?: string;
   className?: string;
+  title?: string;
+  description?: string;
 }
 
 export function OfflinePage({
   onRetry,
   onBrowseCached,
-  cachedHref,
+  cachedHref = ROUTE_BOOKINGS,
   className = "",
+  title = "النت فاصل",
+  description = "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
 }: OfflinePageProps) {
   const { checkOnline } = useOnline();
 
@@ -33,66 +39,132 @@ export function OfflinePage({
       dir="rtl"
       role="region"
       aria-label="صفحة انقطاع الاتصال بالإنترنت"
-      className={`flex flex-col items-center justify-center rounded-[14px] border border-[#E5E7EB] bg-[#F7F8FA] p-8 sm:p-14 text-center transition-all ${className}`}
+      className={cn(
+        "flex min-h-[68vh] w-full flex-col items-center justify-center px-4 py-8 text-center sm:px-6",
+        className
+      )}
     >
-      {/* Custom Disconnected Plug Graphic from FRAME 14 */}
-      <div
-        className="relative h-[96px] w-[168px] my-2"
-        aria-hidden="true"
-      >
-        {/* Right plug socket */}
-        <div className="absolute right-0 top-[38px] h-[20px] w-[54px] rounded-r-[10px] border-[1.5px] border-l-0 border-[#0F766E] bg-[#F0FAF8]" />
-        <div className="absolute right-[54px] top-[44px] h-[8px] w-[16px] border-[1.5px] border-l-0 border-[#0F766E] bg-[#F0FAF8]" />
+      <div className="flex w-full max-w-[390px] flex-col items-center">
+        {/* رسمة انقطاع النت الفيكتورية المطابقة تماماً لـ mobile.html Frame 18 */}
+        <svg
+          viewBox="0 0 200 170"
+          className="w-[190px] h-auto shrink-0"
+          aria-hidden="true"
+        >
+          {/* النقطة السفلية */}
+          <path
+            d="M100 138h.01"
+            stroke="#0E0F11"
+            strokeWidth="9"
+            strokeLinecap="round"
+          />
+          {/* القوس الأول (بترولي) */}
+          <path
+            d="M78 114a30 30 0 0 1 44 0"
+            fill="none"
+            stroke="#0F766E"
+            strokeWidth="7"
+            strokeLinecap="round"
+          />
+          {/* القوس الثاني */}
+          <path
+            d="M58 90a58 58 0 0 1 84 0"
+            fill="none"
+            stroke="#9FB6B4"
+            strokeWidth="7"
+            strokeLinecap="round"
+          />
+          {/* القوس الثالث الخارجي */}
+          <path
+            d="M38 66a86 86 0 0 1 124 0"
+            fill="none"
+            stroke="#DCE4E4"
+            strokeWidth="7"
+            strokeLinecap="round"
+          />
+          {/* الخط المائل الأبيض كطبقة تفريغ */}
+          <path
+            d="M34 26 168 152"
+            stroke="#ffffff"
+            strokeWidth="13"
+            strokeLinecap="round"
+          />
+          {/* الخط المائل الأحمر */}
+          <path
+            d="M34 26 168 152"
+            stroke="#EF4444"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+        </svg>
 
-        {/* Left plug socket */}
-        <div className="absolute left-0 top-[38px] h-[20px] w-[54px] rounded-l-[10px] border-[1.5px] border-r-0 border-[#0F766E] bg-[#F0FAF8]" />
-        <div className="absolute left-[54px] top-[44px] h-[8px] w-[16px] border-[1.5px] border-r-0 border-[#0F766E] bg-[#F0FAF8]" />
+        {/* العنوان */}
+        <h2 className="mt-5 text-[20px] font-extrabold text-foreground md:text-[22px]">
+          {title}
+        </h2>
 
-        {/* Spark/break indicators in #9FCFC9 */}
-        <div className="absolute right-[82px] top-[22px] h-[14px] w-[1.5px] rotate-[28deg] bg-[#9FCFC9] rounded-full" />
-        <div className="absolute right-[96px] top-[28px] h-[12px] w-[1.5px] bg-[#9FCFC9] rounded-full" />
-        <div className="absolute right-[70px] top-[28px] h-[12px] w-[1.5px] -rotate-[28deg] bg-[#9FCFC9] rounded-full" />
-        <div className="absolute right-[82px] top-[62px] h-[14px] w-[1.5px] -rotate-[28deg] bg-[#9FCFC9] rounded-full" />
-        <div className="absolute right-[70px] top-[60px] h-[12px] w-[1.5px] rotate-[28deg] bg-[#9FCFC9] rounded-full" />
-      </div>
+        {/* الوصف الموجه للمستخدم */}
+        <p className="mt-2 mb-6 text-[14px] leading-[1.8] text-muted-foreground">
+          {description}
+        </p>
 
-      {/* Heading */}
-      <h1 className="mt-2 text-[26px] font-extrabold leading-[1.35] text-[#0E0F11]">
-        النت فاصل
-      </h1>
-
-      {/* Subtitle */}
-      <p className="mt-1 max-w-[540px] text-[14.5px] leading-[1.9] text-[#6B7280]">
-        المواعيد اللي شايفها ممكن تكون اتغيّرت، وتأكيد أي حجز جديد محتاج نت.
-        حجوزاتك المؤكدة ورقمك في الدور محفوظين ومش هيضيعوا.
-      </p>
-
-      {/* Action Buttons */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
+        {/* زر المحاولة من جديد البترولي مع الأيقونة */}
         <button
           type="button"
           onClick={handleRetry}
-          className="inline-flex h-[46px] flex-none cursor-pointer items-center justify-center whitespace-nowrap rounded-[10px] bg-[#0F766E] px-[22px] font-bold text-[14.5px] leading-none text-white transition-all hover:bg-[#0D655E] active:scale-95 shadow-sm"
+          className="flex h-[50px] w-full cursor-pointer items-center justify-center gap-2 rounded-[10px] bg-primary text-[15px] font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed active:scale-[0.99]"
         >
-          إعادة المحاولة
+          <svg
+            className="size-[17px] shrink-0 stroke-[2.2]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M20 12a8 8 0 1 1-2.6-5.9" />
+            <path d="M20.5 4v4.5H16" />
+          </svg>
+          <span>جرّب تاني</span>
         </button>
 
+        {/* زر تصفح آخر حجز */}
         {cachedHref ? (
           <Link
             href={cachedHref}
-            className="inline-flex h-[46px] flex-none items-center justify-center whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white px-[22px] font-bold text-[14.5px] leading-none text-[#0E0F11] transition-all hover:bg-[#F7F8FA] active:scale-95 shadow-xs"
+            className="mt-2.5 flex h-[48px] w-full items-center justify-center rounded-[10px] border border-border bg-card text-[14.5px] font-bold text-foreground transition-colors hover:bg-muted active:scale-[0.99]"
           >
-            تصفح آخر البيانات المحفوظة
+            افتح آخر حجز شوفته
           </Link>
         ) : (
           <button
             type="button"
             onClick={onBrowseCached}
-            className="inline-flex h-[46px] flex-none cursor-pointer items-center justify-center whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white px-[22px] font-bold text-[14.5px] leading-none text-[#0E0F11] transition-all hover:bg-[#F7F8FA] active:scale-95 shadow-xs"
+            className="mt-2.5 flex h-[48px] w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-card text-[14.5px] font-bold text-foreground transition-colors hover:bg-muted active:scale-[0.99]"
           >
-            تصفح آخر البيانات المحفوظة
+            افتح آخر حجز شوفته
           </button>
         )}
+
+        {/* نصائح حل المشكلة (Frame 18) */}
+        <div className="mt-7 w-full rounded-[14px] border border-border bg-muted/60 p-4 text-start">
+          <div className="mb-2.5 text-[13.5px] font-bold text-foreground">
+            جرّب الحاجات دي:
+          </div>
+          <div className="mb-2 flex items-center gap-2.5">
+            <span className="size-[5px] shrink-0 rounded-full bg-muted-foreground" />
+            <span className="text-[13px] font-medium text-muted-foreground">
+              اتأكد إن بيانات الموبايل أو الواي فاي شغّالين
+            </span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="size-[5px] shrink-0 rounded-full bg-muted-foreground" />
+            <span className="text-[13px] font-medium text-muted-foreground">
+              قفل وضع الطيران لو مفتوح
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

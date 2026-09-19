@@ -1,7 +1,7 @@
 "use client";
 
 // متابعة الدور الحية — يوم الميعاد (مطابق لتصميم FRAME 11B في web app design.html)
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Bell,
@@ -28,6 +28,15 @@ import {
   formatTime,
 } from "@/lib/utils/format/date.utils";
 import { CancelBookingDialog } from "../../../__components/cancel-booking-dialog";
+import { ApproachingQueueCard } from "./approaching-queue-card";
+import { YourTurnQueueCard } from "./your-turn-queue-card";
+import { InServiceQueueCard } from "./in-service-queue-card";
+import { VisitCompletedDialog } from "./visit-completed-dialog";
+import { LeaveQueueDialog } from "./leave-queue-dialog";
+import {
+  SimulationControlBar,
+  type LiveQueueSimStage,
+} from "./simulation-control-bar";
 
 interface LiveTrackingViewProps {
   booking: Booking;
@@ -49,6 +58,59 @@ export function LiveTrackingView({
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<BookingStatus>(booking.status);
 
+  // حالة محاكاة الطابور التفاعلية (WebSocket Real-Time Simulation)
+  const [simStage, setSimStage] = useState<LiveQueueSimStage>("waiting");
+  const [autoPlay, setAutoPlay] = useState<boolean>(true);
+  const [secondsToNext, setSecondsToNext] = useState<number>(15);
+  const [completedModalOpen, setCompletedModalOpen] = useState(false);
+  const [leaveQueueModalOpen, setLeaveQueueModalOpen] = useState(false);
+  const [yourTurnSeconds, setYourTurnSeconds] = useState(294);
+
+  // مؤقت الانتقال التلقائي بين مراحل الطابور (يحاكي استقبال رسائل WebSocket)
+  useEffect(() => {
+    if (!autoPlay || simStage === "completed") return;
+
+    const timer = setInterval(() => {
+      setSecondsToNext((prev) => {
+        if (prev <= 1) {
+          setSimStage((curr) => {
+            if (curr === "waiting") return "approaching";
+            if (curr === "approaching") return "yourTurn";
+            if (curr === "yourTurn") return "inService";
+            if (curr === "inService") {
+              setCompletedModalOpen(true);
+              setAutoPlay(false);
+              return "completed";
+            }
+            return curr;
+          });
+          return 15;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [autoPlay, simStage]);
+
+  // عداد تنازلي لمرحلة "حان دورك"
+  useEffect(() => {
+    if (simStage !== "yourTurn") return;
+    const interval = setInterval(() => {
+      setYourTurnSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [simStage]);
+
+  const handleSelectStage = (stage: LiveQueueSimStage) => {
+    setSimStage(stage);
+    setSecondsToNext(15);
+    if (stage === "completed") {
+      setCompletedModalOpen(true);
+      setAutoPlay(false);
+    }
+  };
+
   const isCancelled = currentStatus === BookingStatus.CANCELLED;
   const isRunningLate = queueStatus.punctuality === Punctuality.RUNNING_LATE || queueStatus.delayMinutes >= 10;
   const delayMinutes = queueStatus.delayMinutes || (isRunningLate ? 10 : 0);
@@ -67,6 +129,12 @@ export function LiveTrackingView({
   const salonPhone = salon?.phone || "01012345678";
   const peopleAhead = queueStatus.peopleAhead;
   const totalQueueToday = Math.max(8, booking.queueNumber + 5);
+  const servicesText =
+    booking.serviceNames && booking.serviceNames.length > 0
+      ? booking.serviceNames.join(" + ")
+      : services && services.length > 0
+        ? services.map((s) => s.name).join(" + ")
+        : "قص شعر بالمقص + تحديد دقن";
 
   // Link to reschedule slot picker pre-filled with existing selections
   const rescheduleParams = new URLSearchParams();
@@ -207,55 +275,98 @@ export function LiveTrackingView({
               </div>
             </div>
 
-            {/* كارت "هنبعتلك تنبيه" */}
-            <div className="flex flex-col gap-[11px] rounded-[14px] border border-[#E5E7EB] bg-white p-4 sm:px-[18px] sm:py-4">
-              <h3 className="text-sm font-bold leading-none text-[#0E0F11]">هنبعتلك تنبيه</h3>
-              <div className="flex items-start gap-2.5">
-                <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
-                <span className="text-[13px] leading-[1.8] text-[#0E0F11]">لما يفضل قدامك اتنين.</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
-                <span className="text-[13px] leading-[1.8] text-[#0E0F11]">وبعدين لما يجي دورك.</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#F59E0B]" />
-                <span className="text-[13px] leading-[1.8] text-[#0E0F11]">
-                  ولو الصالون اتأخر، هنقولك الميعاد الجديد.
+            {/* في مرحلة "على الكرسي" (4) ومرحلة "نعيماً!" (5) لا تظهر تنبيهات الانتظار وأزرار التعديل والإلغاء */}
+            {simStage !== "inService" && simStage !== "completed" && (
+              <>
+                {/* كارت "هنبعتلك تنبيه" */}
+                <div className="flex flex-col gap-[11px] rounded-[14px] border border-[#E5E7EB] bg-white p-4 sm:px-[18px] sm:py-4">
+                  <h3 className="text-sm font-bold leading-none text-[#0E0F11]">هنبعتلك تنبيه</h3>
+                  <div className="flex items-start gap-2.5">
+                    <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
+                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">لما يفضل قدامك اتنين.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
+                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">وبعدين لما يجي دورك.</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#F59E0B]" />
+                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">
+                      ولو الصالون اتأخر، هنقولك الميعاد الجديد.
+                    </span>
+                  </div>
+                  <p className="text-xs leading-[1.7] text-[#6B7280]">على واتساب والتطبيق</p>
+                </div>
+
+                {/* أزرار الإجراءات */}
+                <div className="flex flex-col gap-2 rounded-[14px] border border-[#E5E7EB] bg-white p-3.5 sm:px-[18px] sm:py-3.5">
+                  <Link
+                    href={rescheduleUrl}
+                    className="flex h-[42px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-[13.5px] font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
+                  >
+                    <CalendarSync className="size-4 text-[#6B7280]" />
+                    <span>عدّل الميعاد</span>
+                  </Link>
+                  {!isCancelled ? (
+                    <button
+                      type="button"
+                      onClick={() => setCancelModalOpen(true)}
+                      className="flex h-[42px] w-full items-center justify-center whitespace-nowrap rounded-[10px] border border-[#FECACA] bg-white text-[13.5px] font-bold text-[#EF4444] transition-colors hover:bg-red-50 cursor-pointer"
+                    >
+                      إلغاء الحجز
+                    </button>
+                  ) : (
+                    <div className="flex h-[42px] w-full items-center justify-center rounded-[10px] bg-slate-100 text-[13.5px] font-bold text-[#6B7280]">
+                      تم إلغاء هذا الحجز
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* كارت مرحلة انت على الكرسي في القائمة الجانبية */}
+            {simStage === "inService" && (
+              <div className="flex items-center gap-2.5 rounded-[14px] border border-emerald-200 bg-emerald-50/70 p-4">
+                <div className="size-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
+                <span className="text-xs font-bold text-emerald-950 leading-relaxed">
+                  الخدمة جارية الآن داخل الصالون — نعيماً مقدماً!
                 </span>
               </div>
-              <p className="text-xs leading-[1.7] text-[#6B7280]">على واتساب والتطبيق</p>
-            </div>
+            )}
 
-            {/* أزرار الإجراءات */}
-            <div className="flex flex-col gap-2 rounded-[14px] border border-[#E5E7EB] bg-white p-3.5 sm:px-[18px] sm:py-3.5">
-              <Link
-                href={rescheduleUrl}
-                className="flex h-[42px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-[13.5px] font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
-              >
-                <CalendarSync className="size-4 text-[#6B7280]" />
-                <span>عدّل الميعاد</span>
-              </Link>
-              {!isCancelled ? (
-                <button
-                  type="button"
-                  onClick={() => setCancelModalOpen(true)}
-                  className="flex h-[42px] w-full items-center justify-center whitespace-nowrap rounded-[10px] border border-[#FECACA] bg-white text-[13.5px] font-bold text-[#EF4444] transition-colors hover:bg-red-50 cursor-pointer"
-                >
-                  إلغاء الحجز
-                </button>
-              ) : (
-                <div className="flex h-[42px] w-full items-center justify-center rounded-[10px] bg-slate-100 text-[13.5px] font-bold text-[#6B7280]">
-                  تم إلغاء هذا الحجز
+            {/* كارت مرحلة نعيماً في القائمة الجانبية */}
+            {simStage === "completed" && (
+              <div className="flex flex-col gap-2.5 rounded-[14px] border border-emerald-200 bg-emerald-50/70 p-4">
+                <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
+                  <Check className="size-4 stroke-[3]" />
+                  <span>تمت الزيارة بنجاح</span>
                 </div>
-              )}
-            </div>
+                <Link
+                  href={`/bookings/${booking.id}/rate`}
+                  className="flex h-[42px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] bg-[#0F766E] text-[13.5px] font-bold text-white transition-colors hover:bg-[#0B5A54] shadow-xs"
+                >
+                  <span>قيّم زيارتك الآن</span>
+                </Link>
+              </div>
+            )}
           </aside>
 
-          {/* العمود الرئيسي (متابعة الدور الحية) */}
+          {/* العمود الرئيسي (متابعة الدور الحية ومحاكاة الطابور Real-Time) */}
           <div className="flex min-w-0 flex-1 flex-col gap-[18px]">
-            {/* كارت التذكرة الحية — برواز 2px تيل و زوايا 18px */}
-            <div className="overflow-hidden rounded-[18px] border-2 border-[#0F766E] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+            {/* شريط التحكم بالمحاكاة ومؤقت التحديث التلقائي */}
+            <SimulationControlBar
+              currentStage={simStage}
+              onSelectStage={handleSelectStage}
+              autoPlay={autoPlay}
+              onToggleAutoPlay={() => setAutoPlay(!autoPlay)}
+              secondsToNext={secondsToNext}
+            />
+
+            {/* 1. في الانتظار: كارت التذكرة ومخطط خطوات الدور */}
+            {simStage === "waiting" && (
+              <>
+                {/* كارت التذكرة الحية — برواز 2px تيل و زوايا 18px */}
+                <div className="overflow-hidden rounded-[18px] border-2 border-[#0F766E] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
               {/* شريط حالة اليوم والتحديث */}
               <div className="flex flex-wrap items-center justify-between gap-3 bg-[#0F766E] px-5 py-3.5 sm:px-[26px]">
                 <span className="text-sm sm:text-base font-extrabold leading-none text-white">
@@ -517,20 +628,112 @@ export function LiveTrackingView({
                 هنبعتلك تنبيه لما يفضل قدامك اتنين، وبعدين لما يجي دورك، ولو الصالون اتأخر.
               </p>
             </div>
-          </div>
-        </div>
-      </main>
+            </>
+          )}
 
-      {/* حوار إلغاء الحجز */}
-      <CancelBookingDialog
-        bookingId={booking.id}
-        open={cancelModalOpen}
-        onOpenChange={setCancelModalOpen}
-        onCancelled={() => {
-          setCurrentStatus(BookingStatus.CANCELLED);
-        }}
-      />
-    </div>
-  );
+          {/* 2. دورك قرّب (مطابق 1:1 لتصميم شاشة الموبايل المرفقة) */}
+          {simStage === "approaching" && (
+            <ApproachingQueueCard
+              queueNumber={booking.queueNumber}
+              peopleAhead={1}
+              travelMinutes={6}
+              estimatedMinutes={9}
+              distanceText="1.2 كم"
+              salonName={booking.shopName}
+              onLeaveQueue={() => setLeaveQueueModalOpen(true)}
+            />
+          )}
+
+          {/* 3. دورك جه (حان دورك) */}
+          {simStage === "yourTurn" && (
+            <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xs">
+              <YourTurnQueueCard
+                queueNumber={booking.queueNumber}
+                barberName={barberName}
+                timeLeftSeconds={yourTurnSeconds}
+                onCheckIn={() => {
+                  setSimStage("inService");
+                  setSecondsToNext(15);
+                }}
+                onPostpone={() => {
+                  setSimStage("approaching");
+                  setSecondsToNext(15);
+                  setYourTurnSeconds(300);
+                }}
+                onLeaveQueue={() => setLeaveQueueModalOpen(true)}
+              />
+            </div>
+          )}
+
+          {/* 4. انت على الكرسي */}
+          {simStage === "inService" && (
+            <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-xs">
+              <InServiceQueueCard
+                shopName={booking.shopName}
+                servicesText={servicesText}
+                totalPrice={booking.totalPrice}
+                salonPhone={salonPhone}
+                onFinishService={() => {
+                  setSimStage("completed");
+                  setCompletedModalOpen(true);
+                  setAutoPlay(false);
+                }}
+              />
+            </div>
+          )}
+
+          {/* 5. نعيماً! (تم انتهاء الحلاقة) */}
+          {simStage === "completed" && (
+            <div className="flex flex-col items-center justify-center p-8 rounded-3xl border border-emerald-200 bg-emerald-50/60 text-center gap-4 shadow-xs">
+              <div className="flex size-16 items-center justify-center rounded-full bg-emerald-600 text-white shadow-md">
+                <Check className="size-8 stroke-[3]" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <h3 className="text-2xl sm:text-3xl font-black text-emerald-950">
+                  نعيماً! تم انتهاء الحلاقة
+                </h3>
+                <p className="text-sm font-semibold text-emerald-800 max-w-sm">
+                  شكراً لزيارتك {booking.shopName}. رأيك بيساعد غيرك ويطوّر الخدمة في الصالون.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCompletedModalOpen(true)}
+                className="mt-2 flex h-12 items-center justify-center gap-2 rounded-xl bg-[#0F766E] px-8 text-sm sm:text-base font-black text-white shadow-md hover:bg-[#0B5A54] active:scale-98 transition-all cursor-pointer"
+              >
+                <span>فتح نافذة تقييم الزيارة</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+
+    {/* نافذة نعيماً! قيّم تجربتك معانا */}
+    <VisitCompletedDialog
+      open={completedModalOpen}
+      onOpenChange={setCompletedModalOpen}
+      shopName={booking.shopName}
+      bookingId={booking.id}
+    />
+
+    {/* حوار تأكيد الخروج من الطابور */}
+    <LeaveQueueDialog
+      open={leaveQueueModalOpen}
+      onOpenChange={setLeaveQueueModalOpen}
+      queueNumber={booking.queueNumber}
+    />
+
+    {/* حوار إلغاء الحجز */}
+    <CancelBookingDialog
+      bookingId={booking.id}
+      open={cancelModalOpen}
+      onOpenChange={setCancelModalOpen}
+      onCancelled={() => {
+        setCurrentStatus(BookingStatus.CANCELLED);
+      }}
+    />
+  </div>
+);
 }
 

@@ -9,8 +9,13 @@ import { AppointmentStrip } from "@/components/molecules/appointment-strip";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import { cn } from "@/lib/utils/cn.utils";
 import { formatTime, isToday } from "@/lib/utils/format/date.utils";
+import {
+  ROUTE_BOOKINGS,
+  ROUTE_BOOKING_RATE,
+} from "@/lib/data/constants/routes.constants";
 import { CancelBookingDialog } from "../cancel-booking-dialog";
 import { RebookDialog } from "../rebook-dialog";
+import { ProfileBreadcrumb } from "@/components/molecules/profile-breadcrumb";
 import { UpcomingSection } from "../../__sections/upcoming";
 import { PastSection } from "../../__sections/past";
 
@@ -84,7 +89,7 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
 
   return (
     <div className="flex flex-col">
-      {/* شريط الميعاد الثابت يوم الحجز في حال وجود حجز اليوم */}
+      {/* شريط الميعاد الثابت يوم الحجز في حال وجود حجز اليوم (Header Strip) */}
       {todayBooking && (
         <AppointmentStrip
           time={formatTime(todayBooking.startAt)}
@@ -94,6 +99,9 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
         />
       )}
 
+      {/* شريط المسار (Breadcrumb) لصفحات الحساب — أسفل الهيدر مباشرة كما في /favorites */}
+      <ProfileBreadcrumb items={[{ label: "حجوزاتي" }]} />
+
       <PageContainer className="flex flex-col gap-6 py-8 md:py-9">
         {/* عنوان الصفحة والتبويبات */}
         <div className="flex flex-col gap-5">
@@ -101,39 +109,38 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
             حجوزاتي
           </h1>
 
-          {/* شريط التبويبات */}
-          <div className="flex gap-2 border-b border-border">
-            {/* تبويب الحجوزات القادمة */}
+          {/* شريط التبويبات — العرض الكامل كما في mobile.html */}
+          <div className="flex w-full gap-1 rounded-xl bg-muted p-1" role="tablist">
+            {/* تبويب الحجوزات الحالية */}
             <button
               type="button"
+              role="tab"
+              aria-selected={activeTab === "upcoming"}
               onClick={() => handleTabChange("upcoming")}
               className={cn(
-                "relative flex items-center gap-2 pb-3.5 pe-3 ps-1 font-bold text-[15px] transition-colors cursor-pointer",
+                "flex h-10 flex-1 items-center justify-center rounded-[9px] font-bold text-sm transition-all cursor-pointer select-none",
                 activeTab === "upcoming"
-                  ? "border-b-2 border-primary text-foreground"
+                  ? "bg-card text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <span>الحجوزات القادمة</span>
-              {upcomingBookings.length > 0 && (
-                <span className="tabular text-xs font-bold text-muted-foreground">
-                  {upcomingBookings.length}
-                </span>
-              )}
+              الحالية
             </button>
 
             {/* تبويب الحجوزات السابقة */}
             <button
               type="button"
+              role="tab"
+              aria-selected={activeTab === "past"}
               onClick={() => handleTabChange("past")}
               className={cn(
-                "relative flex items-center gap-2 pb-3.5 px-4 font-bold text-[15px] transition-colors cursor-pointer",
+                "flex h-10 flex-1 items-center justify-center rounded-[9px] font-bold text-sm transition-all cursor-pointer select-none",
                 activeTab === "past"
-                  ? "border-b-2 border-primary text-foreground"
+                  ? "bg-card text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <span>حجوزات سابقة</span>
+              السابقة
             </button>
           </div>
         </div>
@@ -148,6 +155,7 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
           <PastSection
             bookings={pastBookings}
             onRebook={(b) => setRebookTarget(b)}
+            onRate={(b) => router.push(ROUTE_BOOKING_RATE(b.id))}
           />
         )}
       </PageContainer>

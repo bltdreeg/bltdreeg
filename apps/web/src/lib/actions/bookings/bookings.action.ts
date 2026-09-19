@@ -90,3 +90,22 @@ export async function cancelBooking(bookingId: string): Promise<{ success: boole
   return { success: true };
 }
 
+export async function submitBookingRating(
+  bookingId: string,
+  rating: number,
+  _reviewData?: {
+    haircutRating?: number;
+    cleanlinessRating?: number;
+    punctualityRating?: number;
+    tags?: string[];
+    comment?: string;
+    isAnonymous?: boolean;
+  }
+): Promise<{ success: boolean }> {
+  const booking = await getBookingById(bookingId);
+  if (booking) {
+    booking.rating = rating;
+  }
+  return { success: true };
+}
+

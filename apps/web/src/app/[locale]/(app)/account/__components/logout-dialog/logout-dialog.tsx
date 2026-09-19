@@ -1,10 +1,8 @@
-// نافذة تأكيد تسجيل الخروج مع تنبيه الحجز النشط في الدور
+// نافذة تأكيد تسجيل الخروج مطابقة لتصميم الموبايل (Frame 17)
 "use client";
 
 import { useState } from "react";
-import { Clock } from "lucide-react";
 import { Modal, ModalContent } from "@/components/atoms/modal";
-import { Button } from "@/components/atoms/button";
 import { useRouter } from "@/i18n/navigation";
 import { logout } from "@/lib/actions/auth/auth.action";
 import { SESSION_COOKIE } from "@/lib/data/constants/app.constants";
@@ -12,6 +10,7 @@ import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
 
 type LogoutDialogProps = {
   userName?: string;
+  salonName?: string;
   activeBookingNotice?: string;
   trigger?: React.ReactNode;
   open?: boolean;
@@ -19,14 +18,15 @@ type LogoutDialogProps = {
 };
 
 export function LogoutDialog({
-  userName = "كريم مصطفى",
-  activeBookingNotice = "عندك ميعاد النهارده 6:30 م ورقمك في الدور 3 — فكّر تستنى لما تخلّصه.",
+  salonName = "صالون الكابتن حسام",
+  activeBookingNotice,
   trigger,
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
 }: LogoutDialogProps) {
   const router = useRouter();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : uncontrolledOpen;
@@ -39,7 +39,7 @@ export function LogoutDialog({
   };
 
   const handleLogout = async () => {
-    setOpen(false);
+    setIsPending(true);
     try {
       await logout();
     } catch {
@@ -48,9 +48,15 @@ export function LogoutDialog({
     if (typeof document !== "undefined") {
       document.cookie = `${SESSION_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
     }
+    setOpen(false);
+    setIsPending(false);
     router.push(ROUTE_HOME);
     router.refresh();
   };
+
+  const noticeText =
+    activeBookingNotice ||
+    `عندك دور شغّال في ${salonName}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.`;
 
   return (
     <>
@@ -61,73 +67,55 @@ export function LogoutDialog({
       )}
 
       <Modal open={open} onOpenChange={setOpen}>
-        <ModalContent showCloseButton={false} className="p-0 overflow-hidden border-border max-w-[520px]">
-          {/* رأس النافذة */}
-          <div className="flex flex-col gap-2 px-6 pt-6 text-start">
-            <h2 className="text-[21px] font-extrabold leading-tight text-foreground">
-              تسجّل الخروج؟
-            </h2>
-            <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-              هتخرج من حساب {userName} على الجهاز ده.
-            </p>
-          </div>
-
-          {/* محتوى الشرح والتنبيهات */}
-          <div className="flex flex-col gap-3 px-6 pt-4 text-start">
-            {/* نقطة خضراء */}
-            <div className="flex items-start gap-2.5">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-success" />
-              <span className="text-[13.5px] leading-relaxed text-foreground">
-                تقدر تكمّل تتفرج على الصالونات والمواعيد من غير حساب.
-              </span>
-            </div>
-
-            {/* نقطة رمادية */}
-            <div className="flex items-start gap-2.5">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-muted-foreground" />
-              <span className="text-[13.5px] leading-relaxed text-foreground">
-                حجوزاتك ورقمك في الدور محفوظين — بيرجعوا أول ما تسجّل دخول بنفس الرقم.
-              </span>
-            </div>
-
-            {/* نقطة تحذير برتقالية */}
-            <div className="flex items-start gap-2.5">
-              <span className="mt-2 size-1.5 shrink-0 rounded-full bg-warning" />
-              <span className="text-[13.5px] leading-relaxed text-foreground">
-                بس مش هتوصلك تنبيهات الدور على الجهاز ده وانت خارج.
-              </span>
-            </div>
-
-            {/* بوكس التنبيه لميعاد اليوم النشط في الطابور */}
-            {activeBookingNotice && (
-              <div className="mt-1 flex items-center gap-3 rounded-xl border border-border bg-muted/60 p-3.5">
-                <div className="flex size-8.5 shrink-0 items-center justify-center rounded-[9px] border border-border bg-card">
-                  <Clock className="size-4 text-primary" />
-                </div>
-                <p className="text-[13px] font-medium leading-relaxed text-foreground">
-                  {activeBookingNotice}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* أزرار الإجراءات */}
-          <div className="flex items-center gap-2.5 p-6 pt-5">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleLogout}
-              className="h-12 flex-1 rounded-xl border-destructive/60 font-bold text-destructive hover:bg-destructive/10 hover:text-destructive text-[15px]"
+        <ModalContent
+          showCloseButton={false}
+          className="w-[calc(100%-2.5rem)] max-w-[390px] rounded-[18px] border border-border/80 bg-card p-[24px_22px_18px] text-start shadow-[0_18px_44px_rgba(14,15,17,0.18)]"
+        >
+          {/* أيقونة الخروج الحمراء */}
+          <div className="mb-4 flex size-[46px] items-center justify-center rounded-[12px] bg-[#FDEAEA] text-destructive">
+            <svg
+              className="size-5 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              أيوه، سجّل الخروج
-            </Button>
-            <Button
+              <path d="M14.5 4.5h-8v15h8" />
+              <path d="M11 12h9.5M17.5 8.5 21 12l-3.5 3.5" />
+            </svg>
+          </div>
+
+          {/* العنوان */}
+          <h3 className="mb-2 text-[18px] font-extrabold text-foreground">
+            تسجيل الخروج؟
+          </h3>
+
+          {/* نص التنبيه المبرر للأثر في الطابور */}
+          <p className="mb-5 text-[14px] leading-[1.8] text-muted-foreground">
+            {noticeText}
+          </p>
+
+          {/* أزرار الإجراءات الرأسية كما في تصميم الموبايل */}
+          <div className="flex flex-col gap-[9px]">
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={isPending}
+              className="flex h-12 w-full cursor-pointer items-center justify-center rounded-[10px] bg-destructive text-[16px] font-bold text-destructive-foreground transition-colors hover:bg-destructive/90 active:bg-destructive/80 disabled:opacity-60"
+            >
+              {isPending ? "جاري الخروج..." : "اخرج من الحساب"}
+            </button>
+            <button
               type="button"
               onClick={() => setOpen(false)}
-              className="h-12 flex-1 rounded-xl bg-primary font-bold text-primary-foreground hover:bg-primary-pressed text-[15px]"
+              disabled={isPending}
+              className="flex h-12 w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-card text-[15px] font-bold text-foreground transition-colors hover:bg-muted active:bg-muted/80"
             >
-              خليني داخل
-            </Button>
+              خليني فاضل
+            </button>
           </div>
         </ModalContent>
       </Modal>

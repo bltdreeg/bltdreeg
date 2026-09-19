@@ -1,48 +1,62 @@
-// الحالة الفاضية للحجوزات القادمة — FRAME 10C
+// الحالة الفاضية للحجوزات — مطابقة للفريم ١١ في mobile.html
 import { Link } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
+
+export function BookingsEmptyIllustration({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 200 160"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={cn("w-[190px] h-auto select-none", className)}
+    >
+      {/* جسم التقويم */}
+      <rect x="34" y="26" width="132" height="110" rx="14" fill="#F7F8FA" stroke="#E5E7EB" strokeWidth="2.5" />
+      {/* الخط الفاصل العلوي */}
+      <path d="M34 56h132" stroke="#E5E7EB" strokeWidth="2.5" />
+      {/* حلقات التعليق */}
+      <path d="M66 18v18M134 18v18" stroke="#6B7280" strokeWidth="3" strokeLinecap="round" />
+      {/* خطوط الحجوزات */}
+      <rect x="54" y="72" width="40" height="9" rx="4.5" fill="#E5E7EB" />
+      <rect x="106" y="72" width="40" height="9" rx="4.5" fill="#E5E7EB" />
+      <rect x="54" y="96" width="40" height="9" rx="4.5" fill="#E5E7EB" />
+      <rect x="106" y="96" width="40" height="9" rx="4.5" fill="#E5E7EB" />
+      {/* دائرة إضافة الحجز العائمة */}
+      <circle cx="140" cy="112" r="26" fill="#fff" />
+      <circle cx="140" cy="112" r="22" fill="#E6F0EF" stroke="#0F766E" strokeWidth="2.6" />
+      {/* علامة الزائد */}
+      <path d="M140 102v20M130 112h20" stroke="#0F766E" strokeWidth="3.2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export function UpcomingEmpty() {
   return (
     <section
       aria-label="لا توجد حجوزات قادمة"
-      className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-muted/40 p-10 text-center md:p-14"
+      className="flex flex-col items-center justify-center gap-4 py-8 text-center md:py-12"
     >
-      {/* الرسمة التوضيحية لنتيجة التقويم */}
-      <div className="relative h-[104px] w-[140px]" aria-hidden>
-        <div className="absolute end-[18px] top-2 h-[88px] w-[104px] rounded-[10px] border-[1.5px] border-primary bg-card" />
-        <div className="absolute end-[18px] top-[30px] h-[1.5px] w-[104px] bg-primary" />
-        <div className="absolute end-10 top-0 h-4 w-[1.5px] bg-primary" />
-        <div className="absolute end-[100px] top-0 h-4 w-[1.5px] bg-primary" />
-
-        {/* المربعات المتقطعة */}
-        <div className="absolute end-7 top-11 h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-[#9FCFC9]" />
-        <div className="absolute end-[52px] top-11 h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-[#9FCFC9]" />
-        <div className="absolute end-[76px] top-11 h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-[#9FCFC9]" />
-        <div className="absolute end-[100px] top-11 h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-[#9FCFC9]" />
-
-        <div className="absolute end-7 top-[68px] h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-tint-border" />
-        <div className="absolute end-[52px] top-[68px] h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-tint-border" />
-        <div className="absolute end-[76px] top-[68px] h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-tint-border" />
-        <div className="absolute end-[100px] top-[68px] h-[13px] w-[18px] rounded-[3px] border-[1.5px] border-dashed border-tint-border" />
-      </div>
+      <BookingsEmptyIllustration />
 
       {/* العنوان والشرح */}
-      <h2 className="text-[22px] font-bold text-foreground">
-        مفيش حجوزات قادمة
-      </h2>
-      <p className="max-w-[340px] text-[14.5px] leading-relaxed text-muted-foreground text-pretty">
-        لما تحجز ميعاد هيظهر هنا مع رقمك في الدور.
-      </p>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-[21px] font-extrabold text-foreground">
+          لسه ما حجزتش أي حاجة
+        </h2>
+        <p className="max-w-[380px] text-[14.5px] leading-relaxed text-muted-foreground text-pretty">
+          أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.
+        </p>
+      </div>
 
       {/* زر الاستكشاف */}
       <Link
         href={ROUTE_SEARCH}
-        className="mt-1.5 inline-flex h-[46px] items-center justify-center rounded-[10px] bg-primary px-5.5 text-[14.5px] font-bold text-primary-foreground transition-colors hover:bg-primary-pressed whitespace-nowrap"
+        className="mt-2 inline-flex h-12 items-center justify-center rounded-[10px] bg-primary px-7 text-[15px] font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary-pressed whitespace-nowrap cursor-pointer"
       >
-        اكتشف صالونات قريبة
+        دوّر على صالون قريب منك
       </Link>
     </section>
   );
 }
-

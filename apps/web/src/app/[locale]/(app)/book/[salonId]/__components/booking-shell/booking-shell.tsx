@@ -90,7 +90,7 @@ export function BookingShell({
       </div>
 
       {/* محتوى الصفحة واللوحة الجانبية */}
-      <PageContainer className="flex flex-col items-stretch gap-6 py-8 lg:flex-row lg:items-start lg:gap-8">
+      <PageContainer className="flex flex-col items-stretch gap-6 pt-6 pb-28 lg:pt-12 lg:pb-16 lg:flex-row lg:items-start lg:gap-10">
         {panel && (
           <aside className="w-full shrink-0 order-last lg:order-first lg:w-[380px]">
             {panel}

@@ -168,7 +168,7 @@ export function BookingSuccess({ booking }: BookingSuccessProps) {
             <AddToCalendar booking={booking} />
             <Link
               href={ROUTE_BOOKING_DETAILS(booking.id)}
-              className="flex h-12 flex-1 items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white font-bold text-[15px] text-[#0E0F11] transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="flex h-12 min-h-[48px] w-full sm:flex-1 items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white font-bold text-[15px] text-[#0E0F11] transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
               تفاصيل الحجز
             </Link>

@@ -68,11 +68,11 @@ export function AddToCalendar({ booking }: AddToCalendarProps) {
   };
 
   return (
-    <div className="relative flex-1">
+    <div className="relative w-full sm:flex-1">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-[#0F766E] px-4 font-bold text-[15px] text-white transition hover:bg-[#0B5A54] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/40"
+        className="flex h-12 min-h-[48px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#0F766E] px-4 font-bold text-[15px] text-white transition hover:bg-[#0B5A54] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/40"
       >
         <Calendar className="size-4.5" />
         <span className="whitespace-nowrap">أضف للتقويم</span>

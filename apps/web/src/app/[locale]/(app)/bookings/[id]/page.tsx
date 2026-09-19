@@ -32,7 +32,7 @@ export default async function BookingDetailPage({
   // Fallback demo booking for direct frame reviews (e.g. /bookings/11a, /bookings/11b, /bookings/11c)
   if (!booking) {
     if (id === "11a" || id === "11b" || id === "11c" || id.startsWith("bk-")) {
-      const isTodayMock = id === "11b" || id === "11c";
+      const isTodayMock = id === "11b" || id === "11c" || id.includes("today");
       const targetDate = new Date();
       if (!isTodayMock) {
         targetDate.setDate(targetDate.getDate() + 2);
@@ -42,9 +42,9 @@ export default async function BookingDetailPage({
       booking = {
         id,
         shopId: "shop-2",
-        shopName: id === "11b" || id === "11c" ? "بربر لاونج المعادي" : "صالون الكابتن حسام",
+        shopName: isTodayMock ? "بربر لاونج المعادي" : "صالون الكابتن حسام",
         barberId: "barber-3",
-        barberName: id === "11b" || id === "11c" ? "كريم مصطفى" : "محمود عبد العال",
+        barberName: isTodayMock ? "كريم مصطفى" : "محمود عبد العال",
         serviceIds: ["svc-2-1", "svc-2-4"],
         serviceNames: ["قص شعر بالمقص", "تحديد دقن"],
         durationMinutes: 50,

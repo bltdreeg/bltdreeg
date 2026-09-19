@@ -1,4 +1,6 @@
-import { Navigation, Phone, Star } from "lucide-react";
+"use client";
+
+import { Heart, Navigation, Phone, Star } from "lucide-react";
 import type { SalonDetails } from "@/lib/types/salon";
 import { formatDistance } from "@/lib/utils/format/price.utils";
 import { isOpenNow } from "@/lib/utils/hours.utils";
@@ -8,6 +10,10 @@ import {
   salonQueueTitle,
   salonReviewsWithCount,
 } from "@/lib/utils/format/queue-labels.utils";
+import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
+import { useToast } from "@/components/atoms/toast";
+import { ROUTE_FAVORITES } from "@/lib/data/constants/routes.constants";
+import { cn } from "@/lib/utils/cn.utils";
 
 type SalonInfoBlockProps = {
   salon: SalonDetails;
@@ -15,6 +21,10 @@ type SalonInfoBlockProps = {
 };
 
 export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockProps) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { toast } = useToast();
+  const isFav = isFavorite(salon.id);
+
   const open = isOpenNow(salon.hours);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(salon.address)}`;
 
@@ -24,6 +34,22 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
     success: { bg: "bg-success-bg", dot: "bg-success", text: "text-success-strong" },
     warning: { bg: "bg-warning-bg", dot: "bg-warning", text: "text-warning-fg" },
   }[tone];
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(salon.id);
+    if (!isFav) {
+      toast.success(
+        "تمت الإضافة للمفضلة",
+        `تقدر تلاقي ${salon.name} في الصالونات المفضلة وتتابع مواعيده`,
+        { label: "شوف المفضلة", href: ROUTE_FAVORITES }
+      );
+    } else {
+      toast.info(
+        "اتمسح من المفضلة",
+        `تمت إزالة ${salon.name} من قائمة الصالونات المفضلة`
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3.5 px-4 sm:px-8 pt-4 pb-5 lg:px-0">
@@ -60,19 +86,40 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-2">
+        {/* زر الإضافة للمفضلة */}
+        <button
+          type="button"
+          onClick={handleToggleFavorite}
+          className={cn(
+            "flex h-11 flex-1 min-w-[130px] items-center justify-center gap-1.5 rounded-xl border text-[13.5px] font-bold transition-all cursor-pointer select-none",
+            isFav
+              ? "border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/15"
+              : "border-border bg-background text-foreground hover:bg-muted"
+          )}
+          aria-label={isFav ? "إزالة من الصالونات المفضلة" : "إضافة إلى الصالونات المفضلة"}
+        >
+          <Heart
+            className={cn(
+              "size-4 shrink-0 transition-colors",
+              isFav ? "fill-destructive text-destructive" : "text-muted-foreground"
+            )}
+          />
+          <span>{isFav ? "في المفضلة" : "الصالونات المفضلة"}</span>
+        </button>
+
         <a
           href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
+          className="flex h-11 flex-1 min-w-[100px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
         >
           <Navigation className="size-4" />
           <span>الاتجاهات</span>
         </a>
         <a
           href={`tel:${salon.phone}`}
-          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
+          className="flex h-11 flex-1 min-w-[90px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
         >
           <Phone className="size-4" />
           <span>اتصل</span>
