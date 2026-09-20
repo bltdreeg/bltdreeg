@@ -11,6 +11,7 @@ use App\Modules\V1\Services\Models\Service;
 use App\Modules\V1\Services\Models\ServiceCategory;
 use App\Modules\V1\Services\Policies\ServiceCategoryPolicy;
 use App\Modules\V1\Services\Policies\ServicePolicy;
+use BezhanSalleh\LanguageSwitch\Enums\TriggerStyle;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Bltdreeg\Core\Models\Branch;
 use Bltdreeg\Core\Models\JobType;
@@ -48,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['en', 'ar']);
+
+            $switch->trigger(style: TriggerStyle::Icon);
+            $switch->trigger(style: TriggerStyle::Flag);
+            $switch->trigger(style: TriggerStyle::Avatar);
         });
     }
 }
