@@ -14,26 +14,26 @@ class ShiftPolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('shifts.index');
+        return $authUser->can('ViewAny:Shift');
     }
 
     public function view(AuthUser $authUser, Shift $shift): bool
     {
-        return $authUser->can('shifts.view');
+        return $authUser->can('View:Shift');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('shifts.create');
+        return $authUser->can('Create:Shift');
     }
 
     public function update(AuthUser $authUser, Shift $shift): bool
     {
-        return $authUser->can('shifts.update');
+        return $authUser->can('Update:Shift');
     }
 
     public function delete(AuthUser $authUser, Shift $shift): bool
     {
-        return $authUser->can('shifts.delete');
+        return $authUser->can('Delete:Shift');
     }
 }

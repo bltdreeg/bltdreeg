@@ -13,26 +13,26 @@ class ServicePolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('services.index');
+        return $authUser->can('ViewAny:Service');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('services.view');
+        return $authUser->can('View:Service');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('services.create');
+        return $authUser->can('Create:Service');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('services.update');
+        return $authUser->can('Update:Service');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('services.delete');
+        return $authUser->can('Delete:Service');
     }
 }

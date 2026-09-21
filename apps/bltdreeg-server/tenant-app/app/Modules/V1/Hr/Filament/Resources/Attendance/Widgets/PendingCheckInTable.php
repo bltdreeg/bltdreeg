@@ -28,7 +28,7 @@ class PendingCheckInTable extends TableWidget
     {
         return $table
             ->heading(__('core::attendance.pending_check_in'))
-            ->query(fn(): Builder => $this->pendingEmployeesQuery())
+            ->query(fn (): Builder => $this->pendingEmployeesQuery())
             ->columns([
                 TextColumn::make('name')
                     ->label(__('core::attendance.employee'))
@@ -43,7 +43,7 @@ class PendingCheckInTable extends TableWidget
                     ->label(__('core::attendance.check_in'))
                     ->icon(Heroicon::OutlinedArrowDownTray)
                     ->color('success')
-                    ->authorize('attendance.check-in')
+                    ->authorize('CheckIn:EmployeeAttendance')
                     ->action(function (User $record): void {
                         $this->checkIn($record);
                     }),
@@ -69,8 +69,8 @@ class PendingCheckInTable extends TableWidget
 
         return User::query()
             ->where('is_active', true)
-            ->whereHas('tenants', fn(Builder $query): Builder => $query->whereKey($tenant->getKey()))
-            ->when($checkedIn->isNotEmpty(), fn(Builder $query): Builder => $query->whereNotIn('id', $checkedIn));
+            ->whereHas('tenants', fn (Builder $query): Builder => $query->whereKey($tenant->getKey()))
+            ->when($checkedIn->isNotEmpty(), fn (Builder $query): Builder => $query->whereNotIn('id', $checkedIn));
     }
 
     private function checkIn(User $user): void
@@ -80,7 +80,7 @@ class PendingCheckInTable extends TableWidget
 
             Notification::make()
                 ->success()
-                ->title(__('core::attendance.checked_in_at') . ' ' . $record->check_in->format('H:i'))
+                ->title(__('core::attendance.checked_in_at').' '.$record->check_in->format('H:i'))
                 ->send();
         } catch (AttendanceException $e) {
             Notification::make()->danger()->title($e->getMessage())->send();

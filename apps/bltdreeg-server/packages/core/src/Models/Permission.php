@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Bltdreeg\Core\Models;
 
 use Spatie\Permission\Models\Permission as SpatiePermission;
 

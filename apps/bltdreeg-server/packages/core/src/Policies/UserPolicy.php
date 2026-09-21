@@ -1,73 +1,71 @@
 <?php
 
-declare(strict_types=1);
-
-namespace App\Policies;
+namespace Bltdreeg\Core\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
-class TenantPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ViewAny:Tenant');
+        return $authUser->can('ViewAny:User');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('View:Tenant');
+        return $authUser->can('View:User');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('Create:Tenant');
+        return $authUser->can('Create:User');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('Update:Tenant');
+        return $authUser->can('Update:User');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('Delete:Tenant');
+        return $authUser->can('Delete:User');
     }
 
     public function deleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('DeleteAny:Tenant');
+        return $authUser->can('DeleteAny:User');
     }
 
     public function restore(AuthUser $authUser): bool
     {
-        return $authUser->can('Restore:Tenant');
+        return $authUser->can('Restore:User');
     }
 
     public function forceDelete(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDelete:Tenant');
+        return $authUser->can('ForceDelete:User');
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $authUser->can('ForceDeleteAny:Tenant');
+        return $authUser->can('ForceDeleteAny:User');
     }
 
     public function restoreAny(AuthUser $authUser): bool
     {
-        return $authUser->can('RestoreAny:Tenant');
+        return $authUser->can('RestoreAny:User');
     }
 
     public function replicate(AuthUser $authUser): bool
     {
-        return $authUser->can('Replicate:Tenant');
+        return $authUser->can('Replicate:User');
     }
 
     public function reorder(AuthUser $authUser): bool
     {
-        return $authUser->can('Reorder:Tenant');
+        return $authUser->can('Reorder:User');
     }
 }

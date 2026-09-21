@@ -13,26 +13,26 @@ class JobTypePolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('job-types.index');
+        return $authUser->can('ViewAny:JobType');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('job-types.view');
+        return $authUser->can('View:JobType');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('job-types.create');
+        return $authUser->can('Create:JobType');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('job-types.update');
+        return $authUser->can('Update:JobType');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('job-types.delete');
+        return $authUser->can('Delete:JobType');
     }
 }

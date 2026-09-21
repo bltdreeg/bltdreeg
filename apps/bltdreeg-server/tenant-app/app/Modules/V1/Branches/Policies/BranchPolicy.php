@@ -13,26 +13,26 @@ class BranchPolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('branches.index');
+        return $authUser->can('ViewAny:Branch');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('branches.view');
+        return $authUser->can('View:Branch');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('branches.create');
+        return $authUser->can('Create:Branch');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('branches.update');
+        return $authUser->can('Update:Branch');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('branches.delete');
+        return $authUser->can('Delete:Branch');
     }
 }

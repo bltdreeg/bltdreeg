@@ -14,36 +14,36 @@ class EmployeeAttendancePolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('attendance.index');
+        return $authUser->can('ViewAny:EmployeeAttendance');
     }
 
     public function view(AuthUser $authUser, EmployeeAttendance $attendance): bool
     {
-        return $authUser->can('attendance.view');
+        return $authUser->can('View:EmployeeAttendance');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('attendance.create');
+        return $authUser->can('Create:EmployeeAttendance');
     }
 
     public function update(AuthUser $authUser, EmployeeAttendance $attendance): bool
     {
-        return $authUser->can('attendance.update');
+        return $authUser->can('Update:EmployeeAttendance');
     }
 
     public function delete(AuthUser $authUser, EmployeeAttendance $attendance): bool
     {
-        return $authUser->can('attendance.delete');
+        return $authUser->can('Delete:EmployeeAttendance');
     }
 
     public function checkIn(AuthUser $authUser, EmployeeAttendance $attendance): bool
     {
-        return $authUser->can('attendance.check-in');
+        return $authUser->can('CheckIn:EmployeeAttendance');
     }
 
     public function checkOut(AuthUser $authUser, EmployeeAttendance $attendance): bool
     {
-        return $authUser->can('attendance.check-out');
+        return $authUser->can('CheckOut:EmployeeAttendance');
     }
 }

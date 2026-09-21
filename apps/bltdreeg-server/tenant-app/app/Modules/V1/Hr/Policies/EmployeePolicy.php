@@ -14,26 +14,26 @@ class EmployeePolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('employees.index');
+        return $authUser->can('ViewAny:User');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('employees.view');
+        return $authUser->can('View:User');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('employees.create');
+        return $authUser->can('Create:User');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('employees.update');
+        return $authUser->can('Update:User');
     }
 
     public function delete(AuthUser $authUser, User $employee): bool
     {
-        return $authUser->can('employees.delete') && ! $employee->is_super_admin;
+        return $authUser->can('Delete:User') && ! $employee->is_super_admin;
     }
 }

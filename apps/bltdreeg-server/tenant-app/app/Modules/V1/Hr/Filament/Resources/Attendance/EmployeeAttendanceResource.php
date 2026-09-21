@@ -329,7 +329,7 @@ class EmployeeAttendanceResource extends Resource
             ->label(__('core::attendance.check_in'))
             ->icon(Heroicon::OutlinedArrowDownTray)
             ->color('success')
-            ->authorize('attendance.check-in')
+            ->authorize('CheckIn:EmployeeAttendance')
             ->visible(fn (EmployeeAttendance $record): bool => $record->isToday() && ! $record->isCheckedIn())
             ->action(function (EmployeeAttendance $record, AttendanceService $service): void {
                 $checked = $service->checkIn($record->user);
@@ -350,7 +350,7 @@ class EmployeeAttendanceResource extends Resource
             ->label(__('core::attendance.check_out'))
             ->icon(Heroicon::OutlinedArrowLeftOnRectangle)
             ->color('warning')
-            ->authorize('attendance.check-out')
+            ->authorize('CheckOut:EmployeeAttendance')
             ->requiresConfirmation()
             ->visible(fn (EmployeeAttendance $record): bool => $record->isToday() && $record->isCheckedIn() && ! $record->isCheckedOut())
             ->action(function (EmployeeAttendance $record, AttendanceService $service): void {

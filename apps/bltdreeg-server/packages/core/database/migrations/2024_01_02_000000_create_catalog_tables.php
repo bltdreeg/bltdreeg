@@ -37,20 +37,10 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
-
-        Schema::create('role_templates', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
-            $table->json('permissions')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('role_templates');
         Schema::dropIfExists('catalog_services');
         Schema::dropIfExists('catalog_service_categories');
         Schema::dropIfExists('job_types');

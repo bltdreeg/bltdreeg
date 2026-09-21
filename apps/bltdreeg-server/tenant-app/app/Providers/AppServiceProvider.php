@@ -7,8 +7,6 @@ use App\Modules\V1\Hr\Policies\EmployeeAttendancePolicy;
 use App\Modules\V1\Hr\Policies\EmployeePolicy;
 use App\Modules\V1\Hr\Policies\JobTypePolicy;
 use App\Modules\V1\Hr\Policies\ShiftPolicy;
-use App\Modules\V1\Roles\Models\Role;
-use App\Modules\V1\Roles\Policies\RolePolicy;
 use App\Modules\V1\Services\Models\Service;
 use App\Modules\V1\Services\Models\ServiceCategory;
 use App\Modules\V1\Services\Policies\ServiceCategoryPolicy;
@@ -34,7 +32,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(JobType::class, JobTypePolicy::class);
         Gate::policy(User::class, EmployeePolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);

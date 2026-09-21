@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Auth\Pages\Login;
 use App\Http\Middleware\BindTenantContext;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Bltdreeg\Core\Models\Tenant;
 use Filament\Http\Middleware\Authenticate;
@@ -103,6 +104,12 @@ class AppPanelProvider extends PanelProvider
                 ],
             ])
             ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
+            ->plugins([
+                FilamentShieldPlugin::make()
+                    ->globallySearchable(false)
+                    ->tenantRelationshipName('roles')
+                    ->tenantOwnershipRelationshipName('team'),
+            ])
             ->tenant(Tenant::class, ownershipRelationship: 'tenants', slugAttribute: 'slug')
             ->discoverResources(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')
             ->discoverPages(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')

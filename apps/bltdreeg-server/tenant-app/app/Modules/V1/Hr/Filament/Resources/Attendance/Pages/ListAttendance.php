@@ -30,7 +30,7 @@ class ListAttendance extends ListRecords
                 ->label(__('core::attendance.quick_check_in'))
                 ->icon(Heroicon::OutlinedArrowDownTray)
                 ->color('success')
-                ->authorize('attendance.check-in')
+                ->authorize('CheckIn:EmployeeAttendance')
                 ->schema([
                     Select::make('employee')
                         ->label(__('core::attendance.employee'))

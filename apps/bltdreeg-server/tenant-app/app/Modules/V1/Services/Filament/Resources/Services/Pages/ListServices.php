@@ -22,7 +22,7 @@ class ListServices extends ListRecords
         return [
             Action::make('importCatalog')
                 ->label('Import from catalog')
-                ->visible(fn (): bool => Filament::auth()->user()?->can('services.import') ?? false)
+                ->visible(fn (): bool => Filament::auth()->user()?->can('Import:Service') ?? false)
                 ->form([
                     Select::make('catalog_service_ids')
                         ->label('Catalog services')

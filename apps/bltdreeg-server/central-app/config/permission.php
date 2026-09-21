@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Permission;
-use App\Models\Role;
+use Bltdreeg\Core\Models\Permission;
+use Bltdreeg\Core\Models\Role;
 use Spatie\Permission\DefaultTeamResolver;
 
 return [
