@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Modules\V1\Branches\Policies\BranchPolicy;
+use App\Modules\V1\Hr\Policies\EmployeeAttendancePolicy;
 use App\Modules\V1\Hr\Policies\EmployeePolicy;
 use App\Modules\V1\Hr\Policies\JobTypePolicy;
+use App\Modules\V1\Hr\Policies\ShiftPolicy;
 use App\Modules\V1\Roles\Models\Role;
 use App\Modules\V1\Roles\Policies\RolePolicy;
 use App\Modules\V1\Services\Models\Service;
@@ -14,9 +16,11 @@ use App\Modules\V1\Services\Policies\ServicePolicy;
 use BezhanSalleh\LanguageSwitch\Enums\TriggerStyle;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Bltdreeg\Core\Models\Branch;
+use Bltdreeg\Core\Models\EmployeeAttendance;
 use Bltdreeg\Core\Models\JobType;
 use Bltdreeg\Core\Models\Service as CoreService;
 use Bltdreeg\Core\Models\ServiceCategory as CoreServiceCategory;
+use Bltdreeg\Core\Models\Shift;
 use Bltdreeg\Core\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -38,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(CoreService::class, ServicePolicy::class);
         Gate::policy(CoreServiceCategory::class, ServiceCategoryPolicy::class);
         Gate::policy(Branch::class, BranchPolicy::class);
+        Gate::policy(EmployeeAttendance::class, EmployeeAttendancePolicy::class);
+        Gate::policy(Shift::class, ShiftPolicy::class);
 
         Gate::before(function ($user) {
             if ($user instanceof User && $user->is_super_admin) {

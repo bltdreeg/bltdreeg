@@ -21,6 +21,8 @@ final class TenantPermissions
         'services' => ['import'],
         'categories' => ['import'],
         'branches' => [],
+        'shifts' => [],
+        'attendance' => ['check-in', 'check-out'],
     ];
 
     /**
@@ -33,6 +35,8 @@ final class TenantPermissions
         'services' => 'Services',
         'categories' => 'Categories',
         'branches' => 'Branches',
+        'shifts' => 'Shifts',
+        'attendance' => 'Attendance',
     ];
 
     /**

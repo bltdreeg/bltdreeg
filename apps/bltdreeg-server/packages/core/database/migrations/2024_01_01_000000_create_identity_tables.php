@@ -38,11 +38,14 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->unique();
             $table->string('avatar')->nullable();
+            $table->date('start_date')->nullable();
+            $table->tinyInteger('salary_type')->default(1);
+            $table->decimal('salary', 10, 2)->default(0);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_super_admin')->default(false);
             $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();

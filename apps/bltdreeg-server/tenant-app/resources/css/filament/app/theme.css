@@ -1,0 +1,124 @@
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+
+@source '../../../../app/Filament/**/*.php';
+@source '../../../../app/Filament/**/*.js';
+@source '../../../../app/Modules/**/*.php';
+@source '../../../../app/Modules/**/*.js';
+@source '../../../../resources/views/filament/**/*.php';
+
+@layer components {
+    /* ===== Sidebar: deep teal gradient ===== */
+    .fi-sidebar {
+        background-image: linear-gradient(
+            180deg,
+            var(--primary-800) 0%,
+            var(--primary-950) 100%
+        );
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .fi-sidebar-nav {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+    }
+
+    .fi-sidebar .fi-sidebar-header button,
+    .fi-sidebar .fi-sidebar-header .fi-btn,
+    .fi-sidebar .fi-sidebar-footer .fi-btn {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .fi-sidebar .fi-sidebar-group-label {
+        color: rgba(255, 255, 255, 0.55) !important;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .fi-sidebar .fi-sidebar-group-collapse-btn,
+    .fi-sidebar .fi-sidebar-group-dropdown-trigger-btn {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .fi-sidebar-item-btn,
+    .fi-sidebar-item-btn > .fi-icon,
+    .fi-sidebar-item-btn > .fi-sidebar-item-label {
+        color: #fff !important;
+    }
+
+    .fi-sidebar-item-btn:hover,
+    .fi-sidebar-item-btn:focus-visible {
+        color: #fff !important;
+        background-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
+    .fi-sidebar-item.fi-active.fi-sidebar-item-has-url > .fi-sidebar-item-btn,
+    .fi-sidebar-item.fi-active.fi-sidebar-item-has-url
+        > .fi-sidebar-item-btn:hover,
+    .fi-sidebar-item.fi-active.fi-sidebar-item-has-url
+        > .fi-sidebar-item-btn:focus-visible {
+        background-color: #fff !important;
+        color: var(--primary-800) !important;
+    }
+
+    .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon,
+    .fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-sidebar-item-label {
+        color: var(--primary-700) !important;
+    }
+
+    .fi-sidebar-item.fi-sidebar-item-has-active-child-items
+        > .fi-sidebar-item-btn
+        > .fi-icon,
+    .fi-sidebar-item.fi-sidebar-item-has-active-child-items
+        > .fi-sidebar-item-btn
+        > .fi-sidebar-item-label {
+        color: #fff !important;
+    }
+
+    .fi-sidebar-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* ===== Section headers ===== */
+    .fi-section-header {
+        background-image: linear-gradient(
+            180deg,
+            var(--primary-600) 0%,
+            var(--primary-800) 100%
+        );
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+
+    .fi-section .fi-section-header-heading,
+    .fi-section .fi-section-header-description {
+        color: #fff !important;
+    }
+
+    .fi-section .fi-section-header-heading {
+        font-weight: 600;
+    }
+
+    .fi-section .fi-section-header > .fi-icon {
+        color: #fff !important;
+    }
+
+    /* ===== Table headers ===== */
+    .fi-ta-table thead th.fi-ta-header-cell,
+    .fi-ta-table thead th.fi-ta-header-group-cell {
+        background-color: var(--gray-100);
+        color: var(--primary-900);
+        font-weight: 600;
+        font-size: 0.8125rem;
+        letter-spacing: 0.01em;
+        border-bottom: 2px solid var(--primary-200);
+    }
+
+    .fi-ta-table thead th.fi-ta-header-cell.fi-ta-header-cell-sorted {
+        color: var(--primary-700);
+    }
+
+    .fi-ta-table thead th.fi-ta-header-cell .fi-ta-header-cell-sort-btn,
+    .fi-ta-table thead th.fi-ta-header-cell .fi-ta-header-cell-sort-btn:hover {
+        color: var(--primary-600);
+    }
+}

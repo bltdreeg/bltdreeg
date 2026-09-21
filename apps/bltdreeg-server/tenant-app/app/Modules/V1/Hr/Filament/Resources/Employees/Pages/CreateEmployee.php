@@ -18,9 +18,10 @@ class CreateEmployee extends CreateRecord
     {
         $tenant = Filament::getTenant();
         $jobTypeId = $data['job_type_id'] ?? null;
+        $shiftId = $data['shift_id'] ?? null;
         $roleIds = $data['roles'] ?? [];
         $serviceIds = $data['services'] ?? [];
-        unset($data['job_type_id'], $data['roles'], $data['services']);
+        unset($data['job_type_id'], $data['shift_id'], $data['roles'], $data['services']);
 
         $existing = User::query()->where('email', $data['email'])->first();
 
@@ -31,11 +32,11 @@ class CreateEmployee extends CreateRecord
                 ]);
             }
 
-            $existing->tenants()->attach($tenant->getKey(), ['job_type_id' => $jobTypeId]);
+            $existing->tenants()->attach($tenant->getKey(), ['job_type_id' => $jobTypeId, 'shift_id' => $shiftId]);
             $user = $existing;
         } else {
             $user = User::query()->create($data);
-            $user->tenants()->attach($tenant->getKey(), ['job_type_id' => $jobTypeId]);
+            $user->tenants()->attach($tenant->getKey(), ['job_type_id' => $jobTypeId, 'shift_id' => $shiftId]);
         }
 
         app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
