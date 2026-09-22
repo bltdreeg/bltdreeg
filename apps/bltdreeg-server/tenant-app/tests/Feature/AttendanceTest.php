@@ -250,3 +250,27 @@ test('attendance records are scoped to the active tenant', function () {
 
     expect(EmployeeAttendance::query()->count())->toBe(0);
 });
+
+test('the same employee can check in for different tenants on the same day', function () {
+    $tenantA = Tenant::factory()->create();
+    $tenantB = Tenant::factory()->create();
+    $branchA = Branch::factory()->create(['tenant_id' => $tenantA->id]);
+    $branchB = Branch::factory()->create(['tenant_id' => $tenantB->id]);
+
+    $user = User::factory()->create(['branch_id' => $branchA->id]);
+    $user->tenants()->attach($tenantA->id);
+    $user->tenants()->attach($tenantB->id);
+
+    app(TenantContext::class)->set($tenantA);
+    $recordA = app(AttendanceService::class)->checkIn($user, Carbon::createFromTime(9, 0));
+
+    $user->forceFill(['branch_id' => $branchB->id])->save();
+
+    app(TenantContext::class)->set($tenantB);
+    $recordB = app(AttendanceService::class)->checkIn($user, Carbon::createFromTime(10, 0));
+
+    expect($recordA->tenant_id)->toBe($tenantA->id)
+        ->and($recordB->tenant_id)->toBe($tenantB->id)
+        ->and($recordA->date->toDateString())->toBe($recordB->date->toDateString())
+        ->and(EmployeeAttendance::query()->withoutGlobalScopes()->where('user_id', $user->id)->count())->toBe(2);
+});

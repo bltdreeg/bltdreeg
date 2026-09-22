@@ -8,6 +8,7 @@ return [
     'password' => 'Password',
     'landlord_panel_access' => 'Landlord panel access. Also opens every tenant in the tenant app.',
     'leave_branch_empty' => 'Optional. Leave empty so the user can access all branches in the tenant app.',
+    'branch_must_belong_to_selected_tenants' => 'The selected branch must belong to one of the selected salons.',
     'tenant_can_sign_into' => 'Which salons this person can sign into in the tenant app.',
     'personal_data' => 'Personal Data',
     'salary_data' => 'Salary Data',

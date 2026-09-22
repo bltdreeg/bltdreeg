@@ -23,7 +23,13 @@ class CreateEmployee extends CreateRecord
         $serviceIds = $data['services'] ?? [];
         unset($data['job_type_id'], $data['shift_id'], $data['roles'], $data['services']);
 
-        $existing = User::query()->where('email', $data['email'])->first();
+        if (blank($data['email'] ?? null)) {
+            $data['email'] = null;
+        }
+
+        $existing = filled($data['email'])
+            ? User::query()->where('email', $data['email'])->first()
+            : null;
 
         if ($existing) {
             if ($existing->belongsToTenant($tenant)) {

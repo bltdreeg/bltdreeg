@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'date']);
+            $table->unique(['tenant_id', 'user_id', 'date']);
         });
     }
 

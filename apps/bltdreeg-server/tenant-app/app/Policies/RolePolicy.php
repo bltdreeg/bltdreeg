@@ -29,12 +29,12 @@ class RolePolicy
 
     public function update(AuthUser $authUser, Role $role): bool
     {
-        return $authUser->can('Update:Role');
+        return ! $role->is_system && $authUser->can('Update:Role');
     }
 
     public function delete(AuthUser $authUser, Role $role): bool
     {
-        return $authUser->can('Delete:Role');
+        return ! $role->is_system && $authUser->can('Delete:Role');
     }
 
     public function deleteAny(AuthUser $authUser): bool

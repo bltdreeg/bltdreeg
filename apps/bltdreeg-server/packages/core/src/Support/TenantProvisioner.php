@@ -10,11 +10,30 @@ class TenantProvisioner
 {
     public function provision(Tenant $tenant): void
     {
+        $this->ensurePermissions();
         $this->grantSuperAdmin($tenant);
+    }
+
+    public function ensurePermissions(): void
+    {
+        $permissionClass = $this->permissionClass();
+        $registrar = app(PermissionRegistrar::class);
+
+        $registrar->forgetCachedPermissions();
+
+        foreach (ShieldPermissions::names() as $name) {
+            $permissionClass::query()->firstOrCreate(
+                ['name' => $name, 'guard_name' => 'web'],
+            );
+        }
+
+        $registrar->forgetCachedPermissions();
     }
 
     public function syncSuperAdminAccess(User $user): void
     {
+        $this->ensurePermissions();
+
         if ($user->is_super_admin) {
             Tenant::query()->each(fn (Tenant $tenant) => $this->grantSuperAdmin($tenant));
 
@@ -47,6 +66,8 @@ class TenantProvisioner
         if (! config('filament-shield.super_admin.enabled', true)) {
             return;
         }
+
+        $this->ensurePermissions();
 
         $superAdmins = User::query()->where('is_super_admin', true)->get();
 
@@ -106,6 +127,8 @@ class TenantProvisioner
         if (! config('filament-shield.super_admin.enabled', true)) {
             return;
         }
+
+        $this->ensurePermissions();
 
         $registrar = app(PermissionRegistrar::class);
         $previousTeamId = $registrar->getPermissionsTeamId();

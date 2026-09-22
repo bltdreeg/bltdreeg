@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use Closure;
 
 class UserForm
 {
@@ -80,6 +81,22 @@ class UserForm
                             ->preload()
                             ->searchable()
                             ->live()
+                            ->afterStateUpdated(function (?array $state, callable $set, Get $get): void {
+                                $branchId = $get('branch_id');
+
+                                if (blank($branchId)) {
+                                    return;
+                                }
+
+                                $stillValid = Branch::query()
+                                    ->whereKey($branchId)
+                                    ->whereIn('tenant_id', (array) $state)
+                                    ->exists();
+
+                                if (! $stillValid) {
+                                    $set('branch_id', null);
+                                }
+                            })
                             ->helperText(__('core::users.tenant_can_sign_into')),
                         Select::make('branch_id')
                             ->label(__('core::branches.branch'))
@@ -95,6 +112,22 @@ class UserForm
                             })
                             ->disabled(fn (Get $get): bool => blank($get('tenants')))
                             ->searchable()
+                            ->rule(function (Get $get) {
+                                return function (string $attribute, mixed $value, Closure $fail) use ($get): void {
+                                    if (blank($value)) {
+                                        return;
+                                    }
+
+                                    $belongsToSelectedTenant = Branch::query()
+                                        ->whereKey($value)
+                                        ->whereIn('tenant_id', (array) $get('tenants'))
+                                        ->exists();
+
+                                    if (! $belongsToSelectedTenant) {
+                                        $fail(__('core::users.branch_must_belong_to_selected_tenants'));
+                                    }
+                                };
+                            })
                             ->helperText(__('core::users.leave_branch_empty')),
                         Toggle::make('is_super_admin')
                             ->label(__('core::users.central_access'))

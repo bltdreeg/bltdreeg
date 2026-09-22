@@ -32,6 +32,8 @@ class AttendanceService
         $shift = $this->shiftFor($user, $tenant);
 
         $record = EmployeeAttendance::query()
+            ->withoutGlobalScopes()
+            ->where('tenant_id', $tenant->getKey())
             ->where('user_id', $user->getKey())
             ->where('date', $date)
             ->first();
