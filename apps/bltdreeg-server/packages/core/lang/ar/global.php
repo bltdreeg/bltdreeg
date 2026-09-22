@@ -12,4 +12,5 @@ return [
     'is_active' => 'الحالة',
     'operations' => 'الإجراءات',
     'administration' => 'الإدارة',
+    'email' => 'البريد الإلكتروني',
 ];

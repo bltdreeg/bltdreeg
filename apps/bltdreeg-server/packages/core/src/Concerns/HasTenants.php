@@ -13,7 +13,7 @@ trait HasTenants
     {
         return $this->belongsToMany(Tenant::class, 'tenant_user', 'user_id', 'tenant_id')
             ->using(UserTenant::class)
-            ->withPivot(['job_type_id'])
+            ->withPivot(['job_type_id', 'shift_id'])
             ->withTimestamps();
     }
 

@@ -13,12 +13,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'avatar', 'is_active', 'is_super_admin', 'branch_id'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'avatar', 'is_active', 'is_super_admin', 'branch_id', 'start_date', 'salary_type', 'salary'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentHasTenants, FilamentUser
 {
@@ -39,6 +41,8 @@ class User extends Authenticatable implements FilamentHasTenants, FilamentUser
             'password' => 'hashed',
             'is_active' => 'boolean',
             'is_super_admin' => 'boolean',
+            'start_date' => 'date',
+            'salary' => 'decimal:2',
         ];
     }
 
@@ -83,5 +87,10 @@ class User extends Authenticatable implements FilamentHasTenants, FilamentUser
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function attendance(): HasMany
+    {
+        return $this->hasMany(EmployeeAttendance::class);
     }
 }

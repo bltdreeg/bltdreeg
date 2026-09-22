@@ -22,7 +22,7 @@ class ListServiceCategories extends ListRecords
         return [
             Action::make('importCatalog')
                 ->label('Import from catalog')
-                ->visible(fn (): bool => auth()->user()?->can('categories.import') ?? false)
+                ->visible(fn (): bool => auth()->user()?->can('Import:ServiceCategory') ?? false)
                 ->form([
                     Select::make('catalog_category_ids')
                         ->label('Catalog categories')

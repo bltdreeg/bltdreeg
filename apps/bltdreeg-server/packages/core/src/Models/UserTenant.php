@@ -13,6 +13,7 @@ class UserTenant extends Pivot
         'tenant_id',
         'user_id',
         'job_type_id',
+        'shift_id',
     ];
 
     public function tenant(): BelongsTo
@@ -28,5 +29,10 @@ class UserTenant extends Pivot
     public function jobType(): BelongsTo
     {
         return $this->belongsTo(JobType::class);
+    }
+
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(Shift::class);
     }
 }

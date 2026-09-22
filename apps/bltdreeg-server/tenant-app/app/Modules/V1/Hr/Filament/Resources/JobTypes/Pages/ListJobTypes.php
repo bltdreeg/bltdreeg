@@ -27,7 +27,7 @@ class ListJobTypes extends ListRecords
                 ->visible(function (): bool {
                     $user = Auth::user();
 
-                    return $user instanceof User && $user->can('job-types.import');
+                    return $user instanceof User && $user->can('Import:JobType');
                 })
                 ->form([
                     Select::make('catalog_job_type_ids')

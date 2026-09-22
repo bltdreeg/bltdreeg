@@ -19,6 +19,7 @@ class EditEmployee extends EditRecord
         $membership = $this->record->tenants()->whereKey($tenant->getKey())->first();
 
         $data['job_type_id'] = $membership?->pivot?->job_type_id;
+        $data['shift_id'] = $membership?->pivot?->shift_id;
         $data['roles'] = $this->record->roles->pluck('id')->all();
         $data['services'] = $this->record->services->pluck('id')->all();
         unset($data['password']);
@@ -30,16 +31,17 @@ class EditEmployee extends EditRecord
     {
         $tenant = Filament::getTenant();
         $jobTypeId = $data['job_type_id'] ?? null;
+        $shiftId = $data['shift_id'] ?? null;
         $roleIds = $data['roles'] ?? [];
         $serviceIds = $data['services'] ?? [];
-        unset($data['job_type_id'], $data['roles'], $data['services']);
+        unset($data['job_type_id'], $data['shift_id'], $data['roles'], $data['services']);
 
         if (empty($data['password'])) {
             unset($data['password']);
         }
 
         $record->update($data);
-        $record->tenants()->updateExistingPivot($tenant->getKey(), ['job_type_id' => $jobTypeId]);
+        $record->tenants()->updateExistingPivot($tenant->getKey(), ['job_type_id' => $jobTypeId, 'shift_id' => $shiftId]);
 
         app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
         $record->syncRoles($roleIds);
@@ -52,15 +54,19 @@ class EditEmployee extends EditRecord
     {
         return [
             DeleteAction::make()
-                ->using(function (Model $record): void {
+                ->using(function (Model $record): bool {
                     $tenant = Filament::getTenant();
+
                     $record->tenants()->detach($tenant->getKey());
                     $record->services()->detach();
 
                     if (! $record->is_super_admin && $record->tenants()->doesntExist()) {
-                        $record->delete();
+                        return (bool) $record->delete();
                     }
-                }),
+
+                    return true;
+                })
+                ->successRedirectUrl(fn () => static::getResource()::getUrl('index')),
         ];
     }
 }

@@ -48,7 +48,7 @@ class Tenant extends Model implements HasName
     {
         return $this->belongsToMany(User::class, 'tenant_user', 'tenant_id', 'user_id')
             ->using(UserTenant::class)
-            ->withPivot(['job_type_id'])
+            ->withPivot(['job_type_id', 'shift_id'])
             ->withTimestamps();
     }
 

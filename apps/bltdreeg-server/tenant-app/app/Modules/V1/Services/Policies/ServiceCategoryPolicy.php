@@ -13,26 +13,26 @@ class ServiceCategoryPolicy
 
     public function viewAny(AuthUser $authUser): bool
     {
-        return $authUser->can('categories.index');
+        return $authUser->can('ViewAny:ServiceCategory');
     }
 
     public function view(AuthUser $authUser): bool
     {
-        return $authUser->can('categories.view');
+        return $authUser->can('View:ServiceCategory');
     }
 
     public function create(AuthUser $authUser): bool
     {
-        return $authUser->can('categories.create');
+        return $authUser->can('Create:ServiceCategory');
     }
 
     public function update(AuthUser $authUser): bool
     {
-        return $authUser->can('categories.update');
+        return $authUser->can('Update:ServiceCategory');
     }
 
     public function delete(AuthUser $authUser): bool
     {
-        return $authUser->can('categories.delete');
+        return $authUser->can('Delete:ServiceCategory');
     }
 }

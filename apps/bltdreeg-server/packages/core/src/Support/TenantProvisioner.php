@@ -2,7 +2,6 @@
 
 namespace Bltdreeg\Core\Support;
 
-use Bltdreeg\Core\Models\RoleTemplate;
 use Bltdreeg\Core\Models\Tenant;
 use Bltdreeg\Core\Models\User;
 use Spatie\Permission\PermissionRegistrar;
@@ -13,7 +12,6 @@ class TenantProvisioner
     {
         $this->ensurePermissions();
         $this->grantSuperAdmin($tenant);
-        $this->copyRoleTemplates($tenant);
     }
 
     public function ensurePermissions(): void
@@ -23,7 +21,7 @@ class TenantProvisioner
 
         $registrar->forgetCachedPermissions();
 
-        foreach (TenantPermissions::names() as $name) {
+        foreach (ShieldPermissions::names() as $name) {
             $permissionClass::query()->firstOrCreate(
                 ['name' => $name, 'guard_name' => 'web'],
             );
@@ -68,6 +66,8 @@ class TenantProvisioner
         if (! config('filament-shield.super_admin.enabled', true)) {
             return;
         }
+
+        $this->ensurePermissions();
 
         $superAdmins = User::query()->where('is_super_admin', true)->get();
 
@@ -153,35 +153,6 @@ class TenantProvisioner
 
         $user->unsetRelation('roles')->unsetRelation('permissions');
         $user->assignRole($role);
-
-        $registrar->setPermissionsTeamId($previousTeamId);
-    }
-
-    public function copyRoleTemplates(Tenant $tenant): void
-    {
-        $registrar = app(PermissionRegistrar::class);
-        $previousTeamId = $registrar->getPermissionsTeamId();
-        $registrar->setPermissionsTeamId($tenant->getKey());
-
-        $roleClass = $this->roleClass();
-
-        RoleTemplate::query()->where('is_active', true)->each(function (RoleTemplate $template) use ($tenant, $roleClass): void {
-            $role = $roleClass::firstOrCreate([
-                'tenant_id' => $tenant->getKey(),
-                'name' => $template->name,
-                'guard_name' => 'web',
-            ], [
-                'is_system' => true,
-                'role_template_id' => $template->getKey(),
-            ]);
-
-            $role->forceFill([
-                'is_system' => true,
-                'role_template_id' => $template->getKey(),
-            ])->save();
-
-            $role->syncPermissions($template->permissions ?? []);
-        });
 
         $registrar->setPermissionsTeamId($previousTeamId);
     }

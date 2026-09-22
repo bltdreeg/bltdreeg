@@ -5,14 +5,11 @@ namespace Bltdreeg\Core\Support;
 use Bltdreeg\Core\Models\CatalogJobType;
 use Bltdreeg\Core\Models\CatalogService;
 use Bltdreeg\Core\Models\CatalogServiceCategory;
-use Bltdreeg\Core\Models\RoleTemplate;
 
 class Catalog
 {
     public static function seed(): void
     {
-        app(TenantProvisioner::class)->ensurePermissions();
-
         $hair = CatalogServiceCategory::query()->firstOrCreate(
             ['name' => 'Hair'],
             ['description' => 'Cuts, color, and styling', 'is_active' => true],
@@ -60,37 +57,5 @@ class Catalog
                 ['description' => $jobType['description'], 'is_active' => true],
             );
         }
-
-        RoleTemplate::query()->updateOrCreate(
-            ['name' => 'Owner'],
-            [
-                'description' => 'Full access to the salon',
-                'permissions' => TenantPermissions::names(),
-                'is_active' => true,
-            ],
-        );
-
-        RoleTemplate::query()->updateOrCreate(
-            ['name' => 'Manager'],
-            [
-                'description' => 'Manage staff, services, and roles',
-                'permissions' => TenantPermissions::names(),
-                'is_active' => true,
-            ],
-        );
-
-        RoleTemplate::query()->firstOrCreate(
-            ['name' => 'Staff'],
-            [
-                'description' => 'View services and categories',
-                'permissions' => [
-                    'services.index',
-                    'services.view',
-                    'categories.index',
-                    'categories.view',
-                ],
-                'is_active' => true,
-            ],
-        );
     }
 }

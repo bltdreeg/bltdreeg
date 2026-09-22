@@ -12,4 +12,5 @@ return [
     'is_active' => 'Is Active',
     'operations' => 'Operations',
     'administration' => 'Administration',
+    'email' => 'Email',
 ];

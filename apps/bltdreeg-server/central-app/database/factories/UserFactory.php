@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Bltdreeg\Core\Enums\SalaryTypeEnum;
 use Bltdreeg\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'phone' => fake()->phoneNumber(),
+            'start_date' => fake()->date(),
+            'salary_type' => fake()->randomElement(SalaryTypeEnum::cases())->value,
+            'salary' => fake()->randomFloat(2, 0, 100000),
             'is_active' => true,
             'is_super_admin' => false,
             'remember_token' => Str::random(10),

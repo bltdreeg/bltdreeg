@@ -1,7 +1,7 @@
 <?php
 
-use App\Modules\V1\Roles\Models\Permission;
-use App\Modules\V1\Roles\Models\Role;
+use Bltdreeg\Core\Models\Permission;
+use Bltdreeg\Core\Models\Role;
 
 return [
 

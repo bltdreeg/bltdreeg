@@ -1,73 +1,16 @@
 <?php
 
-use App\Modules\V1\Roles\Models\Role;
-use App\Modules\V1\Roles\Services\RoleService;
 use App\Support\CatalogImporter;
 use Bltdreeg\Core\Models\Branch;
 use Bltdreeg\Core\Models\CatalogJobType;
 use Bltdreeg\Core\Models\CatalogService;
 use Bltdreeg\Core\Models\JobType;
-use Bltdreeg\Core\Models\RoleTemplate;
 use Bltdreeg\Core\Models\Tenant;
 use Bltdreeg\Core\Models\User;
 use Bltdreeg\Core\Support\TenantContext;
-use Bltdreeg\Core\Support\TenantPermissions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\PermissionRegistrar;
 
 uses(RefreshDatabase::class);
-
-test('creating a tenant copies predefined role templates', function () {
-    RoleTemplate::factory()->create([
-        'name' => 'Owner',
-        'permissions' => TenantPermissions::names(),
-    ]);
-
-    $tenant = Tenant::factory()->create();
-
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    $role = Role::query()->where('tenant_id', $tenant->id)->where('name', 'Owner')->first();
-
-    expect($role)->not->toBeNull()
-        ->and($role->is_system)->toBeTrue();
-});
-
-test('a tenant can create a custom role', function () {
-    $tenant = Tenant::factory()->create();
-
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    $role = Role::query()->create([
-        'tenant_id' => $tenant->id,
-        'name' => 'Colorist',
-        'guard_name' => 'web',
-        'is_system' => false,
-    ]);
-
-    expect($role->is_system)->toBeFalse()
-        ->and(Role::query()->where('tenant_id', $tenant->id)->where('name', 'Colorist')->exists())->toBeTrue();
-});
-
-test('duplicating a role copies permissions and numbers the name', function () {
-    $tenant = Tenant::factory()->create();
-
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    $role = Role::query()->create([
-        'tenant_id' => $tenant->id,
-        'name' => 'Colorist',
-        'guard_name' => 'web',
-        'is_system' => false,
-    ]);
-    $role->syncPermissions(['employees.index', 'roles.view']);
-
-    $copy = app(RoleService::class)->duplicate($role, $tenant->id);
-
-    expect($copy->name)->toBe('Colorist 2')
-        ->and($copy->is_system)->toBeFalse()
-        ->and($copy->permissions->pluck('name')->all())->toEqualCanonicalizing(['employees.index', 'roles.view']);
-});
 
 test('importing a catalog service copies defaults onto the tenant', function () {
     $tenant = Tenant::factory()->create();
