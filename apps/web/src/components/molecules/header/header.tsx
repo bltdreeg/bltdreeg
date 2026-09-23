@@ -7,11 +7,11 @@ import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/data/constants/app.constants";
 import {
+  EXTERNAL_SALON_REGISTER,
   ROUTE_ACCOUNT,
   ROUTE_BOOKINGS,
   ROUTE_HOME,
   ROUTE_LOGIN,
-  ROUTE_PARTNER,
   ROUTE_SEARCH,
 } from "@/lib/data/constants/routes.constants";
 import { useUser } from "@/lib/hooks/user";
@@ -101,12 +101,14 @@ export function Header({
         {/* 3. عناصر التحكم اليسرى حسب حالة المصادقة */}
         <div className="flex shrink-0 items-center gap-2.5 sm:gap-3 md:gap-4">
           {/* رابط الانضمام كصالون (للكل على الشاشات الكبيرة) */}
-          <Link
-            href={ROUTE_PARTNER}
+          <a
+            href={EXTERNAL_SALON_REGISTER}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden rounded-lg border border-primary-foreground/35 px-3 py-1.5 text-[13px] font-bold text-primary-foreground transition-colors hover:bg-primary-foreground/15 md:block"
           >
             انضم كصالون
-          </Link>
+          </a>
 
           {isAuth ? (
             /* ================= حالة المستخدم المسجل (Authenticated) ================= */

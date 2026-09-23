@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'tenant_model' => 'Bltdreeg\Core\Models\Tenant',
+    'tenant_model' => 'Bltdreeg\Core\Modules\Tenancy\Models\Tenant',
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ return [
 
     'super_admin' => [
         'enabled' => true,
-        'name' => 'super_admin',
+        'name' => 'owner',
         'define_via_gate' => false,
         'intercept_gate' => 'before',
     ],
@@ -253,11 +253,6 @@ return [
     */
 
     'custom_permissions' => [
-        'Import:JobType' => 'Import Job Types',
-        'Import:Service' => 'Import Services',
-        'Import:ServiceCategory' => 'Import Service Categories',
-        'CheckIn:EmployeeAttendance' => 'Check In Attendance',
-        'CheckOut:EmployeeAttendance' => 'Check Out Attendance',
     ],
 
     /*
@@ -288,6 +283,6 @@ return [
     |
     */
 
-    'register_role_policy' => true,
+    'register_role_policy' => false,
 
 ];

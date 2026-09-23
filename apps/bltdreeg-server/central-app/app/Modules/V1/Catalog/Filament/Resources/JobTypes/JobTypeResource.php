@@ -6,7 +6,7 @@ use App\Modules\V1\Catalog\Filament\Resources\JobTypes\Pages\CreateJobType;
 use App\Modules\V1\Catalog\Filament\Resources\JobTypes\Pages\EditJobType;
 use App\Modules\V1\Catalog\Filament\Resources\JobTypes\Pages\ListJobTypes;
 use BackedEnum;
-use Bltdreeg\Core\Models\CatalogJobType;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogJobType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -19,7 +19,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class JobTypeResource extends Resource
@@ -37,11 +36,6 @@ class JobTypeResource extends Resource
     protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
-    }
 
     public static function form(Schema $schema): Schema
     {

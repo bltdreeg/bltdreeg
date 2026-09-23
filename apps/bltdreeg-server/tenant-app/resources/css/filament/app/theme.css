@@ -5,6 +5,8 @@
 @source '../../../../app/Modules/**/*.php';
 @source '../../../../app/Modules/**/*.js';
 @source '../../../../resources/views/filament/**/*.php';
+@source '../../../../resources/views/livewire/**/*.php';
+@source '../../../../app/Livewire/**/*.php';
 
 @layer components {
     /* ===== Sidebar: deep teal gradient ===== */
@@ -120,5 +122,266 @@
     .fi-ta-table thead th.fi-ta-header-cell .fi-ta-header-cell-sort-btn,
     .fi-ta-table thead th.fi-ta-header-cell .fi-ta-header-cell-sort-btn:hover {
         color: var(--primary-600);
+    }
+
+    /* ===== Onboarding shell / navbar ===== */
+    .fi-onboarding-shell {
+        display: flex;
+        min-height: 100dvh;
+        flex-direction: column;
+        background-color: var(--gray-50);
+    }
+
+    .fi-onboarding-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background-color: var(--primary-600);
+        color: #fff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+        width: 100%;
+    }
+
+    .fi-onboarding-navbar-inner {
+        display: flex;
+        height: 3.75rem;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-inline: 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-navbar-inner {
+            padding-inline: 1.5rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .fi-onboarding-navbar-inner {
+            padding-inline: 2rem;
+        }
+    }
+
+    .fi-onboarding-navbar-brand {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .fi-onboarding-brand-link {
+        flex-shrink: 0;
+        font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .fi-onboarding-brand-link:hover {
+        opacity: 0.95;
+    }
+
+    .fi-onboarding-navbar-divider {
+        display: none;
+        width: 1px;
+        height: 1rem;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .fi-onboarding-tenant-name {
+        display: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.8125rem;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-navbar-divider,
+        .fi-onboarding-tenant-name {
+            display: block;
+        }
+    }
+
+    .fi-onboarding-navbar-actions {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-navbar-actions {
+            gap: 0.75rem;
+        }
+    }
+
+    .fi-onboarding-nav-link {
+        display: none;
+        border-radius: 0.5rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        transition: background-color 0.15s ease;
+    }
+
+    .fi-onboarding-nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-nav-link {
+            display: inline-flex;
+        }
+    }
+
+    .fi-onboarding-locale-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 0.5rem;
+        background: rgba(255, 255, 255, 0.12);
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+
+    .fi-onboarding-locale-btn:hover {
+        background: rgba(255, 255, 255, 0.22);
+    }
+
+    .fi-onboarding-locale-icon {
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.9;
+    }
+
+    .fi-onboarding-user-menu .fi-icon-btn,
+    .fi-onboarding-user-menu .fi-user-menu-trigger {
+        color: #fff !important;
+    }
+
+    .fi-onboarding-user-menu .fi-icon-btn:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .fi-onboarding-main-ctn {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .fi-onboarding-main {
+        width: 100%;
+        flex: 1;
+        margin-inline: auto;
+        padding: 2rem 1rem;
+        border: none;
+        background: none;
+        box-shadow: none;
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-main {
+            padding-inline: 1.5rem;
+        }
+    }
+
+    .fi-onboarding-status {
+        margin-inline: auto;
+        max-width: 36rem;
+    }
+
+    .fi-onboarding-status-card {
+        overflow: hidden;
+        border: 1px solid var(--gray-200);
+        border-radius: 1rem;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+
+    .fi-onboarding-status-banner {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid transparent;
+    }
+
+    .fi-onboarding-status-banner.is-pending {
+        background: #fffbeb;
+        border-bottom-color: #fde68a;
+    }
+
+    .fi-onboarding-status-banner.is-declined {
+        background: #fff1f2;
+        border-bottom-color: #fecdd3;
+    }
+
+    .fi-onboarding-status-eyebrow {
+        margin: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .fi-onboarding-status-banner.is-pending .fi-onboarding-status-eyebrow {
+        color: #b45309;
+    }
+
+    .fi-onboarding-status-banner.is-declined .fi-onboarding-status-eyebrow {
+        color: #be123c;
+    }
+
+    .fi-onboarding-status-heading {
+        margin: 0.25rem 0 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--gray-950);
+    }
+
+    .fi-onboarding-status-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .fi-onboarding-status-copy {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--gray-600);
+    }
+
+    .fi-onboarding-status-reason {
+        border: 1px solid #fecdd3;
+        border-radius: 0.75rem;
+        background: #fff1f2;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: #881337;
+    }
+
+    .fi-onboarding-status-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .fi-onboarding-status-actions {
+            flex-direction: row;
+            align-items: center;
+        }
     }
 }

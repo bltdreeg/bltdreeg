@@ -5,7 +5,7 @@ namespace App\Modules\V1\Services\Filament\Resources\ServiceCategories\Pages;
 use App\Modules\V1\Services\Filament\Resources\ServiceCategories\ServiceCategoryResource;
 use App\Modules\V1\Services\Models\ServiceCategory;
 use App\Support\CatalogImporter;
-use Bltdreeg\Core\Models\CatalogServiceCategory;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogServiceCategory;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Facades\Filament;

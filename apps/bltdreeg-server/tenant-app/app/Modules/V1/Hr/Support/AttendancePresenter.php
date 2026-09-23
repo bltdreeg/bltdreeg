@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\V1\Hr\Support;
 
-use Bltdreeg\Core\Enums\AttendenceStatusEnum;
+use Bltdreeg\Core\Modules\Hr\Enums\AttendenceStatusEnum;
 use Filament\Support\Icons\Heroicon;
 
 class AttendancePresenter

@@ -6,7 +6,7 @@ use App\Modules\V1\Hr\Filament\Resources\JobTypes\Pages\CreateJobType;
 use App\Modules\V1\Hr\Filament\Resources\JobTypes\Pages\EditJobType;
 use App\Modules\V1\Hr\Filament\Resources\JobTypes\Pages\ListJobTypes;
 use BackedEnum;
-use Bltdreeg\Core\Models\JobType;
+use Bltdreeg\Core\Modules\Hr\Models\JobType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;

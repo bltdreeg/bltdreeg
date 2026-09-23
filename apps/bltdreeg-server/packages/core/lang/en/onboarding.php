@@ -1,0 +1,132 @@
+<?php
+
+return [
+    'register' => [
+        'title' => 'Register your salon',
+        'heading' => 'Create your salon account',
+        'salon_name' => 'Salon name',
+        'slug' => 'Panel address',
+        'slug_helper' => 'Your panel will be at /:slug.',
+        'slug_taken' => 'This address is already taken.',
+        'owner_name' => 'Your name',
+        'phone' => 'Phone number',
+        'accept_terms' => 'I agree to the <a href=":terms" target="_blank" class="underline">Terms of Service</a> and <a href=":privacy" target="_blank" class="underline">Privacy Policy</a>',
+        'accept_terms_required' => 'You must accept the Terms of Service and Privacy Policy.',
+    ],
+
+    'wizard' => [
+        'title' => 'Set up your salon',
+        'submit' => 'Submit for review',
+        'steps' => [
+            'business' => 'Business',
+            'team' => 'Team size',
+            'location_type' => 'Where you work',
+            'address' => 'Address',
+            'document' => 'Identity',
+            'review' => 'Review',
+        ],
+        'business_name' => 'Business name',
+        'website' => 'Website',
+        'team_size' => 'How many people work at your salon?',
+        'service_location_type' => 'Where do you provide your services?',
+        'address' => 'Address',
+        'latitude' => 'Latitude',
+        'longitude' => 'Longitude',
+        'address_not_needed' => 'No address needed for mobile or virtual services.',
+        'document_type' => 'Document type',
+        'document_file' => 'Document file',
+        'document_helper' => 'JPG, PNG or PDF, up to 5 MB. Only our review team can see it.',
+        'document_on_file' => 'We already have your previous document. Upload a new one only if you want to replace it.',
+        'review_intro' => 'Check your answers, then submit. Our team usually reviews within 2 business days.',
+        'new_document' => 'New file uploaded',
+        'previous_document' => 'Previous document on file',
+        'submitted' => 'Submitted for review',
+        'not_available' => 'Your salon cannot be edited right now.',
+    ],
+
+    'status_page' => [
+        'title' => 'Salon review',
+        'pending_heading' => 'Your salon is under review',
+        'pending_body' => 'Thanks! We received your details (submission #:revision) and will email you once a reviewer has checked them.',
+        'declined_heading' => 'Your salon needs changes',
+        'declined_body' => 'A reviewer could not approve submission #:revision for the following reason:',
+        'resubmit' => 'Update and resubmit',
+        'browse_marketplace' => 'Continue browsing',
+    ],
+
+    'tenant_status' => [
+        'draft' => 'Draft',
+        'pending_review' => 'Pending review',
+        'approved' => 'Approved',
+        'declined' => 'Declined',
+    ],
+
+    'submission_status' => [
+        'pending' => 'Pending',
+        'approved' => 'Approved',
+        'declined' => 'Declined',
+    ],
+
+    'team_size' => [
+        'independent' => 'Just me',
+        '2-5' => '2–5 people',
+        '6-10' => '6–10 people',
+        '11-20' => '11–20 people',
+        '20+' => 'More than 20',
+    ],
+
+    'service_location_type' => [
+        'physical' => 'At my salon',
+        'mobile' => 'At the client\'s location',
+        'virtual' => 'Online',
+    ],
+
+    'document_type' => [
+        'national_id' => 'National ID',
+        'passport' => 'Passport',
+        'driving_license' => 'Driving license',
+    ],
+
+    'admin' => [
+        'submissions' => 'Salon applications',
+        'submission' => 'Salon application',
+        'salon' => 'Salon',
+        'revision' => 'Revision',
+        'status' => 'Status',
+        'submitted_at' => 'Submitted',
+        'submitted_by' => 'Submitted by',
+        'reviewed_by' => 'Reviewed by',
+        'reviewed_at' => 'Reviewed',
+        'decline_reason' => 'Decline reason',
+        'answers' => 'Answers',
+        'comparison' => 'Changes since revision #:revision',
+        'field' => 'Field',
+        'previous' => 'Previous',
+        'current' => 'Current',
+        'unchanged' => 'No changes',
+        'document' => 'Identity document',
+        'view_document' => 'Open document (link expires in 10 minutes)',
+        'no_document' => 'No document',
+        'approve' => 'Approve',
+        'approve_confirm' => 'Approving makes the salon live and seeds its starter catalog, roles and example employee.',
+        'approved' => 'Salon approved',
+        'decline' => 'Decline',
+        'declined' => 'Salon declined',
+        'history' => 'Revision history',
+    ],
+
+    'mail' => [
+        'submitted' => [
+            'subject' => 'New salon application: :salon',
+            'body' => ':salon submitted onboarding revision #:revision for review.',
+        ],
+        'approved' => [
+            'subject' => 'Your salon has been approved',
+            'body' => 'Good news — :salon is approved and now live.',
+        ],
+        'declined' => [
+            'subject' => 'Your salon application needs changes',
+            'body' => 'We could not approve :salon yet. Reason:',
+        ],
+    ],
+];

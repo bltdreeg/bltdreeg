@@ -2,7 +2,8 @@
 
 namespace App\Modules\V1\Tenants\Filament\Resources\Tenants\Tables;
 
-use Bltdreeg\Core\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -30,6 +31,11 @@ class TenantsTable
                     ->limit(40),
                 TextColumn::make('currency')
                     ->formatStateUsing(fn (CurrencyEnum $state): string => $state->name),
+                TextColumn::make('status')
+                    ->label(__('core::onboarding.admin.status'))
+                    ->badge()
+                    ->formatStateUsing(fn (TenantStatusEnum $state): string => $state->label())
+                    ->color(fn (TenantStatusEnum $state): string => $state->color()),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')

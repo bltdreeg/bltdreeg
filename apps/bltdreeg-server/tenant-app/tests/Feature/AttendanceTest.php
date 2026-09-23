@@ -2,13 +2,13 @@
 
 use App\Modules\V1\Hr\Exceptions\AttendanceException;
 use App\Modules\V1\Hr\Services\AttendanceService;
-use Bltdreeg\Core\Enums\AttendenceStatusEnum;
-use Bltdreeg\Core\Models\Branch;
-use Bltdreeg\Core\Models\EmployeeAttendance;
-use Bltdreeg\Core\Models\Shift;
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Models\User;
-use Bltdreeg\Core\Support\TenantContext;
+use Bltdreeg\Core\Modules\Hr\Enums\AttendenceStatusEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
+use Bltdreeg\Core\Modules\Hr\Models\EmployeeAttendance;
+use Bltdreeg\Core\Modules\Hr\Models\Shift;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 
@@ -265,6 +265,7 @@ test('the same employee can check in for different tenants on the same day', fun
     $recordA = app(AttendanceService::class)->checkIn($user, Carbon::createFromTime(9, 0));
 
     $user->forceFill(['branch_id' => $branchB->id])->save();
+    $user->unsetRelation('branch');
 
     app(TenantContext::class)->set($tenantB);
     $recordB = app(AttendanceService::class)->checkIn($user, Carbon::createFromTime(10, 0));

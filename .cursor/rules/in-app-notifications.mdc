@@ -1,0 +1,25 @@
+---
+description: Queue updates notify the customer in the app only. No WhatsApp or SMS.
+globs:
+  - "**/Modules/V1/Notifications/**"
+  - "**/Modules/V1/Queue/**"
+  - "**/Modules/V1/Visits/**"
+  - "**/*Notification*"
+  - "**/*Push*"
+alwaysApply: false
+---
+
+# In-app notifications
+
+Any event that changes a customer's **turn** must push an **in-app** notification: delay, chair disable, reorder, people-ahead change, expected wait change.
+
+```php
+// ❌ BAD
+WhatsApp::send($customer->phone, $body);
+Sms::send($customer->phone, $body);
+
+// ✅ GOOD
+CustomerPush::queueTurnChanged($visit, $change);
+```
+
+Do not add WhatsApp, SMS, or email as the channel for turn updates. The ticket (number, people ahead, expected wait) lives in the app.

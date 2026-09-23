@@ -3,14 +3,13 @@
 use App\Modules\V1\Users\Filament\Resources\Users\Pages\CreateUser;
 use App\Modules\V1\Users\Filament\Resources\Users\Pages\EditUser;
 use App\Modules\V1\Users\Filament\Resources\Users\UserResource;
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Models\User;
-use Bltdreeg\Core\Support\TenantProvisioner;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantProvisioner;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Spatie\Permission\PermissionRegistrar;
 
 uses(RefreshDatabase::class);
 
@@ -118,14 +117,13 @@ test('a super admin cannot delete themselves', function () {
     expect(UserResource::canDelete($superAdmin))->toBeFalse();
 });
 
-test('granting central access assigns the tenant super admin role', function () {
+test('granting central access does not assign a tenant owner role', function () {
     $tenant = Tenant::factory()->create();
     $user = User::factory()->create(['is_super_admin' => false]);
 
     $user->forceFill(['is_super_admin' => true])->save();
     app(TenantProvisioner::class)->syncSuperAdminAccess($user);
 
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    expect($user->fresh()->hasRole(config('filament-shield.super_admin.name')))->toBeTrue();
+    expect($user->fresh()->hasRole(config('filament-shield.super_admin.name')))->toBeFalse()
+        ->and($user->roles()->count())->toBe(0);
 });

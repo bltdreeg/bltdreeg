@@ -1,8 +1,8 @@
 <?php
 
-use BezhanSalleh\FilamentShield\Resources\Roles\RoleResource;
-use Bltdreeg\Core\Models\Role;
-use Bltdreeg\Core\Models\Tenant;
+use App\Modules\V1\Roles\Filament\Resources\Roles\RoleResource;
+use Bltdreeg\Core\Modules\Auth\Models\Role;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Facades\Filament;
 use Illuminate\Contracts\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

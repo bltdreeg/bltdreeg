@@ -1,7 +1,7 @@
 <?php
 
-use Bltdreeg\Core\Models\Permission;
-use Bltdreeg\Core\Models\Role;
+use Bltdreeg\Core\Modules\Auth\Models\Permission;
+use Bltdreeg\Core\Modules\Auth\Models\Role;
 
 return [
 
@@ -147,7 +147,7 @@ return [
      * (view the latest version of this package's migration file)
      */
 
-    'teams' => true,
+    'teams' => false,
 
     /*
      * The class to use to resolve the permissions team id

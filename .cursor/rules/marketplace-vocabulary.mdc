@@ -1,0 +1,25 @@
+---
+description: Canonical marketplace words. Use these names in code, APIs, UI copy, and tests.
+alwaysApply: true
+---
+
+# Marketplace vocabulary
+
+| Use this | Means | Do not call it |
+|---|---|---|
+| **Customer** | Person on the consumer app | user, client, guest |
+| **Barber** | Salon-owned floor profile on a chair | employee-as-portable-identity, craftsman |
+| **Salon** | Tenant we contract with | shop-as-barber, vendor |
+| **Cashier** | Opens shop, chairs, walk-ins, prices | admin (unless central landlord) |
+| **Queue** | Ordered waiting visits | booking calendar, appointment slot |
+| **Chair** | Physical station | seat, station (in APIs use `chair`) |
+| **Open shop** | Cashier action that allows queue joins | "online", "active tenant" |
+| **Disable chair** | Emergency stop; redistribute by arrival | delete queue, cancel all |
+| **Walk-in price** | What a foot customer pays | list price, MSRP |
+| **Offer** | Salon-funded discount for app-acquired visits | coupon, promo code |
+| **App-acquired** | Platform brought this customer | booked, registered |
+| **Walk-in** | Arrived without the app | offline, cash customer |
+| **Customer saving** | Half of the offer gap | discount (ambiguous) |
+| **Platform fee** | Other half; ledger on the salon | payment, commission-at-till |
+| **Rotating reception QR** | Customer scans on their phone | staff QR, static poster QR |
+| **Salon ranking** | Public order in the app; scans lift it | SEO score |

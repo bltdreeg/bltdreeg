@@ -3,7 +3,7 @@
 namespace App\Modules\V1\Users\Filament\Resources\Users\Pages;
 
 use App\Modules\V1\Users\Filament\Resources\Users\UserResource;
-use Bltdreeg\Core\Support\TenantProvisioner;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantProvisioner;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;

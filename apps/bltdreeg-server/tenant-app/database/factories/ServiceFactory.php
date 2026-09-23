@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Bltdreeg\Core\Models\Service;
-use Bltdreeg\Core\Models\ServiceCategory;
-use Bltdreeg\Core\Models\Tenant;
+use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

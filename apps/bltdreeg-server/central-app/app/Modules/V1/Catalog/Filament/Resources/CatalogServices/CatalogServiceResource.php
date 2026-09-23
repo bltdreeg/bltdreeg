@@ -6,8 +6,8 @@ use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\Pages\CreateCatalo
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\Pages\EditCatalogService;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\Pages\ListCatalogServices;
 use BackedEnum;
-use Bltdreeg\Core\Models\CatalogService;
-use Bltdreeg\Core\Models\CatalogServiceCategory;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogServiceCategory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -21,7 +21,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class CatalogServiceResource extends Resource
@@ -39,11 +38,6 @@ class CatalogServiceResource extends Resource
     protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScissors;
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
-    }
 
     public static function form(Schema $schema): Schema
     {

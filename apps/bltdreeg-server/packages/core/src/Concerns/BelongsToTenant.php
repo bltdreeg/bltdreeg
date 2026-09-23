@@ -2,8 +2,8 @@
 
 namespace Bltdreeg\Core\Concerns;
 
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Support\TenantContext;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

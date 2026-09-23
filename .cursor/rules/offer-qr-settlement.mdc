@@ -1,0 +1,45 @@
+---
+description: Offers, QR visit proof, walk-ins, cash collection, and monthly platform fees.
+globs:
+  - "**/Modules/V1/Services/**"
+  - "**/Modules/V1/Offers/**"
+  - "**/Modules/V1/Billing/**"
+  - "**/Modules/V1/Settlement/**"
+  - "**/Modules/V1/Visits/**"
+  - "**/Modules/V1/Ranking/**"
+  - "**/*Offer*"
+  - "**/*Qr*"
+  - "**/*Settlement*"
+  - "**/*Ranking*"
+alwaysApply: false
+---
+
+# Offer, QR, settlement
+
+Services and packages have **price** and **duration**. Duration drives the queue; price drives the offer.
+
+## Split (canonical example)
+
+Walk-in package **250**. Salon funds **20%** for the app → gap **50**, split 50/50.
+
+- Walk-in pays **250**, platform fee **0**
+- App-acquired **after customer QR scan** pays **225**, platform fee **25** (ledger, not taken from the drawer)
+
+## Visit paths
+
+| Path | Check-in | Customer QR scan | Pays | Platform fee |
+|---|---|---|---|---|
+| App-acquired | Already in queue/system | Required | 225 | 25 |
+| Walk-in | Cashier enters them | None | 250 | 0 |
+
+No scan ⇒ no discount. The customer demands the scan to get the saving. Reception has no reason to hide walk-ins: recording them costs nothing and keeps the **queue complete**.
+
+## Money
+
+Customer pays **cash to the salon**. Accumulate platform fees. One **monthly settlement** (wallet, InstaPay, or transfer).
+
+QR is **rotating**, on the reception screen, scanned by the **customer device**. That scan is independent visit proof for settlement.
+
+## Ranking
+
+Public salon rating orders the app list. **QR scan count** lifts rank so the salon pushes the app itself.

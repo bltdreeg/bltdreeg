@@ -6,9 +6,10 @@ use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\CreateBranch;
 use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\EditBranch;
 use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\ListBranches;
 use BackedEnum;
-use Bltdreeg\Core\Models\Branch;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -17,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class BranchResource extends Resource
@@ -30,6 +32,21 @@ class BranchResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
 
     protected static bool $isScopedToTenant = false;
+
+    public static function getEloquentQuery(): Builder
+    {
+        $tenantId = Filament::getTenant()?->getKey();
+
+        return parent::getEloquentQuery()
+            ->withoutGlobalScope('branch')
+            ->when(
+                $tenantId !== null,
+                fn (Builder $query): Builder => $query->where(
+                    $query->getModel()->qualifyColumn('tenant_id'),
+                    $tenantId,
+                ),
+            );
+    }
 
     public static function getNavigationGroup(): string
     {

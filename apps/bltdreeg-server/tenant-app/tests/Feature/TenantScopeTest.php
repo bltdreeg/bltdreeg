@@ -1,9 +1,9 @@
 <?php
 
-use Bltdreeg\Core\Models\Service;
-use Bltdreeg\Core\Models\ServiceCategory;
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Support\TenantContext;
+use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

@@ -2,7 +2,7 @@
 
 namespace App\Modules\V1\Users\Filament\Resources\Users\Tables;
 
-use Bltdreeg\Core\Enums\SalaryTypeEnum;
+use Bltdreeg\Core\Modules\Hr\Enums\SalaryTypeEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;

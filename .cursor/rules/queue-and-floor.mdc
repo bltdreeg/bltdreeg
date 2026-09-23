@@ -1,0 +1,47 @@
+---
+description: Live queue, chairs, open shop, roster, wait estimates, and chair disable.
+globs:
+  - "**/Modules/V1/Queue/**"
+  - "**/Modules/V1/Chairs/**"
+  - "**/Modules/V1/Floor/**"
+  - "**/Modules/V1/Roster/**"
+  - "**/Modules/V1/Visits/**"
+  - "**/*Queue*"
+  - "**/*Chair*"
+  - "**/*Roster*"
+alwaysApply: false
+---
+
+# Queue and floor
+
+The floor is a **live queue**, not a calendar.
+
+## Open shop
+
+- Cashier opens from the dashboard (phone, tablet, computer).
+- Opening sets hours, holidays, who is present today, and which **chair**.
+- Until opened: salon shows **closed** and **must reject queue joins**.
+
+```php
+// ❌ BAD — tenant exists and is active, so allow joins
+if ($salon->is_active) {
+    $queue->join($customer);
+}
+
+// ✅ GOOD — floor must be opened for this day
+if (! $salon->isOpenedFor(now())) {
+    throw new ShopClosed;
+}
+```
+
+## Wait time
+
+Expected wait is computed from **service/package duration minutes** on the queue ahead. Do not hard-code wait.
+
+## Disable chair
+
+One tap. Waiting visits on that chair **keep arrival order** across remaining chairs. They do not go to the back.
+
+Before confirm, show **impact preview**: how many customers move, how much wait increases.
+
+Then notify each affected customer **in-app**.

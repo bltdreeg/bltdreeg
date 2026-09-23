@@ -7,7 +7,7 @@ use App\Modules\V1\Hr\Filament\Resources\Attendance\EmployeeAttendanceResource;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets\AttendanceOverview;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets\PendingCheckInTable;
 use App\Modules\V1\Hr\Services\AttendanceService;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Facades\Filament;

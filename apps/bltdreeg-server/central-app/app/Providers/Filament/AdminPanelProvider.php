@@ -6,10 +6,10 @@ use App\Modules\V1\Branches\Filament\Resources\Branches\BranchResource;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\CatalogServiceCategoryResource;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\CatalogServiceResource;
 use App\Modules\V1\Catalog\Filament\Resources\JobTypes\JobTypeResource;
+use App\Modules\V1\Catalog\Filament\Resources\RoleTemplates\RoleTemplateResource;
+use App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\OnboardingSubmissionResource;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\TenantResource;
 use App\Modules\V1\Users\Filament\Resources\Users\UserResource;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -107,11 +107,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
             ->resources([
+                OnboardingSubmissionResource::class,
                 TenantResource::class,
                 UserResource::class,
                 CatalogServiceCategoryResource::class,
                 CatalogServiceResource::class,
                 JobTypeResource::class,
+                RoleTemplateResource::class,
                 BranchResource::class,
             ])
             ->pages([
@@ -131,12 +133,6 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugins([
-                FilamentShieldPlugin::make()->centralApp()->globallySearchable(false),
-            ])
-            ->tenantMiddleware([
-                SyncShieldTenant::class,
-            ], isPersistent: true)
             ->authMiddleware([
                 Authenticate::class,
             ])

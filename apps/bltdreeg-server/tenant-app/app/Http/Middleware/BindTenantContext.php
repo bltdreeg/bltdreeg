@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Bltdreeg\Core\Support\BranchContext;
-use Bltdreeg\Core\Support\TenantContext;
+use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
+use Bltdreeg\Core\Modules\Tenancy\Support\BranchSelection;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
-use Spatie\Permission\PermissionRegistrar;
 use Symfony\Component\HttpFoundation\Response;
 
 class BindTenantContext
@@ -20,12 +21,17 @@ class BindTenantContext
 
         if ($tenant) {
             app(TenantContext::class)->set($tenant);
-            app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
 
-            $branch = Filament::auth()->user()?->branch;
+            /** @var User|null $user */
+            $user = Filament::auth()->user();
 
-            if ($branch && $branch->tenant_id === $tenant->getKey()) {
-                app(BranchContext::class)->set($branch);
+            if ($user) {
+                $branch = app(BranchSelection::class)->resolve($user, $tenant)
+                    ?? app(BranchSelection::class)->autoSelectIfOnlyOne($user, $tenant);
+
+                if ($branch) {
+                    app(BranchContext::class)->set($branch);
+                }
             }
         }
 

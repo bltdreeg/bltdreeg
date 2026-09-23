@@ -1,7 +1,7 @@
 <?php
 
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Panel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -1,0 +1,72 @@
+---
+description: Every app Modules/V1 domain must own a ServiceProvider registered in bootstrap/providers.php — never dump module bindings/policies into AppServiceProvider.
+alwaysApply: true
+---
+
+# Module service providers (bltdreeg-server)
+
+## Rule
+
+Each domain under `app/Modules/V1/{Name}/` **must** have `{Name}ServiceProvider` that owns that module’s registrations. Register every module provider in that app’s `bootstrap/providers.php`.
+
+**Do not** put module-specific `Gate::policy`, container bindings, observers, route loads, or Filament response bindings in `App\Providers\AppServiceProvider`.
+
+`AppServiceProvider` stays for **app-wide** concerns only (e.g. `Gate::before` super-admin, LanguageSwitch, global PermissionRegistrar wiring).
+
+## Pattern (ATS-style)
+
+```
+app/Modules/V1/{Name}/
+  {Name}ServiceProvider.php
+  Filament/…
+  Policies/…
+  …
+```
+
+```php
+// bootstrap/providers.php
+return [
+    AppServiceProvider::class,
+    AppPanelProvider::class, // or AdminPanelProvider
+    \App\Modules\V1\Auth\AuthServiceProvider::class,
+    \App\Modules\V1\Hr\HrServiceProvider::class,
+    // …every V1 module
+];
+```
+
+```php
+namespace App\Modules\V1\Hr;
+
+class HrServiceProvider extends ServiceProvider
+{
+    public function register(): void { /* bindings */ }
+
+    public function boot(): void
+    {
+        Gate::policy(JobType::class, JobTypePolicy::class);
+        // …
+    }
+}
+```
+
+## Applies to
+
+- `tenant-app`
+- `central-app`
+
+Shared package policies/observers may stay in `Bltdreeg\Core\Providers\CoreServiceProvider` when they belong to `packages/core`, not to one app module.
+
+### Private file downloads (central-app)
+
+Do **not** add one-off controllers per document type. Instead:
+
+1. Implement `Bltdreeg\Core\Contracts\PrivateStoredFile` on the model
+2. Register it in the owning module provider: `PrivateFileRegistry::register($type, Model::class)`
+3. Link with `PrivateFileController::temporaryUrl($model)` (signed route `private-files.show`)
+
+## When adding a new module
+
+1. Create `app/Modules/V1/{Name}/{Name}ServiceProvider.php`
+2. Move that module’s policies/bindings into it
+3. Append the provider class to `bootstrap/providers.php`
+4. Do **not** grow `AppServiceProvider` with module code

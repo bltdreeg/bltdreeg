@@ -1,0 +1,32 @@
+---
+description: Barber profiles belong to the salon. Ratings are not portable.
+globs:
+  - "**/Modules/V1/Hr/**"
+  - "**/Employees/**"
+  - "**/*Barber*"
+  - "**/*Rating*"
+alwaysApply: false
+---
+
+# Barber identity
+
+The **salon owner** creates and manages barber profiles. A barber is assigned to a **chair**. Each profile has its own customer rating (Uber-driver style).
+
+## Rule
+
+Barbers move. The salon does not. A barber who joins another salon gets a **new profile and a zero rating**.
+
+```php
+// ❌ BAD — rating follows the person
+$barber = User::find($id);
+$rating = $barber->lifetimeRating();
+
+// ✅ GOOD — rating belongs to this salon's profile
+$profile = BarberProfile::query()
+    ->where('tenant_id', $salon->id)
+    ->whereKey($profileId)
+    ->firstOrFail();
+$rating = $profile->rating;
+```
+
+HR `Employee` / `User` is a **login** for the tenant app. It is not a portable marketplace identity. Do not copy ratings, reviews, or ranking when attaching someone to a new tenant.

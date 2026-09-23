@@ -2,8 +2,8 @@
 
 namespace Bltdreeg\Core\Concerns;
 
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Models\UserTenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\UserTenant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
