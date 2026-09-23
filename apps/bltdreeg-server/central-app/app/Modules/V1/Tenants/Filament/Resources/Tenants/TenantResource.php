@@ -14,12 +14,11 @@ use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\UsersRela
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Schemas\TenantForm;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Tables\TenantsTable;
 use BackedEnum;
-use Bltdreeg\Core\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 
 class TenantResource extends Resource
 {
@@ -47,11 +46,6 @@ class TenantResource extends Resource
     public static function getPluralLabel(): string
     {
         return __('core::tenants.tenants');
-    }
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
     }
 
     public static function form(Schema $schema): Schema

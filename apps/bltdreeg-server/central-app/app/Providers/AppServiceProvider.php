@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use BezhanSalleh\LanguageSwitch\Enums\TriggerStyle;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
-use Bltdreeg\Core\Models\Permission;
-use Bltdreeg\Core\Models\Role;
+use Bltdreeg\Core\Modules\Auth\Models\Permission;
+use Bltdreeg\Core\Modules\Auth\Models\Role;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\PermissionRegistrar;

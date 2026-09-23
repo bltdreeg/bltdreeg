@@ -8,7 +8,7 @@ use App\Modules\V1\Users\Filament\Resources\Users\Pages\ListUsers;
 use App\Modules\V1\Users\Filament\Resources\Users\Schemas\UserForm;
 use App\Modules\V1\Users\Filament\Resources\Users\Tables\UsersTable;
 use BackedEnum;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -44,11 +44,6 @@ class UserResource extends Resource
     public static function getPluralLabel(): string
     {
         return __('core::users.users');
-    }
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
     }
 
     public static function canCreate(): bool

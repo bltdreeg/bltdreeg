@@ -25,4 +25,7 @@ export const METADATA_LOGIN = page("تسجيل الدخول", "ادخل على �
 export const METADATA_REGISTER = page("إنشاء حساب", "اعمل حساب جديد واحجز في دقيقة");
 export const METADATA_VERIFY_OTP = page("كود التأكيد", "أدخل الكود اللي وصلك على موبايلك");
 export const METADATA_FORGOT_PASSWORD = page("نسيت كلمة السر", "هنبعتلك رابط لإعادة تعيين كلمة السر");
+export const METADATA_TERMS = page("شروط الخدمة", "الشروط اللي بتنظم استخدام منصة بالتدريج");
+export const METADATA_PRIVACY = page("سياسة الخصوصية", "إزاي بنجمع بياناتك ونستخدمها ونحميها");
+export const METADATA_REFUND_POLICY = page("سياسة الإلغاء والاسترداد", "إزاي تلغي ميعادك وإمتى تسترد فلوسك");
 export const METADATA_OFFLINE = page("النت فاصل", "مش قادرين نوصل للسيرفر — اطمن دورك متسجّل");

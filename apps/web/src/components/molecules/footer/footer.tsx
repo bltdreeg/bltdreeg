@@ -3,9 +3,14 @@ import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { APP_NAME } from "@/lib/data/constants/app.constants";
 import {
+  EXTERNAL_SALON_LOGIN,
+  EXTERNAL_SALON_REGISTER,
   ROUTE_BOOKINGS,
   ROUTE_HOME,
+  ROUTE_PRIVACY,
+  ROUTE_REFUND_POLICY,
   ROUTE_SEARCH,
+  ROUTE_TERMS,
 } from "@/lib/data/constants/routes.constants";
 
 const COLUMNS = [
@@ -28,17 +33,17 @@ const COLUMNS = [
   {
     title: "الشروط والخصوصية",
     links: [
-      { label: "شروط الاستخدام", href: ROUTE_HOME },
-      { label: "سياسة الخصوصية", href: ROUTE_HOME },
-      { label: "سياسة الإلغاء", href: ROUTE_HOME },
+      { label: "شروط الاستخدام", href: ROUTE_TERMS },
+      { label: "سياسة الخصوصية", href: ROUTE_PRIVACY },
+      { label: "سياسة الإلغاء", href: ROUTE_REFUND_POLICY },
     ],
   },
   {
     title: "للصالونات",
     links: [
-      { label: "ضيف صالونك", href: ROUTE_HOME },
+      { label: "ضيف صالونك", href: EXTERNAL_SALON_REGISTER },
       { label: "الأسعار", href: ROUTE_SEARCH },
-      { label: "تسجيل دخول الصالون", href: ROUTE_HOME },
+      { label: "تسجيل دخول الصالون", href: EXTERNAL_SALON_LOGIN },
     ],
   },
 ] as const;
@@ -59,15 +64,25 @@ function Footer() {
             {COLUMNS.map((col) => (
               <div key={col.title} className="flex flex-col gap-3">
                 <span className="text-[13px] font-bold text-background">{col.title}</span>
-                {col.links.map((l) => (
-                  <Link
-                    key={l.label}
-                    href={l.href}
-                    className="text-[13px] text-disabled-fg transition-colors hover:text-background"
-                  >
-                    {l.label}
-                  </Link>
-                ))}
+                {col.links.map((l) =>
+                  l.href.startsWith("http") ? (
+                    <a
+                      key={l.label}
+                      href={l.href}
+                      className="text-[13px] text-disabled-fg transition-colors hover:text-background"
+                    >
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={l.label}
+                      href={l.href}
+                      className="text-[13px] text-disabled-fg transition-colors hover:text-background"
+                    >
+                      {l.label}
+                    </Link>
+                  ),
+                )}
               </div>
             ))}
           </div>

@@ -2,7 +2,7 @@
 
 namespace Bltdreeg\Core\Concerns;
 
-use Bltdreeg\Core\Support\BranchContext;
+use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 

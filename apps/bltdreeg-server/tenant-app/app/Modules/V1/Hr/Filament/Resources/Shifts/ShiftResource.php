@@ -6,7 +6,7 @@ use App\Modules\V1\Hr\Filament\Resources\Shifts\Pages\CreateShift;
 use App\Modules\V1\Hr\Filament\Resources\Shifts\Pages\EditShift;
 use App\Modules\V1\Hr\Filament\Resources\Shifts\Pages\ListShifts;
 use BackedEnum;
-use Bltdreeg\Core\Models\Shift;
+use Bltdreeg\Core\Modules\Hr\Models\Shift;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;

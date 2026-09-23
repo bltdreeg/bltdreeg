@@ -1,6 +1,6 @@
 <?php
 
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 
 return [
 

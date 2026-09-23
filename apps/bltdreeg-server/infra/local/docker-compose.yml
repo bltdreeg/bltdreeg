@@ -21,7 +21,7 @@ x-app: &app
     APP_LOCALE: ar
     APP_DEBUG: "true"
     OCTANE_SERVER: frankenphp
-    AUTH_MODEL: Bltdreeg\Core\Models\User
+    AUTH_MODEL: Bltdreeg\Core\Modules\Auth\Models\User
     DB_CONNECTION: mysql
     DB_HOST: mysql
     DB_PORT: "3306"
@@ -66,11 +66,11 @@ services:
     <<: *app
     working_dir: /workspace/tenant-app
     ports:
-      - "8000:8000"
+      - "8010:8000"
     environment:
       <<: *app-env
       APP_NAME: "Bltdreeg Tenant"
-      APP_URL: http://localhost:8000
+      APP_URL: http://localhost:8010
     volumes:
       - ../..:/workspace
       - tenant-vendor:/workspace/tenant-app/vendor

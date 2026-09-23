@@ -7,7 +7,6 @@ use Filament\Actions\DeleteAction;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\PermissionRegistrar;
 
 class EditEmployee extends EditRecord
 {
@@ -43,7 +42,6 @@ class EditEmployee extends EditRecord
         $record->update($data);
         $record->tenants()->updateExistingPivot($tenant->getKey(), ['job_type_id' => $jobTypeId, 'shift_id' => $shiftId]);
 
-        app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
         $record->syncRoles($roleIds);
         $record->services()->sync($serviceIds);
 

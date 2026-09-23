@@ -28,6 +28,9 @@ class RolesRelationManager extends RelationManager
                 IconColumn::make('is_system')
                     ->boolean(),
                 TextColumn::make('guard_name'),
+                TextColumn::make('sourceTemplate.name')
+                    ->label('Template')
+                    ->placeholder('—'),
             ]);
     }
 }

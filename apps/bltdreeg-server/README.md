@@ -34,20 +34,33 @@ Both apps include `laravel/octane` (`config/octane.php`). `TenantContext` is flu
 
 ## Setup
 
-From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6382** (Redis), **8000** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
+From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6382** (Redis), **8010** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
 
 ```bash
-make up          # build and start everything
-make migrate     # shared DB, from tenant-app
+make start         # build frontend assets, start stack, migrate (same as make up)
+make assets        # npm install + vite build for central-app and tenant-app
+make tenant-assets # rebuild tenant-app Vite theme/CSS and reload Octane
+make migrate       # run pending migrations
+make migrate-fresh # drop all tables and re-run migrations
 make seed
 ```
 
-`make` is the same as `make up`. Without Make: `docker compose -f infra/local/docker-compose.yml up -d --build`, then `docker compose -f infra/local/docker-compose.yml exec -T tenant-app php artisan migrate --force` and `db:seed --force`.
+`make` / `make start` / `make up` are the same. After editing `tenant-app/resources/css/filament/app/theme.css`, run `make tenant-assets` so the new hashed CSS is built and Octane picks it up. Without Make: build assets with `npm --prefix central-app install && npm --prefix central-app run build` (and the same for `tenant-app`), then `docker compose -f infra/local/docker-compose.yml up -d --build --wait`, then `docker compose -f infra/local/docker-compose.yml exec -T tenant-app php artisan migrate --force` and `db:seed --force`.
+
+## Module layout
+
+Domain code follows ATS-style modules:
+
+- **`packages/core/src/Modules/{Tenancy,Auth,Catalog,Services,Hr,Onboarding}/`** — shared models, enums, policies, support (`Bltdreeg\Core\Modules\…`). Cross-cutting traits stay in `Concerns/`; `CoreServiceProvider` stays in `Providers/`.
+- **`{central,tenant}-app/app/Modules/V1/{Domain}/`** — Filament UI (and tenant Livewire) per domain.
+- **Each V1 module owns `{Domain}ServiceProvider`**, registered in that app’s `bootstrap/providers.php`. Module policies/bindings live there — not in `AppServiceProvider`.
+
+See `docs/superpowers/plans/2026-09-23-modular-structure.md`, `.cursor/rules/module-service-providers.mdc`, and `.cursor/skills/bltdreeg-module-service-providers/SKILL.md`.
 
 | App | URL | Login |
 |-----|-----|-------|
 | Landlord | http://localhost:8011/login | `super@admin.dev` / `password` |
-| Bloom salon | http://localhost:8000/bloom | `owner@bloom.dev` / `password` |
-| Petal studio | http://localhost:8000/petal | `owner@petal.dev` / `password` |
+| Bloom salon | http://localhost:8010/bloom | `owner@bloom.dev` / `password` |
+| Petal studio | http://localhost:8010/petal | `owner@petal.dev` / `password` |
 
 `apps/backend` is unchanged. This tree is the simpler split of that domain.

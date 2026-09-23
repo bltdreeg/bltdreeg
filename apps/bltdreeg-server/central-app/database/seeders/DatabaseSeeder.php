@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Bltdreeg\Core\Support\DemoData;
+use Bltdreeg\Core\Modules\Tenancy\Support\DemoData;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

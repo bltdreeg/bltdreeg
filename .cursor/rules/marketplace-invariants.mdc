@@ -1,0 +1,30 @@
+---
+description: Barbershop marketplace invariants. Enforce for queue, chairs, visits, offers, QR, settlement, ratings, or notifications.
+alwaysApply: true
+---
+
+# Marketplace invariants
+
+This product is a **live queue marketplace**. The contracted account is the **salon** (`Tenant`), not the barber.
+
+## Never violate
+
+1. Closed shop ⇒ not joinable.
+2. Queue order is **arrival order**, including after chair disable.
+3. Barber identity and rating are **per salon**, not portable.
+4. **Duration in minutes** is first-class; wait time is derived from it.
+5. The customer **never pays the platform**. Cash at the chair only.
+6. Discount and commission exist only after a **customer-device QR scan**.
+7. Walk-in check-in is **free and commission-free**.
+8. Settlement uses scan records the salon dashboard **cannot rewrite alone**.
+
+## Forbidden
+
+- WhatsApp / SMS as the notification channel
+- Ratings that follow a barber across salons
+- In-app, card, or wallet payment by the customer
+- Reception scanning the QR for the customer
+- Commission on walk-ins
+- Sending customers to a shop that is not opened
+
+When implementing or reviewing these domains, use the `applying-marketplace-logic` skill.

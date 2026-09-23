@@ -3,12 +3,11 @@
 namespace App\Modules\V1\Hr\Filament\Resources\Employees\Pages;
 
 use App\Modules\V1\Hr\Filament\Resources\Employees\EmployeeResource;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\ValidationException;
-use Spatie\Permission\PermissionRegistrar;
 
 class CreateEmployee extends CreateRecord
 {
@@ -45,7 +44,6 @@ class CreateEmployee extends CreateRecord
             $user->tenants()->attach($tenant->getKey(), ['job_type_id' => $jobTypeId, 'shift_id' => $shiftId]);
         }
 
-        app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
         $user->syncRoles($roleIds);
         $user->services()->sync($serviceIds);
 

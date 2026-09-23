@@ -4,7 +4,7 @@ namespace App\Modules\V1\Hr\Filament\Resources\Attendance\Pages;
 
 use App\Modules\V1\Hr\Filament\Resources\Attendance\EmployeeAttendanceResource;
 use App\Modules\V1\Hr\Services\AttendanceService;
-use Bltdreeg\Core\Models\EmployeeAttendance;
+use Bltdreeg\Core\Modules\Hr\Models\EmployeeAttendance;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;

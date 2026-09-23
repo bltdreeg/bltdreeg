@@ -2,11 +2,18 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Auth\Pages\Login;
+use App\Modules\V1\Auth\Filament\Pages\Login;
+use App\Modules\V1\Auth\Filament\Pages\Register;
+use App\Modules\V1\Onboarding\Filament\Pages\Onboarding;
+use App\Modules\V1\Onboarding\Filament\Pages\OnboardingStatus;
+use App\Modules\V1\Branches\Filament\Pages\SelectBranch;
+use App\Modules\V1\Roles\Filament\Resources\Roles\RoleResource;
 use App\Http\Middleware\BindTenantContext;
+use App\Http\Middleware\EnsureBranchSelected;
+use App\Http\Middleware\EnsureOnboardingComplete;
+use App\Modules\V1\Branches\Livewire\BranchSwitcher;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use BezhanSalleh\FilamentShield\Middleware\SyncShieldTenant;
-use Bltdreeg\Core\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -14,6 +21,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -34,6 +42,7 @@ class AppPanelProvider extends PanelProvider
             ->path('')
             ->viteTheme('resources/css/filament/app/theme.css')
             ->login(Login::class)
+            ->registration(Register::class)
             ->font('Cairo')
             ->darkMode(false)
             ->colors([
@@ -104,17 +113,21 @@ class AppPanelProvider extends PanelProvider
                 ],
             ])
             ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(['ar', 'en']))
+            ->resources([
+                RoleResource::class,
+            ])
             ->plugins([
                 FilamentShieldPlugin::make()
-                    ->globallySearchable(false)
-                    ->tenantRelationshipName('roles')
-                    ->tenantOwnershipRelationshipName('team'),
+                    ->globallySearchable(false),
             ])
             ->tenant(Tenant::class, ownershipRelationship: 'tenants', slugAttribute: 'slug')
             ->discoverResources(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')
             ->discoverPages(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')
             ->pages([
                 Dashboard::class,
+                SelectBranch::class,
+                Onboarding::class,
+                OnboardingStatus::class,
             ])
             ->discoverWidgets(in: app_path('Modules/V1'), for: 'App\\Modules\\V1')
             ->widgets([
@@ -133,12 +146,17 @@ class AppPanelProvider extends PanelProvider
                 DispatchServingFilamentEvent::class,
             ])
             ->tenantMiddleware([
-                SyncShieldTenant::class,
                 BindTenantContext::class,
+                EnsureOnboardingComplete::class,
+                EnsureBranchSelected::class,
             ], isPersistent: true)
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_START,
+                fn (): string => \Livewire\Livewire::mount(BranchSwitcher::class),
+            )
             ->maxContentWidth('full');
     }
 }

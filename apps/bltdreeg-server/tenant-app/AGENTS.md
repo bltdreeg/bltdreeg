@@ -31,6 +31,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 - Stick to existing directory structure; don't create new base folders without approval.
 - Do not change the application's dependencies without approval.
+- **Modules:** every `app/Modules/V1/{Name}` domain must define `{Name}ServiceProvider` and be listed in `bootstrap/providers.php`. Put module policies/bindings in that provider — never in `AppServiceProvider`. Follow `.cursor/rules/module-service-providers.mdc` and the `bltdreeg-module-service-providers` skill.
 
 ## Frontend Bundling
 

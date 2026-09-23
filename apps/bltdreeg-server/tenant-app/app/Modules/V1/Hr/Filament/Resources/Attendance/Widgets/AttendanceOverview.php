@@ -3,7 +3,7 @@
 namespace App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets;
 
 use App\Modules\V1\Hr\Services\AttendanceService;
-use Bltdreeg\Core\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Facades\Filament;
 use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;

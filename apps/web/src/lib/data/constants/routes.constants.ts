@@ -28,3 +28,12 @@ export const ROUTE_ACCOUNT_HELP = `${ROUTE_ACCOUNT}/help`;
 export const ROUTE_BOOKING_CONFIRMATION = (salonId: string, bookingId: string) =>
   `${ROUTE_BOOK_ROOT}/${salonId}/confirmation/${bookingId}`;
 export const ROUTE_OFFLINE = "/offline";
+
+export const ROUTE_TERMS = "/terms";
+export const ROUTE_PRIVACY = "/privacy";
+export const ROUTE_REFUND_POLICY = "/refund-policy";
+
+// لوحة الصالونات تطبيق منفصل (tenant-app) على دومين تاني — روابط خارجية مش مسارات next-intl
+export const SALON_PANEL_URL = (process.env.NEXT_PUBLIC_SALON_PANEL_URL ?? "http://localhost:8010").replace(/\/$/, "");
+export const EXTERNAL_SALON_REGISTER = `${SALON_PANEL_URL}/register`;
+export const EXTERNAL_SALON_LOGIN = `${SALON_PANEL_URL}/login`;

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;

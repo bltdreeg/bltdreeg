@@ -1,0 +1,132 @@
+<?php
+
+return [
+    'register' => [
+        'title' => 'سجّل صالونك',
+        'heading' => 'أنشئ حساب صالونك',
+        'salon_name' => 'اسم الصالون',
+        'slug' => 'عنوان لوحة التحكم',
+        'slug_helper' => 'ستكون لوحتك على /:slug.',
+        'slug_taken' => 'هذا العنوان مستخدم بالفعل.',
+        'owner_name' => 'اسمك',
+        'phone' => 'رقم الهاتف',
+        'accept_terms' => 'أوافق على <a href=":terms" target="_blank" class="underline">شروط الخدمة</a> و<a href=":privacy" target="_blank" class="underline">سياسة الخصوصية</a>',
+        'accept_terms_required' => 'يجب الموافقة على شروط الخدمة وسياسة الخصوصية.',
+    ],
+
+    'wizard' => [
+        'title' => 'إعداد صالونك',
+        'submit' => 'إرسال للمراجعة',
+        'steps' => [
+            'business' => 'النشاط',
+            'team' => 'حجم الفريق',
+            'location_type' => 'مكان العمل',
+            'address' => 'العنوان',
+            'document' => 'الهوية',
+            'review' => 'المراجعة',
+        ],
+        'business_name' => 'اسم النشاط',
+        'website' => 'الموقع الإلكتروني',
+        'team_size' => 'كم عدد العاملين في صالونك؟',
+        'service_location_type' => 'أين تقدّم خدماتك؟',
+        'address' => 'العنوان',
+        'latitude' => 'خط العرض',
+        'longitude' => 'خط الطول',
+        'address_not_needed' => 'لا حاجة لعنوان للخدمات المتنقلة أو عبر الإنترنت.',
+        'document_type' => 'نوع المستند',
+        'document_file' => 'ملف المستند',
+        'document_helper' => 'JPG أو PNG أو PDF بحد أقصى 5 ميجابايت. لا يطّلع عليه إلا فريق المراجعة.',
+        'document_on_file' => 'لدينا مستندك السابق. ارفع ملفًا جديدًا فقط إذا أردت استبداله.',
+        'review_intro' => 'راجع إجاباتك ثم أرسلها. عادةً ما يراجع فريقنا الطلبات خلال يومي عمل.',
+        'new_document' => 'تم رفع ملف جديد',
+        'previous_document' => 'المستند السابق محفوظ',
+        'submitted' => 'تم الإرسال للمراجعة',
+        'not_available' => 'لا يمكن تعديل صالونك حاليًا.',
+    ],
+
+    'status_page' => [
+        'title' => 'مراجعة الصالون',
+        'pending_heading' => 'صالونك قيد المراجعة',
+        'pending_body' => 'شكرًا! استلمنا بياناتك (الطلب رقم :revision) وسنراسلك بالبريد فور مراجعتها.',
+        'declined_heading' => 'صالونك يحتاج إلى تعديلات',
+        'declined_body' => 'لم يتمكن المراجع من اعتماد الطلب رقم :revision للسبب التالي:',
+        'resubmit' => 'تعديل وإعادة الإرسال',
+        'browse_marketplace' => 'متابعة التصفح',
+    ],
+
+    'tenant_status' => [
+        'draft' => 'مسودة',
+        'pending_review' => 'قيد المراجعة',
+        'approved' => 'معتمد',
+        'declined' => 'مرفوض',
+    ],
+
+    'submission_status' => [
+        'pending' => 'قيد الانتظار',
+        'approved' => 'معتمد',
+        'declined' => 'مرفوض',
+    ],
+
+    'team_size' => [
+        'independent' => 'أنا فقط',
+        '2-5' => 'من 2 إلى 5',
+        '6-10' => 'من 6 إلى 10',
+        '11-20' => 'من 11 إلى 20',
+        '20+' => 'أكثر من 20',
+    ],
+
+    'service_location_type' => [
+        'physical' => 'في صالوني',
+        'mobile' => 'في موقع العميل',
+        'virtual' => 'عبر الإنترنت',
+    ],
+
+    'document_type' => [
+        'national_id' => 'بطاقة الرقم القومي',
+        'passport' => 'جواز السفر',
+        'driving_license' => 'رخصة القيادة',
+    ],
+
+    'admin' => [
+        'submissions' => 'طلبات الصالونات',
+        'submission' => 'طلب صالون',
+        'salon' => 'الصالون',
+        'revision' => 'رقم المراجعة',
+        'status' => 'الحالة',
+        'submitted_at' => 'تاريخ الإرسال',
+        'submitted_by' => 'أرسله',
+        'reviewed_by' => 'راجعه',
+        'reviewed_at' => 'تاريخ المراجعة',
+        'decline_reason' => 'سبب الرفض',
+        'answers' => 'الإجابات',
+        'comparison' => 'التغييرات منذ المراجعة رقم :revision',
+        'field' => 'الحقل',
+        'previous' => 'السابق',
+        'current' => 'الحالي',
+        'unchanged' => 'لا تغييرات',
+        'document' => 'مستند الهوية',
+        'view_document' => 'فتح المستند (ينتهي الرابط خلال 10 دقائق)',
+        'no_document' => 'لا يوجد مستند',
+        'approve' => 'اعتماد',
+        'approve_confirm' => 'الاعتماد يجعل الصالون متاحًا ويضيف الخدمات والأدوار والموظف التجريبي.',
+        'approved' => 'تم اعتماد الصالون',
+        'decline' => 'رفض',
+        'declined' => 'تم رفض الصالون',
+        'history' => 'سجل المراجعات',
+    ],
+
+    'mail' => [
+        'submitted' => [
+            'subject' => 'طلب صالون جديد: :salon',
+            'body' => 'أرسل :salon المراجعة رقم :revision للاعتماد.',
+        ],
+        'approved' => [
+            'subject' => 'تم اعتماد صالونك',
+            'body' => 'أخبار سارة — تم اعتماد :salon وأصبح متاحًا الآن.',
+        ],
+        'declined' => [
+            'subject' => 'طلب صالونك يحتاج إلى تعديلات',
+            'body' => 'لم نتمكن من اعتماد :salon بعد. السبب:',
+        ],
+    ],
+];

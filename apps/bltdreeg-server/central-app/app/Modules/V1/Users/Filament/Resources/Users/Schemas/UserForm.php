@@ -2,9 +2,9 @@
 
 namespace App\Modules\V1\Users\Filament\Resources\Users\Schemas;
 
-use Bltdreeg\Core\Enums\SalaryTypeEnum;
-use Bltdreeg\Core\Models\Branch;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Hr\Enums\SalaryTypeEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;

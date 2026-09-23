@@ -3,7 +3,8 @@
 namespace App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages;
 
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\TenantResource;
-use Bltdreeg\Core\Support\TenantProvisioner;
+use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantProvisioner;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateTenant extends CreateRecord
@@ -28,6 +29,10 @@ class CreateTenant extends CreateRecord
         ];
 
         unset($data['owner_name'], $data['owner_email'], $data['owner_password']);
+
+        // Admin-created salons skip self-serve onboarding review.
+        $data['status'] = TenantStatusEnum::APPROVED;
+        $data['onboarding_completed_at'] = now();
 
         return $data;
     }

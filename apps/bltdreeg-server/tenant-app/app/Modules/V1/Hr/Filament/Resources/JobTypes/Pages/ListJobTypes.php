@@ -4,9 +4,9 @@ namespace App\Modules\V1\Hr\Filament\Resources\JobTypes\Pages;
 
 use App\Modules\V1\Hr\Filament\Resources\JobTypes\JobTypeResource;
 use App\Support\CatalogImporter;
-use Bltdreeg\Core\Models\CatalogJobType;
-use Bltdreeg\Core\Models\JobType;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogJobType;
+use Bltdreeg\Core\Modules\Hr\Models\JobType;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Facades\Filament;

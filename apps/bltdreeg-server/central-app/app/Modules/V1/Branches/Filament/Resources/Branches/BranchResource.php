@@ -6,8 +6,8 @@ use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\CreateBranch;
 use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\EditBranch;
 use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\ListBranches;
 use BackedEnum;
-use Bltdreeg\Core\Models\Branch;
-use Bltdreeg\Core\Models\Tenant;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -21,7 +21,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class BranchResource extends Resource
@@ -55,11 +54,6 @@ class BranchResource extends Resource
     public static function getPluralLabel(): string
     {
         return __('core::branches.branches');
-    }
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
     }
 
     public static function form(Schema $schema): Schema

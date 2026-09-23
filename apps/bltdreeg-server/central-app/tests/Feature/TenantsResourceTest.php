@@ -4,17 +4,16 @@ use App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages\CreateTenant;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\Pages\EditTenant;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\RelationManagers\ServicesRelationManager;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\TenantResource;
-use Bltdreeg\Core\Enums\CurrencyEnum;
-use Bltdreeg\Core\Models\Service;
-use Bltdreeg\Core\Models\ServiceCategory;
-use Bltdreeg\Core\Models\Tenant;
-use Bltdreeg\Core\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
-use Spatie\Permission\PermissionRegistrar;
 
 uses(RefreshDatabase::class);
 
@@ -52,13 +51,12 @@ test('the tenants resource is only visible to super admins', function () {
     expect(TenantResource::canViewAny())->toBeFalse();
 });
 
-test('creating a tenant grants the super admin role to every super admin user', function () {
+test('creating a tenant does not assign a tenant owner role to platform super admins', function () {
     $superAdmin = User::factory()->superAdmin()->create();
     $tenant = Tenant::factory()->create();
 
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    expect($superAdmin->hasRole(config('filament-shield.super_admin.name')))->toBeTrue();
+    expect($superAdmin->fresh()->hasRole(config('filament-shield.super_admin.name')))->toBeFalse()
+        ->and($superAdmin->roles()->count())->toBe(0);
 });
 
 test('creating a tenant also creates its salon owner with name email and password', function () {
@@ -91,11 +89,8 @@ test('creating a tenant also creates its salon owner with name email and passwor
         ->and($owner->is_super_admin)->toBeFalse()
         ->and($owner->canAccessPanel(app(Panel::class)->id('admin')))->toBeFalse()
         ->and($owner->belongsToTenant($tenant))->toBeTrue()
-        ->and(Hash::check('secret-password', $owner->password))->toBeTrue();
-
-    app(PermissionRegistrar::class)->setPermissionsTeamId($tenant->getKey());
-
-    expect($owner->fresh()->hasRole(config('filament-shield.super_admin.name')))->toBeTrue();
+        ->and(Hash::check('secret-password', $owner->password))->toBeTrue()
+        ->and($owner->fresh()->hasRole(config('filament-shield.super_admin.name')))->toBeTrue();
 });
 
 test('visiting / while unauthenticated redirects to the login page', function () {

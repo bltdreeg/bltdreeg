@@ -1,6 +1,6 @@
 <?php
 
-use Bltdreeg\Core\Support\ShieldPermissions;
+use Bltdreeg\Core\Modules\Auth\Support\ShieldPermissions;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;

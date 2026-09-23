@@ -6,7 +6,7 @@ use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\Pages\Cre
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\Pages\EditCatalogServiceCategory;
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\Pages\ListCatalogServiceCategories;
 use BackedEnum;
-use Bltdreeg\Core\Models\CatalogServiceCategory;
+use Bltdreeg\Core\Modules\Catalog\Models\CatalogServiceCategory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -19,7 +19,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class CatalogServiceCategoryResource extends Resource
@@ -37,11 +36,6 @@ class CatalogServiceCategoryResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
-
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->is_super_admin ?? false;
-    }
 
     public static function form(Schema $schema): Schema
     {

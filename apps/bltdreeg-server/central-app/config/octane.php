@@ -1,7 +1,7 @@
 <?php
 
-use Bltdreeg\Core\Support\BranchContext;
-use Bltdreeg\Core\Support\TenantContext;
+use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
+use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
 use Laravel\Octane\Events\RequestReceived;
