@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'adjustments' => 'Discounts & Penalties',
+    'adjustment' => 'Discount or Penalty',
+    'adjustment_details' => 'Discount or Penalty Details',
+    'create_adjustment' => 'Add Discount or Penalty',
+    'type' => 'Type',
+    'amount' => 'Amount',
+    'reason' => 'Reason',
+    'effective_date' => 'Effective date',
+    'approved_by' => 'Approved by',
+    'approved_at' => 'Approved at',
+    'approve' => 'Approve',
+    'approved_successfully' => 'Adjustment approved successfully.',
+    'already_approved' => 'This adjustment is already approved.',
+    'not_approvable' => 'A cancelled discount or penalty cannot be approved.',
+    'adjustment_approved' => 'Adjustment approved',
+    'pending_approval' => 'Pending approval',
+    'discount' => 'Discount',
+    'penalty' => 'Penalty',
+    'approved' => 'Approved',
+    'applied' => 'Applied',
+    'cancelled' => 'Cancelled',
+];

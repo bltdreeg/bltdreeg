@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Modules\V1\Hr\Services;
 
 use App\Modules\V1\Hr\Exceptions\AttendanceException;
+use App\Modules\V1\Hr\Support\EmployeeDirectory;
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Hr\Enums\AttendenceStatusEnum;
-use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Hr\Models\EmployeeAttendance;
 use Bltdreeg\Core\Modules\Hr\Models\Shift;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
-use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Carbon\CarbonInterface;
@@ -201,10 +202,7 @@ class AttendanceService
      */
     public function tenantUsersQuery(Tenant $tenant, ?int $branchId = null): Builder
     {
-        return User::query()
-            ->where('is_active', true)
-            ->whereHas('tenants', fn (Builder $query) => $query->whereKey($tenant->getKey()))
-            ->when($branchId !== null, fn (Builder $query) => $query->where('branch_id', $branchId));
+        return EmployeeDirectory::queryInBranch($tenant, $branchId);
     }
 
     private function currentRecordFor(User $user, string $date): ?EmployeeAttendance

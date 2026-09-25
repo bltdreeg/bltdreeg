@@ -5,8 +5,9 @@ namespace App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets;
 use App\Modules\V1\Hr\Exceptions\AttendanceException;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\EmployeeAttendanceResource;
 use App\Modules\V1\Hr\Services\AttendanceService;
-use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use App\Modules\V1\Hr\Support\EmployeeDirectory;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
@@ -67,9 +68,7 @@ class PendingCheckInTable extends TableWidget
             ->whereNotNull('check_in')
             ->pluck('user_id');
 
-        return User::query()
-            ->where('is_active', true)
-            ->whereHas('tenants', fn (Builder $query): Builder => $query->whereKey($tenant->getKey()))
+        return EmployeeDirectory::query($tenant)
             ->when($checkedIn->isNotEmpty(), fn (Builder $query): Builder => $query->whereNotIn('id', $checkedIn));
     }
 

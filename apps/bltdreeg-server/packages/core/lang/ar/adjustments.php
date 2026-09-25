@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'adjustments' => 'الخصومات والغرامات',
+    'adjustment' => 'خصم أو غرامة',
+    'adjustment_details' => 'بيانات الخصم أو الغرامة',
+    'create_adjustment' => 'إضافة خصم او غرامة',
+    'type' => 'النوع',
+    'amount' => 'المبلغ',
+    'reason' => 'السبب',
+    'effective_date' => 'تاريخ السريان',
+    'approved_by' => 'تمت الموافقة بواسطة',
+    'approved_at' => 'تاريخ الموافقة',
+    'approve' => 'موافقة',
+    'approved_successfully' => 'تمت الموافقة على التعديل بنجاح.',
+    'already_approved' => 'تمت الموافقة على هذا التعديل مسبقاً.',
+    'not_approvable' => 'لا يمكن الموافقة على خصم او غرامة ملغي.',
+    'adjustment_approved' => 'تمت الموافقة على التعديل',
+    'pending_approval' => 'بانتظار الموافقة',
+    'discount' => 'خصم',
+    'penalty' => 'غرامة',
+    'approved' => 'تم الموافقة',
+    'applied' => 'تم التطبيق',
+    'cancelled' => 'ملغي',
+];

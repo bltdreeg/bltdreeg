@@ -7,6 +7,7 @@ use App\Modules\V1\Hr\Filament\Resources\Attendance\EmployeeAttendanceResource;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets\AttendanceOverview;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\Widgets\PendingCheckInTable;
 use App\Modules\V1\Hr\Services\AttendanceService;
+use App\Modules\V1\Hr\Support\EmployeeDirectory;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
@@ -76,9 +77,7 @@ class ListAttendance extends ListRecords
             ->whereNotNull('check_in')
             ->pluck('user_id');
 
-        return User::query()
-            ->where('is_active', true)
-            ->whereHas('tenants', fn (Builder $query): Builder => $query->whereKey($tenant->getKey()))
+        return EmployeeDirectory::query($tenant)
             ->when($checkedIn->isNotEmpty(), fn (Builder $query): Builder => $query->whereNotIn('id', $checkedIn))
             ->orderBy('name')
             ->pluck('name', 'id')

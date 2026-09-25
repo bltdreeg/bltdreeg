@@ -10,12 +10,12 @@ use App\Modules\V1\Hr\Filament\Resources\Attendance\Pages\ListAttendance;
 use App\Modules\V1\Hr\Filament\Resources\Attendance\Pages\ViewAttendance;
 use App\Modules\V1\Hr\Services\AttendanceService;
 use App\Modules\V1\Hr\Support\AttendancePresenter;
+use App\Modules\V1\Hr\Support\EmployeeDirectory;
 use BackedEnum;
 use Bltdreeg\Core\Modules\Hr\Enums\AttendenceStatusEnum;
-use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Hr\Models\EmployeeAttendance;
 use Bltdreeg\Core\Modules\Hr\Models\Shift;
-use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -84,7 +84,11 @@ class EmployeeAttendanceResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['user', 'branch', 'shift']);
+        $branchId = EmployeeDirectory::branchIdForCurrentUser();
+
+        return parent::getEloquentQuery()
+            ->with(['user', 'branch', 'shift'])
+            ->when($branchId !== null, fn (Builder $query): Builder => $query->where('branch_id', $branchId));
     }
 
     public static function form(Schema $schema): Schema
@@ -97,7 +101,7 @@ class EmployeeAttendanceResource extends Resource
                     ->schema([
                         Select::make('user_id')
                             ->label(__('core::attendance.employee'))
-                            ->options(fn (): array => self::tenantUsers()->pluck('name', 'id')->all())
+                            ->options(fn (): array => EmployeeDirectory::options())
                             ->searchable()
                             ->preload()
                             ->required()
@@ -199,7 +203,7 @@ class EmployeeAttendanceResource extends Resource
             ->filters([
                 SelectFilter::make('user_id')
                     ->label(__('core::attendance.employee'))
-                    ->options(fn (): array => self::tenantUsers()->pluck('name', 'id')->all())
+                    ->options(fn (): array => EmployeeDirectory::options())
                     ->searchable()
                     ->attribute('user_id'),
                 SelectFilter::make('branch_id')
@@ -368,17 +372,6 @@ class EmployeeAttendanceResource extends Resource
                     ->body($message)
                     ->send();
             });
-    }
-
-    private static function tenantUsers(): Collection
-    {
-        $tenantId = Filament::getTenant()?->getKey();
-
-        return User::query()
-            ->where('is_active', true)
-            ->whereHas('tenants', fn (Builder $query) => $query->whereKey($tenantId))
-            ->orderBy('name')
-            ->get(['id', 'name']);
     }
 
     private static function tenantBranches(): Collection

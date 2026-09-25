@@ -258,6 +258,7 @@ return [
         'Import:ServiceCategory' => 'Import Service Categories',
         'CheckIn:EmployeeAttendance' => 'Check In Attendance',
         'CheckOut:EmployeeAttendance' => 'Check Out Attendance',
+        'Approve:EmployeeAdjustment' => 'Approve Adjustments',
     ],
 
     /*

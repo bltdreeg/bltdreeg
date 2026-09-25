@@ -36,6 +36,7 @@ final class ShieldPermissions
         'ServiceCategory',
         'Shift',
         'EmployeeAttendance',
+        'EmployeeAdjustment',
     ];
 
     /**
@@ -58,6 +59,7 @@ final class ShieldPermissions
         'Import:ServiceCategory',
         'CheckIn:EmployeeAttendance',
         'CheckOut:EmployeeAttendance',
+        'Approve:EmployeeAdjustment',
     ];
 
     /**
