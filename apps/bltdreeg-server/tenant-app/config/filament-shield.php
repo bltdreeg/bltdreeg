@@ -259,6 +259,8 @@ return [
         'CheckIn:EmployeeAttendance' => 'Check In Attendance',
         'CheckOut:EmployeeAttendance' => 'Check Out Attendance',
         'Approve:EmployeeAdjustment' => 'Approve Adjustments',
+        'Approve:LeaveRequest' => 'Approve Leave Requests',
+        'Reject:LeaveRequest' => 'Reject Leave Requests',
     ],
 
     /*

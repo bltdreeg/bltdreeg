@@ -56,7 +56,8 @@ class UserForm
                 Section::make(__('core::users.salary_data'))
                     ->schema([
                         DatePicker::make('start_date')
-                            ->label(__('core::users.start_date')),
+                            ->label(__('core::users.start_date'))
+                            ->native(false),
                         Select::make('salary_type')
                             ->label(__('core::users.salary_type'))
                             ->options(function (): array {

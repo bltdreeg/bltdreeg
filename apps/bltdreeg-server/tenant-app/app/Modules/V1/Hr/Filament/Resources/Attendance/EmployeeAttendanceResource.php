@@ -88,7 +88,7 @@ class EmployeeAttendanceResource extends Resource
 
         return parent::getEloquentQuery()
             ->with(['user', 'branch', 'shift'])
-            ->when($branchId !== null, fn (Builder $query): Builder => $query->where('branch_id', $branchId));
+            ->when($branchId !== null, fn(Builder $query): Builder => $query->where('branch_id', $branchId));
     }
 
     public static function form(Schema $schema): Schema
@@ -101,29 +101,30 @@ class EmployeeAttendanceResource extends Resource
                     ->schema([
                         Select::make('user_id')
                             ->label(__('core::attendance.employee'))
-                            ->options(fn (): array => EmployeeDirectory::options())
+                            ->options(fn(): array => EmployeeDirectory::options())
                             ->searchable()
                             ->preload()
                             ->required()
                             ->disabledOn('view'),
                         Select::make('branch_id')
                             ->label(__('core::attendance.branch'))
-                            ->options(fn (): array => self::tenantBranches()->pluck('name', 'id')->all())
+                            ->options(fn(): array => self::tenantBranches()->pluck('name', 'id')->all())
                             ->searchable()
                             ->required()
                             ->disabledOn('view'),
                         Select::make('shift_id')
                             ->label(__('core::attendance.shift'))
-                            ->options(fn (): array => self::tenantShifts()->pluck('name', 'id')->all())
+                            ->options(fn(): array => self::tenantShifts()->pluck('name', 'id')->all())
                             ->nullable()
                             ->searchable()
                             ->placeholder(__('core::attendance.no_shift'))
                             ->disabledOn('view'),
                         DatePicker::make('date')
                             ->label(__('core::attendance.date'))
-                            ->default(fn (): string => Carbon::today()->toDateString())
+                            ->default(fn(): string => Carbon::today()->toDateString())
                             ->required()
-                            ->disabledOn('view'),
+                            ->disabledOn('view')
+                            ->native(false),
                         Select::make('status')
                             ->label(__('core::attendance.status'))
                             ->options(AttendancePresenter::statusOptions())
@@ -180,35 +181,35 @@ class EmployeeAttendanceResource extends Resource
                     ->sortable(),
                 TextColumn::make('worked_minutes')
                     ->label(__('core::attendance.worked_hours'))
-                    ->formatStateUsing(fn (?int $state): string => AttendancePresenter::minutesClock($state))
+                    ->formatStateUsing(fn(?int $state): string => AttendancePresenter::minutesClock($state))
                     ->placeholder('—')
                     ->sortable(),
                 TextColumn::make('late_minutes')
                     ->label(__('core::attendance.late_minutes'))
-                    ->formatStateUsing(fn (int $state): string => AttendancePresenter::minutesClock($state))
+                    ->formatStateUsing(fn(int $state): string => AttendancePresenter::minutesClock($state))
                     ->placeholder('—')
                     ->sortable(),
                 TextColumn::make('overtime_minutes')
                     ->label(__('core::attendance.overtime'))
-                    ->formatStateUsing(fn (int $state): string => AttendancePresenter::minutesClock($state))
+                    ->formatStateUsing(fn(int $state): string => AttendancePresenter::minutesClock($state))
                     ->placeholder('—')
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('core::attendance.status'))
-                    ->formatStateUsing(fn (AttendenceStatusEnum $state): string => $state->label())
+                    ->formatStateUsing(fn(AttendenceStatusEnum $state): string => $state->label())
                     ->badge()
-                    ->color(fn (AttendenceStatusEnum $state): string => AttendancePresenter::statusColor($state))
-                    ->icon(fn (AttendenceStatusEnum $state): Heroicon => AttendancePresenter::statusIcon($state)),
+                    ->color(fn(AttendenceStatusEnum $state): string => AttendancePresenter::statusColor($state))
+                    ->icon(fn(AttendenceStatusEnum $state): Heroicon => AttendancePresenter::statusIcon($state)),
             ])
             ->filters([
                 SelectFilter::make('user_id')
                     ->label(__('core::attendance.employee'))
-                    ->options(fn (): array => EmployeeDirectory::options())
+                    ->options(fn(): array => EmployeeDirectory::options())
                     ->searchable()
                     ->attribute('user_id'),
                 SelectFilter::make('branch_id')
                     ->label(__('core::attendance.branch'))
-                    ->options(fn (): array => self::tenantBranches()->pluck('name', 'id')->all())
+                    ->options(fn(): array => self::tenantBranches()->pluck('name', 'id')->all())
                     ->searchable()
                     ->attribute('branch_id'),
                 Filter::make('date')
@@ -216,20 +217,22 @@ class EmployeeAttendanceResource extends Resource
                     ->schema([
                         DatePicker::make('from')
                             ->label(__('core::attendance.date_from'))
-                            ->default(fn (): string => Carbon::today()->toDateString()),
+                            ->default(fn(): string => Carbon::today()->toDateString())
+                            ->native(false),
                         DatePicker::make('to')
                             ->label(__('core::attendance.date_to'))
-                            ->default(fn (): string => Carbon::today()->toDateString()),
+                            ->default(fn(): string => Carbon::today()->toDateString())
+                            ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
                                 filled($data['from']),
-                                fn (Builder $query) => $query->whereDate('date', '>=', $data['from']),
+                                fn(Builder $query) => $query->whereDate('date', '>=', $data['from']),
                             )
                             ->when(
                                 filled($data['to']),
-                                fn (Builder $query) => $query->whereDate('date', '<=', $data['to']),
+                                fn(Builder $query) => $query->whereDate('date', '<=', $data['to']),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -240,13 +243,13 @@ class EmployeeAttendanceResource extends Resource
                             return [];
                         }
 
-                        $indicator = __('core::attendance.date').': ';
+                        $indicator = __('core::attendance.date') . ': ';
 
                         if ($from !== null && $to !== null && $from === $to) {
-                            return [$indicator.$from];
+                            return [$indicator . $from];
                         }
 
-                        return [$indicator.($from ?? '*').' - '.($to ?? '*')];
+                        return [$indicator . ($from ?? '*') . ' - ' . ($to ?? '*')];
                     }),
                 SelectFilter::make('status')
                     ->label(__('core::attendance.status'))
@@ -286,9 +289,9 @@ class EmployeeAttendanceResource extends Resource
                             ->date('Y-m-d'),
                         TextEntry::make('status')
                             ->label(__('core::attendance.status'))
-                            ->state(fn (EmployeeAttendance $record): string => $record->status->label())
-                            ->icon(fn (EmployeeAttendance $record): Heroicon => AttendancePresenter::statusIcon($record->status))
-                            ->color(fn (EmployeeAttendance $record): string => AttendancePresenter::statusColor($record->status))
+                            ->state(fn(EmployeeAttendance $record): string => $record->status->label())
+                            ->icon(fn(EmployeeAttendance $record): Heroicon => AttendancePresenter::statusIcon($record->status))
+                            ->color(fn(EmployeeAttendance $record): string => AttendancePresenter::statusColor($record->status))
                             ->badge(),
                         TextEntry::make('check_in')
                             ->label(__('core::attendance.check_in_time'))
@@ -300,13 +303,13 @@ class EmployeeAttendanceResource extends Resource
                             ->placeholder('—'),
                         TextEntry::make('worked_minutes')
                             ->label(__('core::attendance.worked_hours'))
-                            ->formatStateUsing(fn (?int $state): string => AttendancePresenter::minutesClock($state)),
+                            ->formatStateUsing(fn(?int $state): string => AttendancePresenter::minutesClock($state)),
                         TextEntry::make('late_minutes')
                             ->label(__('core::attendance.late_minutes'))
-                            ->formatStateUsing(fn (int $state): string => AttendancePresenter::minutesClock($state)),
+                            ->formatStateUsing(fn(int $state): string => AttendancePresenter::minutesClock($state)),
                         TextEntry::make('overtime_minutes')
                             ->label(__('core::attendance.overtime'))
-                            ->formatStateUsing(fn (int $state): string => AttendancePresenter::minutesClock($state)),
+                            ->formatStateUsing(fn(int $state): string => AttendancePresenter::minutesClock($state)),
                         TextEntry::make('notes')
                             ->label(__('core::attendance.notes'))
                             ->placeholder('—'),
@@ -334,13 +337,13 @@ class EmployeeAttendanceResource extends Resource
             ->icon(Heroicon::OutlinedArrowDownTray)
             ->color('success')
             ->authorize('CheckIn:EmployeeAttendance')
-            ->visible(fn (EmployeeAttendance $record): bool => $record->isToday() && ! $record->isCheckedIn())
+            ->visible(fn(EmployeeAttendance $record): bool => $record->isToday() && ! $record->isCheckedIn())
             ->action(function (EmployeeAttendance $record, AttendanceService $service): void {
                 $checked = $service->checkIn($record->user);
 
                 Notification::make()
                     ->success()
-                    ->title(__('core::attendance.checked_in_at').' '.$checked->check_in->format('H:i'))
+                    ->title(__('core::attendance.checked_in_at') . ' ' . $checked->check_in->format('H:i'))
                     ->send();
             });
     }
@@ -356,19 +359,19 @@ class EmployeeAttendanceResource extends Resource
             ->color('warning')
             ->authorize('CheckOut:EmployeeAttendance')
             ->requiresConfirmation()
-            ->visible(fn (EmployeeAttendance $record): bool => $record->isToday() && $record->isCheckedIn() && ! $record->isCheckedOut())
+            ->visible(fn(EmployeeAttendance $record): bool => $record->isToday() && $record->isCheckedIn() && ! $record->isCheckedOut())
             ->action(function (EmployeeAttendance $record, AttendanceService $service): void {
                 $checked = $service->checkOut($record->user);
 
-                $message = __('core::attendance.worked_hours').': '.AttendancePresenter::minutesClock($checked->worked_minutes);
+                $message = __('core::attendance.worked_hours') . ': ' . AttendancePresenter::minutesClock($checked->worked_minutes);
 
                 if ($checked->overtime_minutes > 0) {
-                    $message .= ' · '.__('core::attendance.overtime').' '.AttendancePresenter::minutesClock($checked->overtime_minutes);
+                    $message .= ' · ' . __('core::attendance.overtime') . ' ' . AttendancePresenter::minutesClock($checked->overtime_minutes);
                 }
 
                 Notification::make()
                     ->success()
-                    ->title(__('core::attendance.check_out').' · '.$checked->check_out->format('H:i'))
+                    ->title(__('core::attendance.check_out') . ' · ' . $checked->check_out->format('H:i'))
                     ->body($message)
                     ->send();
             });

@@ -37,6 +37,7 @@ final class ShieldPermissions
         'Shift',
         'EmployeeAttendance',
         'EmployeeAdjustment',
+        'LeaveRequest',
     ];
 
     /**
@@ -60,6 +61,8 @@ final class ShieldPermissions
         'CheckIn:EmployeeAttendance',
         'CheckOut:EmployeeAttendance',
         'Approve:EmployeeAdjustment',
+        'Approve:LeaveRequest',
+        'Reject:LeaveRequest',
     ];
 
     /**

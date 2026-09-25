@@ -119,7 +119,8 @@ class EmployeeAdjustmentResource extends Resource
                             ->label(__('core::adjustments.effective_date'))
                             ->default(fn (): string => Carbon::today()->toDateString())
                             ->required()
-                            ->disabledOn('view'),
+                            ->disabledOn('view')
+                            ->native(false),
                         Textarea::make('reason')
                             ->label(__('core::adjustments.reason'))
                             ->rows(3)
@@ -194,9 +195,11 @@ class EmployeeAdjustmentResource extends Resource
                     ->label(__('core::adjustments.effective_date'))
                     ->schema([
                         DatePicker::make('from')
-                            ->label(__('core::attendance.date_from')),
+                            ->label(__('core::attendance.date_from'))
+                            ->native(false),
                         DatePicker::make('to')
-                            ->label(__('core::attendance.date_to')),
+                            ->label(__('core::attendance.date_to'))
+                            ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query

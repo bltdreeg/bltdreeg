@@ -9,6 +9,7 @@ use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**

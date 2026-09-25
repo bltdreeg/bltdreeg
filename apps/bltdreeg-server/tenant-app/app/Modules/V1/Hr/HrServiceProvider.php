@@ -8,11 +8,13 @@ use App\Modules\V1\Hr\Policies\EmployeeAdjustmentPolicy;
 use App\Modules\V1\Hr\Policies\EmployeeAttendancePolicy;
 use App\Modules\V1\Hr\Policies\EmployeePolicy;
 use App\Modules\V1\Hr\Policies\JobTypePolicy;
+use App\Modules\V1\Hr\Policies\LeaveRequestPolicy;
 use App\Modules\V1\Hr\Policies\ShiftPolicy;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Hr\Models\EmployeeAdjustment;
 use Bltdreeg\Core\Modules\Hr\Models\EmployeeAttendance;
 use Bltdreeg\Core\Modules\Hr\Models\JobType;
+use Bltdreeg\Core\Modules\Hr\Models\LeaveRequest;
 use Bltdreeg\Core\Modules\Hr\Models\Shift;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -31,5 +33,6 @@ class HrServiceProvider extends ServiceProvider
         Gate::policy(EmployeeAttendance::class, EmployeeAttendancePolicy::class);
         Gate::policy(Shift::class, ShiftPolicy::class);
         Gate::policy(EmployeeAdjustment::class, EmployeeAdjustmentPolicy::class);
+        Gate::policy(LeaveRequest::class, LeaveRequestPolicy::class);
     }
 }

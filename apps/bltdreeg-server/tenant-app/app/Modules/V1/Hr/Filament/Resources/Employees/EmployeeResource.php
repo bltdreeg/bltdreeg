@@ -110,7 +110,8 @@ class EmployeeResource extends Resource
                     ->schema([
                         DatePicker::make('start_date')
                             ->label(__('core::users.start_date'))
-                            ->required(),
+                            ->required()
+                            ->native(false),
                         Select::make('salary_type')
                             ->label(__('core::users.salary_type'))
                             ->options(function (): array {
