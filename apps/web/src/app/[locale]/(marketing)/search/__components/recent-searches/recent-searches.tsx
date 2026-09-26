@@ -3,6 +3,7 @@
 
 import { Clock, Scissors, X } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
@@ -17,6 +18,7 @@ export type RecentSearch = {
 };
 
 function RecentSearches({ items }: { items: RecentSearch[] }) {
+  const t = useTranslations("marketing.search.recentSearches");
   const [rows, setRows] = useState(items);
 
   if (rows.length === 0) return null;
@@ -24,13 +26,13 @@ function RecentSearches({ items }: { items: RecentSearch[] }) {
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-[17px] font-bold">آخر ما بحثت عنه</h2>
+        <h2 className="text-[17px] font-bold">{t("title")}</h2>
         <button
           type="button"
           onClick={() => setRows([])}
           className="rounded-lg px-1 text-[13px] font-semibold text-primary transition-colors hover:text-primary-pressed focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
         >
-          مسح الكل
+          {t("clearAll")}
         </button>
       </div>
 
@@ -67,7 +69,7 @@ function RecentSearches({ items }: { items: RecentSearch[] }) {
 
             <button
               type="button"
-              aria-label={`مسح ${row.query}`}
+              aria-label={t("clearItem", { query: row.query })}
               onClick={() => setRows((r) => r.filter((x) => x.id !== row.id))}
               className="relative z-[1] flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
             >

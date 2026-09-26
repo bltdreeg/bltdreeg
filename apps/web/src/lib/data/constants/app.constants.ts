@@ -1,6 +1,12 @@
 // ثوابت عامة للتطبيق
 
+/** اسم التطبيق: بلتدريج بالعربي، bltdreeg بالإنجليزي — استخدم getAppName(locale) في أي مكان فيه لغة */
 export const APP_NAME = "بلتدريج";
+export const APP_NAME_EN = "bltdreeg";
+
+export function getAppName(locale: string) {
+  return locale === "en" ? APP_NAME_EN : APP_NAME;
+}
 export const SESSION_COOKIE = "beltadreeg_session";
 /** اختيار "تصفح كزائر" — تفضيل متذكر، مش صلاحية دخول (proxy.ts بيتجاهله عمداً) */
 export const GUEST_COOKIE = "beltadreeg_guest";

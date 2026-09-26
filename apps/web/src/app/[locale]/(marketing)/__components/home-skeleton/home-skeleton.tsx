@@ -1,4 +1,4 @@
-// هيكل تحميل الرئيسية — نفس أبعاد الكارت الحقيقي بالظبط، مفيش قفزة
+import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/atoms/skeleton";
 
 /** نفس مقاسات ShopCard: عرض مرن جوه الشبكة، صورة 4:3، فاصل متقطع */
@@ -39,8 +39,10 @@ function RailSkeleton() {
 }
 
 function HomeSkeleton() {
+  const t = useTranslations("common");
+
   return (
-    <div role="status" aria-label="جاري التحميل">
+    <div role="status" aria-label={t("loading")}>
       <div className="border-b border-tint-border bg-tint">
         <div className="mx-auto flex w-full max-w-[1312px] flex-col gap-8 px-4 py-8 md:flex-row md:px-16 md:py-13">
           <div className="flex flex-1 flex-col gap-4">

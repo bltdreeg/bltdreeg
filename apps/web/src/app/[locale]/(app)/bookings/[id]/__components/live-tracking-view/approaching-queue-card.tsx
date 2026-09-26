@@ -2,6 +2,7 @@
 
 // كارت "قرّب دورك" — مطابق 1:1 لتصميم شاشة الموبايل المرفقة
 import { Navigation, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ApproachingQueueCardProps {
   queueNumber?: number;
@@ -22,6 +23,7 @@ export function ApproachingQueueCard({
   salonName = "صالون بربر لاونج",
   onLeaveQueue,
 }: ApproachingQueueCardProps) {
+  const t = useTranslations("app.liveTracking.approaching");
   const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(salonName)}`;
 
   return (
@@ -30,10 +32,10 @@ export function ApproachingQueueCard({
       <div className="flex items-center justify-between rounded-2xl bg-[#EA580C] px-5 py-4 text-white shadow-sm">
         <div className="flex flex-col gap-0.5 text-start">
           <span className="text-base sm:text-lg font-black tracking-tight leading-tight">
-            اتحرّك دلوقتي
+            {t("moveNow")}
           </span>
           <span className="text-xs sm:text-[13px] font-semibold text-white/95 leading-tight">
-            المشوار {travelMinutes} دقايق — دورك بعد {estimatedMinutes} دقايق
+            {t("travelSummary", { travel: travelMinutes, estimated: estimatedMinutes })}
           </span>
         </div>
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/15">
@@ -44,7 +46,7 @@ export function ApproachingQueueCard({
       {/* 2. كارت رقم الدور بلون بيج دافئ وشارة "فاضلك واحد بس" */}
       <div className="flex flex-col items-center justify-center rounded-3xl border border-[#FDE68A]/70 bg-[#FEF9EE] p-6 sm:p-8 text-center shadow-xs">
         <span className="text-sm font-extrabold text-[#92400E]">
-          رقم دورك
+          {t("queueNumberLabel")}
         </span>
 
         {/* الرقم البني الضخم */}
@@ -56,7 +58,7 @@ export function ApproachingQueueCard({
         <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-[#FDE68A] bg-white px-5 py-2 shadow-xs">
           <Users className="size-4 text-[#B45309]" />
           <span className="text-sm font-extrabold text-[#92400E]">
-            {peopleAhead === 1 ? "فاضلك واحد بس" : `فاضلك ${peopleAhead} بس`}
+            {t("onlyAhead", { count: peopleAhead })}
           </span>
         </div>
       </div>
@@ -74,13 +76,13 @@ export function ApproachingQueueCard({
 
         <div className="grid grid-cols-3 text-center text-xs">
           <span className="font-semibold text-[#0F766E]">
-            دخلت الطابور
+            {t("stageJoined")}
           </span>
           <span className="font-black text-[#EA580C]">
-            قرّب دورك
+            {t("stageApproaching")}
           </span>
           <span className="font-semibold text-muted-foreground/70">
-            دورك دلوقتي
+            {t("stageYourTurn")}
           </span>
         </div>
       </div>
@@ -89,15 +91,15 @@ export function ApproachingQueueCard({
       <div className="grid grid-cols-2 divide-x divide-border rtl:divide-x-reverse rounded-2xl border border-border bg-card p-4 text-center shadow-xs">
         <div className="flex flex-col items-center">
           <span className="text-xs font-bold text-muted-foreground">
-            الوقت المتوقع
+            {t("expectedTime")}
           </span>
           <span className="mt-1 text-2xl font-black text-foreground tabular-nums">
-            ~ {estimatedMinutes} د
+            {t("minutesShort", { count: estimatedMinutes })}
           </span>
         </div>
         <div className="flex flex-col items-center">
           <span className="text-xs font-bold text-muted-foreground">
-            المسافة
+            {t("distance")}
           </span>
           <span className="mt-1 text-2xl font-black text-foreground tabular-nums">
             {distanceText}
@@ -114,7 +116,7 @@ export function ApproachingQueueCard({
           className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#0F766E] text-sm sm:text-base font-extrabold text-white shadow-sm hover:bg-[#0B5A54] active:scale-98 transition-all cursor-pointer"
         >
           <Navigation className="size-4 stroke-[2.5]" />
-          <span>افتح الاتجاهات للصالون</span>
+          <span>{t("openDirections")}</span>
         </a>
 
         <button
@@ -122,7 +124,7 @@ export function ApproachingQueueCard({
           onClick={onLeaveQueue}
           className="flex h-12 w-full items-center justify-center rounded-xl border border-[#FECACA] bg-card text-sm font-extrabold text-[#EF4444] hover:bg-red-50 active:scale-98 transition-all cursor-pointer"
         >
-          اطلع من الطابور
+          {t("leaveQueue")}
         </button>
       </div>
     </div>

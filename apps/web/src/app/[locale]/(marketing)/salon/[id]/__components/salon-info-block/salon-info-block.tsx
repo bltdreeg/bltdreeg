@@ -1,6 +1,7 @@
 "use client";
 
 import { Heart, Navigation, Phone, Star } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import type { SalonDetails } from "@/lib/types/salon";
 import { formatDistance } from "@/lib/utils/format/price.utils";
 import { isOpenNow } from "@/lib/utils/hours.utils";
@@ -21,6 +22,8 @@ type SalonInfoBlockProps = {
 };
 
 export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockProps) {
+  const t = useTranslations("marketing.salon.info");
+  const locale = useLocale();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { toast } = useToast();
   const isFav = isFavorite(salon.id);
@@ -39,14 +42,14 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
     toggleFavorite(salon.id);
     if (!isFav) {
       toast.success(
-        "تمت الإضافة للمفضلة",
-        `تقدر تلاقي ${salon.name} في الصالونات المفضلة وتتابع مواعيده`,
-        { label: "شوف المفضلة", href: ROUTE_FAVORITES }
+        t("toasts.addedTitle"),
+        t("toasts.addedDesc", { name: salon.name }),
+        { label: t("toasts.viewFavorites"), href: ROUTE_FAVORITES }
       );
     } else {
       toast.info(
-        "اتمسح من المفضلة",
-        `تمت إزالة ${salon.name} من قائمة الصالونات المفضلة`
+        t("toasts.removedTitle"),
+        t("toasts.removedDesc", { name: salon.name })
       );
     }
   };
@@ -60,13 +63,13 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
           <Star className="size-3.5 fill-amber-400 text-amber-400" />
           <span className="tabular">{salon.rating}</span>
           <span className="font-normal text-muted-foreground">
-            {salonReviewsWithCount(salon.reviewCount)}
+            {salonReviewsWithCount(salon.reviewCount, locale)}
           </span>
         </div>
         <span className="text-border">·</span>
         <span>{salon.areaName}</span>
         <span className="text-border">·</span>
-        <span className="tabular">{formatDistance(salon.distanceKm)}</span>
+        <span className="tabular">{formatDistance(salon.distanceKm, locale)}</span>
       </div>
 
       <div
@@ -76,11 +79,11 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
         <span className={`size-2.5 shrink-0 rounded-full ${toneClasses.dot}`} />
         <div className="flex flex-col gap-0.5">
           <span className={`text-[14.5px] font-extrabold ${toneClasses.text}`}>
-            {salonQueueTitle(open, salon.queue)}
+            {salonQueueTitle(open, salon.queue, locale)}
           </span>
           {open && (
             <span className={`text-[12.5px] font-semibold ${toneClasses.text}`}>
-              {chairsActive(salon.chairsActive)} · {barbersOnShift(barbersOnShiftCount)}
+              {chairsActive(salon.chairsActive, locale)} · {barbersOnShift(barbersOnShiftCount, locale)}
             </span>
           )}
         </div>
@@ -97,7 +100,7 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
               ? "border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/15"
               : "border-border bg-background text-foreground hover:bg-muted"
           )}
-          aria-label={isFav ? "إزالة من الصالونات المفضلة" : "إضافة إلى الصالونات المفضلة"}
+          aria-label={isFav ? t("removeAria") : t("addAria")}
         >
           <Heart
             className={cn(
@@ -105,7 +108,7 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
               isFav ? "fill-destructive text-destructive" : "text-muted-foreground"
             )}
           />
-          <span>{isFav ? "في المفضلة" : "الصالونات المفضلة"}</span>
+          <span>{isFav ? t("inFavorites") : t("addToFavorites")}</span>
         </button>
 
         <a
@@ -115,14 +118,14 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
           className="flex h-11 flex-1 min-w-[100px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
         >
           <Navigation className="size-4" />
-          <span>الاتجاهات</span>
+          <span>{t("directions")}</span>
         </a>
         <a
           href={`tel:${salon.phone}`}
           className="flex h-11 flex-1 min-w-[90px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
         >
           <Phone className="size-4" />
-          <span>اتصل</span>
+          <span>{t("call")}</span>
         </a>
       </div>
     </div>

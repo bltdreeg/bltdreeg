@@ -4,6 +4,7 @@
 import { Modal, ModalContent } from "@/components/atoms/modal";
 import { Button } from "@/components/atoms/button";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { ROUTE_BOOK_SLOT } from "@/lib/data/constants/routes.constants";
 import type { Booking } from "@/lib/types/booking";
 
@@ -18,6 +19,7 @@ export function RebookDialog({
   open,
   onOpenChange,
 }: RebookDialogProps) {
+  const t = useTranslations("app.bookings.rebookDialog");
   const router = useRouter();
 
   const handleConfirmRebook = () => {
@@ -47,11 +49,10 @@ export function RebookDialog({
       >
         <div className="flex flex-col gap-2.5 p-6 pb-0 text-start">
           <h2 className="text-[21px] font-extrabold leading-[1.3] text-foreground">
-            نعيد نفس الحجز؟
+            {t("title")}
           </h2>
           <p className="text-sm leading-[1.8] text-muted-foreground text-pretty">
-            هنفتحلك صفحة الحجز وكل اختياراتك السابقة جاهزة — بس هتختار الميعاد من
-            الأوقات المتاحة.
+            {t("description")}
           </p>
         </div>
 
@@ -61,7 +62,7 @@ export function RebookDialog({
             onClick={handleConfirmRebook}
             className="flex h-12 flex-1 items-center justify-center rounded-[10px] bg-primary text-[15px] font-bold text-primary-foreground hover:bg-primary-pressed whitespace-nowrap"
           >
-            اختار الميعاد
+            {t("chooseSlot")}
           </Button>
 
           <Button
@@ -70,7 +71,7 @@ export function RebookDialog({
             onClick={() => onOpenChange(false)}
             className="h-12 shrink-0 px-5 text-[15px] font-bold text-primary hover:bg-primary/10 whitespace-nowrap"
           >
-            مش دلوقتي
+            {t("notNow")}
           </Button>
         </div>
       </ModalContent>

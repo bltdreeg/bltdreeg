@@ -1,7 +1,7 @@
 "use client";
 
-// حقل البحث: بيبعت q في الـ URL — الصفحة كلها بتتفرع منه
 import { Search, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { Input } from "@/components/atoms/input";
@@ -16,6 +16,7 @@ type SearchBarProps = {
 };
 
 function SearchBar({ autoFocus = false, className }: SearchBarProps) {
+  const t = useTranslations("marketing.search.searchBar");
   const router = useRouter();
   const params = useSearchParams();
   const [value, setValue] = useState(params.get("q") ?? "");
@@ -46,14 +47,14 @@ function SearchBar({ autoFocus = false, className }: SearchBarProps) {
         autoFocus={autoFocus}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="ابحث باسم الصالون أو المنطقة"
-        aria-label="ابحث باسم الصالون أو المنطقة"
+        placeholder={t("placeholder")}
+        aria-label={t("placeholder")}
         className="h-12 ps-11 pe-11"
       />
       {value && (
         <button
           type="button"
-          aria-label="مسح البحث"
+          aria-label={t("clear")}
           onClick={() => {
             setValue("");
             inputRef.current?.focus();

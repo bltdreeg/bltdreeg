@@ -6,16 +6,21 @@ import { AccountHeader } from "./__components/account-header";
 import { AccountMenu } from "./__components/account-menu";
 import { LogoutDialog } from "./__components/logout-dialog";
 
+import { getLocale, getTranslations } from "next-intl/server";
+import { getAppName } from "@/lib/data/constants/app.constants";
+
 export const metadata = METADATA_ACCOUNT;
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const t = await getTranslations("app.account");
+  const locale = await getLocale();
   const user = currentUser;
 
   return (
     <PageContainer className="flex flex-col gap-6 py-8 md:py-9">
       {/* عنوان الصفحة */}
       <h1 className="text-[26px] font-extrabold text-foreground md:text-[28px]">
-        حسابي
+        {t("title")}
       </h1>
 
       {/* كارت البروفايل */}
@@ -49,7 +54,7 @@ export default function AccountPage() {
                 <path d="M14.5 4.5h-8v15h8" />
                 <path d="M11 12h9.5M17.5 8.5 21 12l-3.5 3.5" />
               </svg>
-              <span>تسجيل الخروج</span>
+              <span>{t("logout")}</span>
             </button>
           }
         />
@@ -57,7 +62,7 @@ export default function AccountPage() {
           dir="ltr"
           className="tabular text-[12.5px] text-muted-foreground"
         >
-          بالتدريج 2.4.1 (build 318)
+          {getAppName(locale)} 2.4.1 (build 318)
         </span>
       </div>
     </PageContainer>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Search,
   MessageSquare,
@@ -14,56 +15,27 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn.utils";
 
-interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
-}
-
-const FAQS: FaqItem[] = [
-  {
-    id: "cancelled-at-salon",
-    question: "دوري اتلغى وأنا في المحل — أعمل إيه؟",
-    answer:
-      "لو وصلت المحل ولقيت دورك اتلغى من غير ما تطلب، اطلب من الكابتن أو الريسيبشن يثبّت ميعادك يدوي، أو اضغط على شات الدعم الفوري تحت وهنرجعلك دورك ونكلّم الصالون في دقيقتين.",
-  },
-  {
-    id: "wrong-time",
-    question: "الوقت المتوقع طلع غلط والانتظار طول",
-    answer:
-      "وقت الطابور بيتحسب تلقائياً حسب متوسط مدة الحلاقة لكل عميل قدامك. في أوقات الذروة أو لو عميل طلب خدمة إضافية ممكن يحصل تأخير 10-15 دقيقة. بنحدث وقتك الحي تلقائياً.",
-  },
-  {
-    id: "no-notification",
-    question: "ما وصلنيش إشعار «حان دورك»",
-    answer:
-      "اتأكد إنك مفعل إشعارات المتصفح لـ بالتدريج، ورقم موبايلك عليه واتساب نشط، لأننا بنبعت الإشعار عبر التطبيق وواتساب في نفس اللحظة لما يتبقى قدامك عميل واحد.",
-  },
-  {
-    id: "leave-queue",
-    question: "إزاي أطلع من الطابور أو ألغي الحجز؟",
-    answer:
-      "تقدر تلغي حجزك مجاناً لحد ساعتين قبل الميعاد من صفحة تفاصيل الحجز، أو من صفحة متابعة الطابور بالضغط على «الخروج من الطابور».",
-  },
-  {
-    id: "price-difference",
-    question: "الصالون حاسبني بسعر غير المكتوب في التطبيق",
-    answer:
-      "الأسعار في بالتدريج ملزمة للصالون. لو اتحاسبت بأكتر من المعروض، احتفظ بالفاتورة وكلمنا فوراً في الشات، وبنردلك فرق السعر رصيد في حسابك بعد التأكد مع الإدارة.",
-  },
-  {
-    id: "change-phone",
-    question: "إزاي أغيّر رقم موبايلي المسجل؟",
-    answer:
-      "تقدر تغيّر رقمك من صفحة «بياناتي الشخصية» بالضغط على «غيّر الرقم»، وهنبعتلك كود تأكيد OTP على الرقم الجديد لتأمينه.",
-  },
-];
+const FAQ_KEYS = [
+  "cancelledAtSalon",
+  "wrongTime",
+  "noNotification",
+  "leaveQueue",
+  "priceDifference",
+  "changePhone",
+] as const;
 
 export function HelpView() {
+  const t = useTranslations("app.account.help");
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedId, setExpandedId] = useState<string | null>("cancelled-at-salon");
+  const [expandedId, setExpandedId] = useState<string | null>("cancelledAtSalon");
 
-  const filteredFaqs = FAQS.filter(
+  const faqs = FAQ_KEYS.map((key) => ({
+    id: key,
+    question: t(`faqs.${key}.question`),
+    answer: t(`faqs.${key}.answer`),
+  }));
+
+  const filteredFaqs = faqs.filter(
     (faq) =>
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
@@ -82,10 +54,10 @@ export function HelpView() {
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-[15px] font-extrabold text-primary-pressed">
-                  عندك مشكلة في دور دلوقتي؟
+                  {t("emergencyTitle")}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  فريق الدعم بيرد خلال 5 دقائق يومياً من 10 ص حتى 12 منتصف الليل.
+                  {t("emergencySubtitle")}
                 </span>
               </div>
             </div>
@@ -95,7 +67,7 @@ export function HelpView() {
               rel="noopener noreferrer"
               className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-primary px-5 text-xs font-extrabold text-white shadow-xs hover:bg-primary-hover transition-colors shrink-0 cursor-pointer self-start sm:self-auto"
             >
-              <span>كلمنا واتساب</span>
+              <span>{t("contactWhatsapp")}</span>
               <ExternalLink className="size-3.5" />
             </a>
           </div>
@@ -107,7 +79,7 @@ export function HelpView() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="دوّر على مشكلتك أو سؤالك…"
+              placeholder={t("searchPlaceholder")}
               className="h-12 w-full rounded-2xl border border-border bg-card ps-11 pe-4 text-sm font-semibold text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 shadow-xs"
             />
           </div>
@@ -115,7 +87,7 @@ export function HelpView() {
           {/* 3 — قائمة الأسئلة الشائعة الأكورديون */}
           <div className="flex flex-col gap-3">
             <h2 className="text-sm font-bold text-foreground">
-              أكتر أسئلة بتتسأل
+              {t("faqTitle")}
             </h2>
 
             <div className="flex flex-col gap-2.5">
@@ -152,8 +124,8 @@ export function HelpView() {
                 })
               ) : (
                 <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
-                  <p className="text-sm font-semibold">مفيش نتائج مطابقة لبحثك</p>
-                  <p className="mt-1 text-xs">جرب تبحث بكلمات تانية أو كلمنا مباشرة على الدعم.</p>
+                  <p className="text-sm font-semibold">{t("noFaqResults")}</p>
+                  <p className="mt-1 text-xs">{t("noFaqResultsHint")}</p>
                 </div>
               )}
             </div>
@@ -165,7 +137,7 @@ export function HelpView() {
           {/* كارت قنوات التواصل */}
           <div className="rounded-2xl border border-border bg-card p-5 shadow-xs flex flex-col gap-4">
             <h2 className="text-sm font-extrabold text-foreground border-b border-border pb-3">
-              كلّمنا مباشرة
+              {t("contactDirect")}
             </h2>
 
             {/* شات الدعم */}
@@ -179,8 +151,8 @@ export function HelpView() {
                 <MessageSquare className="size-5" />
               </div>
               <div className="flex flex-1 flex-col">
-                <span className="text-sm font-bold text-foreground">شات مع الدعم</span>
-                <span className="text-xs text-muted-foreground">متصل الآن عبر واتساب</span>
+                <span className="text-sm font-bold text-foreground">{t("chatSupport")}</span>
+                <span className="text-xs text-muted-foreground">{t("chatOnline")}</span>
               </div>
               <span className="size-2.5 rounded-full bg-[#16A34A] animate-pulse" />
             </a>
@@ -194,12 +166,12 @@ export function HelpView() {
                 <Phone className="size-5" />
               </div>
               <div className="flex flex-1 flex-col">
-                <span className="text-sm font-bold text-foreground">اتصل بينا</span>
+                <span className="text-sm font-bold text-foreground">{t("callUs")}</span>
                 <span className="text-xs font-mono font-bold text-primary-pressed">19245</span>
               </div>
               <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                 <Clock className="size-3" />
-                <span>10ص - 12ص</span>
+                <span>{t("callHours")}</span>
               </span>
             </a>
           </div>
@@ -207,30 +179,30 @@ export function HelpView() {
           {/* كارت عن التطبيق والشروط */}
           <div className="rounded-2xl border border-border bg-card p-5 shadow-xs flex flex-col gap-3">
             <h2 className="text-sm font-extrabold text-foreground border-b border-border pb-2.5">
-              عن بالتدريج
+              {t("aboutTitle")}
             </h2>
 
             <div className="flex flex-col divide-y divide-border/60 text-xs">
               <div className="flex items-center justify-between py-2.5 text-muted-foreground hover:text-foreground cursor-pointer">
                 <div className="flex items-center gap-2">
                   <FileText className="size-4 text-muted-foreground" />
-                  <span className="font-semibold">شروط الاستخدام</span>
+                  <span className="font-semibold">{t("termsOfUse")}</span>
                 </div>
-                <span className="text-xs">←</span>
+                <span className="text-xs rtl:rotate-0 ltr:rotate-180">←</span>
               </div>
 
               <div className="flex items-center justify-between py-2.5 text-muted-foreground hover:text-foreground cursor-pointer">
                 <div className="flex items-center gap-2">
                   <Shield className="size-4 text-muted-foreground" />
-                  <span className="font-semibold">سياسة الخصوصية</span>
+                  <span className="font-semibold">{t("privacyPolicy")}</span>
                 </div>
-                <span className="text-xs">←</span>
+                <span className="text-xs rtl:rotate-0 ltr:rotate-180">←</span>
               </div>
 
               <div className="flex items-center justify-between pt-2.5 text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Info className="size-4 text-muted-foreground" />
-                  <span className="font-semibold">نسخة التطبيق</span>
+                  <span className="font-semibold">{t("appVersion")}</span>
                 </div>
                 <span className="font-mono text-xs tabular font-bold text-foreground">
                   2.4.1 (build 318)

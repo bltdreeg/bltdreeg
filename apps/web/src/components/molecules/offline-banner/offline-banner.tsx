@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useOnline } from "@/lib/hooks/use-online.hook";
 
 export interface OfflineBannerProps {
@@ -16,6 +17,7 @@ export function OfflineBanner({
   onRetry,
   className = "",
 }: OfflineBannerProps) {
+  const t = useTranslations("common.offlineBanner");
   const { isOnline, lastOnlineTime, checkOnline } = useOnline();
 
   const showBanner = forceVisible ?? !isOnline;
@@ -33,7 +35,6 @@ export function OfflineBanner({
     <div
       role="status"
       aria-live="polite"
-      dir="rtl"
       className={`w-full min-h-[46px] bg-[#FEF3C7] border-b border-[#FDE68A] text-[#92400E] flex items-center justify-between gap-3 px-4 sm:px-6 py-2.5 transition-all animate-in fade-in slide-in-from-top-1 duration-200 ${className}`}
     >
       <div className="flex items-center gap-3 min-w-0">
@@ -48,7 +49,7 @@ export function OfflineBanner({
         </div>
 
         <span className="font-bold text-[13.5px] leading-relaxed font-mono tabular-nums truncate">
-          مفيش نت — المواعيد دي آخر تحديث الساعة {displayTime}
+          {t("message", { time: displayTime })}
         </span>
       </div>
 
@@ -57,7 +58,7 @@ export function OfflineBanner({
         onClick={handleRetry}
         className="flex-none inline-flex items-center justify-center h-8 px-3.5 rounded-lg bg-white border border-[#FDE68A] text-[#92400E] font-bold text-[12.5px] leading-none whitespace-nowrap hover:bg-[#FFFBEB] active:scale-95 transition-all shadow-xs cursor-pointer"
       >
-        جرّب تاني
+        {t("retry")}
       </button>
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Check, Download, ExternalLink } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { Calendar, Download, ExternalLink } from "lucide-react";
 import type { Booking } from "@/lib/types/booking";
 
 interface AddToCalendarProps {
@@ -9,8 +10,9 @@ interface AddToCalendarProps {
 }
 
 export function AddToCalendar({ booking }: AddToCalendarProps) {
+  const t = useTranslations("app.book.confirmation.calendar");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const startDate = new Date(booking.startAt);
   const endDate = new Date(startDate.getTime() + (booking.durationMinutes || 45) * 60 * 1000);
@@ -19,8 +21,10 @@ export function AddToCalendar({ booking }: AddToCalendarProps) {
     return d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
 
-  const title = `ميعاد حلاقة - ${booking.shopName}`;
-  const description = `حجز في ${booking.shopName}\nالخدمات: ${booking.serviceNames.join(" + ")}\nالحلاق: ${booking.barberName}\nرقمك في الدور: ${booking.queueNumber}\nكود الحجز: ${booking.bookingCode || booking.id}`;
+  const title = t("eventTitle", { salon: booking.shopName });
+  const description = locale === "en"
+    ? `Booking at ${booking.shopName}\nServices: ${booking.serviceNames.join(" + ")}\nBarber: ${booking.barberName}\nQueue Number: ${booking.queueNumber}\nBooking Code: ${booking.bookingCode || booking.id}`
+    : `حجز في ${booking.shopName}\nالخدمات: ${booking.serviceNames.join(" + ")}\nالحلاق: ${booking.barberName}\nرقمك في الدور: ${booking.queueNumber}\nكود الحجز: ${booking.bookingCode || booking.id}`;
   const location = booking.shopName;
 
   const downloadIcs = () => {
@@ -72,34 +76,34 @@ export function AddToCalendar({ booking }: AddToCalendarProps) {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex h-12 min-h-[48px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#0F766E] px-4 font-bold text-[15px] text-white transition hover:bg-[#0B5A54] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/40"
+        className="flex h-12 min-h-[48px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#0F766E] px-4 font-bold text-[15px] text-white transition hover:bg-[#0B5A54] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/40 cursor-pointer"
       >
         <Calendar className="size-4.5" />
-        <span className="whitespace-nowrap">أضف للتقويم</span>
+        <span className="whitespace-nowrap">{t("addToCalendar")}</span>
       </button>
 
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute top-[calc(100%+8px)] right-0 z-50 w-full min-w-[220px] rounded-xl border border-border bg-white p-1.5 shadow-lg animate-in fade-in zoom-in-95">
+          <div className="absolute top-[calc(100%+8px)] end-0 z-50 w-full min-w-[220px] rounded-xl border border-border bg-white p-1.5 shadow-lg animate-in fade-in zoom-in-95">
             <button
               type="button"
               onClick={openGoogleCalendar}
-              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-right text-sm font-semibold text-[#0E0F11] hover:bg-[#F0FAF8] hover:text-[#0B5A54]"
+              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-start text-sm font-semibold text-[#0E0F11] hover:bg-[#F0FAF8] hover:text-[#0B5A54] cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <ExternalLink className="size-4 text-muted-foreground" />
-                تقويم Google
+                {t("googleCalendar")}
               </span>
             </button>
             <button
               type="button"
               onClick={downloadIcs}
-              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-right text-sm font-semibold text-[#0E0F11] hover:bg-[#F0FAF8] hover:text-[#0B5A54]"
+              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-start text-sm font-semibold text-[#0E0F11] hover:bg-[#F0FAF8] hover:text-[#0B5A54] cursor-pointer"
             >
               <span className="flex items-center gap-2">
                 <Download className="size-4 text-muted-foreground" />
-                تحميل لـ Apple / Outlook (.ics)
+                {t("appleOutlook")}
               </span>
             </button>
           </div>

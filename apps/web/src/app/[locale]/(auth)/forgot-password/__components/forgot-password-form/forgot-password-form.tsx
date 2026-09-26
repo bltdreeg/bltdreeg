@@ -2,6 +2,7 @@
 
 // نموذج استعادة كلمة السر — متسق مع FRAME 13A و FRAME 13D
 import { useState, useId } from "react";
+import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowRight, KeyRound } from "lucide-react";
 import {
@@ -18,6 +19,7 @@ import type {
 } from "./forgot-password-form.schema";
 
 export function ForgotPasswordForm() {
+  const t = useTranslations("auth.forgotPassword");
   const router = useRouter();
   const [mode, setMode] = useState<ResetIdentifierMode>("phone");
   const [email, setEmail] = useState("");
@@ -34,9 +36,9 @@ export function ForgotPasswordForm() {
 
     if (mode === "email") {
       if (!email.trim()) {
-        errs.identifier = "اكتب البريد الإلكتروني المسجل به.";
+        errs.identifier = t("errors.emailRequired");
       } else if (!isValidEmail(email)) {
-        errs.identifier = "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com).";
+        errs.identifier = t("errors.emailInvalid");
       }
     } else {
       const phoneValidation = validateEgyptianPhone(phone);
@@ -79,10 +81,10 @@ export function ForgotPasswordForm() {
       {/* ترويسة الصفحة */}
       <div className="flex flex-col gap-1.5">
         <h1 className="text-[26px] font-extrabold leading-tight text-[#0E0F11]">
-          نسيت كلمة السر؟
+          {t("title")}
         </h1>
         <p className="text-sm leading-relaxed text-[#6B7280]">
-          اكتب رقم موبايلك أو إيميلك المسجل وهنبعتلك كود تأكيد عشان تعيّن كلمة سر جديدة.
+          {t("description")}
         </p>
       </div>
 
@@ -96,7 +98,7 @@ export function ForgotPasswordForm() {
             !
           </div>
           <span className="text-[13px] font-medium leading-relaxed">
-            ظبّط الحاجات المعلّمة بالأحمر وبعدين كمّل.
+            {t("errorBanner")}
           </span>
         </div>
       )}
@@ -104,7 +106,7 @@ export function ForgotPasswordForm() {
       {/* تبديل طريقة الاستعادة */}
       <div
         role="tablist"
-        aria-label="طريقة استعادة كلمة السر"
+        aria-label={t("tabsAriaLabel")}
         className="flex rounded-[11px] border border-[#E5E7EB] bg-[#F7F8FA] p-1 gap-1"
       >
         <button
@@ -123,7 +125,7 @@ export function ForgotPasswordForm() {
               : "font-semibold text-[#6B7280] hover:text-[#0E0F11]"
           }`}
         >
-          رقم الموبايل
+          {t("tabPhone")}
         </button>
         <button
           type="button"
@@ -141,7 +143,7 @@ export function ForgotPasswordForm() {
               : "font-semibold text-[#6B7280] hover:text-[#0E0F11]"
           }`}
         >
-          البريد الإلكتروني
+          {t("tabEmail")}
         </button>
       </div>
 
@@ -153,7 +155,7 @@ export function ForgotPasswordForm() {
               htmlFor={phoneId}
               className="text-[13px] font-semibold text-[#0E0F11]"
             >
-              رقم الموبايل المسجل
+              {t("phoneLabel")}
             </label>
             {/* الصندوق كله LTR زي AppPhoneField في الموبايل: الكود على الشمال والرقم جنبه */}
             <div
@@ -195,7 +197,7 @@ export function ForgotPasswordForm() {
               htmlFor={emailId}
               className="text-[13px] font-semibold text-[#0E0F11]"
             >
-              البريد الإلكتروني المسجل
+              {t("emailLabel")}
             </label>
             <input
               id={emailId}
@@ -230,7 +232,7 @@ export function ForgotPasswordForm() {
           disabled={isSubmitting}
           className="mt-1 flex h-[50px] w-full items-center justify-center rounded-xl bg-[#0F766E] text-[15.5px] font-bold text-white shadow-xs transition-colors hover:bg-[#0B5A54] disabled:cursor-not-allowed disabled:bg-[#E7EAEC] disabled:text-[#A5ABB3] cursor-pointer"
         >
-          {isSubmitting ? "جاري الإرسال..." : "ابعت كود التأكيد"}
+          {isSubmitting ? t("submitPending") : t("submit")}
         </button>
 
         {/* العودة لتسجيل الدخول */}
@@ -239,8 +241,8 @@ export function ForgotPasswordForm() {
             href={ROUTE_LOGIN}
             className="flex items-center gap-1.5 text-sm font-bold text-[#0F766E] hover:underline"
           >
-            <ArrowRight className="size-4" />
-            <span>الرجوع لتسجيل الدخول</span>
+            <ArrowRight className="size-4 rtl:rotate-0 rotate-180" />
+            <span>{t("backToLogin")}</span>
           </Link>
         </div>
       </form>

@@ -1,11 +1,11 @@
 "use client";
 
-// الهيدر: شريط واحد تيل sticky — البراند والمنطقة، البحث في النص، واليوزر (مسجل أو زائر)
-import { Search, MapPin, ChevronDown, LogIn } from "lucide-react";
+import { Search, MapPin, ChevronDown, LogIn, Languages } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Avatar } from "@/components/atoms/avatar";
 import { PageContainer } from "@/components/atoms/page-container";
-import { Link } from "@/i18n/navigation";
-import { APP_NAME } from "@/lib/data/constants/app.constants";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import {
   EXTERNAL_SALON_REGISTER,
   ROUTE_ACCOUNT,
@@ -31,7 +31,14 @@ export function Header({
   isAuthenticated: propIsAuthenticated,
   showSearchRow = true,
 }: HeaderProps) {
+  const t = useTranslations("common.header");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated: hookIsAuth, user: hookUser } = useUser();
+
+  const nextLocale = locale === "ar" ? "en" : "ar";
+  const nextLocaleName = nextLocale === "ar" ? "العربية" : "English";
 
   const isAuth = propIsAuthenticated !== undefined ? propIsAuthenticated : hookIsAuth;
   const activeUserName =
@@ -52,7 +59,7 @@ export function Header({
             href={ROUTE_HOME}
             className="shrink-0 text-[19px] font-black tracking-tight text-primary-foreground transition-opacity hover:opacity-95"
           >
-            {APP_NAME}
+            {getAppName(locale)}
           </Link>
           <button
             type="button"
@@ -61,7 +68,7 @@ export function Header({
             <MapPin aria-hidden className="size-3.5 text-primary-foreground" />
             <span className="text-[13px] font-bold text-primary-foreground">{areaName}</span>
             <ChevronDown aria-hidden className="size-3.5 text-primary-foreground" />
-            <span className="sr-only">تغيير المنطقة</span>
+            <span className="sr-only">{t("changeArea")}</span>
           </button>
         </div>
 
@@ -71,7 +78,7 @@ export function Header({
             {/* زر البحث للموبايل */}
             <Link
               href={ROUTE_SEARCH}
-              aria-label="ابحث باسم الصالون أو المنطقة"
+              aria-label={t("searchPlaceholder")}
               className={cn(
                 "flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-foreground/15 text-primary-foreground/90 sm:hidden",
                 "transition-colors duration-200 hover:bg-primary-foreground/25",
@@ -92,7 +99,7 @@ export function Header({
             >
               <Search aria-hidden className="size-4 shrink-0 text-primary-foreground/80" />
               <span className="truncate text-sm text-primary-foreground/80">
-                ابحث باسم الصالون أو المنطقة
+                {t("searchPlaceholder")}
               </span>
             </Link>
           </>
@@ -100,6 +107,16 @@ export function Header({
 
         {/* 3. عناصر التحكم اليسرى حسب حالة المصادقة */}
         <div className="flex shrink-0 items-center gap-2.5 sm:gap-3 md:gap-4">
+          {/* زر تبديل اللغة */}
+          <button
+            type="button"
+            onClick={() => router.replace(pathname, { locale: nextLocale })}
+            aria-label={t("switchLanguage", { language: nextLocaleName })}
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary-foreground/15 text-primary-foreground transition-colors hover:bg-primary-foreground/25 cursor-pointer"
+          >
+            <Languages aria-hidden className="size-4" />
+          </button>
+
           {/* رابط الانضمام كصالون (للكل على الشاشات الكبيرة) */}
           <a
             href={EXTERNAL_SALON_REGISTER}
@@ -107,7 +124,7 @@ export function Header({
             rel="noopener noreferrer"
             className="hidden rounded-lg border border-primary-foreground/35 px-3 py-1.5 text-[13px] font-bold text-primary-foreground transition-colors hover:bg-primary-foreground/15 md:block"
           >
-            انضم كصالون
+            {t("joinSalon")}
           </a>
 
           {isAuth ? (
@@ -118,14 +135,14 @@ export function Header({
                 href={ROUTE_BOOKINGS}
                 className="hidden text-[13px] font-semibold text-primary-foreground/90 transition-colors hover:text-primary-foreground sm:block"
               >
-                حجوزاتي
+                {t("myBookings")}
               </Link>
 
               {/* زر البروفايل والحساب */}
               <Link
                 href={ROUTE_ACCOUNT}
                 className="flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-primary-foreground/15"
-                aria-label={`حسابي — ${activeUserName || "المستخدم"}`}
+                aria-label={t("myAccount", { name: activeUserName || t("defaultUser") })}
               >
                 <Avatar
                   name={activeUserName || "كريم"}
@@ -147,7 +164,7 @@ export function Header({
               className="flex items-center gap-1.5 rounded-lg bg-white px-3 sm:px-3.5 py-1.5 text-xs sm:text-[13px] font-bold text-primary shadow-xs transition-colors hover:bg-white/90"
             >
               <LogIn className="size-3.5 sm:size-4" />
-              <span>تسجيل الدخول</span>
+              <span>{t("signIn")}</span>
             </Link>
           )}
         </div>

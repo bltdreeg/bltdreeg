@@ -1,7 +1,7 @@
-// الفوتر: خلفية غامقة، 4 أعمدة روابط
+import { getLocale, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
-import { APP_NAME } from "@/lib/data/constants/app.constants";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import {
   EXTERNAL_SALON_LOGIN,
   EXTERNAL_SALON_REGISTER,
@@ -13,55 +13,59 @@ import {
   ROUTE_TERMS,
 } from "@/lib/data/constants/routes.constants";
 
-const COLUMNS = [
-  {
-    title: `عن ${APP_NAME}`,
-    links: [
-      { label: "مين إحنا", href: ROUTE_HOME },
-      { label: "إزاي بيشتغل", href: ROUTE_HOME },
-      { label: "وظايف", href: ROUTE_HOME },
-    ],
-  },
-  {
-    title: "تواصل معانا",
-    links: [
-      { label: "مساعدة", href: ROUTE_HOME },
-      { label: "شكوى على حجز", href: ROUTE_BOOKINGS },
-      { label: "واتساب الدعم", href: ROUTE_HOME },
-    ],
-  },
-  {
-    title: "الشروط والخصوصية",
-    links: [
-      { label: "شروط الاستخدام", href: ROUTE_TERMS },
-      { label: "سياسة الخصوصية", href: ROUTE_PRIVACY },
-      { label: "سياسة الإلغاء", href: ROUTE_REFUND_POLICY },
-    ],
-  },
-  {
-    title: "للصالونات",
-    links: [
-      { label: "ضيف صالونك", href: EXTERNAL_SALON_REGISTER },
-      { label: "الأسعار", href: ROUTE_SEARCH },
-      { label: "تسجيل دخول الصالون", href: EXTERNAL_SALON_LOGIN },
-    ],
-  },
-] as const;
+async function Footer() {
+  const t = await getTranslations("common.footer");
+  const locale = await getLocale();
+  const appName = getAppName(locale);
 
-function Footer() {
+  const columns = [
+    {
+      title: t("aboutTitle", { appName }),
+      links: [
+        { label: t("whoWeAre"), href: ROUTE_HOME },
+        { label: t("howItWorks"), href: ROUTE_HOME },
+        { label: t("careers"), href: ROUTE_HOME },
+      ],
+    },
+    {
+      title: t("contactTitle"),
+      links: [
+        { label: t("help"), href: ROUTE_HOME },
+        { label: t("complaint"), href: ROUTE_BOOKINGS },
+        { label: t("whatsapp"), href: ROUTE_HOME },
+      ],
+    },
+    {
+      title: t("termsTitle"),
+      links: [
+        { label: t("terms"), href: ROUTE_TERMS },
+        { label: t("privacy"), href: ROUTE_PRIVACY },
+        { label: t("refund"), href: ROUTE_REFUND_POLICY },
+      ],
+    },
+    {
+      title: t("salonsTitle"),
+      links: [
+        { label: t("addSalon"), href: EXTERNAL_SALON_REGISTER },
+        { label: t("pricing"), href: ROUTE_SEARCH },
+        { label: t("salonLogin"), href: EXTERNAL_SALON_LOGIN },
+      ],
+    },
+  ];
+
   return (
     <footer className="mt-auto bg-foreground">
       <PageContainer className="pb-24 pt-11 md:pb-7">
         <div className="flex flex-col justify-between gap-10 lg:flex-row lg:gap-14">
           <div className="flex w-full shrink-0 flex-col gap-3.5 lg:w-[300px]">
-            <span className="text-[21px] font-black text-background">{APP_NAME}</span>
+            <span className="text-[21px] font-black text-background">{appName}</span>
             <p className="text-[13.5px] leading-[1.8] text-disabled-fg">
-              احجز ميعادك في أقرب صالون، واعرف رقمك في الدور من قبل ما تخرج من البيت.
+              {t("tagline")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:flex lg:gap-12 xl:gap-18">
-            {COLUMNS.map((col) => (
+            {columns.map((col) => (
               <div key={col.title} className="flex flex-col gap-3">
                 <span className="text-[13px] font-bold text-background">{col.title}</span>
                 {col.links.map((l) =>
@@ -90,9 +94,9 @@ function Footer() {
 
         <div className="mt-8 flex justify-between gap-5 border-t border-background/10 pt-5">
           <span className="tabular text-[12.5px] text-muted-foreground">
-            {APP_NAME} © {new Date().getFullYear()}
+            {appName} © {new Date().getFullYear()}
           </span>
-          <span className="text-[12.5px] text-muted-foreground">القاهرة، مصر</span>
+          <span className="text-[12.5px] text-muted-foreground">{t("location")}</span>
         </div>
       </PageContainer>
     </footer>
@@ -100,3 +104,4 @@ function Footer() {
 }
 
 export { Footer };
+

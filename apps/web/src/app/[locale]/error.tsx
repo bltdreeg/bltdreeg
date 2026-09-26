@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { getAppName } from "@/lib/data/constants/app.constants";
 
 export default function LocaleError({
   error,
@@ -9,6 +11,8 @@ export default function LocaleError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("common.errorPage");
+  const locale = useLocale();
   const [timestamp, setTimestamp] = useState("17/09/2026 21:14");
 
   useEffect(() => {
@@ -26,14 +30,13 @@ export default function LocaleError({
   return (
     <section
       role="alert"
-      dir="rtl"
       className="flex min-h-[70vh] items-center justify-center p-4 sm:p-6"
     >
       <div className="w-full max-w-[480px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white shadow-sm">
         {/* Brand bar */}
         <div className="flex h-[46px] items-center bg-[#0F766E] px-[22px]">
           <span className="font-black text-[16px] leading-none text-white tracking-wide">
-            بالتدريج
+            {getAppName(locale)}
           </span>
         </div>
 
@@ -54,11 +57,11 @@ export default function LocaleError({
           </div>
 
           <h1 className="text-[24px] font-extrabold leading-[1.35] text-[#0E0F11]">
-            حصلت مشكلة عندنا
+            {t("title")}
           </h1>
 
           <p className="max-w-[380px] text-[14px] leading-[1.8] text-[#6B7280]">
-            مش مشكلة في النت بتاعك — الخدمة عندنا مش ردّت. حجوزاتك المؤكدة ورقمك في الدور مأمّنين.
+            {t("description")}
           </p>
 
           <div className="mt-1 flex flex-wrap items-center justify-center gap-2.5">
@@ -67,7 +70,7 @@ export default function LocaleError({
               onClick={reset}
               className="inline-flex h-[44px] flex-none cursor-pointer items-center justify-center whitespace-nowrap rounded-[10px] bg-[#0F766E] px-5 font-bold text-[14px] leading-none text-white transition-all hover:bg-[#0D655E] active:scale-95 shadow-sm"
             >
-              جرّب تاني
+              {t("retry")}
             </button>
             <a
               href="https://wa.me/201000000000"
@@ -75,7 +78,7 @@ export default function LocaleError({
               rel="noopener noreferrer"
               className="inline-flex h-[44px] flex-none items-center justify-center whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white px-[18px] font-bold text-[14px] leading-none text-[#0E0F11] transition-all hover:bg-[#F7F8FA] active:scale-95 shadow-xs"
             >
-              كلّم الدعم
+              {t("contactSupport")}
             </a>
           </div>
 

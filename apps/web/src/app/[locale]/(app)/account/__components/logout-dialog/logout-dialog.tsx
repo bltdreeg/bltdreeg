@@ -1,7 +1,7 @@
-// نافذة تأكيد تسجيل الخروج مطابقة لتصميم الموبايل (Frame 17)
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Modal, ModalContent } from "@/components/atoms/modal";
 import { useRouter } from "@/i18n/navigation";
 import { logout } from "@/lib/actions/auth/auth.action";
@@ -24,6 +24,7 @@ export function LogoutDialog({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
 }: LogoutDialogProps) {
+  const t = useTranslations("app.account.logoutDialog");
   const router = useRouter();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -55,8 +56,7 @@ export function LogoutDialog({
   };
 
   const noticeText =
-    activeBookingNotice ||
-    `عندك دور شغّال في ${salonName}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.`;
+    activeBookingNotice || t("notice", { salonName });
 
   return (
     <>
@@ -90,7 +90,7 @@ export function LogoutDialog({
 
           {/* العنوان */}
           <h3 className="mb-2 text-[18px] font-extrabold text-foreground">
-            تسجيل الخروج؟
+            {t("title")}
           </h3>
 
           {/* نص التنبيه المبرر للأثر في الطابور */}
@@ -106,7 +106,7 @@ export function LogoutDialog({
               disabled={isPending}
               className="flex h-12 w-full cursor-pointer items-center justify-center rounded-[10px] bg-destructive text-[16px] font-bold text-destructive-foreground transition-colors hover:bg-destructive/90 active:bg-destructive/80 disabled:opacity-60"
             >
-              {isPending ? "جاري الخروج..." : "اخرج من الحساب"}
+              {isPending ? t("loggingOut") : t("confirm")}
             </button>
             <button
               type="button"
@@ -114,7 +114,7 @@ export function LogoutDialog({
               disabled={isPending}
               className="flex h-12 w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-card text-[15px] font-bold text-foreground transition-colors hover:bg-muted active:bg-muted/80"
             >
-              خليني فاضل
+              {t("cancel")}
             </button>
           </div>
         </ModalContent>

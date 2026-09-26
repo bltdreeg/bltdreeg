@@ -3,6 +3,7 @@
 // شيت الفلاتر السفلي (Bottom Sheet) لشاشات الموبايل والتابلت بأسلوب الفريم ١٤ في mobile.html
 import { Dialog } from "@base-ui/react/dialog";
 import { Check, SlidersHorizontal, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
@@ -11,14 +12,6 @@ import { ShopSort } from "@/lib/types/shop/shop-filters.interface";
 import { cn } from "@/lib/utils/cn.utils";
 import { filterShops } from "@/lib/utils/filter-shops.utils";
 import { formatPrice } from "@/lib/utils/format/price.utils";
-
-const SORT_OPTIONS: { value: ShopSort; label: string }[] = [
-  { value: ShopSort.NEXT_SLOT, label: "أقل انتظار دلوقتي" },
-  { value: ShopSort.NEAREST, label: "الأقرب ليك" },
-  { value: ShopSort.RATING, label: "الأعلى تقييماً" },
-  { value: ShopSort.PRICE, label: "أرخص سعر" },
-  { value: ShopSort.NEWEST, label: "أحدث الصالونات" },
-];
 
 export type FilterSheetProps = {
   q: string;
@@ -48,6 +41,18 @@ export function FilterSheet({
   className,
   trigger,
 }: FilterSheetProps) {
+  const t = useTranslations("marketing.search.filterSheet");
+  const tSort = useTranslations("marketing.search.sortOptions");
+  const locale = useLocale();
+
+  const sortOptions: { value: ShopSort; label: string }[] = [
+    { value: ShopSort.NEXT_SLOT, label: tSort("nextSlotSheet") },
+    { value: ShopSort.NEAREST, label: tSort("nearest") },
+    { value: ShopSort.RATING, label: tSort("rating") },
+    { value: ShopSort.PRICE, label: tSort("priceSheet") },
+    { value: ShopSort.NEWEST, label: tSort("newestSheet") },
+  ];
+
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -123,7 +128,7 @@ export function FilterSheet({
         {trigger ?? (
           <>
             <SlidersHorizontal className="size-4 text-primary" />
-            <span className="hidden sm:inline">الفلاتر</span>
+            <span className="hidden sm:inline">{t("filters")}</span>
             {activeCount > 0 && (
               <span className="tabular flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-primary-foreground">
                 {activeCount}
@@ -151,16 +156,16 @@ export function FilterSheet({
           <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
             <div className="flex items-center gap-2.5">
               <Dialog.Title className="text-[17px] font-extrabold text-foreground">
-                فلترة وترتيب
+                {t("title")}
               </Dialog.Title>
               {draftActiveCount > 0 && (
                 <span className="tabular rounded-[7px] bg-primary px-2.5 py-0.5 text-[11.5px] font-bold text-primary-foreground">
-                  {draftActiveCount} مفعّلة
+                  {t("active", { count: draftActiveCount })}
                 </span>
               )}
             </div>
             <Dialog.Close
-              aria-label="إغلاق"
+              aria-label={t("close")}
               className="flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground cursor-pointer"
             >
               <X className="size-4.5" />
@@ -172,10 +177,10 @@ export function FilterSheet({
             {/* ١. ترتيب النتائج بـ */}
             <div>
               <div className="mb-2.5 text-[13.5px] font-bold text-foreground">
-                رتّب النتايج بـ
+                {t("sortBy")}
               </div>
               <div className="flex flex-wrap gap-2">
-                {SORT_OPTIONS.map((opt) => {
+                {sortOptions.map((opt) => {
                   const isSelected = selectedSort === opt.value;
                   return (
                     <button
@@ -200,7 +205,7 @@ export function FilterSheet({
             {serviceOptions.length > 0 && (
               <div>
                 <div className="mb-2.5 text-[13.5px] font-bold text-foreground">
-                  الخدمة اللي عايزها
+                  {t("serviceWanted")}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {serviceOptions.map((opt) => {
@@ -241,8 +246,10 @@ export function FilterSheet({
             {/* ٣. السعر */}
             <div>
               <div className="mb-2 flex items-center justify-between text-[13.5px] font-bold">
-                <span className="text-foreground">السعر</span>
-                <span className="tabular text-primary-pressed">حتى {formatPrice(selectedPrice)}</span>
+                <span className="text-foreground">{t("price")}</span>
+                <span className="tabular text-primary-pressed">
+                  {t("upToPrice", { price: formatPrice(selectedPrice, locale) })}
+                </span>
               </div>
               <input
                 type="range"
@@ -253,16 +260,18 @@ export function FilterSheet({
                 className="h-2 w-full accent-primary cursor-pointer"
               />
               <div className="mt-1 flex justify-between text-[12px] text-muted-foreground">
-                <span className="tabular">{formatPrice(priceBounds.min)}</span>
-                <span className="tabular">{formatPrice(priceBounds.max)}</span>
+                <span className="tabular">{formatPrice(priceBounds.min, locale)}</span>
+                <span className="tabular">{formatPrice(priceBounds.max, locale)}</span>
               </div>
             </div>
 
             {/* ٤. المسافة */}
             <div>
               <div className="mb-2 flex items-center justify-between text-[13.5px] font-bold">
-                <span className="text-foreground">المسافة</span>
-                <span className="tabular text-muted-foreground">لحد {selectedDistance} كم</span>
+                <span className="text-foreground">{t("distance")}</span>
+                <span className="tabular text-muted-foreground">
+                  {t("upToDistance", { distance: selectedDistance })}
+                </span>
               </div>
               <div className="flex gap-2">
                 {[2, 5, 10].map((km) => {
@@ -279,7 +288,7 @@ export function FilterSheet({
                           : "border-border bg-background text-foreground hover:bg-muted/60",
                       )}
                     >
-                      {km} كم
+                      {t("km", { km })}
                     </button>
                   );
                 })}
@@ -289,8 +298,8 @@ export function FilterSheet({
             {/* ٥. مفتوح دلوقتي بس */}
             <div className="flex items-center justify-between border-t border-border pt-4">
               <div className="flex flex-col gap-0.5">
-                <span className="text-[14px] font-bold text-foreground">مفتوح دلوقتي بس</span>
-                <span className="text-[12px] text-muted-foreground">اخفي الصالونات المقفولة</span>
+                <span className="text-[14px] font-bold text-foreground">{t("openNowOnly")}</span>
+                <span className="text-[12px] text-muted-foreground">{t("hideClosed")}</span>
               </div>
               <label className="relative inline-flex h-[26px] w-11 shrink-0 cursor-pointer items-center rounded-full bg-disabled-bg transition-colors has-checked:bg-primary">
                 <input
@@ -314,7 +323,7 @@ export function FilterSheet({
               onClick={handleReset}
               className="h-12 flex-[0_0_110px] rounded-[11px] border border-border bg-background text-[14px] font-bold text-foreground transition-colors hover:bg-muted cursor-pointer"
             >
-              امسح الكل
+              {t("resetAll")}
             </button>
             <button
               type="button"
@@ -322,14 +331,8 @@ export function FilterSheet({
               className="h-12 flex-1 rounded-[11px] bg-primary text-[15px] font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed cursor-pointer"
             >
               {previewCount === 0
-                ? "مفيش نتايج"
-                : previewCount === 1
-                  ? "اعرض صالون واحد"
-                  : previewCount === 2
-                    ? "اعرض صالونين"
-                    : previewCount <= 10
-                      ? `اعرض ${previewCount} صالونات`
-                      : `اعرض ${previewCount} نتيجة`}
+                ? t("noResults")
+                : t("showResults", { count: previewCount })}
             </button>
           </div>
         </Dialog.Popup>

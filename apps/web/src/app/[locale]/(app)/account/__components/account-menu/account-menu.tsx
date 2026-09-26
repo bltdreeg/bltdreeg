@@ -13,6 +13,7 @@ import {
   Info,
   ChevronLeft,
 } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/atoms/sheet";
 import {
@@ -33,19 +34,22 @@ export function AccountMenu({
   favoriteCount = 4,
   upcomingBookingsCount = 2,
 }: AccountMenuProps) {
+  const t = useTranslations("app.account.menu");
+  const locale = useLocale();
+
   const COMING_SOON = (
-    <p className="text-sm text-muted-foreground">قريباً في التحديث القادم</p>
+    <p className="text-sm text-muted-foreground">{t("comingSoon")}</p>
   );
 
   return (
     <nav
-      aria-label="خيارات الحساب"
+      aria-label={t("ariaLabel")}
       className="grid grid-cols-1 gap-4 lg:grid-cols-3"
     >
       {/* 1 — الحساب */}
       <div className="overflow-hidden rounded-[14px] border border-border bg-card">
         <div className="border-b border-border bg-muted/50 px-[18px] py-[14px]">
-          <h3 className="text-[13px] font-bold text-muted-foreground">الحساب</h3>
+          <h3 className="text-[13px] font-bold text-muted-foreground">{t("accountSection")}</h3>
         </div>
 
         <div className="divide-y divide-border/60">
@@ -58,7 +62,7 @@ export function AccountMenu({
               <User className="size-4 text-muted-foreground" />
             </div>
             <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-              الملف الشخصي
+              {t("profile")}
             </span>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           </Link>
@@ -73,7 +77,7 @@ export function AccountMenu({
             </div>
             <div className="flex flex-1 items-center gap-2.5">
               <span className="text-[14.5px] font-semibold text-foreground">
-                الصالونات المفضلة
+                {t("favorites")}
               </span>
               <span className="flex h-5.5 items-center justify-center rounded-md border border-tint-border bg-tint px-2 text-[11.5px] font-bold text-primary-pressed">
                 {favoriteCount}
@@ -92,10 +96,10 @@ export function AccountMenu({
             </div>
             <div className="flex flex-1 items-center gap-2.5">
               <span className="text-[14.5px] font-semibold text-foreground">
-                حجوزاتي
+                {t("bookings")}
               </span>
               <span className="text-[12.5px] text-muted-foreground">
-                {upcomingBookingsCount} قادمة
+                {t("upcomingCount", { count: upcomingBookingsCount })}
               </span>
             </div>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
@@ -106,7 +110,7 @@ export function AccountMenu({
       {/* 2 — التطبيق */}
       <div className="overflow-hidden rounded-[14px] border border-border bg-card">
         <div className="border-b border-border bg-muted/50 px-[18px] py-[14px]">
-          <h3 className="text-[13px] font-bold text-muted-foreground">التطبيق</h3>
+          <h3 className="text-[13px] font-bold text-muted-foreground">{t("appSection")}</h3>
         </div>
 
         <div className="divide-y divide-border/60">
@@ -119,10 +123,10 @@ export function AccountMenu({
               <Globe className="size-4 text-muted-foreground" />
             </div>
             <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-              لغة التطبيق
+              {t("language")}
             </span>
             <span className="text-[13.5px] font-semibold text-muted-foreground">
-              العربية
+              {locale === "ar" ? "العربية" : "English"}
             </span>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           </Link>
@@ -135,15 +139,15 @@ export function AccountMenu({
               </div>
               <div className="flex flex-1 flex-col gap-0.5">
                 <span className="text-[14.5px] font-semibold text-foreground">
-                  الإشعارات
+                  {t("notifications")}
                 </span>
                 <span className="text-[12.5px] text-muted-foreground">
-                  واتساب والتطبيق
+                  {t("notificationsSubtitle")}
                 </span>
               </div>
               <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
             </SheetTrigger>
-            <SheetContent title="الإشعارات">{COMING_SOON}</SheetContent>
+            <SheetContent title={t("notifications")}>{COMING_SOON}</SheetContent>
           </Sheet>
 
           {/* الإعدادات */}
@@ -153,11 +157,11 @@ export function AccountMenu({
                 <Sliders className="size-4 text-muted-foreground" />
               </div>
               <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-                الإعدادات
+                {t("settings")}
               </span>
               <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
             </SheetTrigger>
-            <SheetContent title="الإعدادات">{COMING_SOON}</SheetContent>
+            <SheetContent title={t("settings")}>{COMING_SOON}</SheetContent>
           </Sheet>
         </div>
       </div>
@@ -166,7 +170,7 @@ export function AccountMenu({
       <div className="overflow-hidden rounded-[14px] border border-border bg-card">
         <div className="border-b border-border bg-muted/50 px-[18px] py-[14px]">
           <h3 className="text-[13px] font-bold text-muted-foreground">
-            المساعدة
+            {t("helpSection")}
           </h3>
         </div>
 
@@ -181,10 +185,10 @@ export function AccountMenu({
             </div>
             <div className="flex flex-1 flex-col gap-0.5">
               <span className="text-[14.5px] font-semibold text-foreground">
-                الدعم والمساعدة
+                {t("helpAndSupport")}
               </span>
               <span className="text-[12.5px] text-muted-foreground">
-                شكوى على حجز أو مشكلة في الدور
+                {t("helpSubtitle")}
               </span>
             </div>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
@@ -197,11 +201,11 @@ export function AccountMenu({
                 <FileText className="size-4 text-muted-foreground" />
               </div>
               <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-                الشروط والخصوصية
+                {t("termsAndPrivacy")}
               </span>
               <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
             </SheetTrigger>
-            <SheetContent title="الشروط والخصوصية">{COMING_SOON}</SheetContent>
+            <SheetContent title={t("termsAndPrivacy")}>{COMING_SOON}</SheetContent>
           </Sheet>
 
           {/* عن بالتدريج */}
@@ -211,11 +215,11 @@ export function AccountMenu({
                 <Info className="size-4 text-muted-foreground" />
               </div>
               <span className="flex-1 text-[14.5px] font-semibold text-foreground">
-                عن بالتدريج
+                {t("about")}
               </span>
               <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
             </SheetTrigger>
-            <SheetContent title="عن بالتدريج">{COMING_SOON}</SheetContent>
+            <SheetContent title={t("about")}>{COMING_SOON}</SheetContent>
           </Sheet>
         </div>
       </div>

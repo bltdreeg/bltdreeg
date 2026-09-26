@@ -5,6 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, Copy, Check, Phone, ArrowLeft, CalendarSync, Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations, useLocale } from "next-intl";
 import { ROUTE_ACCOUNT, ROUTE_BOOKINGS, ROUTE_BOOK_SLOT, ROUTE_BOOKING_RATE } from "@/lib/data/constants/routes.constants";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import type { SalonDetails } from "@/lib/types/salon";
@@ -39,16 +40,24 @@ export function BookingDetailView({
   barber,
   services = [],
 }: BookingDetailViewProps) {
+  const t = useTranslations("app.bookingDetail");
+  const tDateTime = useTranslations("common.dateTime");
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<BookingStatus>(booking.status);
 
   const isCancelled = currentStatus === BookingStatus.CANCELLED;
   const bookingCode = booking.bookingCode || "8C2-406";
-  const timeText = formatTime(booking.startAt);
-  const dateDetailText = formatBookingDetailDate(booking.startAt);
-  const dayOfWeek = formatDayOfWeek(booking.startAt);
-  const windowInfo = calculateAppointmentWindow(booking.startAt, booking.durationMinutes);
+  const timeText = formatTime(booking.startAt, locale);
+  const dateDetailText = formatBookingDetailDate(booking.startAt, locale);
+  const dayOfWeek = formatDayOfWeek(booking.startAt, locale);
+  const windowInfo = calculateAppointmentWindow(booking.startAt, booking.durationMinutes, locale);
+  const windowText = tDateTime("appointmentWindow", {
+    duration: booking.durationMinutes,
+    start: windowInfo.start,
+    end: windowInfo.end,
+  });
   const totalQueueDay = Math.max(9, booking.queueNumber + 6);
 
   const salonAddress = salon?.address || "شارع 9، المعادي — قبل ميدان الحرية بمحل، جنب صيدلية العزبي.";
@@ -84,10 +93,10 @@ export function BookingDetailView({
   };
 
   return (
-    <div dir="rtl" className="flex min-h-full flex-1 flex-col bg-white text-[#0E0F11]">
+    <div className="flex min-h-full flex-1 flex-col bg-white text-[#0E0F11]">
       {/* 1. شريط مسار التنقل (Breadcrumb) + كود الحجز — مطابق لـ FRAME 11A */}
       <nav
-        aria-label="مسار التنقل"
+        aria-label={t("breadcrumb.bookingDetails")}
         className="flex h-[60px] w-full items-center justify-between border-b border-[#E5E7EB] bg-white px-4 sm:px-8 lg:px-16"
       >
         <div className="flex items-center gap-3 text-[13px]">
@@ -95,20 +104,20 @@ export function BookingDetailView({
             href={ROUTE_ACCOUNT}
             className="font-semibold text-[#6B7280] transition-colors hover:text-[#0E0F11]"
           >
-            حسابي
+            {t("breadcrumb.account")}
           </Link>
           <ChevronLeft className="size-3.5 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           <Link
             href={ROUTE_BOOKINGS}
             className="font-semibold text-[#6B7280] transition-colors hover:text-[#0E0F11]"
           >
-            حجوزاتي
+            {t("breadcrumb.bookings")}
           </Link>
           <ChevronLeft className="size-3.5 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
-          <span className="font-bold text-[#0E0F11]">تفاصيل الحجز</span>
+          <span className="font-bold text-[#0E0F11]">{t("breadcrumb.bookingDetails")}</span>
         </div>
         <div className="text-[12.5px] tabular-nums text-[#6B7280]">
-          كود الحجز {bookingCode}
+          {t("bookingCode", { code: bookingCode })}
         </div>
       </nav>
 
@@ -144,7 +153,7 @@ export function BookingDetailView({
                     {booking.shopName}
                   </h2>
                   <div className="text-[12.5px] leading-none text-[#6B7280] tabular-nums">
-                    {salonArea} · {formatDistance(salonDistance)} · {salonRating}
+                    {salonArea} · {formatDistance(salonDistance, locale)} · {salonRating}
                   </div>
                 </div>
               </div>
@@ -159,7 +168,7 @@ export function BookingDetailView({
                     className="flex h-[42px] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-[13.5px] font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
                   >
                     <Phone className="size-3.5 text-[#6B7280]" />
-                    <span>اتصل بالصالون</span>
+                    <span>{t("callSalon")}</span>
                   </a>
                   <button
                     type="button"
@@ -169,12 +178,12 @@ export function BookingDetailView({
                     {copied ? (
                       <>
                         <Check className="size-3.5 text-[#15803D]" />
-                        <span className="text-[#15803D]">اتنسخ!</span>
+                        <span className="text-[#15803D]">{t("copied")}</span>
                       </>
                     ) : (
                       <>
                         <Copy className="size-3.5 text-[#6B7280]" />
-                        <span>انسخ العنوان</span>
+                        <span>{t("copyAddress")}</span>
                       </>
                     )}
                   </button>
@@ -184,13 +193,13 @@ export function BookingDetailView({
 
             {/* كارت تعديل الحجز */}
             <div className="flex flex-col gap-2.5 rounded-[14px] border border-[#E5E7EB] bg-white p-4 sm:px-[18px] sm:py-4">
-              <h3 className="text-sm font-bold leading-none text-[#0E0F11]">تعديل الحجز</h3>
+              <h3 className="text-sm font-bold leading-none text-[#0E0F11]">{t("rescheduleTitle")}</h3>
               <Link
                 href={rescheduleUrl}
                 className="flex h-11 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-sm font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
               >
                 <CalendarSync className="size-4 text-[#6B7280]" />
-                <span>عدّل الميعاد</span>
+                <span>{t("rescheduleTime")}</span>
               </Link>
               {!isCancelled ? (
                 <button
@@ -198,15 +207,15 @@ export function BookingDetailView({
                   onClick={() => setCancelModalOpen(true)}
                   className="flex h-11 w-full items-center justify-center whitespace-nowrap rounded-[10px] border border-[#FECACA] bg-white text-sm font-bold text-[#EF4444] transition-colors hover:bg-red-50 cursor-pointer"
                 >
-                  إلغاء الحجز
+                  {t("cancelBooking")}
                 </button>
               ) : (
                 <div className="flex h-11 w-full items-center justify-center rounded-[10px] bg-slate-100 text-sm font-bold text-[#6B7280]">
-                  تم إلغاء هذا الحجز
+                  {t("bookingCancelled")}
                 </div>
               )}
               <p className="text-center text-xs leading-[1.7] text-[#6B7280]">
-                مجاني لحد ساعتين قبل الميعاد
+                {t("freeCancellationHint")}
               </p>
             </div>
           </aside>
@@ -216,19 +225,19 @@ export function BookingDetailView({
             {/* عنوان الحجز وشارة الحالة */}
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-2xl sm:text-[28px] font-extrabold leading-[1.25] text-[#0E0F11]">
-                حجزك في {booking.shopName}
+                {t("yourBookingAt", { salon: booking.shopName })}
               </h1>
               {isCancelled ? (
                 <span className="flex h-7 items-center whitespace-nowrap rounded-lg border border-red-200 bg-red-50 px-3 text-[12.5px] font-bold text-red-600">
-                  ملغي
+                  {t("status.cancelled")}
                 </span>
               ) : currentStatus === BookingStatus.DONE ? (
                 <span className="flex h-7 items-center whitespace-nowrap rounded-lg border border-slate-200 bg-slate-100 px-3 text-[12.5px] font-bold text-[#6B7280]">
-                  تمت الزيارة
+                  {t("status.completed")}
                 </span>
               ) : (
                 <span className="flex h-7 items-center whitespace-nowrap rounded-lg border border-[#CFE6E3] bg-[#F0FAF8] px-3 text-[12.5px] font-bold text-[#0B5A54]">
-                  مؤكد
+                  {t("status.confirmed")}
                 </span>
               )}
             </div>
@@ -241,15 +250,15 @@ export function BookingDetailView({
                     <Star className="size-5 fill-[#B45309] text-[#B45309]" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-[#B45309]">قيّم زيارتك للصالون</span>
-                    <span className="text-xs text-[#92400E]">رأيك بيساعد زباين تانية تختار صح وبيكشف دقة الطابور</span>
+                    <span className="text-sm font-bold text-[#B45309]">{t("rateVisitTitle")}</span>
+                    <span className="text-xs text-[#92400E]">{t("rateVisitSubtitle")}</span>
                   </div>
                 </div>
                 <Link
                   href={ROUTE_BOOKING_RATE(booking.id)}
                   className="inline-flex h-9 items-center justify-center rounded-lg bg-[#B45309] px-4 text-xs font-bold text-white hover:bg-[#92400E] transition-colors self-start sm:self-auto cursor-pointer"
                 >
-                  قيّم دلوقتي
+                  {t("rateNow")}
                 </Link>
               </div>
             )}
@@ -257,7 +266,7 @@ export function BookingDetailView({
               <div className="flex items-center gap-2 rounded-xl bg-amber-50/80 px-4 py-2.5 border border-amber-200/80 w-fit">
                 <Star className="size-4 fill-[#B45309] text-[#B45309]" />
                 <span className="text-xs font-bold text-[#B45309]">
-                  تقييمك لهذه الزيارة: {booking.rating} من 5 نجوم
+                  {t("yourRatingStars", { rating: booking.rating })}
                 </span>
               </div>
             )}
@@ -272,7 +281,7 @@ export function BookingDetailView({
                 {/* ميعادك */}
                 <div className="flex flex-1 flex-col gap-2 p-5 sm:p-6">
                   <span className="text-[12.5px] font-semibold tracking-wide text-[#6B7280]">
-                    ميعادك
+                    {t("ticket.yourTime")}
                   </span>
                   <span className="text-[36px] sm:text-[40px] font-extrabold leading-none tabular-nums text-[#0E0F11]">
                     {timeText}
@@ -289,7 +298,7 @@ export function BookingDetailView({
                 {/* رقمك في الدور */}
                 <div className="flex flex-1 flex-col gap-2 p-5 sm:p-6">
                   <span className="text-[12.5px] font-semibold tracking-wide text-[#6B7280]">
-                    رقمك في الدور
+                    {t("ticket.yourQueueNumber")}
                   </span>
                   <div className="flex items-center gap-3.5">
                     <div className="flex size-[70px] shrink-0 items-center justify-center rounded-[14px] border-2 border-[#0F766E] bg-[#F0FAF8]">
@@ -298,9 +307,9 @@ export function BookingDetailView({
                       </span>
                     </div>
                     <div className="text-[13px] leading-[1.6] text-[#6B7280]">
-                      من {totalQueueDay} في دور {dayOfWeek}
+                      {t("ticket.outOfTotal", { total: totalQueueDay, day: dayOfWeek })}
                       <br />
-                      الرقم بيبقى حيّ يوم الميعاد
+                      {t("ticket.liveOnDay")}
                     </div>
                   </div>
                 </div>
@@ -309,8 +318,7 @@ export function BookingDetailView({
               {/* الشريط السفلي التوضيحي داخل التذكرة */}
               <div className="border-t border-[#E5E7EB] bg-[#F7F8FA] px-5 py-3.5 sm:px-6">
                 <p className="text-[13px] leading-[1.7] text-[#6B7280]">
-                  يوم الميعاد الصفحة دي بتتحول لحالة حيّة: قدامك كام واحد، والصالون ماشي في ميعاده
-                  ولا متأخر.
+                  {t("ticket.dayExplanation")}
                 </p>
               </div>
             </div>
@@ -318,19 +326,19 @@ export function BookingDetailView({
             {/* جدول تفاصيل الحجز (الخدمات والحلاق والمدة والإجمالي) */}
             <div className="overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white">
               <div className="border-b border-[#E5E7EB] bg-[#F7F8FA] px-5 py-3.5 sm:px-5">
-                <h2 className="text-[15px] font-bold leading-none text-[#0E0F11]">تفاصيل الحجز</h2>
+                <h2 className="text-[15px] font-bold leading-none text-[#0E0F11]">{t("table.title")}</h2>
               </div>
 
               {/* صف الخدمات */}
               <div className="flex flex-col gap-1 border-b border-[#F1F3F5] p-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:px-5">
                 <span className="w-full shrink-0 text-[13px] font-semibold text-[#6B7280] sm:w-[120px]">
-                  الخدمات
+                  {t("table.services")}
                 </span>
                 <div className="flex-1 text-[14.5px] font-semibold leading-[1.8] text-[#0E0F11]">
                   {services && services.length > 0 ? (
                     services.map((svc, i) => (
                       <div key={svc.id}>
-                        {svc.name} — {svc.durationMinutes} دقيقة — {formatPrice(svc.price)}
+                        {svc.name} — {t("table.minutes", { count: svc.durationMinutes })} — {formatPrice(svc.price, locale)}
                       </div>
                     ))
                   ) : booking.serviceNames && booking.serviceNames.length > 0 ? (
@@ -344,7 +352,7 @@ export function BookingDetailView({
               {/* صف الحلاق */}
               <div className="flex flex-col gap-1.5 border-b border-[#F1F3F5] p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
                 <span className="w-full shrink-0 text-[13px] font-semibold text-[#6B7280] sm:w-[120px]">
-                  الحلاق
+                  {t("table.barber")}
                 </span>
                 <div className="flex flex-1 items-center gap-[11px]">
                   <div className="flex size-[34px] shrink-0 items-center justify-center rounded-full border border-[#CFE6E3] bg-[#F0FAF8] text-xs font-bold text-[#0B5A54]">
@@ -359,47 +367,47 @@ export function BookingDetailView({
               {/* صف المدة الكلية */}
               <div className="flex flex-col gap-1 border-b border-[#F1F3F5] p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
                 <span className="w-full shrink-0 text-[13px] font-semibold text-[#6B7280] sm:w-[120px]">
-                  المدة الكلية
+                  {t("table.totalDuration")}
                 </span>
                 <span className="flex-1 text-[14.5px] font-semibold tabular-nums text-[#0E0F11]">
-                  {windowInfo.text}
+                  {windowText}
                 </span>
               </div>
 
               {/* صف الإجمالي */}
               <div className="flex flex-col gap-1 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
                 <span className="w-full shrink-0 text-[13px] font-semibold text-[#6B7280] sm:w-[120px]">
-                  الإجمالي
+                  {t("table.totalPrice")}
                 </span>
                 <div className="flex flex-1 flex-wrap items-baseline gap-2.5">
                   <span className="text-[22px] font-extrabold leading-none tabular-nums text-[#0E0F11]">
-                    {formatPrice(booking.totalPrice)}
+                    {formatPrice(booking.totalPrice, locale)}
                   </span>
-                  <span className="text-[13px] text-[#6B7280]">تدفع في الصالون · كاش أو فيزا</span>
+                  <span className="text-[13px] text-[#6B7280]">{t("table.payAtSalon")}</span>
                 </div>
               </div>
             </div>
 
             {/* كارت سياسة الإلغاء */}
             <div className="flex flex-col gap-3 rounded-[14px] border border-[#E5E7EB] bg-[#F7F8FA] p-5">
-              <h3 className="text-[15px] font-bold leading-none text-[#0E0F11]">سياسة الإلغاء</h3>
+              <h3 className="text-[15px] font-bold leading-none text-[#0E0F11]">{t("policy.title")}</h3>
               <div className="flex flex-col gap-[9px]">
                 <div className="flex items-start gap-2.5">
                   <div className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#16A34A]" />
                   <span className="text-[13.5px] leading-[1.8] text-[#0E0F11]">
-                    إلغاء أو تأجيل مجاني لحد ساعتين قبل {timeText}.
+                    {t("policy.free", { time: timeText })}
                   </span>
                 </div>
                 <div className="flex items-start gap-2.5">
                   <div className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#F59E0B]" />
                   <span className="text-[13.5px] leading-[1.8] text-[#0E0F11]">
-                    بعد كده الصالون ممكن يحسبها إلغاء متأخر.
+                    {t("policy.late")}
                   </span>
                 </div>
                 <div className="flex items-start gap-2.5">
                   <div className="mt-[7px] size-1.5 shrink-0 rounded-full bg-[#EF4444]" />
                   <span className="text-[13.5px] leading-[1.8] text-[#0E0F11]">
-                    لو مجيتش من غير إلغاء، بتتسجل غياب — 3 غيابات بتوقف الحجز عندهم أسبوع.
+                    {t("policy.noShow")}
                   </span>
                 </div>
               </div>

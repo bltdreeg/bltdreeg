@@ -1,8 +1,8 @@
-// نافذة منبثقة وسط الشاشة بأسلوب Base UI
 "use client";
 
 import { Dialog } from "@base-ui/react/dialog";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn.utils";
 
 const Modal = Dialog.Root;
@@ -21,6 +21,8 @@ function ModalContent({
   description?: string;
   showCloseButton?: boolean;
 }) {
+  const t = useTranslations("common");
+
   return (
     <Dialog.Portal>
       <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/55 backdrop-blur-[2px] transition-opacity data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
@@ -50,7 +52,7 @@ function ModalContent({
             </div>
             {showCloseButton && (
               <Dialog.Close
-                aria-label="إغلاق"
+                aria-label={t("close")}
                 className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer"
               >
                 <X className="size-5" />

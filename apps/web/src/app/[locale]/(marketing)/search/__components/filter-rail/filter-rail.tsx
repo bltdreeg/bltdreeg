@@ -1,4 +1,4 @@
-// رف الفلاتر: 300px ثابت على الديسكتوب — كله GET form عشان الفلاتر تعيش في الرابط من غير جافاسكربت
+import { useLocale, useTranslations } from "next-intl";
 import { RadioGroup, Radio } from "@/components/atoms/radio";
 import { Checkbox } from "@/components/atoms/checkbox";
 import { Label } from "@/components/atoms/label";
@@ -7,14 +7,6 @@ import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { ShopSort } from "@/lib/types/shop/shop-filters.interface";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 import { cn } from "@/lib/utils/cn.utils";
-
-const SORT_OPTIONS: { value: string; label: string }[] = [
-  { value: ShopSort.NEXT_SLOT, label: "أقرب ميعاد متاح" },
-  { value: ShopSort.NEAREST, label: "الأقرب ليك" },
-  { value: ShopSort.RATING, label: "الأعلى تقييماً" },
-  { value: ShopSort.PRICE, label: "الأقل سعراً" },
-  { value: ShopSort.NEWEST, label: "الأحدث" },
-];
 
 type ServiceOption = { name: string; count: number };
 
@@ -43,6 +35,18 @@ function FilterRail({
   activeCount,
   resultCount,
 }: FilterRailProps) {
+  const t = useTranslations("marketing.search.filterRail");
+  const tSort = useTranslations("marketing.search.sortOptions");
+  const locale = useLocale();
+
+  const sortOptions: { value: string; label: string }[] = [
+    { value: ShopSort.NEXT_SLOT, label: tSort("nextSlot") },
+    { value: ShopSort.NEAREST, label: tSort("nearest") },
+    { value: ShopSort.RATING, label: tSort("rating") },
+    { value: ShopSort.PRICE, label: tSort("price") },
+    { value: ShopSort.NEWEST, label: tSort("newest") },
+  ];
+
   return (
     <form
       method="get"
@@ -53,22 +57,22 @@ function FilterRail({
 
       <div className="flex items-center justify-between gap-2.5 border-b border-border px-4 py-3.5">
         <div className="flex items-center gap-2.5">
-          <span className="text-[15px] font-bold">الفلاتر</span>
+          <span className="text-[15px] font-bold">{t("filters")}</span>
           {activeCount > 0 && (
             <span className="tabular rounded-[7px] bg-primary px-2.5 py-1 text-[11.5px] font-bold text-primary-foreground">
-              {activeCount} مفعّلة
+              {t("active", { count: activeCount })}
             </span>
           )}
         </div>
         <a href={`${ROUTE_SEARCH}?q=${encodeURIComponent(q)}`} className="text-[12.5px] font-bold text-primary hover:text-primary-pressed">
-          مسح الكل
+          {t("clearAll")}
         </a>
       </div>
 
       <div className="flex flex-col gap-2.5 border-b border-border px-4 pb-4">
-        <span className="text-[13px] font-bold">ترتيب النتايج</span>
+        <span className="text-[13px] font-bold">{t("sortResults")}</span>
         <RadioGroup name="sort" defaultValue={sort} className="flex flex-col gap-1">
-          {SORT_OPTIONS.map((opt) => (
+          {sortOptions.map((opt) => (
             <Label key={opt.value} className="flex cursor-pointer items-center gap-2.5 py-1 text-[13.5px] font-medium">
               <Radio value={opt.value} />
               {opt.label}
@@ -79,7 +83,7 @@ function FilterRail({
 
       {serviceOptions.length > 0 && (
         <div className="flex flex-col gap-2.5 border-b border-border px-4 pb-4">
-          <span className="text-[13px] font-bold">الخدمة</span>
+          <span className="text-[13px] font-bold">{t("service")}</span>
           <div className="flex flex-col gap-1">
             {serviceOptions.map((opt) => (
               <Label key={opt.name} className="flex cursor-pointer items-center gap-2.5 py-1 text-[13.5px]">
@@ -94,8 +98,10 @@ function FilterRail({
 
       <div className="flex flex-col gap-2.5 border-b border-border px-4 pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-bold">السعر</span>
-          <span className="tabular text-[13px] font-bold text-primary-pressed">حتى {formatPrice(maxPrice)}</span>
+          <span className="text-[13px] font-bold">{t("price")}</span>
+          <span className="tabular text-[13px] font-bold text-primary-pressed">
+            {t("upToPrice", { price: formatPrice(maxPrice, locale) })}
+          </span>
         </div>
         <input
           type="range"
@@ -106,15 +112,17 @@ function FilterRail({
           className="h-1.5 w-full accent-primary"
         />
         <div className="flex justify-between text-[11.5px] text-muted-foreground">
-          <span className="tabular">{formatPrice(priceBounds.min)}</span>
-          <span className="tabular">{formatPrice(priceBounds.max)}</span>
+          <span className="tabular">{formatPrice(priceBounds.min, locale)}</span>
+          <span className="tabular">{formatPrice(priceBounds.max, locale)}</span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2.5 border-b border-border px-4 pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-bold">المسافة</span>
-          <span className="tabular text-[13px] font-bold text-muted-foreground">لحد {maxDistanceKm} كم</span>
+          <span className="text-[13px] font-bold">{t("distance")}</span>
+          <span className="tabular text-[13px] font-bold text-muted-foreground">
+            {t("upToDistance", { km: maxDistanceKm })}
+          </span>
         </div>
         <div className="flex gap-1.5">
           {[2, 5, 10].map((km) => (
@@ -132,14 +140,14 @@ function FilterRail({
                 defaultChecked={maxDistanceKm === km}
                 className="sr-only"
               />
-              {km} كم
+              {t("km", { km })}
             </Label>
           ))}
         </div>
       </div>
 
       <div className="flex items-center justify-between gap-3 px-4 pb-4">
-        <span className="text-[13.5px] font-semibold">مفتوح النهارده بس</span>
+        <span className="text-[13.5px] font-semibold">{t("openTodayOnly")}</span>
         <label className="relative inline-flex h-[26px] w-11 shrink-0 cursor-pointer items-center rounded-full bg-disabled-bg transition-colors has-checked:bg-primary">
           <input type="checkbox" name="todayOnly" value="true" defaultChecked={todayOnly} className="peer sr-only" />
           <span
@@ -153,7 +161,7 @@ function FilterRail({
         type="submit"
         className={cn(buttonVariants(), "mx-4 mb-4 h-11 rounded-[10px] text-[14.5px] font-bold")}
       >
-        اعرض {resultCount} نتايج
+        {t("showResults", { count: resultCount })}
       </button>
     </form>
   );

@@ -1,10 +1,10 @@
 'use client';
 // خطوة الحلاق: أي حلاق متاح (افتراضي) أو اختيار بالاسم — فريم ٢٤ (mobile)
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Users, Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOK_REVIEW } from "@/lib/data/constants/routes.constants";
-import { peopleAheadOfBarber } from "@/lib/utils/format/queue-labels.utils";
 import type { Barber } from "@/lib/types/barber/barber.interface";
 
 type StepBarberProps = {
@@ -14,6 +14,7 @@ type StepBarberProps = {
 };
 
 export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
+  const t = useTranslations("app.book.barber");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const p = new URLSearchParams(queryString);
@@ -34,20 +35,20 @@ export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
         </span>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <span className="text-[15px] font-extrabold text-primary-pressed">أي حلاق متاح</span>
+            <span className="text-[15px] font-extrabold text-primary-pressed">{t("anyBarber")}</span>
             <span className="rounded-md bg-primary px-1.5 py-0.5 text-[10.5px] font-extrabold text-primary-foreground">
-              الأسرع
+              {t("fastest")}
             </span>
           </div>
-          <p className="mt-1 text-[13px] text-foreground">أول واحد يخلّص هيستلمك</p>
+          <p className="mt-1 text-[13px] text-foreground">{t("firstAvailable")}</p>
         </div>
         <div className="shrink-0 text-end">
-          <div className="text-[14px] font-extrabold text-success-strong">فوراً</div>
-          <div className="text-xs text-success">مفيش دور</div>
+          <div className="text-[14px] font-extrabold text-success-strong">{t("immediately")}</div>
+          <div className="text-xs text-success">{t("noQueue")}</div>
         </div>
       </button>
 
-      <span className="text-[13px] font-bold text-muted-foreground">أو اختار حلاق بالاسم</span>
+      <span className="text-[13px] font-bold text-muted-foreground">{t("orChooseBarber")}</span>
 
       {barbers.map((barber) => {
         const off = barber.queue === null;
@@ -81,20 +82,24 @@ export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
                 )}
               </div>
               <div className="mt-0.5 text-xs text-muted-foreground">
-                {off ? "مش موجود النهارده" : barber.specialty}
+                {off ? t("offToday") : barber.specialty}
               </div>
             </div>
             {!off && barber.queue && (
               <div className="shrink-0 text-end">
                 {barber.queue.peopleAhead === 0 ? (
                   <>
-                    <div className="text-[13.5px] font-extrabold text-success-strong">فوراً</div>
-                    <div className="text-xs text-muted-foreground">فاضي</div>
+                    <div className="text-[13.5px] font-extrabold text-success-strong">{t("immediately")}</div>
+                    <div className="text-xs text-muted-foreground">{t("empty")}</div>
                   </>
                 ) : (
                   <>
-                    <div className="text-[13.5px] font-extrabold text-warning-fg">+{barber.queue.waitMinutes} د</div>
-                    <div className="text-xs text-muted-foreground">{peopleAheadOfBarber(barber.queue.peopleAhead)}</div>
+                    <div className="text-[13.5px] font-extrabold text-warning-fg">
+                      {t("minShort", { minutes: barber.queue.waitMinutes })}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {t("ahead", { count: barber.queue.peopleAhead })}
+                    </div>
                   </>
                 )}
               </div>
@@ -110,7 +115,7 @@ export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
             href={nextUrl}
             className="flex h-[52px] lg:h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-base lg:text-[15px] font-bold text-white shadow-sm lg:shadow-none transition-colors hover:bg-primary-pressed cursor-pointer"
           >
-            كمّل — راجع الحجز
+            {t("continueReview")}
           </Link>
         </div>
       </div>

@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Store, Clock } from "lucide-react";
 import type { SalonDetails } from "@/lib/types/salon";
 import type { Service } from "@/lib/types/service/service.interface";
@@ -13,6 +16,7 @@ type BookingSummaryPanelProps = {
 };
 
 export function BookingSummaryPanel({ salon, services, children, cta }: BookingSummaryPanelProps) {
+  const t = useTranslations("app.book.summary");
   const totalMinutes = services.reduce((n, s) => n + s.durationMinutes, 0);
   const totalPrice = services.reduce((n, s) => n + s.price, 0);
 
@@ -33,7 +37,9 @@ export function BookingSummaryPanel({ salon, services, children, cta }: BookingS
           <div key={svc.id} className="flex items-start justify-between gap-3 border-b border-border py-3 last:border-b-0">
             <div className="flex flex-col gap-0.5">
               <span className="text-[14.5px] font-semibold text-foreground">{svc.name}</span>
-              <span className="tabular text-xs text-muted-foreground">{svc.durationMinutes} دقيقة</span>
+              <span className="tabular text-xs text-muted-foreground">
+                {t("minutes", { count: svc.durationMinutes })}
+              </span>
             </div>
             <span className="tabular shrink-0 text-sm font-bold text-foreground">{formatPrice(svc.price)}</span>
           </div>
@@ -53,12 +59,14 @@ export function BookingSummaryPanel({ salon, services, children, cta }: BookingS
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground">
             <Clock className="size-3.5 text-muted-foreground" />
-            <span>المدة الكلية</span>
+            <span>{t("totalDuration")}</span>
           </div>
-          <span className="tabular text-sm font-bold text-foreground">{totalMinutes} دقيقة</span>
+          <span className="tabular text-sm font-bold text-foreground">
+            {t("minutes", { count: totalMinutes })}
+          </span>
         </div>
         <div className="flex items-baseline justify-between">
-          <span className="text-[15px] font-bold text-foreground">الإجمالي</span>
+          <span className="text-[15px] font-bold text-foreground">{t("totalPrice")}</span>
           <span className="tabular text-[26px] font-extrabold text-foreground">{formatPrice(totalPrice)}</span>
         </div>
         {cta && <div className="mt-1">{cta}</div>}

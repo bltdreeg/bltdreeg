@@ -2,6 +2,7 @@
 // معرض صور الصالون — زوايا ناعمة 14px وشبكة ثلاثية أنيقة، مع لايت بوكس لعرض كل الصور
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Dialog } from "@base-ui/react/dialog";
 import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
 import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
@@ -16,6 +17,8 @@ type SalonGalleryProps = {
 };
 
 export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
+  const t = useTranslations("marketing.salon.gallery");
+  const tInfo = useTranslations("marketing.salon.info");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
   const { toast } = useToast();
@@ -40,18 +43,18 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
     toggleFavorite(salonId);
     if (!isFav) {
       toast.success(
-        "تمت الإضافة للمفضلة",
-        `تقدر تلاقي ${name} في الصالونات المفضلة وتتابع مواعيده`,
-        { label: "شوف المفضلة", href: ROUTE_FAVORITES }
+        tInfo("toasts.addedTitle"),
+        tInfo("toasts.addedDesc", { name }),
+        { label: tInfo("toasts.viewFavorites"), href: ROUTE_FAVORITES }
       );
     } else {
-      toast.info("اتمسح من المفضلة", `تمت إزالة ${name} من قائمة الصالونات المفضلة`);
+      toast.info(tInfo("toasts.removedTitle"), tInfo("toasts.removedDesc", { name }));
     }
   };
 
   return (
     <>
-      <div className="flex h-[240px] sm:h-[340px] md:h-[380px] w-full gap-2 sm:gap-3" dir="rtl">
+      <div className="flex h-[240px] sm:h-[340px] md:h-[380px] w-full gap-2 sm:gap-3">
         {/* الصورة الرئيسية العريضة */}
         <div className="relative flex-1 overflow-hidden rounded-none lg:rounded-[14px] bg-white border-b lg:border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] sm:flex-[2]">
           {main ? (
@@ -59,7 +62,7 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
               type="button"
               onClick={() => setOpenIndex(0)}
               className="absolute inset-0 cursor-pointer"
-              aria-label={`عرض صور ${name}`}
+              aria-label={t("viewPhotos", { name })}
             >
               <Image
                 src={main}
@@ -85,7 +88,7 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
               onClick={() => setOpenIndex(0)}
               className="absolute bottom-4 start-4 flex h-8 items-center gap-1.5 rounded-xl border border-slate-200/80 bg-white/95 px-3.5 text-xs font-bold text-slate-800 shadow-sm backdrop-blur-xs hover:bg-white transition-all cursor-pointer"
             >
-              <span>كل الصور</span>
+              <span>{t("allPhotos")}</span>
               <span className="text-slate-300">·</span>
               <span className="tabular font-bold">{total}</span>
             </button>
@@ -100,7 +103,7 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
                 "absolute top-3 end-3 z-10 flex size-9 sm:size-10 items-center justify-center rounded-xl border border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xs transition-all hover:bg-white cursor-pointer active:scale-95",
                 isFav ? "text-destructive" : "text-slate-600 hover:text-destructive"
               )}
-              aria-label={isFav ? "إزالة من الصالونات المفضلة" : "إضافة إلى الصالونات المفضلة"}
+              aria-label={isFav ? tInfo("removeAria") : tInfo("addAria")}
             >
               <Heart
                 className={cn(
@@ -121,7 +124,7 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
                 type="button"
                 onClick={() => setOpenIndex(1)}
                 className="absolute inset-0 cursor-pointer"
-                aria-label={`عرض صور ${name}`}
+                aria-label={t("viewPhotos", { name })}
               >
                 <Image
                   src={side[0]}
@@ -147,7 +150,7 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
                 type="button"
                 onClick={() => setOpenIndex(2)}
                 className="absolute inset-0 cursor-pointer"
-                aria-label={`عرض صور ${name}`}
+                aria-label={t("viewPhotos", { name })}
               >
                 <Image
                   src={side[1]}
@@ -174,12 +177,11 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
           <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/90 transition-opacity data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
           <Dialog.Popup
             className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 outline-none"
-            dir="rtl"
           >
-            <Dialog.Title className="sr-only">{`صور ${name}`}</Dialog.Title>
+            <Dialog.Title className="sr-only">{t("viewPhotos", { name })}</Dialog.Title>
 
             <Dialog.Close
-              aria-label="إغلاق"
+              aria-label={t("close")}
               className="absolute end-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 cursor-pointer"
             >
               <X className="size-5" />
@@ -208,18 +210,18 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
                 <button
                   type="button"
                   onClick={showPrev}
-                  aria-label="الصورة السابقة"
+                  aria-label={t("prevPhoto")}
                   className="absolute start-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 cursor-pointer sm:start-4"
                 >
-                  <ChevronRight className="size-6" />
+                  <ChevronRight className="size-6 rtl:rotate-0 ltr:rotate-180" />
                 </button>
                 <button
                   type="button"
                   onClick={showNext}
-                  aria-label="الصورة التالية"
+                  aria-label={t("nextPhoto")}
                   className="absolute end-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 cursor-pointer sm:end-4"
                 >
-                  <ChevronLeft className="size-6" />
+                  <ChevronLeft className="size-6 rtl:rotate-0 ltr:rotate-180" />
                 </button>
               </>
             )}

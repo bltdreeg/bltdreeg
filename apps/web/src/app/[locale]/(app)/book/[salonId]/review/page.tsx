@@ -1,10 +1,11 @@
-// خطوة الحجز 3/3: راجع الحجز
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { salonDetailsById } from "@/lib/data/salon-details.constants";
 import { ROUTE_BOOK_BARBER, ROUTE_BOOK_SLOT, ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import { METADATA_BOOK } from "@/lib/data/constants/metadata.constants";
 import { createBooking } from "@/lib/actions/bookings/bookings.action";
 import { formatDayLabel, formatTime } from "@/lib/utils/format/date.utils";
+import { formatPrice } from "@/lib/utils/format/price.utils";
 import { BookingShell } from "../__components/booking-shell";
 import { BookingReview } from "../__components/booking-review";
 import {
@@ -25,6 +26,10 @@ export default async function BookingReviewPage({
   const { locale, salonId } = await params;
   const query = await searchParams;
 
+  const t = await getTranslations("app.book.review");
+  const tSummary = await getTranslations("app.book.summary");
+  const tBarber = await getTranslations("app.book.barber");
+
   const salon = salonDetailsById(salonId);
   if (!salon) return redirect({ href: ROUTE_SALON(salonId), locale });
 
@@ -41,12 +46,11 @@ export default async function BookingReviewPage({
   p.set("when", query.when);
 
   const totalPrice = services.reduce((n, s) => n + s.price, 0);
-  const serviceCountText =
-    services.length === 1 ? "خدمة واحدة" : services.length === 2 ? "خدمتين" : `${services.length} خدمات`;
-  const serviceSummary = `${serviceCountText} · ${totalPrice} ج.م`;
+  const serviceCountText = tSummary("servicesCount", { count: services.length });
+  const serviceSummary = `${serviceCountText} · ${formatPrice(totalPrice)}`;
   const slotSummary =
-    query.when === "now" ? "دلوقتي" : `${formatDayLabel(query.when)} · ${formatTime(query.when)}`;
-  const barberSummary = barber?.name ?? "أي حلاق متاح";
+    query.when === "now" ? tSummary("now") : `${formatDayLabel(query.when)} · ${formatTime(query.when)}`;
+  const barberSummary = barber?.name ?? tBarber("anyBarber");
 
   async function submit(formData: FormData) {
     "use server";
@@ -62,7 +66,7 @@ export default async function BookingReviewPage({
       salonId={salonId}
       salonName={salon.name}
       step={4}
-      title="راجع الحجز قبل ما تأكّد"
+      title={t("title")}
       serviceSummary={serviceSummary}
       slotSummary={slotSummary}
       barberSummary={barberSummary}

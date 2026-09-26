@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { useToast, ToastItem } from "./toast-context";
 
@@ -12,17 +13,18 @@ export function ToastCard({
   toast: ToastItem;
   onDismiss: () => void;
 }) {
+  const t = useTranslations("common.toast");
   const { type, title, description, action } = toast;
 
   const getBorderColor = () => {
     switch (type) {
       case "success":
-        return "border-r-[#16A34A]";
+        return "border-s-[#16A34A]";
       case "error":
-        return "border-r-[#EF4444]";
+        return "border-s-[#EF4444]";
       case "info":
       default:
-        return "border-r-[#0F766E]";
+        return "border-s-[#0F766E]";
     }
   };
 
@@ -74,8 +76,7 @@ export function ToastCard({
     <div
       role="status"
       aria-live={type === "error" ? "assertive" : "polite"}
-      dir="rtl"
-      className={`pointer-events-auto flex items-start gap-3 rounded-xl border border-[#E5E7EB] border-r-4 bg-white p-[15px_17px] shadow-[0_8px_22px_rgba(14,15,17,0.09)] transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 ${getBorderColor()}`}
+      className={`pointer-events-auto flex items-start gap-3 rounded-xl border border-[#E5E7EB] border-s-4 bg-white p-[15px_17px] shadow-[0_8px_22px_rgba(14,15,17,0.09)] transition-all animate-in fade-in slide-in-from-bottom-2 duration-200 ${getBorderColor()}`}
     >
       {renderIcon()}
 
@@ -118,7 +119,7 @@ export function ToastCard({
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="إغلاق التنبيه"
+          aria-label={t("close")}
           className="flex-none text-muted-foreground/60 hover:text-foreground p-0.5"
         >
           <X className="h-3.5 w-3.5" />
@@ -129,13 +130,14 @@ export function ToastCard({
 }
 
 export function ToastContainer() {
+  const t = useTranslations("common.toast");
   const { toasts, removeToast } = useToast();
 
   if (!toasts || toasts.length === 0) return null;
 
   return (
     <aside
-      aria-label="التنبيهات"
+      aria-label={t("ariaLabel")}
       className="pointer-events-none fixed bottom-6 left-6 z-50 flex w-full max-w-[360px] flex-col gap-3 sm:max-w-[400px]"
     >
       {toasts.map((toast) => (
