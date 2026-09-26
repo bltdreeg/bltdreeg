@@ -1,5 +1,5 @@
-// الحالة الفاضية للحجوزات — مطابقة للفريم ١١ في mobile.html
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
 
@@ -33,9 +33,11 @@ export function BookingsEmptyIllustration({ className }: { className?: string })
 }
 
 export function UpcomingEmpty() {
+  const t = useTranslations("app.bookings");
+
   return (
     <section
-      aria-label="لا توجد حجوزات قادمة"
+      aria-label={t("empty.upcomingAria")}
       className="flex flex-col items-center justify-center gap-4 py-8 text-center md:py-12"
     >
       <BookingsEmptyIllustration />
@@ -43,10 +45,10 @@ export function UpcomingEmpty() {
       {/* العنوان والشرح */}
       <div className="flex flex-col gap-2">
         <h2 className="text-[21px] font-extrabold text-foreground">
-          لسه ما حجزتش أي حاجة
+          {t("empty.upcomingTitle")}
         </h2>
         <p className="max-w-[380px] text-[14.5px] leading-relaxed text-muted-foreground text-pretty">
-          أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.
+          {t("empty.upcomingDesc")}
         </p>
       </div>
 
@@ -55,7 +57,7 @@ export function UpcomingEmpty() {
         href={ROUTE_SEARCH}
         className="mt-2 inline-flex h-12 items-center justify-center rounded-[10px] bg-primary px-7 text-[15px] font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary-pressed whitespace-nowrap cursor-pointer"
       >
-        دوّر على صالون قريب منك
+        {t("empty.findSalon")}
       </Link>
     </section>
   );

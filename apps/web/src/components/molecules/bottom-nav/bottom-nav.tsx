@@ -1,7 +1,7 @@
-// شريط التنقل السفلي: الرئيسية · حجوزاتي · البحث · حسابي — موبايل بس
 "use client";
 
 import { Home, Calendar, Search, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import {
   ROUTE_ACCOUNT,
@@ -12,26 +12,27 @@ import {
 } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
 
-const TABS = [
-  { href: ROUTE_HOME, label: "الرئيسية", icon: Home },
-  { href: ROUTE_BOOKINGS, label: "حجوزاتي", icon: Calendar },
-  { href: ROUTE_SEARCH, label: "البحث", icon: Search },
-  { href: ROUTE_ACCOUNT, label: "حسابي", icon: User },
-] as const;
-
 function BottomNav() {
+  const t = useTranslations("common.bottomNav");
   const pathname = usePathname();
+
+  const tabs = [
+    { href: ROUTE_HOME, label: t("home"), icon: Home },
+    { href: ROUTE_BOOKINGS, label: t("bookings"), icon: Calendar },
+    { href: ROUTE_SEARCH, label: t("search"), icon: Search },
+    { href: ROUTE_ACCOUNT, label: t("account"), icon: User },
+  ] as const;
 
   // صفحة الصالون عندها شريط حجز ثابت في الأسفل بيغني عن التنقل الرئيسي
   if (pathname.startsWith(ROUTE_SALON_ROOT)) return null;
 
   return (
     <nav
-      aria-label="التنقل الرئيسي"
+      aria-label={t("ariaLabel")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background px-2 pb-[max(0.625rem,env(safe-area-inset-bottom))] pt-2 md:hidden"
     >
       <ul className="flex gap-1">
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const active = tab.href === ROUTE_HOME ? pathname === ROUTE_HOME : pathname.startsWith(tab.href);
 
           const Icon = tab.icon;
@@ -71,3 +72,4 @@ function BottomNav() {
 }
 
 export { BottomNav };
+

@@ -1,5 +1,5 @@
-// عرض التقييم: 4.8 ★ 214 تقييم — مطابق لـ iconStarFilled في الموبايل
 import { Star as LucideStar } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn.utils";
 
 const STAR_CLIP =
@@ -29,7 +29,10 @@ type RatingProps = {
 };
 
 function Rating({ value, count, showStars = false, className }: RatingProps) {
-  const label = count ? `${value} من 5، ${count} تقييم` : `${value} من 5`;
+  const t = useTranslations("common.rating");
+  const label = count
+    ? t("outOfWithCount", { rating: value, count })
+    : t("outOf", { rating: value });
 
   return (
     <div className={cn("flex items-center gap-1.5", className)} aria-label={label}>
@@ -46,7 +49,9 @@ function Rating({ value, count, showStars = false, className }: RatingProps) {
         </>
       )}
       {count !== undefined && (
-        <span className="tabular text-[13px] text-muted-foreground">{count} تقييم</span>
+        <span className="tabular text-[13px] text-muted-foreground">
+          {t("reviewsCount", { count })}
+        </span>
       )}
     </div>
   );

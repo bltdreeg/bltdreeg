@@ -1,6 +1,6 @@
-// كارت نتيجة عمودي (FRAME 03B): صورة، اسم، ميتا، سعر، خط تقطيع، ثم مواعيد الفترة كشرايح
 import { Scissors } from "lucide-react";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import type { Shop } from "@/lib/types/shop/shop.interface";
@@ -16,6 +16,8 @@ type ResultCardProps = {
 };
 
 function ResultCard({ shop }: ResultCardProps) {
+  const t = useTranslations("marketing.search.resultCard");
+  const locale = useLocale();
   const grouped = groupByPeriod(slotsForShop(shop));
   const period = PERIOD_ORDER.find((p) => grouped[p].length > 0) ?? Period.EVENING;
 
@@ -38,7 +40,7 @@ function ResultCard({ shop }: ResultCardProps) {
         )}
         {shop.isNew && (
           <span className="absolute top-2.5 end-2.5 rounded-[7px] bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground">
-            جديد
+            {t("newBadge")}
           </span>
         )}
       </div>
@@ -46,10 +48,10 @@ function ResultCard({ shop }: ResultCardProps) {
       <div className="flex flex-col gap-1.5 px-4 pt-3.5">
         <h3 className="text-[16px] font-bold leading-tight">{shop.name}</h3>
         <p className="tabular text-[12.5px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm)} · {shop.rating} · {shop.reviewCount} تقييم
+          {shop.areaName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating} · {t("reviews", { count: shop.reviewCount })}
         </p>
         <p className="tabular text-[12.5px] text-muted-foreground">
-          {shop.services[0]} {formatFrom(shop.priceFrom)}
+          {shop.services[0]} {formatFrom(shop.priceFrom, locale)}
         </p>
       </div>
 

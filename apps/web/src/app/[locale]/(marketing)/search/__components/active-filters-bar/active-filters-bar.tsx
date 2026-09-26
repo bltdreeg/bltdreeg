@@ -1,5 +1,5 @@
-// شريط الفلاتر المفعّلة — كل شريحة بترجع لينك بيشيل الفلتر ده بس
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
@@ -12,6 +12,8 @@ export type ActiveFilter = {
 };
 
 function ActiveFiltersBar({ q, filters }: { q: string; filters: ActiveFilter[] }) {
+  const t = useTranslations("marketing.search.activeFilters");
+
   if (filters.length === 0) return null;
 
   return (
@@ -34,7 +36,7 @@ function ActiveFiltersBar({ q, filters }: { q: string; filters: ActiveFilter[] }
         href={`${ROUTE_SEARCH}?q=${encodeURIComponent(q)}`}
         className="ms-1.5 text-[12.5px] font-bold text-primary hover:text-primary-pressed"
       >
-        مسح الكل
+        {t("clearAll")}
       </Link>
     </div>
   );

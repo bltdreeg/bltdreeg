@@ -1,12 +1,12 @@
-// هيكل تحميل تفاصيل الحجز — مطابق لتخطيط FRAME 11A
+import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/atoms/skeleton";
 
 export function BookingDetailsSkeleton() {
+  const t = useTranslations("app.bookings");
   return (
     <div
       role="status"
-      aria-label="جاري التحميل"
-      dir="rtl"
+      aria-label={t("loading")}
       className="min-h-screen bg-white"
     >
       {/* شريط مسار التنقل */}

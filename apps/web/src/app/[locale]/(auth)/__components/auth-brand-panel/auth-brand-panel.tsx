@@ -1,7 +1,9 @@
 "use client";
 
 // اللوحة التعريفية الجانبية لصفحات المصادقة — مطابقة لـ FRAME 13A, 13B, 13C في web app design.html
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
 
 export type AuthBrandMode = "login" | "register" | "otp" | "forgot-password";
@@ -12,6 +14,8 @@ interface AuthBrandPanelProps {
 }
 
 export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
+  const t = useTranslations("auth.brandPanel");
+  const locale = useLocale();
   return (
     <aside
       className={`relative hidden lg:flex flex-col justify-between border-e border-[#CFE6E3] bg-[#F0FAF8] p-10 lg:p-12 xl:p-16 text-[#0E0F11] w-full lg:w-1/2 shrink-0 ${className}`}
@@ -22,7 +26,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
           href={ROUTE_HOME}
           className="text-[22px] font-black leading-none text-[#0B5A54] hover:opacity-90 transition-opacity"
         >
-          بالتدريج
+          {getAppName(locale)}
         </Link>
 
       {/* 2. المحتوى السياقي حسب الشاشة */}
@@ -30,7 +34,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
         {mode === "login" && (
           <>
             <h2 className="max-w-[460px] text-3xl xl:text-[40px] font-black leading-[1.3] text-[#0E0F11] text-balance">
-              ميعاد ورقم في الدور — مع بعض في نفس التذكرة.
+              {t("login.title")}
             </h2>
 
             {/* مجسم التذكرة المصغّر — مطابق لـ FRAME 13A */}
@@ -52,14 +56,14 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
 
               <div className="flex items-stretch px-5 pb-5">
                 <div className="flex flex-1 flex-col gap-1">
-                  <span className="text-[11.5px] font-semibold text-[#6B7280]">ميعادك</span>
+                  <span className="text-[11.5px] font-semibold text-[#6B7280]">{t("login.ticketLabelTime")}</span>
                   <span className="text-[32px] font-extrabold leading-none tabular-nums text-[#0E0F11]">
                     6:30 م
                   </span>
                 </div>
                 <div className="my-1 w-px bg-[repeating-linear-gradient(#D9DDE2_0_5px,transparent_5px_10px)]" />
                 <div className="flex flex-1 flex-col gap-1 pr-4">
-                  <span className="text-[11.5px] font-semibold text-[#6B7280]">رقمك في الدور</span>
+                  <span className="text-[11.5px] font-semibold text-[#6B7280]">{t("login.ticketLabelQueue")}</span>
                   <div className="flex items-center gap-2.5">
                     <div className="flex size-14 items-center justify-center rounded-xl border-2 border-[#0F766E] bg-[#F0FAF8]">
                       <span className="text-[32px] font-extrabold leading-none tabular-nums text-[#0B5A54]">
@@ -67,9 +71,9 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
                       </span>
                     </div>
                     <span className="text-[12.5px] leading-[1.5] text-[#6B7280]">
-                      قدامك 2
+                      {t("login.ticketAheadOf")}
                       <br />
-                      في الدور
+                      {t("login.ticketAheadOfLine2")}
                     </span>
                   </div>
                 </div>
@@ -81,7 +85,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
         {mode === "register" && (
           <>
             <h2 className="max-w-[440px] text-3xl xl:text-[36px] font-black leading-[1.35] text-[#0E0F11] text-balance">
-              حساب واحد، وبعد كده الحجز بيبقى في لمستين.
+              {t("register.title")}
             </h2>
 
             {/* خطوات القيمة الثلاث — مطابقة لـ FRAME 13B */}
@@ -91,7 +95,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
                   1
                 </div>
                 <span className="text-sm font-medium leading-[1.7] text-[#0E0F11]">
-                  اعرف رقمك في الدور وقت ما تحجز، مش لما توصل.
+                  {t("register.step1")}
                 </span>
               </div>
               <div className="flex items-start gap-3">
@@ -99,7 +103,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
                   2
                 </div>
                 <span className="text-sm font-medium leading-[1.7] text-[#0E0F11]">
-                  تنبيه على واتساب لما يفضل قدامك اتنين.
+                  {t("register.step2")}
                 </span>
               </div>
               <div className="flex items-start gap-3">
@@ -107,7 +111,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
                   3
                 </div>
                 <span className="text-sm font-medium leading-[1.7] text-[#0E0F11]">
-                  نفس الحجز تاني بضغطة من حجوزاتك السابقة.
+                  {t("register.step3")}
                 </span>
               </div>
             </div>
@@ -117,11 +121,10 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
         {mode === "otp" && (
           <>
             <h2 className="max-w-[380px] text-3xl xl:text-[32px] font-black leading-[1.4] text-[#0E0F11] text-balance">
-              الرقم ده هو اللي هنبعتلك عليه تنبيهات الدور.
+              {t("otp.title")}
             </h2>
             <p className="max-w-[380px] text-[13.5px] leading-[1.8] text-[#0B5A54]">
-              التأكيد بيضمن إنك تستلم تنبيهات دورك في وقتها بدون أي تأخير، وتقدر تغيره لاحقاً من
-              الإعدادات.
+              {t("otp.description")}
             </p>
           </>
         )}
@@ -129,10 +132,10 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
         {mode === "forgot-password" && (
           <>
             <h2 className="max-w-[380px] text-3xl xl:text-[34px] font-black leading-[1.35] text-[#0E0F11] text-balance">
-              هنساعدك ترجع لحسابك في ثواني.
+              {t("forgotPassword.title")}
             </h2>
             <p className="max-w-[380px] text-[13.5px] leading-[1.8] text-[#0B5A54]">
-              اكتب رقم موبايلك أو إيميلك المسجل وهنبعتلك كود تأكيد عشان تعيّن كلمة سر جديدة.
+              {t("forgotPassword.description")}
             </p>
           </>
         )}
@@ -140,14 +143,10 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
 
       {/* 3. ملاحظة الطمأنينة بالأسفل */}
       <div className="text-[13px] leading-[1.8] text-[#0B5A54]">
-        {mode === "login" &&
-          "سجّل دخول عشان تحجز، وتتابع دورك يوم الميعاد، وتلاقي صالوناتك المفضلة في مكان واحد."}
-        {mode === "register" &&
-          "مفيش دفع أونلاين ولا بيانات بنكية — الحساب للحجز والتنبيهات بس."}
-        {mode === "otp" &&
-          "لو الرقم غلط، ارجع وغيّره قبل ما تكمّل — التنبيهات مش هتوصلك على رقم تاني."}
-        {mode === "forgot-password" &&
-          "بياناتك وحجوزاتك السابقة كلها محفوظة بأمان ومش هتتأثر بتغيير كلمة السر."}
+        {mode === "login" && t("login.footerNote")}
+        {mode === "register" && t("register.footerNote")}
+        {mode === "otp" && t("otp.footerNote")}
+        {mode === "forgot-password" && t("forgotPassword.footerNote")}
       </div>
       </div>
     </aside>

@@ -1,5 +1,8 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, Calendar, Sun, Sunset, Moon } from "lucide-react";
-import { Period, PERIOD_LABEL, groupByPeriod } from "@/lib/utils/availability.utils";
+import { Period, groupByPeriod } from "@/lib/utils/availability.utils";
 import { formatTime } from "@/lib/utils/format/date.utils";
 import type { Slot } from "@/lib/types/slot/slot.interface";
 
@@ -23,22 +26,6 @@ type SlotPickerProps = {
   onSlotChange: (iso: string | null) => void;
 };
 
-const ARABIC_DAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
-const ARABIC_MONTHS = [
-  "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-  "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر",
-];
-
-function getRelativeDayLabel(d: Date, index: number): string {
-  if (index === 0) return "اليوم";
-  if (index === 1) return "غداً";
-  return ARABIC_DAYS[d.getDay()];
-}
-
-function formatDateLabel(d: Date): string {
-  return `${d.getDate()} ${ARABIC_MONTHS[d.getMonth()]}`;
-}
-
 export function SlotPicker({
   dates,
   selectedDate,
@@ -50,7 +37,30 @@ export function SlotPicker({
   onDateChange,
   onSlotChange,
 }: SlotPickerProps) {
+  const t = useTranslations("app.book.slot.picker");
+  const locale = useLocale();
   const grouped = groupByPeriod(slots);
+
+  const getRelativeDayLabel = (d: Date, index: number) => {
+    if (index === 0) return t("today");
+    if (index === 1) return t("tomorrow");
+    return d.toLocaleDateString(locale, { weekday: "long" });
+  };
+
+  const formatDateLabel = (d: Date) => {
+    return d.toLocaleDateString(locale, { day: "numeric", month: "short" });
+  };
+
+  const getPeriodLabel = (period: Period) => {
+    switch (period) {
+      case Period.MORNING:
+        return t("period.morning");
+      case Period.AFTERNOON:
+        return t("period.afternoon");
+      case Period.EVENING:
+        return t("period.evening");
+    }
+  };
 
   return (
     <section
@@ -61,10 +71,10 @@ export function SlotPicker({
       <div className="flex flex-wrap items-center justify-between gap-4 bg-accent border-b border-tint-border px-5 py-3.5">
         <div className="flex items-center gap-2">
           <Calendar className="size-4 text-primary" />
-          <h2 className="text-[15px] font-bold text-foreground">المواعيد الفاضية</h2>
+          <h2 className="text-[15px] font-bold text-foreground">{t("availableSlots")}</h2>
         </div>
         <span className="text-xs text-muted-foreground">
-          المدة اللي اخترتها <span className="tabular font-bold text-primary-pressed">{totalMinutes} دقيقة</span> · المعروض مواعيد تكفيها
+          {t("durationNotice", { minutes: totalMinutes })}
         </span>
       </div>
 
@@ -103,7 +113,7 @@ export function SlotPicker({
             type="button"
             className="flex h-[62px] w-[96px] shrink-0 flex-col items-center justify-center gap-1 rounded-[10px] border border-border bg-secondary px-3 text-[12.5px] font-bold text-foreground transition-colors hover:bg-secondary/80 cursor-pointer"
           >
-            <span>تاريخ تاني</span>
+            <span>{t("anotherDate")}</span>
             <ChevronDown className="size-3.5 text-muted-foreground" />
           </button>
         </div>
@@ -119,7 +129,7 @@ export function SlotPicker({
               <div key={period} className="flex flex-col gap-2">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
                   <PeriodIcon className="size-3.5 text-muted-foreground" />
-                  <span>{PERIOD_LABEL[period]}</span>
+                  <span>{getPeriodLabel(period)}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {periodSlots.map((slot) => {
@@ -162,15 +172,15 @@ export function SlotPicker({
         <div className="mt-4 flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
           <div className="flex items-center gap-1.75">
             <span className="size-3.5 rounded-[4px] border border-border bg-white" />
-            <span className="text-xs text-muted-foreground">فاضي</span>
+            <span className="text-xs text-muted-foreground">{t("legend.available")}</span>
           </div>
           <div className="flex items-center gap-1.75">
             <span className="size-3.5 rounded-[4px] bg-disabled-bg" />
-            <span className="text-xs text-muted-foreground">محجوز</span>
+            <span className="text-xs text-muted-foreground">{t("legend.booked")}</span>
           </div>
           <div className="flex items-center gap-1.75">
             <span className="size-3.5 rounded-[4px] bg-primary" />
-            <span className="text-xs text-muted-foreground">اللي اخترته</span>
+            <span className="text-xs text-muted-foreground">{t("legend.selected")}</span>
           </div>
         </div>
 
@@ -178,10 +188,13 @@ export function SlotPicker({
         <div className="mt-5 flex flex-wrap items-center gap-2 sm:gap-2.5 rounded-[10px] border border-[#BBF7D0] bg-success-bg px-3.5 py-2.5">
           <span className="size-2 shrink-0 rounded-full bg-success" />
           <span className="text-xs font-bold text-success-strong">
-            الصالون في ميعاده
+            {t("onSchedule")}
           </span>
           <span className="text-xs text-muted-foreground tabular">
-            آخر {recentBookingsSampled} ميعاد بمتوسط تأخير {avgDelayMinutes} دقايق
+            {t("punctualityStats", {
+              count: recentBookingsSampled,
+              delay: avgDelayMinutes,
+            })}
           </span>
         </div>
       </div>

@@ -2,6 +2,7 @@
 "use client";
 
 import { Bell } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { Booking } from "@/lib/types/booking";
 import { UpcomingCard } from "./upcoming-card";
 import { UpcomingEmpty } from "./upcoming-empty";
@@ -12,6 +13,8 @@ interface UpcomingSectionProps {
 }
 
 export function UpcomingSection({ bookings, onCancel }: UpcomingSectionProps) {
+  const t = useTranslations("app.bookings");
+
   if (bookings.length === 0) {
     return <UpcomingEmpty />;
   }
@@ -29,7 +32,7 @@ export function UpcomingSection({ bookings, onCancel }: UpcomingSectionProps) {
       {/* شريط الإشعار الإرشادي التلقائي كما في الفريم ٠٩ */}
       <div className="flex items-center gap-3 rounded-2xl bg-tint p-4 text-[13px] font-semibold leading-relaxed text-primary-pressed">
         <Bell className="size-4.5 shrink-0 text-primary" />
-        <p>هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.</p>
+        <p>{t("notificationHint")}</p>
       </div>
     </div>
   );

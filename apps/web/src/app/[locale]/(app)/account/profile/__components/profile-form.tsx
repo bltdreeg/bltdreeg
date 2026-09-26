@@ -5,6 +5,7 @@ import { Camera, Check, AlertTriangle, Trash2, Calendar, MapPin, ShieldCheck, Ch
 import { Button } from "@/components/atoms/button";
 import { Dialog } from "@base-ui/react/dialog";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { ROUTE_ACCOUNT } from "@/lib/data/constants/routes.constants";
 import type { User } from "@/lib/types/user/user.interface";
 
@@ -24,6 +25,7 @@ const AREAS = [
 
 export function ProfileForm({ user }: ProfileFormProps) {
   const router = useRouter();
+  const t = useTranslations("app.account.profile");
 
   const [firstName, setFirstName] = useState("كريم");
   const [lastName, setLastName] = useState("مصطفى");
@@ -74,7 +76,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               <label
                 htmlFor="avatar-upload"
                 className="absolute -bottom-1 -start-1 flex size-8 cursor-pointer items-center justify-center rounded-full border-2 border-card bg-primary text-white shadow-sm hover:bg-primary-hover transition-colors"
-                aria-label="تغيير الصورة الشخصية"
+                aria-label={t("changePhotoAria")}
               >
                 <Camera className="size-4" />
                 <input
@@ -90,13 +92,16 @@ export function ProfileForm({ user }: ProfileFormProps) {
               htmlFor="avatar-upload"
               className="text-xs font-bold text-primary hover:underline cursor-pointer"
             >
-              غيّر الصورة
+              {t("changePhoto")}
             </label>
             <h2 className="mt-3 text-base font-extrabold text-foreground">
               {firstName} {lastName}
             </h2>
             <span className="text-xs text-muted-foreground">
-              عضو منذ {user.joinedDate || "يونيو 2025"} · {user.completedBookingsCount || 12} زيارة مكتملة
+              {t("memberSince", {
+                date: user.joinedDate || "يونيو 2025",
+                count: user.completedBookingsCount || 12,
+              })}
             </span>
           </div>
 
@@ -104,10 +109,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <div className="rounded-[14px] border border-border bg-muted/40 p-4.5 text-start">
             <div className="flex items-center gap-2 text-primary-pressed">
               <ShieldCheck className="size-4.5" />
-              <span className="text-xs font-bold">حسابك محمي وموثّق</span>
+              <span className="text-xs font-bold">{t("securityTitle")}</span>
             </div>
             <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-              رقم هاتفك مربوط بالحجوزات وإشعارات دورك في الصالون لضمان عدم تكرار الحجوزات أو ضياع الدور.
+              {t("securityDesc")}
             </p>
           </div>
         </aside>
@@ -116,14 +121,14 @@ export function ProfileForm({ user }: ProfileFormProps) {
         <main className="flex flex-col gap-5 lg:col-span-8">
           <div className="rounded-[14px] border border-border bg-card p-6 shadow-xs flex flex-col gap-4.5">
             <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground border-b border-border pb-3">
-              المعلومات الأساسية
+              {t("basicInfo")}
             </h2>
 
             {/* الاسم الأول واسم العائلة */}
             <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-foreground">
-                  الاسم الأول
+                  {t("firstName")}
                 </label>
                 <input
                   type="text"
@@ -135,7 +140,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-foreground">
-                  اسم العيلة
+                  {t("lastName")}
                 </label>
                 <input
                   type="text"
@@ -150,7 +155,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             {/* رقم الموبايل (مقفل + تحقق OTP) */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-foreground">
-                رقم الموبايل
+                {t("phone")}
               </label>
               <div className="flex h-11 items-center justify-between rounded-xl border border-border bg-muted/70 px-3.5">
                 <div className="flex items-center gap-2 direction-ltr font-mono font-bold text-sm text-foreground">
@@ -161,17 +166,17 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 </div>
                 <div className="flex items-center gap-1 rounded-md bg-[#E7F4EA] px-2 py-1 text-[11px] font-bold text-[#15803D]">
                   <Check className="size-3 stroke-[2.5]" />
-                  <span>متأكّد</span>
+                  <span>{t("verified")}</span>
                 </div>
               </div>
               <div className="flex items-center justify-between pt-0.5 text-xs">
-                <span className="text-muted-foreground">الرقم هو هويتك في بالتدريج</span>
+                <span className="text-muted-foreground">{t("phoneIdentity")}</span>
                 <button
                   type="button"
                   onClick={() => setChangePhoneModalOpen(true)}
                   className="font-bold text-primary hover:underline cursor-pointer"
                 >
-                  غيّر الرقم
+                  {t("changePhone")}
                 </button>
               </div>
             </div>
@@ -179,7 +184,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             {/* البريد الإلكتروني */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-foreground">
-                البريد الإلكتروني <span className="font-normal text-muted-foreground">(اختياري)</span>
+                {t("email")} <span className="font-normal text-muted-foreground">{t("optional")}</span>
               </label>
               <input
                 type="email"
@@ -194,7 +199,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-foreground">
-                  تاريخ الميلاد <span className="font-normal text-muted-foreground">(اختياري)</span>
+                  {t("dob")} <span className="font-normal text-muted-foreground">{t("optional")}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -205,13 +210,13 @@ export function ProfileForm({ user }: ProfileFormProps) {
                   />
                 </div>
                 <span className="text-[11px] text-muted-foreground">
-                  بنستخدمه عشان نبعتلك عرض في عيد ميلادك 🎉
+                  {t("dobHint")}
                 </span>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-bold text-foreground">
-                  المنطقة المفضلة
+                  {t("favoriteArea")}
                 </label>
                 <div className="relative">
                   <select
@@ -237,12 +242,12 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 disabled={isSaving}
                 className="h-11 px-8 rounded-xl font-extrabold text-sm shadow-xs cursor-pointer"
               >
-                {isSaving ? "جاري الحفظ…" : "احفظ التعديلات"}
+                {isSaving ? t("saving") : t("saveChanges")}
               </Button>
               {isSaved && (
                 <span className="text-xs font-bold text-[#15803D] flex items-center gap-1">
                   <Check className="size-4" />
-                  <span>تم حفظ التعديلات بنجاح!</span>
+                  <span>{t("saveSuccess")}</span>
                 </span>
               )}
             </div>
@@ -252,10 +257,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <div className="rounded-[14px] border border-red-200/70 bg-red-50/40 p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex flex-col gap-0.5">
               <span className="text-sm font-bold text-destructive">
-                حذف الحساب نهائياً
+                {t("deleteTitle")}
               </span>
               <span className="text-xs text-muted-foreground">
-                سيتم حذف كافة حجوزاتك ومفضلاتك ونقاطك، ولا يمكن استرجاعها بعد ذلك.
+                {t("deleteDesc")}
               </span>
             </div>
             <Button
@@ -265,7 +270,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               className="h-10 shrink-0 border-red-200 bg-card text-destructive hover:bg-destructive/10 text-xs font-bold cursor-pointer"
             >
               <Trash2 className="size-3.5" />
-              <span>امسح حسابي</span>
+              <span>{t("deleteButton")}</span>
             </Button>
           </div>
         </main>
@@ -277,10 +282,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
           <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" />
           <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-xl text-start">
             <Dialog.Title className="text-lg font-extrabold text-foreground">
-              تغيير رقم الموبايل
+              {t("changePhoneModal.title")}
             </Dialog.Title>
             <Dialog.Description className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              هنبعتلك كود تأكيد OTP على الرقم الجديد لتأمينه والتأكد من ملكيتك له.
+              {t("changePhoneModal.desc")}
             </Dialog.Description>
             <div className="mt-4 flex flex-col gap-3">
               <div className="flex h-11 items-center rounded-xl border border-border bg-muted/40 px-3.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
@@ -301,7 +306,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                   onClick={() => setChangePhoneModalOpen(false)}
                   className="flex-1 h-10 text-xs font-bold"
                 >
-                  إرسال كود التأكيد
+                  {t("changePhoneModal.submit")}
                 </Button>
                 <Button
                   type="button"
@@ -309,7 +314,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                   onClick={() => setChangePhoneModalOpen(false)}
                   className="h-10 text-xs font-bold"
                 >
-                  إلغاء
+                  {t("changePhoneModal.cancel")}
                 </Button>
               </div>
             </div>
@@ -326,10 +331,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
               <AlertTriangle className="size-6" />
             </div>
             <Dialog.Title className="text-lg font-extrabold text-foreground">
-              متأكد إنك عاوز تمسح حسابك؟
+              {t("deleteModal.title")}
             </Dialog.Title>
             <Dialog.Description className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              هتخسر كل سجل حجوزاتك وصالوناتك المفضلة، ومش هتقدر تسترجع الحساب تاني بنفس الرقم إلا بإنشاء حساب جديد من الصفر.
+              {t("deleteModal.desc")}
             </Dialog.Description>
             <div className="mt-5 flex gap-2.5">
               <button
@@ -340,14 +345,14 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 }}
                 className="flex-1 h-10 rounded-xl bg-destructive text-destructive-foreground text-xs font-bold hover:bg-destructive/90 transition-colors"
               >
-                أيوه، امسح الحساب
+                {t("deleteModal.confirm")}
               </button>
               <button
                 type="button"
                 onClick={() => setDeleteModalOpen(false)}
                 className="h-10 px-4 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-colors"
               >
-                تراجع
+                {t("deleteModal.cancel")}
               </button>
             </div>
           </Dialog.Popup>

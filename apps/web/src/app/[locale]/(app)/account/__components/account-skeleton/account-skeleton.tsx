@@ -1,9 +1,10 @@
-// هيكل تحميل حسابي
+import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/atoms/skeleton";
 
 export function AccountSkeleton() {
+  const t = useTranslations("app.account");
   return (
-    <div role="status" aria-label="جاري التحميل" className="flex flex-col gap-4">
+    <div role="status" aria-label={t("loading")} className="flex flex-col gap-4">
       <div className="flex items-center gap-3">
         <Skeleton className="size-16 rounded-full" />
         <div className="flex flex-col gap-2">

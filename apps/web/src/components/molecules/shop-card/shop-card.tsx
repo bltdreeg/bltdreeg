@@ -1,6 +1,6 @@
-// كارت المحل بشكل التذكرة: صورة، فاصل متقطع + خرمين، الميعاد أكبر عنصر
 import { Scissors } from "lucide-react";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { buttonVariants } from "@/components/atoms/button";
 import { Rating } from "@/components/atoms/rating";
 import { Link } from "@/i18n/navigation";
@@ -22,6 +22,8 @@ type ShopCardProps = {
 };
 
 function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCardProps) {
+  const t = useTranslations("common.shopCard");
+  const locale = useLocale();
   // مفيش ميعاد النهارده → الكارت كله يخفت
   const dimmed = !shop.nextSlotAt || !isToday(shop.nextSlotAt);
 
@@ -65,7 +67,7 @@ function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCar
         )}
         {shop.isNew && (
           <span className="absolute top-3 end-3 rounded-[7px] bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground">
-            جديد
+            {t("newBadge")}
           </span>
         )}
       </div>
@@ -81,7 +83,7 @@ function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCar
           {shop.name}
         </h3>
         <p className="tabular text-xs sm:text-[13px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm)}
+          {shop.areaName} · {formatDistance(shop.distanceKm, locale)}
         </p>
         <Rating value={shop.rating} count={shop.reviewCount} />
       </div>
@@ -110,7 +112,7 @@ function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCar
             dimmed ? "text-disabled-fg" : "text-muted-foreground",
           )}
         >
-          {formatFrom(shop.priceFrom)}
+          {formatFrom(shop.priceFrom, locale)}
         </span>
       </div>
 
@@ -123,7 +125,7 @@ function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCar
             "h-11 sm:h-12 w-full rounded-xl text-sm sm:text-[15px] font-bold",
           )}
         >
-          احجز ميعاد
+          {t("bookAppointment")}
         </Link>
       </div>
     </article>

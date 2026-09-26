@@ -1,6 +1,7 @@
 "use client";
 
 // شريط تحكم المحاكاة المباشر (Simulation Control Bar) لتجربة تحديث الطابور Real-Time
+import { useTranslations } from "next-intl";
 import { Play, Pause, Sparkles, FastForward } from "lucide-react";
 import { cn } from "@/lib/utils/cn.utils";
 
@@ -26,12 +27,14 @@ export function SimulationControlBar({
   onToggleAutoPlay,
   secondsToNext,
 }: SimulationControlBarProps) {
+  const t = useTranslations("app.liveTracking.simulation");
+
   const stages: { key: LiveQueueSimStage; label: string }[] = [
-    { key: "waiting", label: "في الطابور" },
-    { key: "approaching", label: "دورك قرّب" },
-    { key: "yourTurn", label: "دورك جه" },
-    { key: "inService", label: "على الكرسي" },
-    { key: "completed", label: "نعيماً!" },
+    { key: "waiting", label: t("stageWaiting") },
+    { key: "approaching", label: t("stageApproaching") },
+    { key: "yourTurn", label: t("stageYourTurn") },
+    { key: "inService", label: t("stageInService") },
+    { key: "completed", label: t("stageCompleted") },
   ];
 
   return (
@@ -43,10 +46,10 @@ export function SimulationControlBar({
           </span>
           <div className="flex flex-col text-start">
             <span className="text-xs sm:text-sm font-black text-foreground">
-              محاكاة تحديث الطابور (WebSocket Simulation)
+              {t("title")}
             </span>
             <span className="text-[11px] font-semibold text-muted-foreground">
-              تتحول الصفحة تلقائياً مع الوقت بمحاكاة تحديثات السيرفر
+              {t("subtitle")}
             </span>
           </div>
         </div>
@@ -56,11 +59,11 @@ export function SimulationControlBar({
           {autoPlay ? (
             <div className="flex items-center gap-1.5 rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-bold tabular-nums">
               <span className="size-2 rounded-full bg-emerald-600 animate-ping" />
-              <span>التالي خلال {secondsToNext}ث</span>
+              <span>{t("nextInSeconds", { seconds: secondsToNext })}</span>
             </div>
           ) : (
             <span className="text-xs font-bold text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
-              متوقف مؤقتاً
+              {t("paused")}
             </span>
           )}
 
@@ -72,12 +75,12 @@ export function SimulationControlBar({
             {autoPlay ? (
               <>
                 <Pause className="size-3.5 text-amber-600" />
-                <span>إيقاف</span>
+                <span>{t("pause")}</span>
               </>
             ) : (
               <>
                 <Play className="size-3.5 text-emerald-600" />
-                <span>تشغيل</span>
+                <span>{t("play")}</span>
               </>
             )}
           </button>

@@ -1,5 +1,5 @@
-// البحث والفلاتر — من غير بحث بنعرض آخر ما بحثت عنه، ومع بحث بنعرض النتايج أو حالة «مفيش صالون»
 import { SlidersHorizontal } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { areas } from "@/lib/data/areas.constants";
@@ -59,7 +59,11 @@ export default async function SearchPage({
 }: {
   searchParams: Promise<SearchPageParams>;
 }) {
-  const params = await searchParams;
+  const [t, locale, params] = await Promise.all([
+    getTranslations("marketing.search"),
+    getLocale(),
+    searchParams,
+  ]);
   const query = params.q?.trim() ?? "";
 
   // خدمات وأسعار الفلتر بتتحسب من بيانات المحلات الحقيقية — مش من رقم ثابت
@@ -124,19 +128,19 @@ export default async function SearchPage({
   const activeFilters: ActiveFilter[] = [
     ...services.map((s) => ({ key: `service:${s}`, label: s, clearHref: keep(`service:${s}`) })),
     ...(params.maxPrice
-      ? [{ key: "maxPrice", label: `حتى ${formatPrice(maxPrice)}`, clearHref: keep("maxPrice") }]
+      ? [{ key: "maxPrice", label: t("maxPriceLabel", { price: formatPrice(maxPrice, locale) }), clearHref: keep("maxPrice") }]
       : []),
     ...(params.maxDistanceKm
       ? [
           {
             key: "maxDistanceKm",
-            label: `لحد ${formatDistance(maxDistanceKm)}`,
+            label: t("maxDistanceLabel", { distance: formatDistance(maxDistanceKm, locale) }),
             clearHref: keep("maxDistanceKm"),
           },
         ]
       : []),
     ...(todayOnly
-      ? [{ key: "todayOnly", label: "فيه ميعاد النهارده", clearHref: keep("todayOnly") }]
+      ? [{ key: "todayOnly", label: t("todayOnlyLabel"), clearHref: keep("todayOnly") }]
       : []),
   ];
 
@@ -167,7 +171,7 @@ export default async function SearchPage({
                   !listView ? "bg-foreground text-background" : "bg-card text-muted-foreground",
                 )}
               >
-                تذاكر
+                {t("viewTickets")}
               </Link>
               <Link
                 href={`${ROUTE_SEARCH}?q=${encodeURIComponent(query)}&view=list`}
@@ -178,7 +182,7 @@ export default async function SearchPage({
                   listView ? "bg-foreground text-background" : "bg-card text-muted-foreground",
                 )}
               >
-                قائمة
+                {t("viewList")}
               </Link>
             </div>
           )}
@@ -235,10 +239,10 @@ export default async function SearchPage({
                     trigger={
                       <span className="inline-flex h-11 items-center gap-2 rounded-[11px] border border-border bg-card px-5 text-[14px] font-bold text-foreground shadow-xs transition-colors hover:bg-muted cursor-pointer">
                         <SlidersHorizontal className="size-4 text-primary" />
-                        <span>تعديل الفلاتر والترتيب</span>
+                        <span>{t("editFilters")}</span>
                         {activeFilters.length > 0 && (
                           <span className="tabular rounded-[6px] bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground">
-                            {activeFilters.length} مفعّلة
+                            {t("filtersActive", { count: activeFilters.length })}
                           </span>
                         )}
                       </span>
@@ -277,10 +281,10 @@ export default async function SearchPage({
                 <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex flex-col gap-1">
                     <h1 className="tabular text-[21px] font-bold">
-                      {results.length} صالونات فيها «{query}»
+                      {t("resultsTitle", { count: results.length, query })}
                     </h1>
                     <p className="text-[13px] text-muted-foreground">
-                      في {DEFAULT_AREA} وحواليها · لحد {formatDistance(maxDistanceKm)}
+                      {t("resultsSubtitle", { area: DEFAULT_AREA, distance: formatDistance(maxDistanceKm, locale) })}
                     </p>
                   </div>
                   <div className="lg:hidden">
@@ -298,7 +302,7 @@ export default async function SearchPage({
                       trigger={
                         <span className="inline-flex h-10 items-center gap-2 rounded-[10px] border border-border bg-card px-3.5 text-[13px] font-bold text-foreground shadow-xs transition-colors hover:bg-muted cursor-pointer">
                           <SlidersHorizontal className="size-3.5 text-primary" />
-                          <span>الفلاتر والترتيب</span>
+                          <span>{t("filtersAndSort")}</span>
                           {activeFilters.length > 0 && (
                             <span className="tabular rounded-[6px] bg-primary px-1.5 py-0.5 text-[11px] font-bold text-primary-foreground">
                               {activeFilters.length}
@@ -327,14 +331,13 @@ export default async function SearchPage({
                 {maxAvailableDistance > maxDistanceKm && (
                   <div className="flex flex-col items-center gap-3 rounded-[12px] border border-dashed border-border bg-muted p-4.5 text-center sm:flex-row sm:justify-between sm:text-start">
                     <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-                      دي كل النتايج على الفلاتر الحالية. لو وسّعت المسافة لـ{" "}
-                      {formatDistance(maxAvailableDistance)} هتلاقي صالونات زيادة.
+                      {t("expandDistanceBanner", { distance: formatDistance(maxAvailableDistance, locale) })}
                     </p>
                     <Link
                       href={keep("maxDistanceKm")}
                       className={cn(chipVariants(), "shrink-0")}
                     >
-                      وسّع لـ {formatDistance(maxAvailableDistance)}
+                      {t("expandDistanceButton", { distance: formatDistance(maxAvailableDistance, locale) })}
                     </Link>
                   </div>
                 )}

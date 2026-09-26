@@ -4,6 +4,7 @@
 import { Check, RefreshCw, Scissors, Star, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/atoms/button";
+import { useTranslations } from "next-intl";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import { cn } from "@/lib/utils/cn.utils";
 import { formatDayLabel, formatTime } from "@/lib/utils/format/date.utils";
@@ -22,6 +23,7 @@ export function PastCard({
   onRate,
   coverImage,
 }: PastCardProps) {
+  const t = useTranslations("app.bookings");
   const isCancelled = booking.status === BookingStatus.CANCELLED;
   const dateFormatted = formatDayLabel(booking.startAt);
   const timeFormatted = formatTime(booking.startAt);
@@ -33,12 +35,12 @@ export function PastCard({
         {isCancelled ? (
           <span className="inline-flex h-6.5 items-center gap-1.5 rounded-[7px] bg-[#FDEAEA] px-2.5 text-xs font-bold text-[#B91C1C]">
             <X className="size-3.5" />
-            اتلغى — ما حضرتش
+            {t("status.cancelled")}
           </span>
         ) : (
           <span className="inline-flex h-6.5 items-center gap-1.5 rounded-[7px] bg-[#E7F4EA] px-2.5 text-xs font-bold text-[#15803D]">
             <Check className="size-3.5 stroke-[2.5]" />
-            خدمة تمّت
+            {t("status.completed")}
           </span>
         )}
         <span className="tabular text-xs font-semibold text-muted-foreground">
@@ -75,7 +77,7 @@ export function PastCard({
           <div className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
             <span>{booking.serviceNames.join(" + ")}</span>
             <span>·</span>
-            <span>مع {booking.barberName}</span>
+            <span>{t("withBarber", { name: booking.barberName })}</span>
           </div>
           <div className="flex items-center gap-2 text-[13px]">
             <span
@@ -105,7 +107,7 @@ export function PastCard({
                       />
                     ))}
                   </div>
-                  <span>تقييمك</span>
+                  <span>{t("yourRating")}</span>
                 </div>
               </>
             )}
@@ -118,14 +120,14 @@ export function PastCard({
         <div className="flex items-center gap-2 rounded-[10px] bg-[#FDF1DE] px-3.5 py-2.5 text-start">
           <Star className="size-4 shrink-0 fill-[#B45309] text-[#B45309]" />
           <span className="flex-1 text-[13px] font-bold text-[#B45309]">
-            قيّم {booking.barberName} والصالون
+            {t("ratePrompt", { barberName: booking.barberName })}
           </span>
           <button
             type="button"
             onClick={() => onRate?.(booking)}
             className="text-[13px] font-bold text-[#B45309] underline hover:no-underline cursor-pointer"
           >
-            قيّم دلوقتي
+            {t("rateNow")}
           </button>
         </div>
       )}
@@ -143,7 +145,7 @@ export function PastCard({
         )}
       >
         <RefreshCw className="size-3.5 stroke-[2.2]" />
-        احجز تاني بنفس الاختيارات
+        {t("rebookSame")}
       </Button>
     </article>
   );

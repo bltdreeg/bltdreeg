@@ -1,4 +1,4 @@
-// سكة أفقية من التذاكر — بتتكرر لكل قسم في الرئيسية
+import { useTranslations } from "next-intl";
 import { PageContainer } from "@/components/atoms/page-container";
 import { ShopCard } from "@/components/molecules/shop-card";
 import { Link } from "@/i18n/navigation";
@@ -13,6 +13,8 @@ type ShopRailProps = {
 };
 
 function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
+  const t = useTranslations("marketing.home.rails");
+
   if (shops.length === 0) return null;
 
   return (
@@ -26,10 +28,10 @@ function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
           href={href}
           className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[13.5px] font-bold text-primary hover:text-primary-pressed"
         >
-          عرض الكل
+          {t("viewAll")}
           <span
             aria-hidden
-            className="inline-block size-[7px] rotate-45 border-b-[1.5px] border-s-[1.5px] border-current"
+            className="inline-block size-[7px] border-b-[1.5px] border-s-[1.5px] border-current rtl:rotate-45 ltr:-rotate-135"
           />
         </Link>
       </div>

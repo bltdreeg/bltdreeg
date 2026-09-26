@@ -1,17 +1,21 @@
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME, ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 
 export default function NotFound() {
+  const t = useTranslations("common.notFoundPage");
+  const locale = useLocale();
+
   return (
     <div
-      dir="rtl"
       className="flex min-h-[70vh] items-center justify-center p-4 sm:p-6"
     >
       <div className="w-full max-w-[480px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white shadow-sm">
         {/* Brand bar */}
         <div className="flex h-[46px] items-center bg-[#0F766E] px-[22px]">
           <span className="font-black text-[16px] leading-none text-white tracking-wide">
-            بالتدريج
+            {getAppName(locale)}
           </span>
         </div>
 
@@ -37,11 +41,11 @@ export default function NotFound() {
           </div>
 
           <h1 className="text-[24px] font-extrabold leading-[1.35] text-[#0E0F11]">
-            الصفحة دي مش موجودة
+            {t("title")}
           </h1>
 
           <p className="max-w-[380px] text-[14px] leading-[1.8] text-[#6B7280]">
-            يمكن الصالون شال صفحته، أو اللينك اتغيّر. تعالى ندوّر على صالون تاني قريب منك.
+            {t("description")}
           </p>
 
           <div className="mt-1 flex flex-wrap items-center justify-center gap-2.5">
@@ -49,13 +53,13 @@ export default function NotFound() {
               href={ROUTE_SEARCH}
               className="inline-flex h-[44px] flex-none items-center justify-center whitespace-nowrap rounded-[10px] bg-[#0F766E] px-5 font-bold text-[14px] leading-none text-white transition-all hover:bg-[#0D655E] active:scale-95 shadow-sm"
             >
-              صالونات في المعادي
+              {t("salonsInMaadi")}
             </Link>
             <Link
               href={ROUTE_HOME}
               className="inline-flex h-[44px] flex-none items-center justify-center whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white px-[18px] font-bold text-[14px] leading-none text-[#0E0F11] transition-all hover:bg-[#F7F8FA] active:scale-95 shadow-xs"
             >
-              الرئيسية
+              {t("home")}
             </Link>
           </div>
         </div>

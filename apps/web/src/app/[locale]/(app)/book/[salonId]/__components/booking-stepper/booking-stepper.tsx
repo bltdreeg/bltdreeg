@@ -1,4 +1,7 @@
+"use client";
+
 // شريط الخطوات لمسار الحجز مطابق لتصميم FRAME 07
+import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils/cn.utils";
 
@@ -15,6 +18,7 @@ export function BookingStepper({
   barberSummary,
   slotSummary,
 }: BookingStepperProps) {
+  const t = useTranslations("app.book.stepper");
   const isStep1Done = step > 1;
   const isStep1Current = step === 1;
 
@@ -27,35 +31,35 @@ export function BookingStepper({
   const steps = [
     {
       number: 1,
-      title: "الخدمة",
+      title: t("service"),
       isDone: isStep1Done,
       isCurrent: isStep1Current,
       subtitle: isStep1Done
         ? (serviceSummary ?? "خدمتين · 180 ج.م")
         : isStep1Current
-          ? "بتختار دلوقتي"
+          ? t("selectingNow")
           : undefined,
     },
     {
       number: 2,
-      title: "الميعاد",
+      title: t("slot"),
       isDone: isStep2Done,
       isCurrent: isStep2Current,
       subtitle: isStep2Done
-        ? (slotSummary ?? "تم تحديد الميعاد")
+        ? (slotSummary ?? t("slotSelected"))
         : isStep2Current
-          ? "بنختار دلوقتي"
+          ? t("selectingNow")
           : undefined,
     },
     {
       number: 3,
-      title: "الحلاق",
+      title: t("barber"),
       isDone: isStep3Done,
       isCurrent: isStep3Current,
       subtitle: isStep3Done
         ? (barberSummary ?? "كريم مصطفى")
         : isStep3Current
-          ? "بتختار دلوقتي"
+          ? t("selectingNow")
           : undefined,
     },
   ];

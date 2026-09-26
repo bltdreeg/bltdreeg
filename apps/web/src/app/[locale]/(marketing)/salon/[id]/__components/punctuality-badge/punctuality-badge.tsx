@@ -1,11 +1,8 @@
+"use client";
 // شارة الالتزام — تستخدم Pill من التصميم عشان الألوان تبقى من اللوحة المقفّلة
+import { useTranslations } from "next-intl";
 import { Pill } from "@/components/atoms/pill";
 import { Punctuality } from "@/lib/types/queue";
-
-const COPY: Record<Punctuality, { label: string; tone: "success" | "warning" }> = {
-  [Punctuality.ON_TIME]: { label: "الصالون غالباً ماشي في ميعاده", tone: "success" },
-  [Punctuality.RUNNING_LATE]: { label: "الصالون متأخر شوية النهارده", tone: "warning" },
-};
 
 export function PunctualityBadge({
   punctuality,
@@ -14,7 +11,10 @@ export function PunctualityBadge({
   punctuality: Punctuality;
   className?: string;
 }) {
-  const { label, tone } = COPY[punctuality];
+  const t = useTranslations("marketing.salon.punctuality");
+  const label = punctuality === Punctuality.ON_TIME ? t("onTime") : t("runningLate");
+  const tone = punctuality === Punctuality.ON_TIME ? "success" : "warning";
+
   return (
     <Pill tone={tone} dot className={className}>
       {label}

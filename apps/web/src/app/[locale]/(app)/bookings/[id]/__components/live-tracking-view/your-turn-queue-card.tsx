@@ -2,6 +2,7 @@
 
 // كارت "حان دورك" — مطابق لتصميم مرحلة استدعاء الكرسي
 import { Scissors } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface YourTurnQueueCardProps {
   queueNumber?: number;
@@ -20,6 +21,7 @@ export function YourTurnQueueCard({
   onPostpone,
   onLeaveQueue,
 }: YourTurnQueueCardProps) {
+  const t = useTranslations("app.liveTracking.yourTurnCard");
   const mins = Math.floor(timeLeftSeconds / 60);
   const secs = timeLeftSeconds % 60;
   const timeFormatted = `${mins}:${secs.toString().padStart(2, "0")}`;
@@ -36,10 +38,10 @@ export function YourTurnQueueCard({
       {/* 2. العنوان ونصوص التوجيه */}
       <div className="flex flex-col gap-1">
         <h2 className="text-2xl sm:text-3xl font-black text-[#15803D]">
-          حان دورك
+          {t("title")}
         </h2>
         <p className="text-sm sm:text-base font-semibold text-muted-foreground">
-          ادخل على الكرسي — {barberName} مستنيك
+          {t("takeChair", { barberName })}
         </p>
       </div>
 
@@ -47,13 +49,13 @@ export function YourTurnQueueCard({
       <div className="w-full rounded-2xl bg-[#E7F4EA]/85 border border-[#D1EBD6] p-5 shadow-xs">
         <div className="grid grid-cols-2 divide-x divide-[#C1E2C8] rtl:divide-x-reverse text-center">
           <div className="flex flex-col items-center">
-            <span className="text-xs font-bold text-[#15803D]">رقمك</span>
+            <span className="text-xs font-bold text-[#15803D]">{t("yourNumber")}</span>
             <span className="mt-1 text-3xl sm:text-4xl font-black text-[#15803D] tabular font-mono">
               {queueNumber}
             </span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-xs font-bold text-[#15803D]">فاضلك</span>
+            <span className="text-xs font-bold text-[#15803D]">{t("timeLeft")}</span>
             <span className="mt-1 text-3xl sm:text-4xl font-black text-[#15803D] tabular font-mono">
               {timeFormatted}
             </span>
@@ -63,7 +65,7 @@ export function YourTurnQueueCard({
 
       {/* 4. التنبيه التحذيري */}
       <p className="text-xs font-medium text-muted-foreground leading-relaxed px-2">
-        لو ما حضرتش خلال 5 دقايق، دورك هيتأخر مركز واحد
+        {t("warning")}
       </p>
 
       {/* 5. أزرار الإجراءات */}
@@ -74,7 +76,7 @@ export function YourTurnQueueCard({
           onClick={onCheckIn}
           className="flex h-12 w-full items-center justify-center rounded-xl bg-[#16A34A] text-sm sm:text-base font-extrabold text-white shadow-md hover:bg-[#15803D] active:scale-98 transition-all cursor-pointer"
         >
-          أنا في المحل
+          {t("iamAtShop")}
         </button>
 
         {/* زر أنا جاي — أجلني واحد */}
@@ -83,7 +85,7 @@ export function YourTurnQueueCard({
           onClick={onPostpone}
           className="flex h-12 w-full items-center justify-center rounded-xl border border-border bg-card text-sm font-extrabold text-foreground hover:bg-muted active:scale-98 transition-all cursor-pointer"
         >
-          أنا جاي — أجّلني واحد
+          {t("postponeOne")}
         </button>
 
         {/* زر اطلع من الطابور */}
@@ -92,7 +94,7 @@ export function YourTurnQueueCard({
           onClick={onLeaveQueue}
           className="pt-1 text-xs font-extrabold text-[#EF4444] hover:underline cursor-pointer"
         >
-          اطلع من الطابور
+          {t("leaveQueue")}
         </button>
       </div>
     </div>

@@ -1,4 +1,5 @@
 // مفيش نتايج: الرسمة الفيكتورية المخصصة مطابقة للفريم ١٥ في mobile.html والسبب بالظبط بالفلاتر
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { buttonVariants } from "@/components/atoms/button";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
@@ -43,22 +44,33 @@ type NoResultsProps = {
 };
 
 function NoResults({ query, areaName, maxDistanceKm, maxPrice, hasFilters }: NoResultsProps) {
-  const reason = [
-    `في ${areaName}`,
-    maxDistanceKm !== undefined ? `لحد ${formatDistance(maxDistanceKm)}` : null,
-    maxPrice !== undefined ? `وبسعر لحد ${formatPrice(maxPrice)}` : null,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const t = useTranslations("marketing.search.noResults");
+  const locale = useLocale();
+
+  const reason = locale === "ar"
+    ? [
+        `في ${areaName}`,
+        maxDistanceKm !== undefined ? `لحد ${formatDistance(maxDistanceKm, locale)}` : null,
+        maxPrice !== undefined ? `وبسعر لحد ${formatPrice(maxPrice, locale)}` : null,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    : [
+        `in ${areaName}`,
+        maxDistanceKm !== undefined ? `within ${formatDistance(maxDistanceKm, locale)}` : null,
+        maxPrice !== undefined ? `and price up to ${formatPrice(maxPrice, locale)}` : null,
+      ]
+        .filter(Boolean)
+        .join(" ");
 
   return (
     <section className="flex flex-col items-center gap-5 py-6 text-center">
       <NoResultsIllustration />
 
       <div className="flex flex-col gap-2">
-        <h2 className="text-[21px] font-bold">مفيش صالون بالاسم ده</h2>
+        <h2 className="text-[21px] font-bold">{t("title")}</h2>
         <p className="max-w-[420px] text-[15px] leading-relaxed text-muted-foreground">
-          ما لقيناش «{query}» {reason}. جرّب تشيل الفلاتر أو تدوّر باسم تاني.
+          {t("description", { query, reason })}
         </p>
       </div>
 
@@ -68,7 +80,7 @@ function NoResults({ query, areaName, maxDistanceKm, maxPrice, hasFilters }: NoR
             href={`${ROUTE_SEARCH}?q=${encodeURIComponent(query)}`}
             className="flex h-12 w-full items-center justify-center rounded-[10px] bg-primary text-[15px] font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary-pressed"
           >
-            امسح الفلاتر واعرض كل الصالونات
+            {t("clearFiltersShowAll")}
           </Link>
         )}
         <Link
@@ -80,7 +92,7 @@ function NoResults({ query, areaName, maxDistanceKm, maxPrice, hasFilters }: NoR
               : "bg-primary text-[15px] text-primary-foreground shadow-xs hover:bg-primary-pressed",
           )}
         >
-          وسّع نطاق البحث لـ 10 كم
+          {t("expandRange10Km")}
         </Link>
       </div>
     </section>

@@ -1,5 +1,6 @@
 // الهيرو: العنوان + شريط البحث + كارت التذكرة الحالية
 import { Clock, Footprints, MapPin, Scissors, Check, Car } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { GradientWaves } from "@/components/atoms/gradient-waves";
 import { Avatar } from "@/components/atoms/avatar";
 import { Button } from "@/components/atoms/button";
@@ -12,13 +13,6 @@ import { cn } from "@/lib/utils/cn.utils";
 // اسم واحد لكل صورة — الحرف الواحد بيقعد جوه دايرة الـ26 صح
 const PROOF_FACES = ["كريم", "أحمد", "محمود"];
 
-// خطوات الطابور — الحالية هي رقم 1 (تم الحجز خلص)
-const STEPS = [
-  { label: "تم الحجز", icon: Check },
-  { label: "في الانتظار", icon: Footprints },
-  { label: "تحرك للصالون", icon: Car },
-  { label: "جاء دورك", icon: Scissors },
-];
 const CURRENT_STEP = 1;
 
 function SearchField({
@@ -44,6 +38,15 @@ function SearchField({
 }
 
 function Hero({ areaName }: { areaName: string }) {
+  const t = useTranslations("marketing.home.hero");
+
+  const steps = [
+    { key: "booked", label: t("steps.booked"), icon: Check },
+    { key: "waiting", label: t("steps.waiting"), icon: Footprints },
+    { key: "move", label: t("steps.move"), icon: Car },
+    { key: "yourTurn", label: t("steps.yourTurn"), icon: Scissors },
+  ];
+
   return (
     <section className="relative overflow-hidden border-b border-tint-border bg-tint">
       {/* موجات متدرجة بألوان النظام — ديكور بحت، ورا المحتوى */}
@@ -64,8 +67,8 @@ function Hero({ areaName }: { areaName: string }) {
         {/* العمود النصي */}
         <div className="flex min-w-0 flex-1 flex-col gap-5">
           <h1 className="text-[25px] font-black leading-[1.35] text-balance md:text-[40px]">
-            احجز حلاقتك واعرف دورك في الطابور{" "}
-            <span className="text-primary-pressed">لحظة بلحظة</span>
+            {t("headline")}{" "}
+            <span className="text-primary-pressed">{t("headlineAccent")}</span>
           </h1>
 
           <div className="flex items-center gap-2.5">
@@ -80,27 +83,28 @@ function Hero({ areaName }: { areaName: string }) {
               ))}
             </div>
             <p className="text-[13px] font-medium text-muted-foreground">
-              أكثر من <span className="tabular font-bold text-foreground">50,000</span> حلاقة هذا
-              الشهر
+              {t.rich("proofCount", {
+                bold: (chunks) => <span className="tabular font-bold text-foreground">{chunks}</span>,
+              })}
             </p>
           </div>
 
           {/* شريط البحث: خدمة / منطقة / موعد */}
           <div className="flex w-full flex-col gap-2 rounded-[14px] border border-border bg-background p-2 md:flex-row md:items-center md:gap-0 md:p-1.5">
-            <SearchField label="الخدمة" value="الخدمة أو الصالون" />
+            <SearchField label={t("serviceLabel")} value={t("serviceValue")} />
             <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
             <SearchField
-              label="المنطقة"
-              value="المنطقة أو العنوان"
+              label={t("areaLabel")}
+              value={t("areaValue")}
               icon={<MapPin aria-hidden className="size-3.5 shrink-0 text-primary" />}
             />
             <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
             <SearchField
-              label="الموعد"
+              label={t("timeLabel")}
               value={
                 <>
                   <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-success" />
-                  متاح فوراً / اليوم
+                  {t("timeValue")}
                 </>
               }
             />
@@ -110,7 +114,7 @@ function Hero({ areaName }: { areaName: string }) {
               className="h-11 shrink-0 px-8 text-[14.5px] font-bold md:ms-2"
               render={<Link href={ROUTE_SEARCH} />}
             >
-              بحث
+              {t("searchButton")}
             </Button>
           </div>
         </div>
@@ -118,29 +122,29 @@ function Hero({ areaName }: { areaName: string }) {
         {/* كارت التذكرة الحالية */}
         <div className="flex w-full shrink-0 flex-col gap-4 rounded-[18px] border border-border bg-background p-5 shadow-sm md:w-[420px]">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-[14px] font-bold">تذكرتك الحالية</h2>
+            <h2 className="text-[14px] font-bold">{t("ticketTitle")}</h2>
             <Pill tone="neutral" dot>
-              في الطابور
+              {t("inQueueBadge")}
             </Pill>
           </div>
 
           <div className="flex flex-col items-center gap-1 py-1">
-            <p className="text-[13px] font-medium text-muted-foreground">رقم دورك</p>
+            <p className="text-[13px] font-medium text-muted-foreground">{t("yourNumber")}</p>
             <p className="tabular text-[56px] font-black leading-none text-primary">#4</p>
             <p className="flex items-center gap-1.5 text-[13.5px] font-semibold">
               <Clock aria-hidden className="size-4 text-muted-foreground" />
-              <span className="tabular">~15</span> دقيقة انتظار
+              {t("waitEstimate")}
             </p>
           </div>
 
           {/* خطوات الطابور */}
           <ol className="flex items-start">
-            {STEPS.map((step, i) => {
+            {steps.map((step, i) => {
               const done = i <= CURRENT_STEP;
               const Icon = step.icon;
               return (
                 <li
-                  key={step.label}
+                  key={step.key}
                   aria-current={i === CURRENT_STEP ? "step" : undefined}
                   className="flex min-w-0 flex-1 flex-col items-center gap-1.5"
                 >
@@ -165,7 +169,7 @@ function Hero({ areaName }: { areaName: string }) {
                       aria-hidden
                       className={cn(
                         "h-px flex-1",
-                        i === STEPS.length - 1
+                        i === steps.length - 1
                           ? "bg-transparent"
                           : i < CURRENT_STEP
                             ? "bg-primary"
@@ -194,11 +198,14 @@ function Hero({ areaName }: { areaName: string }) {
             render={<Link href={ROUTE_BOOKINGS} />}
           >
             <MapPin aria-hidden className="size-4" />
-            تتبع مكانك على الخريطة
+            {t("trackOnMap")}
           </Button>
 
           <p className="text-center text-[12px] text-muted-foreground">
-            الصالونات القريبة منك في <span className="font-bold text-foreground">{areaName}</span>
+            {t.rich("nearbyInArea", {
+              area: areaName,
+              bold: (chunks) => <span className="font-bold text-foreground">{chunks}</span>,
+            })}
           </p>
         </div>
       </PageContainer>

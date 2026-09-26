@@ -1,6 +1,7 @@
 'use client';
 // خطوة الميعاد: دلوقتي (طابور) أو احجز معاد (يوم وساعة)
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOK_BARBER } from "@/lib/data/constants/routes.constants";
 import { isOpenNow } from "@/lib/utils/hours.utils";
@@ -31,6 +32,7 @@ export function StepSlot({
   totalMinutes,
   queryString,
 }: StepSlotProps) {
+  const t = useTranslations("app.book.slot");
   const [mode, setMode] = useState<"now" | "schedule">("schedule");
   const [date, setDate] = useState<Date>(() => buildDates(1)[0]);
 
@@ -80,25 +82,26 @@ export function StepSlot({
         />
         <div className="flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[15px] font-extrabold text-foreground">دلوقتي — ادخل الطابور</span>
+            <span className="text-[15px] font-extrabold text-foreground">{t("nowEnterQueue")}</span>
             {open && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
                 <span className="relative flex size-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex size-1.5 rounded-full bg-emerald-600" />
                 </span>
-                <span>لايف</span>
+                <span>{t("live")}</span>
               </span>
             )}
           </div>
           <p className="mt-1 text-[13px] text-muted-foreground tabular">
             {!open
-              ? "الصالون مقفول دلوقتي — احجز معاد"
+              ? t("salonClosed")
               : salon.queue.peopleAhead === 0
-                ? "مفيش دور — هتدخل على طول"
-                : salon.queue.peopleAhead === 1
-                  ? `قدامك 1 بس · ~${salon.queue.waitMinutes} د`
-                  : `قدامك ${salon.queue.peopleAhead} · ~${salon.queue.waitMinutes} د`}
+                ? t("noQueueEnterImmediately")
+                : t("queueWaitInfo", {
+                    count: salon.queue.peopleAhead,
+                    min: salon.queue.waitMinutes,
+                  })}
           </p>
         </div>
       </button>
@@ -116,8 +119,8 @@ export function StepSlot({
           }`}
         />
         <div>
-          <span className="text-[15px] font-extrabold text-foreground">احجز معاد</span>
-          <p className="mt-1 text-[13px] text-muted-foreground">اختار اليوم والساعة اللي تناسبك</p>
+          <span className="text-[15px] font-extrabold text-foreground">{t("scheduleAppointment")}</span>
+          <p className="mt-1 text-[13px] text-muted-foreground">{t("chooseDayAndTime")}</p>
         </div>
       </button>
 
@@ -146,7 +149,7 @@ export function StepSlot({
               href={nextUrl}
               className="flex h-[52px] lg:h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-base lg:text-[15px] font-bold text-white shadow-sm lg:shadow-none transition-colors hover:bg-primary-pressed cursor-pointer"
             >
-              كمّل — اختار الحلاق
+              {t("continueChooseBarber")}
             </Link>
           ) : (
             <button
@@ -154,7 +157,7 @@ export function StepSlot({
               disabled
               className="flex h-[52px] lg:h-[44px] w-full items-center justify-center rounded-[10px] bg-disabled-bg text-base lg:text-[15px] font-bold text-disabled-fg cursor-not-allowed"
             >
-              اختار ميعاد الأول
+              {t("chooseSlotFirst")}
             </button>
           )}
         </div>

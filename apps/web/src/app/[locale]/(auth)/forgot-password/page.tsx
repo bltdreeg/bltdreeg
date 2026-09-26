@@ -1,13 +1,18 @@
 // استعادة كلمة السر
 import { METADATA_FORGOT_PASSWORD } from "@/lib/data/constants/metadata.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { AuthBrandPanel } from "../__components/auth-brand-panel";
 import { ForgotPasswordForm } from "./__components/forgot-password-form";
 
 export const metadata = METADATA_FORGOT_PASSWORD;
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  const t = await getTranslations("auth.shared");
+  const locale = await getLocale();
+
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row bg-white text-[#0E0F11]">
       {/* هيدر الموبايل */}
@@ -16,10 +21,10 @@ export default function ForgotPasswordPage() {
           href={ROUTE_HOME}
           className="text-xl font-black leading-none text-[#0B5A54]"
         >
-          بالتدريج
+          {getAppName(locale)}
         </Link>
         <span className="text-xs font-bold text-[#0B5A54]">
-          ميعادك ورقمك في الدور
+          {t("tagline")}
         </span>
       </div>
 

@@ -1,6 +1,6 @@
-// صف نتيجة البحث: نفس بيانات التذكرة بكثافة أعلى، والحجز في الطرف مع رقم الدور
 import { Scissors } from "lucide-react";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { buttonVariants } from "@/components/atoms/button";
 import { Star } from "@/components/atoms/rating";
 import { Link } from "@/i18n/navigation";
@@ -19,6 +19,8 @@ type ResultRowProps = {
 };
 
 function ResultRow({ shop, status }: ResultRowProps) {
+  const t = useTranslations("marketing.search.resultRow");
+  const locale = useLocale();
   const late = status.delayMinutes > 0;
 
   return (
@@ -48,14 +50,14 @@ function ResultRow({ shop, status }: ResultRowProps) {
         <p className="tabular flex flex-wrap items-center gap-x-1.5 text-[13px] text-muted-foreground">
           <span>{shop.areaName}</span>
           <span aria-hidden>·</span>
-          <span>{formatDistance(shop.distanceKm)}</span>
+          <span>{formatDistance(shop.distanceKm, locale)}</span>
           <span aria-hidden>·</span>
           <span className="inline-flex items-center gap-1 font-bold text-foreground">
             {shop.rating}
             <Star />
           </span>
           <span aria-hidden>·</span>
-          <span>{shop.reviewCount} تقييم</span>
+          <span>{t("reviews", { count: shop.reviewCount })}</span>
         </p>
 
         {/* الأخضر والأصفر بيظهروا لما يكون لهم معنى بس */}
@@ -65,17 +67,17 @@ function ResultRow({ shop, status }: ResultRowProps) {
             late ? "bg-warning-bg text-warning-fg" : "bg-success-bg text-success-strong",
           )}
         >
-          {late ? `متأخر ${status.delayMinutes} د` : "الصالون في ميعاده"}
+          {late ? t("delayed", { minutes: status.delayMinutes }) : t("onSchedule")}
         </span>
 
         <span className="tabular text-[13px] font-semibold text-muted-foreground">
-          {formatFrom(shop.priceFrom)}
+          {formatFrom(shop.priceFrom, locale)}
           {shop.nextSlotAt && (
             <>
               <span aria-hidden className="px-1.5">
                 ·
               </span>
-              {formatDayLabel(shop.nextSlotAt)} {formatTime(shop.nextSlotAt)}
+              {formatDayLabel(shop.nextSlotAt, locale)} {formatTime(shop.nextSlotAt, locale)}
             </>
           )}
         </span>
@@ -99,11 +101,11 @@ function ResultRow({ shop, status }: ResultRowProps) {
           href={ROUTE_BOOK(shop.id)}
           className={cn(buttonVariants(), "h-11 w-full rounded-[10px] text-[15px] font-bold")}
         >
-          احجز
+          {t("book")}
         </Link>
         {/* رقم الدور معلومة مساعدة هنا — الميعاد فوق هو البطل */}
         <span className="tabular text-center text-[11.5px] font-semibold text-muted-foreground">
-          رقمك هيكون {status.queueNumber}
+          {t("yourQueueWillBe", { number: status.queueNumber })}
         </span>
       </div>
     </article>

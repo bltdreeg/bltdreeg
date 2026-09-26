@@ -1,6 +1,6 @@
 "use client";
 
-// قائمة متطلبات كلمة السر التفاعلية الحية — مطابقة للموبايل
+import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import type { PasswordCriteria } from "@/lib/utils/auth-validation.utils";
 
@@ -10,17 +10,18 @@ interface PasswordRequirementsProps {
 }
 
 export function PasswordRequirements({ criteria, touched }: PasswordRequirementsProps) {
+  const t = useTranslations("auth.register.passwordRequirements");
   const items = [
     {
       met: criteria.min8,
       label:
         touched && !criteria.min8 && criteria.remainingLength > 0
-          ? `8 حروف على الأقل — لسه فاضل ${criteria.remainingLength === 1 ? "حرف واحد" : criteria.remainingLength === 2 ? "حرفين" : `${criteria.remainingLength} حروف`}`
-          : "8 حروف على الأقل",
+          ? t("min8Remaining", { count: criteria.remainingLength })
+          : t("min8"),
     },
     {
       met: criteria.hasNumber,
-      label: "فيها رقم واحد على الأقل",
+      label: t("hasNumber"),
     },
   ];
 

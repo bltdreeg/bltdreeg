@@ -3,6 +3,7 @@
 
 import { Check, Clock, Heart, Star, Store, Users } from "lucide-react";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOK, ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import type { Shop } from "@/lib/types/shop/shop.interface";
@@ -27,13 +28,16 @@ type WaitState = {
 /**
  * تحديد حالة الانتظار الحية استناداً إلى بيانات المحل وFRAME 34 في mobile.html
  */
-function getShopWaitStatus(shop: Shop): WaitState {
+function getShopWaitStatus(
+  shop: Shop,
+  t: (key: "opensAt" | "remindWhenOpen" | "freeNow" | "joinQueue" | "waitingFew") => string,
+): WaitState {
   if (!shop.nextSlotAt) {
     return {
       tone: "closed",
-      label: "بيفتح الساعة ١٢ م",
+      label: t("opensAt"),
       icon: Clock,
-      ctaText: "فكّرني لما يفتح",
+      ctaText: t("remindWhenOpen"),
       ctaVariant: "secondary",
       isClosed: true,
     };
@@ -43,9 +47,9 @@ function getShopWaitStatus(shop: Shop): WaitState {
   if (shop.id === "shop-1" || shop.id === "shop-4") {
     return {
       tone: "free",
-      label: "فاضي دلوقتي — ادخل على طول",
+      label: t("freeNow"),
       icon: Check,
-      ctaText: "ادخل الطابور",
+      ctaText: t("joinQueue"),
       ctaVariant: "ghost",
     };
   }
@@ -53,9 +57,9 @@ function getShopWaitStatus(shop: Shop): WaitState {
   // المحلات التي بها انتظار خفيف
   return {
     tone: "waiting",
-    label: "فاضل ٢ أنفار — استنى ~١٥ د",
+    label: t("waitingFew"),
     icon: Users,
-    ctaText: "ادخل الطابور",
+    ctaText: t("joinQueue"),
     ctaVariant: "secondary",
   };
 }
@@ -65,7 +69,9 @@ export function FavoriteMobileCard({
   onRemove,
   className,
 }: FavoriteMobileCardProps) {
-  const wait = getShopWaitStatus(shop);
+  const t = useTranslations("marketing.favorites.mobileCard");
+  const locale = useLocale();
+  const wait = getShopWaitStatus(shop, t as any);
   const WaitIcon = wait.icon;
 
   return (
@@ -96,7 +102,7 @@ export function FavoriteMobileCard({
         {/* شارة مقفول في زاوية الصورة */}
         {wait.isClosed && (
           <span className="absolute top-0 end-0 rounded-es-lg bg-foreground px-1.5 py-0.5 text-[10.5px] font-bold text-background leading-tight">
-            مقفول
+            {t("closed")}
           </span>
         )}
       </Link>
@@ -120,7 +126,7 @@ export function FavoriteMobileCard({
               e.stopPropagation();
               onRemove(shop.id);
             }}
-            aria-label={`إزالة ${shop.name} من المفضلة`}
+            aria-label={t("removeAria", { name: shop.name })}
             className="shrink-0 p-1 text-red-500 hover:scale-110 active:scale-95 transition-transform cursor-pointer"
           >
             <Heart className="size-4.5 fill-red-500 text-red-500" />
@@ -134,10 +140,10 @@ export function FavoriteMobileCard({
             <span className="tabular">{shop.rating}</span>
           </span>
           <span className="h-3 w-px bg-border" />
-          <span className="tabular">{formatDistance(shop.distanceKm)}</span>
+          <span className="tabular">{formatDistance(shop.distanceKm, locale)}</span>
           <span className="h-3 w-px bg-border" />
           <span className="truncate tabular font-bold text-foreground">
-            {formatFrom(shop.priceFrom)}
+            {formatFrom(shop.priceFrom, locale)}
           </span>
         </div>
 

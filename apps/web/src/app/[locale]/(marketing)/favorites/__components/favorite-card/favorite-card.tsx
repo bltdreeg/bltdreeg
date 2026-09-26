@@ -3,6 +3,7 @@
 
 import { Scissors, X } from "lucide-react";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOK, ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import type { Shop } from "@/lib/types/shop/shop.interface";
@@ -23,8 +24,12 @@ export function FavoriteCard({
   notchColor = "var(--color-card, #ffffff)",
   className,
 }: FavoriteCardProps) {
+  const t = useTranslations("marketing.favorites.card");
+  const locale = useLocale();
   const hasSlotToday = Boolean(shop.nextSlotAt && isToday(shop.nextSlotAt));
-  const slotTimeFormatted = shop.nextSlotAt ? formatTime(shop.nextSlotAt) : "1:15 م";
+  const slotTimeFormatted = shop.nextSlotAt
+    ? formatTime(shop.nextSlotAt, locale)
+    : (locale === "ar" ? "1:15 م" : "1:15 PM");
 
   return (
     <article
@@ -79,7 +84,7 @@ export function FavoriteCard({
           {shop.name}
         </h3>
         <p className="tabular text-[13px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm)} · {shop.rating}
+          {shop.areaName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating}
         </p>
       </div>
 
@@ -103,7 +108,7 @@ export function FavoriteCard({
         <div className="flex items-end justify-between gap-3">
           <div className="flex flex-col gap-1">
             <span className="text-[11.5px] font-semibold text-muted-foreground tracking-wide">
-              {hasSlotToday ? "أقرب ميعاد · النهارده" : "مفيش مواعيد النهارده"}
+              {hasSlotToday ? t("nearestSlotToday") : t("noSlotsToday")}
             </span>
             <span
               className={cn(
@@ -111,13 +116,13 @@ export function FavoriteCard({
                 hasSlotToday ? "text-foreground" : "text-muted-foreground"
               )}
             >
-              {hasSlotToday ? slotTimeFormatted : "بكرة 11:00 ص"}
+              {hasSlotToday ? slotTimeFormatted : (locale === "ar" ? "بكرة 11:00 ص" : "Tomorrow 11:00 AM")}
             </span>
           </div>
 
           {hasSlotToday && (
             <span className="tabular pb-1 text-[13px] font-semibold text-muted-foreground whitespace-nowrap">
-              {formatFrom(shop.priceFrom)}
+              {formatFrom(shop.priceFrom, locale)}
             </span>
           )}
         </div>
@@ -129,14 +134,14 @@ export function FavoriteCard({
               href={ROUTE_BOOK(shop.id)}
               className="flex h-[42px] flex-1 items-center justify-center rounded-[10px] bg-primary text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-pressed whitespace-nowrap"
             >
-              احجز ميعاد
+              {t("bookAppointment")}
             </Link>
           ) : (
             <Link
               href={ROUTE_BOOK(shop.id)}
               className="flex h-[42px] flex-1 items-center justify-center rounded-[10px] border border-primary bg-card text-sm font-bold text-primary-pressed transition-colors hover:bg-primary/10 whitespace-nowrap"
             >
-              شوف مواعيد بكرة
+              {t("seeTomorrowSlots")}
             </Link>
           )}
 
@@ -148,7 +153,7 @@ export function FavoriteCard({
               e.stopPropagation();
               onRemove?.(shop.id);
             }}
-            aria-label={`إزالة ${shop.name} من المفضلة`}
+            aria-label={t("removeAria", { name: shop.name })}
             className="flex size-[42px] shrink-0 items-center justify-center rounded-[10px] border border-border bg-card text-muted-foreground transition-colors hover:border-destructive/60 hover:bg-destructive/10 hover:text-destructive cursor-pointer"
           >
             <X className="size-4" />

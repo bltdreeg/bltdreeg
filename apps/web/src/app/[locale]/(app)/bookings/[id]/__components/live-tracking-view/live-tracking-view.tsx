@@ -14,14 +14,16 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations, useLocale } from "next-intl";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_BOOKINGS, ROUTE_BOOK_SLOT } from "@/lib/data/constants/routes.constants";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import type { SalonDetails } from "@/lib/types/salon";
 import type { Barber } from "@/lib/types/barber/barber.interface";
 import type { Service } from "@/lib/types/service/service.interface";
 import { Punctuality, type QueueStatus } from "@/lib/types/queue";
+import { formatDistance } from "@/lib/utils/format/price.utils";
 import {
-  calculateAppointmentWindow,
   calculateDepartureTime,
   calculateRemainingMinutes,
   formatDate,
@@ -53,6 +55,8 @@ export function LiveTrackingView({
   services = [],
   queueStatus,
 }: LiveTrackingViewProps) {
+  const t = useTranslations("app.liveTracking");
+  const locale = useLocale();
   const [copied, setCopied] = useState(false);
   const [remindSet, setRemindSet] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
@@ -163,7 +167,7 @@ export function LiveTrackingView({
   const totalSegments = 8;
 
   return (
-    <div dir="rtl" className="flex min-h-full flex-1 flex-col bg-white text-[#0E0F11]">
+    <div className="flex min-h-full flex-1 flex-col bg-white text-[#0E0F11]">
       {/* 1. الشريط العلوي الأخضر الكامل — مطابق لـ FRAME 11B */}
       <header className="min-h-[54px] w-full bg-[#0F766E] px-4 py-2 sm:px-8 sm:py-[9px] lg:px-16">
         <div className="mx-auto flex flex-wrap items-center justify-between gap-3 sm:gap-4">
@@ -172,17 +176,17 @@ export function LiveTrackingView({
               href={ROUTE_BOOKINGS}
               className="text-[17px] font-black leading-none text-white hover:opacity-95"
             >
-              بالتدريج
+              {getAppName(locale)}
             </Link>
             <div className="hidden h-[26px] w-px bg-white/25 sm:block" />
             <div className="flex items-baseline gap-1.5 sm:gap-[7px]">
-              <span className="text-xs font-medium leading-none text-white/90">ميعادك النهارده</span>
+              <span className="text-xs font-medium leading-none text-white/90">{t("todayAppointment")}</span>
               <span className="text-[17px] font-extrabold leading-none tabular-nums text-white">
                 {timeText}
               </span>
             </div>
             <div className="flex items-baseline gap-1.5 sm:gap-[7px]">
-              <span className="text-xs font-medium leading-none text-white/90">رقمك في الدور</span>
+              <span className="text-xs font-medium leading-none text-white/90">{t("queueNumber")}</span>
               <span className="text-[17px] font-extrabold leading-none tabular-nums text-white">
                 {booking.queueNumber}
               </span>
@@ -194,14 +198,14 @@ export function LiveTrackingView({
             <div className="flex shrink-0 items-center gap-[7px] rounded-lg bg-[#FEF3C7] px-2.5 py-1.5">
               <div className="size-1.5 rounded-full bg-[#B45309]" />
               <span className="text-xs font-bold leading-none text-[#92400E]">
-                الصالون متأخر ~{delayMinutes} دقايق
+                {t("salonDelayed", { delay: delayMinutes })}
               </span>
             </div>
           ) : (
             <div className="flex shrink-0 items-center gap-[7px] rounded-lg bg-[#DCFCE7] px-2.5 py-1.5">
               <div className="size-1.5 rounded-full bg-[#15803D]" />
               <span className="text-xs font-bold leading-none text-[#15803D]">
-                الصالون في ميعاده
+                {t("salonOnTime")}
               </span>
             </div>
           )}
@@ -239,7 +243,7 @@ export function LiveTrackingView({
                     {booking.shopName}
                   </h2>
                   <div className="text-[12.5px] leading-none text-[#6B7280]">
-                    مع {barberName} · {duration} دقيقة
+                    {t("withBarberMinutes", { barber: barberName, duration })}
                   </div>
                 </div>
               </div>
@@ -252,7 +256,7 @@ export function LiveTrackingView({
                     className="flex h-[42px] flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-[13.5px] font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
                   >
                     <Phone className="size-3.5 text-[#6B7280]" />
-                    <span>اتصل بالصالون</span>
+                    <span>{t("callSalon")}</span>
                   </a>
                   <button
                     type="button"
@@ -262,12 +266,12 @@ export function LiveTrackingView({
                     {copied ? (
                       <>
                         <Check className="size-3.5 text-[#15803D]" />
-                        <span className="text-[#15803D]">اتنسخ!</span>
+                        <span className="text-[#15803D]">{t("copied")}</span>
                       </>
                     ) : (
                       <>
                         <Copy className="size-3.5 text-[#6B7280]" />
-                        <span>انسخ العنوان</span>
+                        <span>{t("copyAddress")}</span>
                       </>
                     )}
                   </button>
@@ -280,22 +284,22 @@ export function LiveTrackingView({
               <>
                 {/* كارت "هنبعتلك تنبيه" */}
                 <div className="flex flex-col gap-[11px] rounded-[14px] border border-[#E5E7EB] bg-white p-4 sm:px-[18px] sm:py-4">
-                  <h3 className="text-sm font-bold leading-none text-[#0E0F11]">هنبعتلك تنبيه</h3>
+                  <h3 className="text-sm font-bold leading-none text-[#0E0F11]">{t("alertsTitle")}</h3>
                   <div className="flex items-start gap-2.5">
                     <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
-                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">لما يفضل قدامك اتنين.</span>
+                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">{t("alertTwoAhead")}</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#0F766E]" />
-                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">وبعدين لما يجي دورك.</span>
+                    <span className="text-[13px] leading-[1.8] text-[#0E0F11]">{t("alertYourTurn")}</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <div className="mt-[7px] size-[7px] shrink-0 rounded-full bg-[#F59E0B]" />
                     <span className="text-[13px] leading-[1.8] text-[#0E0F11]">
-                      ولو الصالون اتأخر، هنقولك الميعاد الجديد.
+                      {t("alertDelay")}
                     </span>
                   </div>
-                  <p className="text-xs leading-[1.7] text-[#6B7280]">على واتساب والتطبيق</p>
+                  <p className="text-xs leading-[1.7] text-[#6B7280]">{t("alertsChannels")}</p>
                 </div>
 
                 {/* أزرار الإجراءات */}
@@ -305,7 +309,7 @@ export function LiveTrackingView({
                     className="flex h-[42px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] border border-[#E5E7EB] bg-white text-[13.5px] font-bold text-[#0E0F11] transition-colors hover:bg-[#F7F8FA]"
                   >
                     <CalendarSync className="size-4 text-[#6B7280]" />
-                    <span>عدّل الميعاد</span>
+                    <span>{t("reschedule")}</span>
                   </Link>
                   {!isCancelled ? (
                     <button
@@ -313,11 +317,11 @@ export function LiveTrackingView({
                       onClick={() => setCancelModalOpen(true)}
                       className="flex h-[42px] w-full items-center justify-center whitespace-nowrap rounded-[10px] border border-[#FECACA] bg-white text-[13.5px] font-bold text-[#EF4444] transition-colors hover:bg-red-50 cursor-pointer"
                     >
-                      إلغاء الحجز
+                      {t("cancelBooking")}
                     </button>
                   ) : (
                     <div className="flex h-[42px] w-full items-center justify-center rounded-[10px] bg-slate-100 text-[13.5px] font-bold text-[#6B7280]">
-                      تم إلغاء هذا الحجز
+                      {t("bookingCancelled")}
                     </div>
                   )}
                 </div>
@@ -329,7 +333,7 @@ export function LiveTrackingView({
               <div className="flex items-center gap-2.5 rounded-[14px] border border-emerald-200 bg-emerald-50/70 p-4">
                 <div className="size-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />
                 <span className="text-xs font-bold text-emerald-950 leading-relaxed">
-                  الخدمة جارية الآن داخل الصالون — نعيماً مقدماً!
+                  {t("inServiceSidebarNotice")}
                 </span>
               </div>
             )}
@@ -339,13 +343,13 @@ export function LiveTrackingView({
               <div className="flex flex-col gap-2.5 rounded-[14px] border border-emerald-200 bg-emerald-50/70 p-4">
                 <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs">
                   <Check className="size-4 stroke-[3]" />
-                  <span>تمت الزيارة بنجاح</span>
+                  <span>{t("completedSidebarNotice")}</span>
                 </div>
                 <Link
                   href={`/bookings/${booking.id}/rate`}
                   className="flex h-[42px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-[10px] bg-[#0F766E] text-[13.5px] font-bold text-white transition-colors hover:bg-[#0B5A54] shadow-xs"
                 >
-                  <span>قيّم زيارتك الآن</span>
+                  <span>{t("rateVisitNow")}</span>
                 </Link>
               </div>
             )}
@@ -370,10 +374,10 @@ export function LiveTrackingView({
               {/* شريط حالة اليوم والتحديث */}
               <div className="flex flex-wrap items-center justify-between gap-3 bg-[#0F766E] px-5 py-3.5 sm:px-[26px]">
                 <span className="text-sm sm:text-base font-extrabold leading-none text-white">
-                  النهارده {formatDate(booking.startAt).replace("،", "")} · الدور شغال
+                  {t("todayQueueActive", { date: formatDate(booking.startAt).replace("،", "") })}
                 </span>
                 <span className="text-[12.5px] font-medium leading-none text-white/90 tabular-nums">
-                  آخر تحديث {formatTime(new Date().toISOString())}
+                  {t("lastUpdate", { time: formatTime(new Date().toISOString()) })}
                 </span>
               </div>
 
@@ -382,13 +386,13 @@ export function LiveTrackingView({
                 {/* ميعادك */}
                 <div className="flex flex-1 flex-col gap-2.5 p-6 sm:p-7">
                   <span className="text-[13px] font-semibold tracking-wide text-[#6B7280]">
-                    ميعادك
+                    {t("yourTime")}
                   </span>
                   <span className="text-[48px] sm:text-[58px] font-extrabold leading-none tabular-nums text-[#0E0F11]">
                     {timeText}
                   </span>
                   <span className="text-[13.5px] leading-none text-[#6B7280]">
-                    مع {barberName} · {duration} دقيقة
+                    {t("withBarberMinutes", { barber: barberName, duration })}
                   </span>
                 </div>
 
@@ -399,7 +403,7 @@ export function LiveTrackingView({
                 {/* رقمك في الدور */}
                 <div className="flex flex-1 flex-col gap-2.5 p-6 sm:p-7">
                   <span className="text-[13px] font-semibold tracking-wide text-[#6B7280]">
-                    رقمك في الدور
+                    {t("yourQueueNumber")}
                   </span>
                   <div className="flex items-center gap-4">
                     <div className="flex size-20 sm:size-24 shrink-0 items-center justify-center rounded-[18px] border-[3px] border-[#0F766E] bg-[#F0FAF8]">
@@ -408,9 +412,7 @@ export function LiveTrackingView({
                       </span>
                     </div>
                     <div className="text-[13.5px] leading-[1.6] text-[#6B7280]">
-                      من {totalQueueToday} في دور
-                      <br />
-                      النهارده
+                      {t("outOfToday", { total: totalQueueToday })}
                     </div>
                   </div>
                 </div>
@@ -423,21 +425,21 @@ export function LiveTrackingView({
                     <span className="text-[34px] font-extrabold leading-none tabular-nums text-[#0F766E]">
                       {peopleAhead}
                     </span>
-                    <span className="text-[17px] font-bold text-[#0E0F11]">قدامك في الدور</span>
+                    <span className="text-[17px] font-bold text-[#0E0F11]">{t("peopleAheadInQueue")}</span>
                   </div>
 
                   {isRunningLate ? (
                     <div className="flex items-center gap-2 rounded-[10px] border border-[#FDE68A] bg-[#FEF3C7] px-3.5 py-2">
                       <div className="size-2 rounded-full bg-[#B45309]" />
                       <span className="text-[14.5px] font-bold leading-none text-[#92400E]">
-                        الصالون متأخر ~{delayMinutes} دقايق
+                        {t("salonDelayed", { delay: delayMinutes })}
                       </span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2 rounded-[10px] border border-[#BBF7D0] bg-[#DCFCE7] px-3.5 py-2">
                       <div className="size-2 rounded-full bg-[#15803D]" />
                       <span className="text-[14.5px] font-bold leading-none text-[#15803D]">
-                        الصالون ماشي في ميعاده
+                        {t("salonOnTimeAlt")}
                       </span>
                     </div>
                   )}
@@ -466,10 +468,10 @@ export function LiveTrackingView({
                 {/* أوقات التقدير */}
                 <div className="flex flex-wrap items-center gap-2.5 text-[13.5px] leading-[1.7] text-[#6B7280]">
                   <span>
-                    دورك تقريبًا {expectedTimeText} · متبقي {remainingMinutes} دقيقة
+                    {t("estimatedTurn", { time: expectedTimeText, remaining: remainingMinutes })}
                   </span>
                   <span className="size-1 rounded-full bg-[#CFD4DA]" />
-                  <span>متوسط تأخير الصالون النهارده 4 دقايق</span>
+                  <span>{t("avgDelayToday")}</span>
                 </div>
 
                 {/* صندوق التنبيه في حالة التأخير */}
@@ -478,21 +480,21 @@ export function LiveTrackingView({
                     <div className="flex shrink-0 items-center gap-2 rounded-[9px] border border-[#FDE68A] bg-[#FEF3C7] px-2.5 py-1.5">
                       <div className="size-1.5 rounded-full bg-[#B45309]" />
                       <span className="text-[13px] font-bold text-[#92400E]">
-                        الصالون متأخر ~{delayMinutes} دقايق
+                        {t("salonDelayed", { delay: delayMinutes })}
                       </span>
                     </div>
                     <span className="text-[12.5px] leading-[1.6] text-[#6B7280]">
-                      ميعادك المتوقع اتعدّل تلقائياً لـ {expectedTimeText} عشان متستناش على الفاضي.
+                      {t("autoDelayAdjustment", { time: expectedTimeText })}
                     </span>
                   </div>
                 ) : (
                   <div className="flex flex-wrap items-center gap-2.5 rounded-[11px] border border-dashed border-[#E5E7EB] bg-[#F7F8FA] p-3 sm:px-3.5 sm:py-3">
                     <div className="flex shrink-0 items-center gap-2 rounded-[9px] border border-[#BBF7D0] bg-[#DCFCE7] px-2.5 py-1.5">
                       <div className="size-1.5 rounded-full bg-[#15803D]" />
-                      <span className="text-[13px] font-bold text-[#15803D]">الدور منتظم</span>
+                      <span className="text-[13px] font-bold text-[#15803D]">{t("queueRegular")}</span>
                     </div>
                     <span className="text-[12.5px] leading-[1.6] text-[#6B7280]">
-                      لو حصل أي تأخير أو زبون خلص بدري، الصفحة هتحدّث الوقت فوراً.
+                      {t("queueRegularHint")}
                     </span>
                   </div>
                 )}
@@ -507,10 +509,10 @@ export function LiveTrackingView({
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <h3 className="text-lg sm:text-[19px] font-extrabold leading-[1.3] text-[#0E0F11]">
-                    تقدر تتحرك الساعة {departureTime}
+                    {t("moveAtTime", { time: departureTime })}
                   </h3>
                   <p className="text-[13px] leading-[1.6] text-[#6B7280]">
-                    1.2 كم من مكانك · حوالي 12 دقيقة بالعربية و 18 مشي
+                    {t("distanceSummary")}
                   </p>
                 </div>
               </div>
@@ -522,12 +524,12 @@ export function LiveTrackingView({
                 {remindSet ? (
                   <>
                     <Check className="size-4 text-[#15803D]" />
-                    <span className="text-[#15803D]">هنفكرك قبلها بـ 10 دقايق</span>
+                    <span className="text-[#15803D]">{t("remind10MinSet")}</span>
                   </>
                 ) : (
                   <>
                     <Bell className="size-4 text-[#6B7280]" />
-                    <span>فكّرني قبلها بـ 10 دقايق</span>
+                    <span>{t("remind10MinBefore")}</span>
                   </>
                 )}
               </button>
@@ -535,7 +537,7 @@ export function LiveTrackingView({
 
             {/* مخطط خطوات الدور — "الدور ماشي إزاي" */}
             <div className="flex flex-col gap-[18px] rounded-[14px] border border-[#E5E7EB] bg-white p-5 sm:p-[22px]">
-              <h3 className="text-base font-bold leading-none text-[#0E0F11]">الدور ماشي إزاي</h3>
+              <h3 className="text-base font-bold leading-none text-[#0E0F11]">{t("howQueueWorks")}</h3>
 
               {/* الشريحة الأفقية للخطوات */}
               <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-0 overflow-x-auto pb-1">
@@ -549,9 +551,11 @@ export function LiveTrackingView({
                   </div>
                   <div className="flex flex-col gap-1 pr-1">
                     <span className="text-[13.5px] font-semibold leading-none text-[#0E0F11]">
-                      الحجز مؤكد
+                      {t("stepBookingConfirmed")}
                     </span>
-                    <span className="text-xs leading-none text-[#6B7280] tabular-nums">امبارح 9:12 م</span>
+                    <span className="text-xs leading-none text-[#6B7280] tabular-nums">
+                      {t("stepConfirmedTimeDemo")}
+                    </span>
                   </div>
                 </div>
 
@@ -565,9 +569,11 @@ export function LiveTrackingView({
                   </div>
                   <div className="flex flex-col gap-1 pr-1">
                     <span className="text-[13.5px] font-semibold leading-none text-[#0E0F11]">
-                      قرب ميعادك
+                      {t("stepApproaching")}
                     </span>
-                    <span className="text-xs leading-none text-[#6B7280] tabular-nums">النهارده 5:30 م</span>
+                    <span className="text-xs leading-none text-[#6B7280] tabular-nums">
+                      {t("stepApproachingTimeDemo")}
+                    </span>
                   </div>
                 </div>
 
@@ -582,14 +588,14 @@ export function LiveTrackingView({
                   <div className="flex flex-col gap-1.5 pr-1">
                     <div className="flex items-center gap-2">
                       <span className="text-[13.5px] font-extrabold leading-none text-[#0B5A54]">
-                        قدامك واحد كمان
+                        {t("stepOneAhead")}
                       </span>
                       <span className="rounded-md bg-[#0F766E] px-1.5 py-0.5 text-[10.5px] font-bold text-white leading-none">
-                        دلوقتي
+                        {t("stepNowBadge")}
                       </span>
                     </div>
                     <span className="text-xs leading-relaxed text-[#6B7280]">
-                      قدامك {peopleAhead} · بنستنى اللي قبلك يخلّص
+                      {t("stepWaitingPredecessor", { ahead: peopleAhead })}
                     </span>
                   </div>
                 </div>
@@ -602,10 +608,10 @@ export function LiveTrackingView({
                   </div>
                   <div className="flex flex-col gap-1 pr-1">
                     <span className="text-[13.5px] font-semibold leading-none text-[#A5ABB3]">
-                      دورك دلوقتي
+                      {t("stepYourTurn")}
                     </span>
                     <span className="text-xs leading-none text-[#A5ABB3] tabular-nums">
-                      متوقع {timeText}
+                      {t("stepExpected", { time: timeText })}
                     </span>
                   </div>
                 </div>
@@ -615,17 +621,17 @@ export function LiveTrackingView({
                   <div className="size-[26px] rounded-full border-2 border-[#E5E7EB] bg-white" />
                   <div className="flex flex-col gap-1 pr-1">
                     <span className="text-[13.5px] font-semibold leading-none text-[#A5ABB3]">
-                      تمت الخدمة
+                      {t("stepServiceDone")}
                     </span>
                     <span className="text-xs leading-none text-[#A5ABB3] tabular-nums">
-                      متوقع 7:20 م
+                      {t("stepExpected", { time: locale === "en" ? "7:20 PM" : "7:20 م" })}
                     </span>
                   </div>
                 </div>
               </div>
 
               <p className="text-[13px] leading-[1.8] text-[#6B7280]">
-                هنبعتلك تنبيه لما يفضل قدامك اتنين، وبعدين لما يجي دورك، ولو الصالون اتأخر.
+                {t("stepsHint")}
               </p>
             </div>
             </>
@@ -638,7 +644,7 @@ export function LiveTrackingView({
               peopleAhead={1}
               travelMinutes={6}
               estimatedMinutes={9}
-              distanceText="1.2 كم"
+              distanceText={formatDistance(1.2, locale)}
               salonName={booking.shopName}
               onLeaveQueue={() => setLeaveQueueModalOpen(true)}
             />
@@ -690,10 +696,10 @@ export function LiveTrackingView({
               </div>
               <div className="flex flex-col gap-1.5">
                 <h3 className="text-2xl sm:text-3xl font-black text-emerald-950">
-                  نعيماً! تم انتهاء الحلاقة
+                  {t("completedCard.title")}
                 </h3>
                 <p className="text-sm font-semibold text-emerald-800 max-w-sm">
-                  شكراً لزيارتك {booking.shopName}. رأيك بيساعد غيرك ويطوّر الخدمة في الصالون.
+                  {t("completedCard.subtitle", { shopName: booking.shopName })}
                 </p>
               </div>
               <button
@@ -701,7 +707,7 @@ export function LiveTrackingView({
                 onClick={() => setCompletedModalOpen(true)}
                 className="mt-2 flex h-12 items-center justify-center gap-2 rounded-xl bg-[#0F766E] px-8 text-sm sm:text-base font-black text-white shadow-md hover:bg-[#0B5A54] active:scale-98 transition-all cursor-pointer"
               >
-                <span>فتح نافذة تقييم الزيارة</span>
+                <span>{t("completedCard.openRateModal")}</span>
               </button>
             </div>
           )}
