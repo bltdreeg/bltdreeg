@@ -1,0 +1,626 @@
+%% ============================================================================
+%% Salon Queue — Database Schema (ERD)
+%% Aligned to the ACTUAL codebase tables (packages/core migrations + the
+%% migrations-draft continuation). Source of truth: docs/features 1..11 and
+%% docs/domain-model.md. See docs/schema/schema-notes.md for mapping + rationale.
+%% Money = decimal(10,2). Durations = integer minutes. Currency = CurrencyEnum
+%% on tenants. Derived values are NOT stored (computed in app).
+%% ============================================================================
+
+erDiagram
+
+%% ---------------------------------------------------------------------------
+%% Tenancy
+%% ---------------------------------------------------------------------------
+
+TENANTS {
+  bigint id PK
+  varchar(120) name
+  varchar(40) slug UK
+  varchar(254) email UK
+  varchar phone
+  text logo
+  text address
+  tinyint currency "CurrencyEnum"
+  boolean is_active
+  varchar status "draft|...|approved"
+  decimal(10,2) contract_discount_pct "feature 7 agreed app-source rate"
+  smallint platform_split_customer_pct "platform-owned, snapshot onto reservation"
+  smallint platform_split_platform_pct "platform-owned, snapshot onto reservation"
+  timestamps
+}
+
+BRANCHES {
+  bigint id PK
+  bigint tenant_id FK
+  json name "translatable"
+  varchar phone
+  json address "translatable"
+  string latitude
+  string longitude
+  string team_size "onboarding enum"
+  json service_location_type "onboarding array"
+  boolean is_active
+  boolean is_open "feature 3 live switch"
+  timestamptz opened_at
+  timestamptz closed_at
+  bigint created_by_emp FK "who flipped open/close"
+  timestamps
+}
+
+BRANCH_STATE_EVENTS {
+  bigint id PK
+  bigint branch_id FK
+  varchar state "open|closed"
+  bigint actor_employee_id FK
+  timestamptz at
+  timestamps
+}
+
+SALON_CONTRACT_LOGS {
+  bigint id PK
+  bigint tenant_id FK
+  decimal(10,2) contract_discount_pct
+  date effective_at "applies to bookings created after"
+  timestamptz recorded_at
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% Chairs, barbers, daily roster (features 2-4)
+%% ---------------------------------------------------------------------------
+
+CHAIRS {
+  bigint id PK
+  bigint branch_id FK
+  smallint position_no
+  varchar status "active|off|disabled_emergency"
+  bigint toggled_by FK "employee"
+  timestamptz toggled_at
+  unique(branch_id, position_no)
+  timestamps
+}
+
+BARBER_PROFILES {
+  bigint id PK
+  bigint tenant_id FK
+  varchar name
+  text photo_url
+  boolean is_active "deactivated, never deleted"
+  bigint default_chair_id FK "feature 2 default"
+  varchar leaving_status "active|absent"
+  timestamps
+}
+
+CHAIR_DAY_ASSIGNMENTS {
+  bigint id PK
+  bigint tenant_id FK
+  bigint branch_id FK
+  bigint chair_id FK
+  bigint barber_profile_id FK
+  date day
+  timestamptz check_in_at "null = not checked in; queue runs only when set"
+  timestamptz check_out_at
+  bigint created_by_emp FK "salon admin confirms roster"
+  unique(branch_id, chair_id, day)
+  timestamps
+}
+
+BARBER_ABSENCES {
+  bigint id PK
+  bigint tenant_id FK
+  bigint barber_profile_id FK
+  date day
+  varchar reason
+  boolean resolved
+  bigint resolved_by_emp FK
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% Identity (decision 1): customers separate from staff `users`
+%% ---------------------------------------------------------------------------
+
+CUSTOMERS {
+  bigint id PK
+  varchar phone_eg UK "phone+OTP OR email+password, both accepted"
+  varchar email UK
+  varchar password_hash
+  varchar name
+  boolean is_active
+  timestamps
+}
+
+%% staff/platform live on the existing `users` + `tenant_user` + `roles`
+%% (NOT drawn here; see schema-notes ERD mapping).
+
+%% ---------------------------------------------------------------------------
+%% Platform catalog + salon copy + per-branch override (features 6, 11)
+%% ---------------------------------------------------------------------------
+
+CATALOG_SERVICE_CATEGORIES {
+  bigint id PK
+  varchar name
+}
+
+CATALOG_SERVICES {
+  bigint id PK
+  bigint catalog_service_category_id FK
+  varchar name
+  integer default_duration
+  decimal(10,2) default_price
+  boolean is_active
+  timestamps
+}
+
+SERVICE_CATEGORIES {
+  bigint id PK
+  bigint tenant_id FK
+  bigint catalog_service_category_id FK "copy-on-take source"
+  varchar name
+  timestamps
+}
+
+SERVICES {
+  bigint id PK
+  bigint tenant_id FK "salon-owned template (copy-on-take)"
+  bigint category_id FK "service_categories"
+  bigint catalog_service_id FK "nullable; copy-on-take source"
+  varchar name
+  integer duration "MANDATORY - wait arithmetic depends on it"
+  decimal(10,2) price "in-shop price; discount base"
+  boolean is_active
+  timestamps
+}
+
+BRANCH_SERVICES {
+  bigint id PK
+  bigint tenant_id FK
+  bigint branch_id FK
+  bigint service_id FK "salon-level template this branch offers"
+  decimal(10,2) price "nullable = inherit services.price"
+  integer duration "nullable = inherit services.duration"
+  boolean is_active "branch can hide a service"
+  unique(branch_id, service_id)
+  timestamps
+}
+
+PACKAGES {
+  bigint id PK
+  bigint tenant_id FK
+  varchar name
+  decimal(10,2) price
+  integer duration "MANDATORY"
+  boolean is_active
+  timestamps
+}
+
+BRANCH_PACKAGES {
+  bigint id PK
+  bigint tenant_id FK
+  bigint branch_id FK
+  bigint package_id FK
+  decimal(10,2) price "nullable = inherit packages.price"
+  integer duration "nullable = inherit packages.duration"
+  boolean is_active
+  unique(branch_id, package_id)
+  timestamps
+}
+
+PACKAGE_SERVICE {
+  bigint id PK
+  bigint package_id FK
+  bigint service_id FK
+  unique(package_id, service_id)
+  timestamps
+}
+
+CATALOG_JOB_TYPES {
+  bigint id PK
+  varchar name
+  boolean is_active
+  boolean grants_login "false = records-only (barber feature 11)"
+  timestamps
+}
+
+JOB_TYPES {
+  bigint id PK
+  bigint tenant_id FK
+  bigint catalog_job_type_id FK
+  varchar name
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% RBAC (Spatie; platform powers via role_templates) — feature 11
+%% ---------------------------------------------------------------------------
+
+ROLES {
+  bigint id PK
+  bigint tenant_id FK "NOT NULL - every role is salon-owned"
+  varchar name
+  varchar guard_name
+  boolean is_system
+  bigint created_by FK
+  bigint source_template_id FK "role_templates"
+  boolean is_catalog_preset
+  bigint source_job_type_id FK "catalog_job_types preset source"
+  timestamps
+  unique(tenant_id, name, guard_name)
+}
+
+PERMISSIONS {
+  bigint id PK
+  varchar name
+  varchar guard_name
+  unique(name, guard_name)
+  timestamps
+}
+
+ROLE_TEMPLATES {
+  bigint id PK
+  varchar name
+  varchar description
+  boolean is_active
+  timestamps
+}
+
+%% Spatie pivots (model_has_roles, role_has_permissions, ...) drawn implicitly.
+
+%% ---------------------------------------------------------------------------
+%% Slots + the queue (feature 1) — position is a live projection over join_time
+%% ---------------------------------------------------------------------------
+
+SLOTS {
+  bigint id PK
+  bigint chair_id FK
+  date day
+  time start_at "precise moment, not a window"
+  smallint capacity "admin-set when defining; default 1"
+  bigint created_by_employee FK
+  unique(chair_id, day, start_at)
+  timestamps
+  note "full is DERIVED = holders >= capacity, not stored"
+}
+
+RESERVATIONS {
+  bigint id PK
+  bigint customer_id FK
+  bigint branch_id FK
+  bigint chair_id FK "the queue belongs to the chair"
+  bigint slot_id FK "NULL for join-now"
+  varchar type "join_now|slot"
+  timestamptz join_time "arrival order key; slot => ACTUAL join moment"
+  varchar status "booked|queued|in_service|served|cancelled|removed"
+  varchar source "app|walk_in_registered"
+  decimal(10,2) snapshot_discount_pct "contract rate snapshot at booking"
+  smallint snapshot_customer_split "platform split snapshot at booking"
+  smallint snapshot_platform_split "platform split snapshot at booking"
+  varchar absence_state "ok|skipped|absent_once|postponed"
+  boolean postpone_used "once per reservation; control locks after"
+  timestamptz cancel_at
+  unique(customer_id, slot_id)
+  timestamps
+  note "one active live-queue per customer: pg partial unique index + app gate"
+}
+
+RESERVATION_LINES {
+  bigint id PK
+  bigint reservation_id FK
+  smallint line_no
+  varchar item_type "service|package"
+  bigint service_id FK "NULL when package"
+  bigint package_id FK "NULL when service"
+  decimal(10,2) price_at_booking "price LOCKED at booking"
+  integer duration_at_booking "durations drive wait live"
+  unique(reservation_id, line_no)
+  timestamps
+}
+
+QUEUE_EVENTS {
+  bigint id PK
+  bigint tenant_id FK
+  bigint reservation_id FK
+  varchar type "join|auto_join|skip|postpone|absent|cancel|service_change|staff_remove|finish"
+  smallint positions "1..3 for postpone/skip"
+  json detail
+  bigint actor_employee_id FK "NULL = customer/system"
+  timestamptz at
+  timestamps
+}
+
+REDISTRIBUTIONS {
+  bigint id PK
+  bigint tenant_id FK
+  bigint reservation_id FK
+  bigint from_chair_id FK
+  bigint to_chair_id FK "same branch only"
+  varchar mode "ask_first|swap_then_notify"
+  varchar status "offered|accepted|declined|cancelled|placed"
+  bigint decided_by_emp FK
+  json impact_preview "positions & waits before commit"
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% QR rotation + scan — presence proof + checked-in (feature 9)
+%% ---------------------------------------------------------------------------
+
+QR_ROTATIONS {
+  bigint id PK
+  bigint branch_id FK
+  text code_hash "rotates every N minutes; valid window"
+  timestamptz valid_from
+  timestamptz valid_until
+  timestamps
+}
+
+QR_SCANS {
+  bigint id PK
+  bigint reservation_id FK
+  bigint customer_id FK
+  bigint qr_rotation_id FK
+  varchar method "scan|assisted"
+  bigint assisted_by_employee FK "staff-logged when phone fails"
+  timestamptz scanned_at "only check-in trigger; never re-seats"
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% Visits / billing / commission / invoicing (features 7 & 8)
+%% ---------------------------------------------------------------------------
+
+VISITS {
+  bigint id PK
+  bigint reservation_id FK "NULL for walk-ins"
+  bigint branch_id FK
+  bigint customer_id FK "NULL for walk-in"
+  bigint qr_scan_id FK "set => app-sourced, discount eligible"
+  varchar walk_in_name
+  varchar walk_in_phone_eg
+  bigint registered_by_employee FK
+  varchar status "in_progress|completed"
+  decimal(10,2) total_price "sum of visit lines"
+  decimal(10,2) discount_total "sum of customer+platform share"
+  decimal(10,2) customer_paid "salon keeps this"
+  decimal(10,2) platform_commission "app share owed by salon"
+  timestamptz service_started_at "service change cutoff"
+  timestamptz service_finished_at
+  timestamps
+  note "app_sourced DERIVED = reservation AND qr_scan present, not stored"
+}
+
+VISIT_LINES {
+  bigint id PK
+  bigint visit_id FK
+  smallint line_no
+  varchar item_type "service|package"
+  bigint service_id FK
+  bigint package_id FK
+  decimal(10,2) price
+  integer duration_min
+  unique(visit_id, line_no)
+  timestamps
+}
+
+COMMISSION_LINES {
+  bigint id PK
+  bigint visit_id FK "one line per QR-verified visit (unique)"
+  bigint tenant_id FK
+  bigint branch_id FK
+  bigint invoice_id FK "NULL until invoiced"
+  decimal(10,2) total_price
+  decimal(10,2) discount_total
+  decimal(10,2) customer_share
+  decimal(10,2) platform_share "rounding diffs to platform"
+  timestamps
+}
+
+INVOICES {
+  bigint id PK
+  bigint tenant_id FK
+  date period_start
+  date period_end "issued 1st of month, covers previous"
+  date issued_at
+  varchar status "due|paid" "NO partial state"
+  decimal(10,2) app_share
+  decimal(10,2) transfer_fee "separate mandatory line"
+  decimal(10,2) total_to_pay
+  integer visit_count "issued only when accumulated >= 3"
+  timestamptz paid_at
+  timestamps
+}
+
+GATEWAY_TRANSACTIONS {
+  bigint id PK
+  bigint invoice_id FK
+  varchar type "webhook|lookup"
+  varchar gateway_ref UK "idempotency: never re-record"
+  varchar method "fawry|instapay|wallet"
+  decimal(10,2) amount
+  timestamptz executed_at "invoice closes + suspension lifts instantly"
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% Ratings — feature 2 (barber) & 10 (salon)
+%% ---------------------------------------------------------------------------
+
+RATINGS {
+  bigint id PK
+  bigint customer_id FK
+  bigint visit_id FK "one per completed visit; served app customers only"
+  varchar target_type "barber|salon"
+  bigint barber_profile_id FK "NULL when salon target"
+  bigint tenant_id FK "NULL when barber target"
+  smallint stars "1..5"
+  text comment "optional, anonymized"
+  unique(visit_id, target_type, barber_profile_id, tenant_id)
+  timestamps
+}
+
+%% ---------------------------------------------------------------------------
+%% Notifications & global config — feature 5
+%% ---------------------------------------------------------------------------
+
+NOTIFICATIONS {
+  bigint id PK
+  varchar recipient_type "customer"
+  bigint customer_id FK
+  varchar type "you_next|turn_in_n|skipped|postponed|wait_updated|swap_ask|swap_done|cancel_done|branch_state|slot_confirmed|slot_joined|slot_conflict_ask"
+  varchar category "turn_critical|informational"
+  text body
+  boolean read
+  timestamps
+}
+
+NOTIFICATION_PREFS {
+  bigint id PK
+  bigint customer_id FK
+  varchar type "muteable per informational type"
+  boolean muted "turn_critical cannot be muted (app-enforced)"
+  unique(customer_id, type)
+  timestamps
+}
+
+PLATFORM_SETTINGS {
+  bigint id PK
+  varchar key UK "qr_rotation_minutes|split_customer_pct|split_platform_pct|invoice_due_days|ranking_min_ratings"
+  json value
+  text description
+  timestamps
+}
+
+%% ============================================================================
+%% Relationships
+%% ============================================================================
+
+TENANTS ||--o{ BRANCHES : "owns"
+TENANTS ||--o{ BARBER_PROFILES : "owns"
+TENANTS ||--o{ SERVICES : "owns catalog copy"
+TENANTS ||--o{ PACKAGES : "owns"
+TENANTS ||--o{ ROLES : "salon RBAC roles"
+TENANTS ||--o{ INVOICES : "billed"
+TENANTS ||--o{ COMMISSION_LINES : "owes"
+TENANTS ||--o{ RATINGS : "target of salon ratings"
+TENANTS ||--o{ SALON_CONTRACT_LOGS : "contract history"
+
+BRANCHES ||--o{ CHAIRS : "has"
+BRANCHES ||--o{ QR_ROTATIONS : "shows rotating QR"
+BRANCHES ||--o{ BRANCH_STATE_EVENTS : "open/close log"
+BRANCHES ||--o{ VISITS : "hosts"
+BRANCHES ||--o{ RESERVATIONS : "hosts"
+BRANCHES ||--o{ BRANCH_SERVICES : "offers"
+BRANCHES ||--o{ BRANCH_PACKAGES : "offers"
+
+CHAIRS ||--o{ SLOTS : "owns bookable slots"
+CHAIRS ||--o{ RESERVATIONS : "queue belongs to chair"
+CHAIRS ||--o{ CHAIR_DAY_ASSIGNMENTS : "rostered"
+BARBER_PROFILES }o--o| CHAIRS : "has default chair"
+
+BARBER_PROFILES ||--o{ CHAIR_DAY_ASSIGNMENTS : "works shift"
+BARBER_PROFILES ||--o{ BARBER_ABSENCES : "absent days"
+BARBER_PROFILES ||--o{ RATINGS : "target of barber ratings"
+
+SERVICES ||--o{ PACKAGE_SERVICE : "composes"
+PACKAGES ||--o{ PACKAGE_SERVICE : "bundles"
+SERVICES ||--o{ BRANCH_SERVICES : "branch overrides"
+PACKAGES ||--o{ BRANCH_PACKAGES : "branch overrides"
+SERVICE_CATEGORIES ||--o{ SERVICES : "categories"
+CATALOG_SERVICE_CATEGORIES ||--o{ CATALOG_SERVICES : "categories"
+CATALOG_SERVICES ||--o{ SERVICES : "copy-on-take source"
+CATALOG_JOB_TYPES ||--o{ JOB_TYPES : "copy-on-take source"
+CATALOG_JOB_TYPES ||--o{ ROLES : "preset source"
+
+ROLES ||--o{ ROLE_TEMPLATES : "source_template"
+
+CUSTOMERS ||--o{ RESERVATIONS : "makes"
+CUSTOMERS ||--o{ QR_SCANS : "scans with own device"
+CUSTOMERS ||--o{ RATINGS : "submits"
+CUSTOMERS ||--o{ NOTIFICATIONS : "receives"
+CUSTOMERS ||--o{ NOTIFICATION_PREFS : "mutes informational only"
+CUSTOMERS o|--o{ VISITS : "visits (walk-ins without account)"
+
+RESERVATIONS }o--o| SLOTS : "optionally books a slot"
+RESERVATIONS ||--o{ RESERVATION_LINES : "ordered items (changeable pre-service)"
+RESERVATIONS ||--o{ QR_SCANS : "checked in by scan"
+RESERVATIONS ||--o{ QUEUE_EVENTS : "lifecycle log"
+RESERVATIONS ||--o{ REDISTRIBUTIONS : "feature 4"
+RESERVATIONS o|--o| VISITS : "resolves to a visit when served"
+
+QR_ROTATIONS ||--o{ QR_SCANS : "verified within window"
+
+VISITS ||--o{ VISIT_LINES : "bill items"
+VISITS o|--o| COMMISSION_LINES : "app-sourced only"
+COMMISSION_LINES }o--o| INVOICES : "attached monthly"
+INVOICES ||--o{ GATEWAY_TRANSACTIONS : "paid via gateway (idempotent)"
+
+%% end erDiagram
+
+%% ============================================================================
+%% INVARIANTS (from the domain model; see schema-notes for enforcement locus —
+%% DB index vs app engine)
+%% ============================================================================
+%%
+%% QUEUE
+%% - The queue must always stay complete and correct.
+%% - Queue POSITION is a live projection ordered by reservation.join_time,
+%%   adjusted transiently by skips (absent, one back, re-evaluated) and
+%%   postpones (voluntary 1-3 back, ONCE per reservation). Never stored.
+%% - Postpone exhausting never removes a customer; removal comes only from the
+%%   absence path (two consecutive absent calls), never from a postpone.
+%% - One active LIVE-queue reservation per customer (type='join_now' AND status
+%%   in booked/queued/in_service): PostgreSQL partial unique index, app-gated
+%%   elsewhere. Future slots excluded: up to 2 in-flight, no same start time.
+%% - Slot join_time = ACTUAL join moment, not booking/slot start.
+%% - At slot start a customer already in another live queue is never in two
+%%   queues: an ask push precedes slot start; no answer => slot cancelled.
+%% - A reservation can never stall: absent => skip once (one back), removed on
+%%   the second absent call. status 'removed' only via staff or branch close.
+%% - Cancellation any time before service starts.
+%% - Service/package changes allowed until service_started_at; wait recomputed
+%%   with DURATION_AT_BOOKING snapshots; never re-seat.
+%% - Expected wait = SUM(durations of queued members ahead, branch-effective) +
+%%   barber's remaining time on the current customer.
+%%
+%% BOOKING / SLOTS
+%% - Closed branch accepts NO join-now; slot booking is independent of open.
+%% - A full slot is not bookable (app-enforced; capacity default 1).
+%% - Slots derive from the chair; unique(chair_id, day, start_at).
+%% - At slot start the customer AUTO-JOINS the chair's queue as a normal fresh
+%%   joiner regardless of barber online state.
+%%
+%% CATALOG (features 6/11)
+%% - services/packages are salon templates; branch-effective price/duration =
+%%   coalesce(branch_* override, salon value).
+%% - Platform catalog is copy-on-take: edits never propagate to taken entries.
+%% - Wait arithmetic and discount base (features 1/7) read branch-effective
+%%   values, so per-branch overrides stay consistent.
+%%
+%% PAYMENT / COMMISSION / INVOICE (features 7-8)
+%% - Walk-in: never discount, never commission.
+%% - One commission line per QR-verified visit; rounding differences to platform.
+%% - Invoice issued 1st of month when accumulated un-invoiced lines >= 3 else
+%%   rolls over. NO partial payments: status in ('due','paid').
+%% - GATEWAY_TRANSACTIONS.gateway_ref globally unique: same reference never
+%%   recorded twice (webhook retries). Payment closes the invoice and lifts any
+%%   suspension instantly.
+%%
+%% RATINGS / RANKING
+%% - Only app customers with a COMPLETED QR-verified visit rate (barber and
+%%   salon fields alike); walk-ins cannot rate. Once per visit.
+%% - Barber rating resets across salons (profile is per-salon).
+%% - Ranking = rating average with minimum-ratings floor; ties broken by
+%%   QR-scan/verified-visit count.
+%%
+%% RBAC (feature 11)
+%% - Every dashboard action is permission-gated via ROLE_PERMISSION; nothing is
+%%   hardcoded to a named role.
+%% - Barbers (catalog job types with grants_login=false) are records only.
+%% - Every employee user belongs to exactly one branch; scope derives from it.
+%%
+%% NOTIFICATIONS (feature 5)
+%% - Turn-critical types (you_next, skipped, removed, swap_ask, slot_conflict)
+%%   are NEVER muteable; NOTIFICATION_PREFS holds informational types only.
+%% - Event creation shares one pipeline for system and dashboard-authored events.
+%% ============================================================================
