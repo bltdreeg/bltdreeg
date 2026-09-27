@@ -59,7 +59,7 @@ class RoleCatalog
             ],
             [
                 'name' => 'Receptionist',
-                'description' => 'Front desk: view catalog entities and check attendance in/out',
+                'description' => 'Front desk: view catalog entities, sell retail products, and check attendance in/out',
                 'permissions' => [
                     'ViewAny:Branch',
                     'View:Branch',
@@ -71,6 +71,12 @@ class RoleCatalog
                     'View:EmployeeAttendance',
                     'CheckIn:EmployeeAttendance',
                     'CheckOut:EmployeeAttendance',
+                    'ViewAny:ProductCategory',
+                    'View:ProductCategory',
+                    'ViewAny:Product',
+                    'View:Product',
+                    'ViewAny:Inventory',
+                    'View:Inventory',
                 ],
             ],
             [
