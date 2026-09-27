@@ -28,6 +28,7 @@ export const ROUTE_ACCOUNT_HELP = `${ROUTE_ACCOUNT}/help`;
 export const ROUTE_BOOKING_CONFIRMATION = (salonId: string, bookingId: string) =>
   `${ROUTE_BOOK_ROOT}/${salonId}/confirmation/${bookingId}`;
 export const ROUTE_OFFLINE = "/offline";
+export const ROUTE_APP_DOWNLOAD = "/download";
 
 export const ROUTE_TERMS = "/terms";
 export const ROUTE_PRIVACY = "/privacy";

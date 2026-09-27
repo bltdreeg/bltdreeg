@@ -21,6 +21,11 @@ export const METADATA_ACCOUNT = page("حسابي", "بياناتك وإعداد�
 export const METADATA_PROFILE = page("بياناتي الشخصية", "تعديل بيانات الحساب والاسم ورقم الموبايل");
 export const METADATA_LANGUAGE = page("لغة التطبيق", "اختر لغة واجهة بالتدريج");
 export const METADATA_HELP = page("المساعدة والدعم", "مركز مساعدة بالتدريج والأسئلة الشائعة وقنوات التواصل");
+export const METADATA_DOWNLOAD = page("حمّل التطبيق", "نزّل تطبيق بالتدريج على iOS أو Android واحجز دورك من موبايلك");
+export const METADATA_PARTNER = page(
+  "انضم كصالون",
+  "سجّل صالونك في بلتدريج واستقبل حجوزات وأدوار من غير تليفونات — التسجيل مجاني والتفعيل في ٢٤ ساعة",
+);
 export const METADATA_LOGIN = page("تسجيل الدخول", "ادخل على حسابك في بلتدريج");
 export const METADATA_REGISTER = page("إنشاء حساب", "اعمل حساب جديد واحجز في دقيقة");
 export const METADATA_VERIFY_OTP = page("كود التأكيد", "أدخل الكود اللي وصلك على موبايلك");

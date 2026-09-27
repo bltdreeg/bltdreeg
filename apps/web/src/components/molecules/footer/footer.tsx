@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
@@ -58,7 +59,19 @@ async function Footer() {
       <PageContainer className="pb-24 pt-11 md:pb-7">
         <div className="flex flex-col justify-between gap-10 lg:flex-row lg:gap-14">
           <div className="flex w-full shrink-0 flex-col gap-3.5 lg:w-[300px]">
-            <span className="text-[21px] font-black text-background">{appName}</span>
+            <Link href={ROUTE_HOME} className="flex w-fit items-center gap-2.5">
+              {/* الماركة تيل — على بلاطة بيضا زي الهيدر عشان تبان على الخلفية الغامقة */}
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white p-1">
+                <Image
+                  src="/logo-mark.png"
+                  alt=""
+                  width={496}
+                  height={521}
+                  className="h-full w-auto object-contain"
+                />
+              </span>
+              <span className="text-[21px] font-black text-background">{appName}</span>
+            </Link>
             <p className="text-[13.5px] leading-[1.8] text-disabled-fg">
               {t("tagline")}
             </p>

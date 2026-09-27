@@ -1,4 +1,4 @@
-// الهيرو: العنوان + شريط البحث + كارت التذكرة الحالية
+// الهيرو: العنوان + شريط البحث + زراير المتاجر + كارت التذكرة الحالية
 import { Clock, Footprints, MapPin, Scissors, Check, Car } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { GradientWaves } from "@/components/atoms/gradient-waves";
@@ -9,6 +9,7 @@ import { Pill } from "@/components/atoms/pill";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOKINGS, ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
+import { StoreBadges } from "../store-badges";
 
 // اسم واحد لكل صورة — الحرف الواحد بيقعد جوه دايرة الـ26 صح
 const PROOF_FACES = ["كريم", "أحمد", "محمود"];
@@ -116,6 +117,12 @@ function Hero({ areaName }: { areaName: string }) {
             >
               {t("searchButton")}
             </Button>
+          </div>
+
+          {/* تحميل التطبيق — تحت البحث عشان ما ينافسش زرار البحث */}
+          <div className="flex w-full flex-col gap-2.5 sm:w-auto">
+            <p className="text-[12.5px] font-semibold text-muted-foreground">{t("getApp")}</p>
+            <StoreBadges />
           </div>
         </div>
 

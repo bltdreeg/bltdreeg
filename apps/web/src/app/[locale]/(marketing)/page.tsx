@@ -1,12 +1,13 @@
 import { getTranslations } from "next-intl/server";
+import { TextLoop } from "@/components/atoms/text-loop";
 import { METADATA_HOME } from "@/lib/data/constants/metadata.constants";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { shops } from "@/lib/data/shops.constants";
 import { isToday } from "@/lib/utils/format/date.utils";
 import { AppDownload } from "./__components/app-download";
-import { AreasGrid } from "./__components/areas-grid";
 import { Hero } from "./__components/hero";
 import { HomeReviews } from "./__components/home-reviews";
+import { PartnerBanner } from "./__components/partner-banner";
 import { ShopRail } from "./__components/shop-rail";
 
 export const metadata = METADATA_HOME;
@@ -15,6 +16,7 @@ const DEFAULT_AREA = "المعادي";
 
 export default async function HomePage() {
   const t = await getTranslations("marketing.home.rails");
+  const tHome = await getTranslations("marketing.home");
 
   // عدد مختلف لكل قسم عشان الصفحة ما تبقاش شبكة مكررة — 4 في الصف والزيادة تنزل تحت
   const recentlyViewed = shops.slice(0, 5);
@@ -48,9 +50,14 @@ export default async function HomePage() {
         href={ROUTE_SEARCH}
       />
 
+      {/* شريط النص الملفوف — الـ SVG مقاسه 1200x520 فبنقص الفاضي فوق وتحت بالـ aspect */}
+      <div className="flex aspect-[1200/260] items-center overflow-hidden" aria-hidden>
+        <TextLoop text={tHome("loop")} shape="wave" curviness={25} speed={80} fontSize={44} />
+      </div>
+
       <AppDownload />
       <HomeReviews />
-      <AreasGrid />
+      <PartnerBanner />
     </>
   );
 }
