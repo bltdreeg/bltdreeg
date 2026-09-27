@@ -38,6 +38,20 @@ final class ShieldPermissions
         'EmployeeAttendance',
         'EmployeeAdjustment',
         'LeaveRequest',
+        'ProductCategory',
+        'Product',
+        'Inventory',
+        'Purchase',
+    ];
+
+    /**
+     * Subjects that are audit trails rather than editable records, so they get
+     * the read affixes only — there is nothing to create, edit or delete.
+     *
+     * @var list<string>
+     */
+    private const TENANT_READ_ONLY_SUBJECTS = [
+        'InventoryTransaction',
     ];
 
     /**
@@ -54,6 +68,14 @@ final class ShieldPermissions
     /**
      * @var list<string>
      */
+    private const READ_ONLY_AFFIXES = [
+        'ViewAny',
+        'View',
+    ];
+
+    /**
+     * @var list<string>
+     */
     private const TENANT_CUSTOM = [
         'Import:JobType',
         'Import:Service',
@@ -63,6 +85,7 @@ final class ShieldPermissions
         'Approve:EmployeeAdjustment',
         'Approve:LeaveRequest',
         'Reject:LeaveRequest',
+        'Receive:Purchase',
     ];
 
     /**
@@ -123,7 +146,8 @@ final class ShieldPermissions
     public static function tenant(): array
     {
         return array_values(array_unique([
-            ...self::expand(self::TENANT_SUBJECTS),
+            ...self::expand(self::TENANT_SUBJECTS, self::STANDARD_AFFIXES),
+            ...self::expand(self::TENANT_READ_ONLY_SUBJECTS, self::READ_ONLY_AFFIXES),
             ...self::TENANT_CUSTOM,
         ]));
     }
@@ -151,14 +175,15 @@ final class ShieldPermissions
 
     /**
      * @param  list<string>  $subjects
+     * @param  list<string>  $affixes
      * @return list<string>
      */
-    private static function expand(array $subjects): array
+    private static function expand(array $subjects, array $affixes = self::STANDARD_AFFIXES): array
     {
         $names = [];
 
         foreach ($subjects as $subject) {
-            foreach (self::STANDARD_AFFIXES as $affix) {
+            foreach ($affixes as $affix) {
                 $names[] = "{$affix}:{$subject}";
             }
         }
