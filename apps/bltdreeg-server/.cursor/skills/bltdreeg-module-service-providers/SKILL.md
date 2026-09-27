@@ -39,7 +39,10 @@ description: >-
 | tenant | `HrServiceProvider` | Employee / JobType / Shift / Attendance policies |
 | tenant | `ServicesServiceProvider` | Service policies |
 | tenant | `BranchesServiceProvider` | Branch policy |
-| central | `Tenants|Users|Catalog|Branches|Onboarding`ServiceProvider | module entry points |
+| central | `Tenants|Users|Catalog|Branches|Onboarding`ServiceProvider | Filament module entry points |
+| central | `SharedServiceProvider` | `ApiV1`, `SetApiLocale`, private files |
+| central | `ApiDocsServiceProvider` | Scramble `/docs/api` + `viewApiDocs` gate |
+| central | `CustomerAuthServiceProvider` | customer `/api/v1` routes + domain (not docs) |
 
 ## Anti-patterns
 
@@ -47,3 +50,4 @@ description: >-
 - Forgetting to list a new module provider in `bootstrap/providers.php`
 - One giant “ModulesServiceProvider” for all domains
 - A new HTTP controller per private document type — use `PrivateStoredFile` + `PrivateFileRegistry` instead
+- Hand-rolling `Route::prefix('api/v1')` in central-app — use `ApiV1::routes(...)` (skill `bltdreeg-central-api-v1-routes`)

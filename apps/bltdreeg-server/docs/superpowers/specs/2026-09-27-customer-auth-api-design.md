@@ -2,9 +2,11 @@
 
 **Date:** 2026-09-27
 **Status:** Draft, awaiting review
-**Scope:** Laravel API in `central-app` + `packages/core`, and the Next.js web client (`apps/web`).
-The Flutter app (`apps/bltdreeg_cutsomer_mobile`) keeps its fake backend for now. The API follows
-the mobile app's existing contract, so wiring mobile later is a follow-up spec (see §14).
+**Scope:** Laravel customer API in `central-app` (domain + HTTP), and the Next.js web client
+(`apps/web`). Salon/tenant code stays in `tenant-app` / `packages/core` and is out of this
+feature's write path. The Flutter app (`apps/bltdreeg_cutsomer_mobile`) keeps its fake backend
+for now. The API follows the mobile app's existing contract, so wiring mobile later is a
+follow-up spec (see §14).
 
 ---
 
@@ -50,62 +52,57 @@ Staff (`users`) auth is not touched.
 
 ## 3. Architecture
 
-Domain code lives in `packages/core`, because `tenant-app` will need `Customer` for bookings and
-walk-ins later. HTTP and admin UI live in `central-app`. This follows the existing module layout
-(`docs/superpowers/plans/2026-09-23-modular-structure.md`).
+**Ownership split**
+- **Customer** domain (auth, OTP, tokens, account, customer admin) lives entirely in
+  `central-app`. Config, lang, models, migrations, and the `/api/v1` HTTP module stay there.
+- **Tenant / salon** domain (branches, chairs, queue, staff Filament) lives in `tenant-app`,
+  with shared salon schema/models in `packages/core` as today.
+- Do **not** put customer auth into `packages/core` or `tenant-app`. Salon booking later talks to
+  the central customer API (or stores a customer reference), it does not own the customer aggregate.
+
+This follows the existing module layout for HTTP
+(`docs/superpowers/plans/2026-09-23-modular-structure.md`), with customer as a central-only module.
+Every `/api/v1` route group in `central-app` must use
+`App\Modules\V1\Shared\Support\ApiV1::routes(...)` (see `.cursor/rules/central-api-v1-routes.mdc`
+and skill `bltdreeg-central-api-v1-routes`) — do not hand-roll the prefix or `api` middleware.
 
 ```
-packages/core/src/Modules/Customers/
-├── Models/            Customer, CustomerSocialAccount
-├── Enums/             OtpChannelEnum, OtpPurposeEnum, SocialProviderEnum, LocationSourceEnum, OnboardingStepEnum
-├── Otp/
-│   ├── Contracts/OtpProvider.php          send(OtpMessage): DeliveryResult
-│   ├── OtpProviderManager.php             extends Illuminate\Support\Manager
-│   ├── Providers/LogOtpProvider.php       dev: writes the code to the log
-│   ├── Providers/FakeOtpProvider.php      tests: records sends, can be told to fail
-│   ├── Providers/MailOtpProvider.php      email channel via Laravel Mail
-│   ├── OtpDispatcher.php                  picks providers for a channel, falls back, logs
-│   ├── OtpService.php                     issue / resend / verify with all the rules in §6
-│   └── Models/  OtpChallenge, OtpChannelSetting, OtpDelivery
-├── Social/
-│   ├── Contracts/SocialTokenVerifier.php  verify(idToken, nonce?): SocialIdentity
-│   ├── GoogleTokenVerifier.php
-│   ├── AppleTokenVerifier.php
-│   └── SocialAuthService.php              find / link / create (§8.4)
-├── Location/
-│   ├── Contracts/IpGeolocator.php         locate(ip): ?Coordinates
-│   └── MaxMindIpGeolocator.php            GeoLite2 City DB, offline
-├── Support/
-│   ├── PhoneNumber.php                    normalise/validate Egyptian mobiles
-│   ├── CustomerTokenIssuer.php            creates Sanctum tokens with device + expiry
-│   ├── OnboardingStatus.php               computes required/skippable missing steps
-│   └── CustomerDeletion.php               soft delete + anonymize
-├── Exceptions/CustomerAuthException.php   code + HTTP status + data
-└── Database/Factories/CustomerFactory.php
-
-packages/core/database/migrations/        (tenant-app runs migrations, see Makefile)
-packages/core/lang/{ar,en}/customer_auth.php
-packages/core/config/customer_auth.php     (merged by CoreServiceProvider: otp.*, token_ttl_days, terms_version, social.*)
-
-central-app/app/Modules/V1/CustomerAuth/
-├── CustomerAuthServiceProvider.php        routes, rate limiters, bindings
-├── Http/
-│   ├── Controllers/  AuthOptionsController, RegisterController, PasswordLoginController,
-│   │                 OtpController, SocialLoginController, PasswordResetController,
-│   │                 LogoutController, MeController, MePhoneController, MeEmailController,
-│   │                 MePasswordController, MeLocationController
-│   ├── Requests/     one FormRequest per write endpoint
-│   ├── Resources/    CustomerResource, AuthSessionResource, OtpChallengeResource
-│   └── Middleware/   TrustBffClientIp, SetApiLocale, EnsureCustomerOnboarded, ExtendCustomerToken
-├── Filament/
-│   ├── Pages/OtpChannelSettings.php
-│   └── Resources/ OtpDeliveries (read-only), Customers (list/view/disable)
-└── routes/api.php
+central-app/
+├── config/customer_auth.php               otp.*, token_ttl_days, terms_version, social.*
+├── lang/{ar,en}/api.php                   shared envelope messages (__('api.…'))
+├── lang/{ar,en}/customer_auth.php         customer business messages (__('customer_auth.…'))
+├── database/migrations/                   customers, tokens, otp_* (central DB only)
+└── app/Modules/V1/
+    ├── Shared/                            cross-cutting JSON API + private files
+    │   ├── SharedServiceProvider.php
+    │   ├── Support/ApiV1.php              every /api/v1 group uses this
+    │   ├── Support/PrivateFileRegistry.php
+    │   └── Http/
+    │       ├── Controllers/PrivateFileController.php
+    │       └── Middleware/SetApiLocale.php   Accept-Language for all /api/*
+    ├── ApiDocs/                           Scramble OpenAPI (/docs/api) — not customer-owned
+    │   └── ApiDocsServiceProvider.php     viewApiDocs gate + bearer security scheme
+    └── CustomerAuth/                      customer domain only
+        ├── CustomerAuthServiceProvider.php    loadRoutesFrom + rate limiters / bindings
+        ├── Models/            Customer, CustomerSocialAccount, OtpChallenge, OtpChannelSetting, OtpDelivery
+        ├── Enums/             OtpChannelEnum, OtpPurposeEnum, SocialProviderEnum, LocationSourceEnum, OnboardingStepEnum
+        ├── Otp/               …
+        ├── Social/            …
+        ├── Location/          …
+        ├── Support/           PhoneNumber, CustomerTokenIssuer, OnboardingStatus, CustomerDeletion
+        ├── Exceptions/CustomerAuthException.php
+        ├── Database/Factories/CustomerFactory.php
+        ├── Http/
+        │   ├── Controllers/   …
+        │   ├── Requests/      …
+        │   ├── Resources/     …
+        │   └── Middleware/    TrustBffClientIp, EnsureCustomerOnboarded, ExtendCustomerToken
+        ├── Filament/          …
+        └── routes/api.php     ApiV1::routes(…)
 ```
 
 **Package additions:**
 - `central-app`: `laravel/sanctum`, `dedoc/scramble`, `firebase/php-jwt`, `geoip2/geoip2`.
-- `packages/core`: `laravel/sanctum`. `tenant-app` then gets Sanctum through `packages/core`.
 
 **Auth wiring:**
 - **Guards:** `config/auth.php` gains provider `customers` (Eloquent, `Customer`) and guard `customer` (driver `sanctum`, provider `customers`).
@@ -114,7 +111,7 @@ central-app/app/Modules/V1/CustomerAuth/
 
 ## 4. Data model
 
-All new migrations go in `packages/core/database/migrations/`. The draft
+All new customer migrations go in `central-app/database/migrations/` (central DB only). The draft
 `bltdreeg-plan/schema/migrations-draft/2026_10_02_000000_create_customers_table.php` is superseded
 by this schema and gets a note pointing here.
 

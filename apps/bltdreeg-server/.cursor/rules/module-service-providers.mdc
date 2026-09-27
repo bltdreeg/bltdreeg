@@ -64,6 +64,14 @@ Do **not** add one-off controllers per document type. Instead:
 2. Register it in the owning module provider: `PrivateFileRegistry::register($type, Model::class)`
 3. Link with `PrivateFileController::temporaryUrl($model)` (signed route `private-files.show`)
 
+### JSON API routes (central-app)
+
+Any `/api/v1` route must go through `App\Modules\V1\Shared\Support\ApiV1::routes(...)`.
+See `.cursor/rules/central-api-v1-routes.mdc` and skill `bltdreeg-central-api-v1-routes`.
+
+Scramble / OpenAPI docs belong in `ApiDocsServiceProvider`, not in a domain module such as
+`CustomerAuthServiceProvider`. Locale for `/api/*` is `Shared\Http\Middleware\SetApiLocale`.
+
 ## When adding a new module
 
 1. Create `app/Modules/V1/{Name}/{Name}ServiceProvider.php`

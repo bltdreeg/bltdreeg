@@ -23,6 +23,8 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
 - Check for existing components to reuse before writing a new one.
 - Module domains under `app/Modules/V1/{Name}` require `{Name}ServiceProvider` registered in `bootstrap/providers.php` (see repo `.cursor/rules/module-service-providers.mdc`).
+- central-app `/api/v1` routes must use `App\Modules\V1\Shared\Support\ApiV1::routes(...)` (see `.cursor/rules/central-api-v1-routes.mdc` and skill `bltdreeg-central-api-v1-routes`).
+- API modules: `Shared` (ApiV1, SetApiLocale), `ApiDocs` (Scramble), `CustomerAuth` (customer domain only).
 
 ## Verification Scripts
 
