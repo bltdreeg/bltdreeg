@@ -60,3 +60,4 @@ TanStack Query, Tailwind 4, shadcn + base-ui. **All data is demo data**: no back
 - [docs/business.md](docs/business.md): what the product is, who uses it, how money flows.
 - [docs/domain.md](docs/domain.md): queue, slot, QR, discount, rating and notification rules; vocabulary; known drift.
 - [docs/architecture.md](docs/architecture.md): folders, naming, data flow, auth, i18n, tests.
+- [docs/system-design.md](docs/system-design.md): how the apps fit together, plus the design system (colors, type, spacing, voice). Read before any UI work.

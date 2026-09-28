@@ -966,7 +966,6 @@
           "today": "Today",
           "day": "Day",
           "addNew": "New booking",
-          "instant": "Instant booking",
           "staff": {
             "one": "Hossam",
             "two": "Mostafa",
@@ -1007,6 +1006,10 @@
               "service": "Haircut"
             }
           }
+        },
+        "phone": {
+          "status": "Free now — no queue",
+          "statusMeta": "3 chairs working · 2 barbers on shift"
         }
       },
       "loop": "Book your turn now"

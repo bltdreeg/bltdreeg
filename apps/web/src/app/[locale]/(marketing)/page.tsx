@@ -30,33 +30,43 @@ export default async function HomePage() {
     <>
       <Hero areaName={DEFAULT_AREA} />
 
-      <ShopRail title={t("recentlyViewed.title")} shops={recentlyViewed} href={ROUTE_SEARCH} />
-      <ShopRail
-        title={t("recommended.title")}
-        subtitle={t("recommended.subtitle")}
-        shops={recommended}
-        href={ROUTE_SEARCH}
-      />
-      <ShopRail
-        title={t("newInArea.title")}
-        subtitle={t("newInArea.subtitle")}
-        shops={newInArea}
-        href={ROUTE_SEARCH}
-      />
-      <ShopRail
-        title={t("mostBooked.title")}
-        subtitle={t("mostBooked.subtitle", { count: availableToday })}
-        shops={mostBooked}
-        href={ROUTE_SEARCH}
-      />
+      {/* المسافات بين الأقسام بتتحدد هنا بس، مش جوه الأقسام — من مقياس الـ Design System
+          (4·8·12·16·24·32·40·64)، مستويين: أقسام مترابطة (الرفوف) 32/40، وفواصل بين الفصول 40/64.
+          الموجة فاصل، فالمسافة قبلها وبعدها 40/64 بالظبط */}
+      <div className="flex flex-col gap-8 pt-8 pb-10 md:gap-10 md:pt-10 md:pb-16">
+        <ShopRail title={t("recentlyViewed.title")} shops={recentlyViewed} href={ROUTE_SEARCH} />
+        <ShopRail
+          title={t("recommended.title")}
+          subtitle={t("recommended.subtitle")}
+          shops={recommended}
+          href={ROUTE_SEARCH}
+        />
+        <ShopRail
+          title={t("newInArea.title")}
+          subtitle={t("newInArea.subtitle")}
+          shops={newInArea}
+          href={ROUTE_SEARCH}
+        />
+        <ShopRail
+          title={t("mostBooked.title")}
+          subtitle={t("mostBooked.subtitle", { count: availableToday })}
+          shops={mostBooked}
+          href={ROUTE_SEARCH}
+        />
+      </div>
 
-      {/* شريط النص الملفوف — الـ SVG مقاسه 1200x520 فبنقص الفاضي فوق وتحت بالـ aspect */}
-      <div className="flex aspect-[1200/260] items-center overflow-hidden" aria-hidden>
+      {/* شريط النص الملفوف — الـ SVG مقاسه 1200x520 والموجة واخدة ~140 بس،
+          فبنقص الباقي بالـ aspect عشان المسافة فوقه وتحته تبقى متساوية */}
+      <div className="flex aspect-1200/160 items-center overflow-hidden" aria-hidden>
         <TextLoop text={tHome("loop")} shape="wave" curviness={25} speed={80} fontSize={44} />
       </div>
 
-      <AppDownload />
-      <HomeReviews />
+      <div className="flex flex-col gap-10 pt-10 md:gap-16 md:pt-16">
+        <AppDownload />
+        <HomeReviews />
+      </div>
+
+      {/* البانر برّه الـ stack: الـ pt بتاعه على السكشن نفسه (40/64) عشان اللوحة بتلزق في الفوتر */}
       <PartnerBanner />
     </>
   );

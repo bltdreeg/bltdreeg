@@ -30,9 +30,9 @@ function AppDownload() {
   const locale = useLocale();
 
   return (
-    <section id="download" className="mt-10 scroll-mt-20 bg-white md:mt-14">
+    <section id="download" className="scroll-mt-20 bg-white">
       <div
-        className="relative mx-auto grid max-w-[1312px] items-center gap-10 overflow-hidden px-4 py-[50px] max-md:grid-cols-1 max-md:gap-9 max-md:py-10 md:grid-cols-[1.05fr_1fr] md:px-16"
+        className="relative mx-auto grid max-w-[1312px] items-center gap-10 overflow-hidden px-4 max-md:grid-cols-1 md:grid-cols-[1.05fr_1fr] md:px-16"
       >
         {/* ————— النصوص + أزرار المتاجر ————— */}
         <div className="flex flex-col gap-[18px] text-start max-md:order-1 max-md:items-center max-md:text-center md:order-1">

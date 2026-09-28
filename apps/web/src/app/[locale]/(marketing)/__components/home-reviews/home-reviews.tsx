@@ -34,8 +34,8 @@ function HomeReviews() {
   const t = useTranslations("marketing.home.reviews");
 
   return (
-    <PageContainer as="section" className="pt-10 pb-12 md:pt-12 md:pb-16">
-      <div className="mb-4.5 flex items-baseline justify-between gap-4">
+    <PageContainer as="section" className="flex flex-col gap-4">
+      <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-lg font-bold md:text-[21px]">{t("title")}</h2>
         <Link
           href={ROUTE_SEARCH}
@@ -45,7 +45,7 @@ function HomeReviews() {
         </Link>
       </div>
 
-      <ul className="grid gap-5 md:grid-cols-3">
+      <ul className="grid gap-4 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <li
             key={t.id}

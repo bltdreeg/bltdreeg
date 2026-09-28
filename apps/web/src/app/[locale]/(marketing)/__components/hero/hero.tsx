@@ -64,7 +64,7 @@ function Hero({ areaName }: { areaName: string }) {
         />
       </div>
 
-      <PageContainer className="relative z-10 flex flex-col items-start justify-between gap-8 py-8 md:flex-row md:items-center md:gap-14 md:py-13">
+      <PageContainer className="relative z-10 flex flex-col items-start justify-between gap-8 py-8 md:flex-row md:items-center md:gap-16 md:py-16">
         {/* العمود النصي */}
         <div className="flex min-w-0 flex-1 flex-col gap-5">
           <h1 className="text-[25px] font-black leading-[1.35] text-balance md:text-[40px]">

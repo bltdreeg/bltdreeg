@@ -2,7 +2,23 @@
 // ومقصوصة من تحت، وموبايل بصفحة صالون راكب على طرفها. الألوان والخط بتوعنا.
 
 import Image from "next/image";
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Home, Megaphone, Plus, Settings, Tag, Users, Zap } from "lucide-react";
+import {
+  CalendarDays,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Heart,
+  Home,
+  Megaphone,
+  Navigation,
+  Phone,
+  Plus,
+  Settings,
+  Share2,
+  Tag,
+  Users,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Avatar } from "@/components/atoms/avatar";
 import { PageContainer } from "@/components/atoms/page-container";
@@ -10,8 +26,10 @@ import { Rating } from "@/components/atoms/rating";
 import { Link } from "@/i18n/navigation";
 import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_PARTNER } from "@/lib/data/constants/routes.constants";
+import { services } from "@/lib/data/services.constants";
 import { shops } from "@/lib/data/shops.constants";
-import { formatDistance } from "@/lib/utils/format/price.utils";
+import { formatDistance, formatPrice } from "@/lib/utils/format/price.utils";
+import { PhoneStatusBar } from "../app-download/journey-demo";
 
 const POINTS = ["queue", "notify", "payouts"] as const;
 
@@ -245,34 +263,156 @@ function Pill({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** موبايل بصفحة صالون حقيقي من بيانات الديمو — راكب على طرف اللوحة زي Fresha */
+const SCREEN_SCALE = 249 / 390;
+
 function PhoneCard() {
-  const t = useTranslations("marketing.home.partnerBanner.board");
-  const tPanel = useTranslations("marketing.partner.panel");
+  const t = useTranslations("marketing.home.partnerBanner.phone");
+  const tSalon = useTranslations("marketing.salon");
   const locale = useLocale();
   const shop = shops[0];
+  const shopServices = services.filter((s) => s.shopId === shop.id);
+  const first = shopServices[0];
 
   return (
-    <div className="absolute bottom-0 -start-6 hidden w-[236px] overflow-hidden rounded-t-[30px] border-[6px] border-b-0 border-foreground bg-background shadow-2xl md:block">
-      <div className="relative h-[150px]">
-        <Image src={shop.coverImage} alt="" fill sizes="236px" className="object-cover" />
-      </div>
-      <div className="flex flex-col gap-1.5 px-3.5 pt-3 pb-4">
-        <span className="truncate text-[15px] font-black text-foreground">{shop.name}</span>
-        <Rating value={shop.rating} count={shop.reviewCount} starSize={11} />
-        <span className="text-[11.5px] font-semibold text-muted-foreground">
-          {formatDistance(shop.distanceKm, locale)} · {shop.areaName}
-        </span>
-        <span className="mt-1 flex items-center gap-1.5 text-[11.5px] font-bold text-success-strong">
-          <span className="size-1.5 rounded-full bg-success" />
-          {tPanel("open")}
-        </span>
-        <span className="flex items-center gap-1.5 border-t border-border pt-2 text-[11.5px] font-semibold text-muted-foreground">
-          <Zap className="size-3.5" />
-          {t("instant")}
-        </span>
+    // نفس إطار موبايل سكشن التحميل (JourneyDemo)
+    <div className="absolute bottom-8 -start-6 hidden h-[524px] w-[262px] rounded-[48px] border-[3.5px] border-[#1E2328] bg-[#0F1316] p-[3px] shadow-2xl md:block">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-[42px] bg-white text-[#0E0F11]">
+        <PhoneStatusBar />
+        <div className="relative min-h-0 flex-1">
+          {/* 249px جوه الإطار ÷ 390px عرض التصميم */}
+          <div
+            className="absolute top-0 flex w-[390px] flex-col ltr:left-0 ltr:origin-top-left rtl:right-0 rtl:origin-top-right"
+            style={{
+              height: `${100 / SCREEN_SCALE}%`,
+              transform: `scale(${SCREEN_SCALE})`,
+            }}
+          >
+            <div className="relative min-h-0 flex-1 overflow-hidden">
+              {/* الجاليري */}
+              <div className="relative h-[170px] border-b border-border">
+                <Image src={shop.coverImage} alt="" fill sizes="249px" className="object-cover" />
+                <div className="absolute inset-x-4 top-2.5 flex justify-between">
+                  <PhoneIconButton>
+                    <ChevronRight className="size-5 ltr:rotate-180" />
+                  </PhoneIconButton>
+                  <div className="flex gap-2">
+                    <PhoneIconButton>
+                      <Share2 className="size-5" />
+                    </PhoneIconButton>
+                    <PhoneIconButton>
+                      <Heart className="size-5 fill-destructive text-destructive" />
+                    </PhoneIconButton>
+                  </div>
+                </div>
+                <div className="absolute bottom-3 end-4 flex gap-1">
+                  <span className="h-1 w-4 rounded-sm bg-background" />
+                  <span className="size-1 rounded-sm bg-background/60" />
+                  <span className="size-1 rounded-sm bg-background/60" />
+                </div>
+              </div>
+
+              <div className="px-5 pt-4">
+                <h3 className="text-[21px] leading-[1.35] font-extrabold text-foreground">{shop.name}</h3>
+                <div className="mt-2 flex items-center gap-2 text-[12.5px] font-medium text-muted-foreground">
+                  <Rating value={shop.rating} count={shop.reviewCount} starSize={14} />
+                  <span className="h-[11px] w-px bg-border" />
+                  <span>{shop.areaName}</span>
+                  <span className="h-[11px] w-px bg-border" />
+                  <span>{formatDistance(shop.distanceKm, locale)}</span>
+                </div>
+
+                {/* حالة الطابور مثبّتة تحت الاسم */}
+                <div className="mt-3.5 flex items-center gap-[11px] rounded-xl bg-success-bg px-3.5 py-[13px]">
+                  <span className="size-2.5 shrink-0 rounded-full bg-success" />
+                  <div className="flex-1">
+                    <div className="text-[14.5px] font-extrabold text-success-strong">{t("status")}</div>
+                    <div className="mt-px text-[12.5px] font-semibold text-success-strong/85">{t("statusMeta")}</div>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex gap-2">
+                  {[
+                    { Icon: Navigation, label: tSalon("info.directions") },
+                    { Icon: Phone, label: tSalon("info.call") },
+                  ].map(({ Icon, label }) => (
+                    <span
+                      key={label}
+                      className="flex h-11 flex-1 items-center justify-center gap-2 rounded-[10px] border border-border text-[13.5px] font-bold text-foreground"
+                    >
+                      <Icon className="size-[15px]" />
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* التابات */}
+              <div className="flex gap-1.5 overflow-hidden border-b border-border px-5 pt-4 text-[14px] whitespace-nowrap">
+                {(["services", "barbers", "offers", "reviews", "hours"] as const).map((key, i) => (
+                  <span
+                    key={key}
+                    className={
+                      i === 0
+                        ? "border-b-[2.5px] border-primary px-3 pb-3 font-extrabold text-primary"
+                        : "px-3 pb-3 font-semibold text-muted-foreground"
+                    }
+                  >
+                    {tSalon(`tabs.${key}`)}
+                  </span>
+                ))}
+              </div>
+
+              <div className="px-5 pt-4">
+                <div className="mx-1 mb-1 text-[12.5px] font-bold text-muted-foreground">{first.category}</div>
+                {shopServices.map((s) => (
+                  <div key={s.id} className="flex items-center gap-3 border-b border-border py-[15px] last:border-b-0">
+                    <div className="flex-1">
+                      <div className="text-[14.5px] font-bold text-foreground">{s.name}</div>
+                      <div className="mt-[3px] flex items-center gap-2 text-[12.5px] font-medium text-muted-foreground">
+                        <Clock className="size-[15px]" />
+                        {tSalon("services.durationMinutes", {
+                          count: s.durationMinutes,
+                        })}
+                      </div>
+                    </div>
+                    <span className="tabular ms-2.5 text-[15px] font-extrabold text-foreground">
+                      {formatPrice(s.price, locale)}
+                    </span>
+                    <span className="flex size-[34px] items-center justify-center rounded-[9px] border-[1.5px] border-primary text-primary">
+                      <Plus className="size-[19px]" />
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* زرار الطابور ثابت تحت مع السعر */}
+            <div className="flex shrink-0 items-center gap-3 border-t border-border bg-background px-5 pt-3 pb-3 shadow-[0_-6px_24px_rgba(14,15,17,.07)]">
+              <div className="shrink-0">
+                <div className="text-[12px] font-semibold text-muted-foreground">
+                  {tSalon("bookingSidebar.servicesCount", { count: 1 })}
+                </div>
+                <div className="tabular text-[17px] font-extrabold text-foreground">
+                  {formatPrice(first.price, locale)}
+                </div>
+              </div>
+              <span className="flex h-[52px] flex-1 items-center justify-center rounded-[10px] bg-primary text-[16px] font-bold text-primary-foreground">
+                {tSalon("bookingBar.joinQueue")}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="mx-auto mt-1 mb-1.5 h-[3.5px] w-[68px] rounded-xs bg-[#0E0F11]" />
       </div>
     </div>
+  );
+}
+
+function PhoneIconButton({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="flex size-[38px] items-center justify-center rounded-[11px] border border-border bg-background text-foreground">
+      {children}
+    </span>
   );
 }
 

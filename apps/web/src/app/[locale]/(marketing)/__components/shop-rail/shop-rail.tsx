@@ -18,7 +18,7 @@ function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
   if (shops.length === 0) return null;
 
   return (
-    <PageContainer as="section" className="flex flex-col gap-3 pt-6 md:pt-11">
+    <PageContainer as="section" className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between gap-4">
         <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
           <h2 className="text-lg font-bold md:text-[21px]">{title}</h2>
@@ -37,7 +37,7 @@ function ShopRail({ title, subtitle, shops, href }: ShopRailProps) {
       </div>
 
       {/* شبكة 4 في الصف — الزيادة بتنزل سطر تحت، مفيش كارت بيتقص */}
-      <div className="grid grid-cols-2 gap-4 pb-2 md:grid-cols-4 md:gap-5">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {shops.map((shop) => (
           <ShopCard key={shop.id} shop={shop} />
         ))}

@@ -38,3 +38,8 @@ export const ROUTE_REFUND_POLICY = "/refund-policy";
 export const SALON_PANEL_URL = (process.env.NEXT_PUBLIC_SALON_PANEL_URL ?? "http://localhost:8010").replace(/\/$/, "");
 export const EXTERNAL_SALON_REGISTER = `${SALON_PANEL_URL}/register`;
 export const EXTERNAL_SALON_LOGIN = `${SALON_PANEL_URL}/login`;
+
+// حسابات السوشيال — ponytail: handles مؤقتة، بدّلها بالروابط الحقيقية أول ما الحسابات تتعمل
+export const EXTERNAL_FACEBOOK = "https://www.facebook.com/bltdreeg";
+export const EXTERNAL_INSTAGRAM = "https://www.instagram.com/bltdreeg";
+export const EXTERNAL_TIKTOK = "https://www.tiktok.com/@bltdreeg";

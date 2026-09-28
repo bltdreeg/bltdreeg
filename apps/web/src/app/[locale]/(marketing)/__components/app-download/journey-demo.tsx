@@ -830,4 +830,4 @@ function JourneyDemo() {
   );
 }
 
-export { JourneyDemo };
+export { JourneyDemo, PhoneStatusBar };
