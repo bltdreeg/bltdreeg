@@ -1,3 +1,4 @@
+import { Quote } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Avatar } from "@/components/atoms/avatar";
 import { PageContainer } from "@/components/atoms/page-container";
@@ -33,8 +34,8 @@ function HomeReviews() {
   const t = useTranslations("marketing.home.reviews");
 
   return (
-    <PageContainer as="section" className="pt-10 md:pt-12">
-      <div className="mb-4.5 flex items-baseline justify-between gap-4">
+    <PageContainer as="section" className="flex flex-col gap-4">
+      <div className="flex items-baseline justify-between gap-4">
         <h2 className="text-lg font-bold md:text-[21px]">{t("title")}</h2>
         <Link
           href={ROUTE_SEARCH}
@@ -44,19 +45,30 @@ function HomeReviews() {
         </Link>
       </div>
 
-      <ul className="grid gap-5 md:grid-cols-3">
+      <ul className="grid gap-4 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <li
             key={t.id}
-            className="flex flex-col gap-3.5 rounded-[14px] border border-border bg-background p-5.5"
+            className="flex flex-col rounded-[14px] border border-border bg-background p-6 transition-colors hover:border-primary/30"
           >
-            <Rating value={t.rating} showStars />
-            <p className="text-[14.5px] leading-[1.85] text-pretty">{t.body}</p>
-            <div className="mt-auto flex items-center gap-2.5">
+            <Rating value={t.rating} showStars starSize={15} />
+
+            {/* علامة اقتباس بتفصل النجوم عن النص */}
+            <Quote
+              aria-hidden
+              className="mt-4 size-5 shrink-0 rotate-180 fill-primary/10 text-primary/10"
+            />
+            <p className="mt-1.5 text-[14.5px] leading-[1.9] text-pretty text-foreground/90">
+              {t.body}
+            </p>
+
+            <div className="mt-5 flex items-center gap-3 border-t border-border/70 pt-4">
               <Avatar name={t.name} />
-              <span className="flex flex-col gap-1">
-                <span className="text-[13.5px] font-bold">{t.name}</span>
-                <span className="text-[12.5px] text-muted-foreground">{t.area}</span>
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="truncate text-[13.5px] font-bold">{t.name}</span>
+                <span className="truncate text-[12.5px] text-muted-foreground">
+                  {t.area}
+                </span>
               </span>
             </div>
           </li>

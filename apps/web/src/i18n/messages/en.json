@@ -704,14 +704,18 @@
       "ariaLabel": "Notifications"
     },
     "header": {
-      "changeArea": "Change area",
-      "searchPlaceholder": "Search by salon or area",
       "joinSalon": "Join as a salon",
-      "myBookings": "My Bookings",
       "myAccount": "My Account — {name}",
       "defaultUser": "User",
       "signIn": "Sign In",
-      "switchLanguage": "Switch to {language}"
+      "switchLanguage": "Switch to {language}",
+      "menu": "Menu",
+      "downloadApp": "Download the app",
+      "help": "Help",
+      "profile": "Profile",
+      "myBookings": "My Bookings",
+      "favorites": "Favorites",
+      "logout": "Log out"
     },
     "footer": {
       "tagline": "Book your appointment at the nearest salon, and know your queue number before leaving home.",
@@ -814,7 +818,8 @@
           "yourTurn": "Your turn"
         },
         "trackOnMap": "Track your location on map",
-        "nearbyInArea": "Salons near you in <bold>{area}</bold>"
+        "nearbyInArea": "Salons near you in <bold>{area}</bold>",
+        "getApp": "Or book faster from the app"
       },
       "rails": {
         "viewAll": "View all",
@@ -838,16 +843,16 @@
         "badge": "Available now on all devices",
         "title": "Download the <brand>{appName}</brand> app now and book your turn",
         "description": "Wait for your turn wherever you are. Join the queue from your phone, see how many people are ahead and estimated wait times in real time, and we'll notify you when your turn is close.",
-        "scanCode": "Scan code to download",
-        "availableOn": "Available for iOS & Android",
-        "qrAria": "QR Code for quick download",
-        "screensAria": "Baltdreeg mobile app screens",
+        "appStoreEyebrow": "Download on the",
+        "appStoreAria": "Download {appName} on the App Store",
+        "googlePlayEyebrow": "Get it on",
+        "googlePlayAria": "Get {appName} on Google Play",
         "mockup": {
           "front": {
             "headerTitle": "Your turn",
             "live": "LIVE",
             "queueNumberLabel": "Your number",
-            "peopleAhead": "{count} ahead of you",
+            "peopleAhead": "{count, plural, one {# ahead of you} other {# ahead of you}}",
             "stepJoined": "Joined queue",
             "stepApproaching": "Almost your turn",
             "stepNow": "Your turn now",
@@ -870,18 +875,144 @@
             "availableNow": "Available now",
             "demoAreaShort": "Shokry El-Kouatly St."
           },
-          "demoSalonName": "Captain Hossam Salon"
+          "demoSalonName": "Captain Hossam Salon",
+          "journey": {
+            "aria": "Demo: pick a nearby salon, choose your services and barber, confirm and join the queue, track your turn live, and get notified when it is your turn.",
+            "caption": "Demo · sample data",
+            "steps": {
+              "discover": "Pick a nearby salon",
+              "salon": "Pick your services",
+              "barber": "Pick your barber",
+              "join": "Confirm & join",
+              "track": "Track it live",
+              "turn": "Your turn!"
+            },
+            "floatLive": {
+              "title": "Live tracking",
+              "sub": "Updates second by second"
+            },
+            "floatNotify": {
+              "title": "We'll notify you",
+              "sub": "No waiting at the shop"
+            }
+          },
+          "review": {
+            "title": "Review booking",
+            "haircut": "Haircut",
+            "beard": "Beard trim",
+            "barberLabel": "Barber",
+            "anyBarber": "Any available barber",
+            "eta": "Your turn in {min}–{max} min",
+            "etaSub": "Only {count} ahead of you",
+            "total": "Total",
+            "confirm": "Confirm & join queue"
+          },
+          "turn": {
+            "title": "It's your turn",
+            "sub": "Head to the chair — Ahmed Magdy is waiting",
+            "numberLabel": "Your number",
+            "remainingLabel": "Time left",
+            "arrived": "I'm at the shop",
+            "notifyBody": "It's your turn — you have 5 minutes to arrive"
+          },
+          "salon": {
+            "openNow": "Free right now — no queue",
+            "openSub": "3 chairs running · 2 barbers on shift",
+            "reviews": "({count} reviews)",
+            "tabServices": "Services",
+            "tabBarbers": "Barbers",
+            "tabOffers": "Offers",
+            "groupHair": "Cut & styling",
+            "groupBeard": "Beard & care",
+            "haircut": "Haircut",
+            "haircutWash": "Haircut + wash",
+            "beard": "Beard trim",
+            "minutes": "{count} min",
+            "selectedCount": "{count, plural, one {# service} other {# services}}",
+            "joinQueue": "Join the queue"
+          },
+          "barber": {
+            "title": "Pick your barber",
+            "stepOf": "Step {step} of {total}",
+            "anyBarber": "Any available barber",
+            "fastest": "Fastest",
+            "anyBarberSub": "Whoever frees up first takes you",
+            "now": "Now",
+            "noQueue": "No queue",
+            "orByName": "Or pick a barber by name",
+            "ahmedName": "Ahmed Magdy",
+            "ahmedSkill": "Fade & taper",
+            "ahmedWait": "+20 min",
+            "ahmedAhead": "2 ahead",
+            "mahmoudName": "Mahmoud El-Sayed",
+            "mahmoudSkill": "Classic & beard",
+            "mahmoudFree": "Free",
+            "next": "Continue — review booking"
+          }
         }
       },
       "reviews": {
         "title": "Customer Reviews",
         "allReviews": "All reviews"
       },
-      "areas": {
-        "title": "Explore by Area",
-        "subtitle": "Cairo & Giza",
-        "shopCount": "{count, plural, one {# salon} other {# salons}}"
-      }
+      "partnerBanner": {
+        "title": "{appName} for salons",
+        "body": "Take bookings and walk-ins without the phone ringing or a crowd at the door. Customers watch their own turn; you see the day laid out before it starts.",
+        "cta": "Find out more",
+        "proofTitle": "Free to join",
+        "proofNote": "Live within 24 hours — no contracts, no monthly fee",
+        "board": {
+          "allStaff": "All barbers",
+          "today": "Today",
+          "day": "Day",
+          "addNew": "New booking",
+          "staff": {
+            "one": "Hossam",
+            "two": "Mostafa",
+            "three": "Omar",
+            "four": "Sherif"
+          },
+          "appointments": {
+            "a": {
+              "name": "Karim Abdullah",
+              "service": "Haircut + beard"
+            },
+            "b": {
+              "name": "Mahmoud Sayed",
+              "service": "Haircut"
+            },
+            "c": {
+              "name": "Ahmed Fathy",
+              "service": "Beard trim"
+            },
+            "d": {
+              "name": "Youssef Tarek",
+              "service": "Kids' haircut"
+            },
+            "e": {
+              "name": "Tarek Nabil",
+              "service": "Razor shave"
+            },
+            "f": {
+              "name": "Mazen Ali",
+              "service": "Colour"
+            },
+            "g": {
+              "name": "Seif Hassan",
+              "service": "Haircut + beard"
+            },
+            "h": {
+              "name": "Amr Khaled",
+              "service": "Haircut"
+            }
+          }
+        },
+        "phone": {
+          "status": "Free now — no queue",
+          "statusMeta": "3 chairs working · 2 barbers on shift"
+        }
+      },
+      "loop": "Book your turn now"
     },
     "favorites": {
       "title": "Favorite Salons",
@@ -1131,6 +1262,247 @@
       },
       "bookingBar": {
         "joinQueue": "Join queue"
+      }
+    },
+    "download": {
+      "badge": "Available on iOS & Android",
+      "title": "Download <brand>{appName}</brand> and book your turn from your phone",
+      "subtitle": "Join the queue from wherever you are, see how many people are ahead of you second by second, and we'll notify you when your turn is close — no waiting at the shop.",
+      "detected": {
+        "ios": "We detected you're on <strong>iPhone</strong> — we put the App Store button first.",
+        "android": "We detected you're on <strong>Android</strong> — we put the Google Play button first.",
+        "change": "Not my device"
+      },
+      "primaryBadge": "Recommended for you",
+      "yourDevice": "Your device: {device}",
+      "otherDevice": "On {store}?",
+      "appTitle": "Customer app",
+      "appDescription": "Find a salon near you, join the queue, and track your turn live — no phone calls, no waiting around.",
+      "sameApp": "Same app on {store}",
+      "sameAppDescription": "Every feature is the same — one account and one queue on any device you use.",
+      "requirement": "Needs {platform} {version} or newer · {size} MB",
+      "noDesktop": "There's no Windows or Mac app — booking is on mobile only, so notifications reach you wherever you are.",
+      "features": {
+        "title": "What you get inside the app",
+        "subtitle": "Four things only — each one fixes a reason you used to wait on the pavement.",
+        "live": {
+          "title": "Your turn, second by second",
+          "body": "Your number and how many are ahead, updated live from the chair itself — not from a guess.",
+          "statLabel": "Your number now"
+        },
+        "notify": {
+          "title": "A heads-up before your turn",
+          "body": "We tell you exactly when to leave based on how far you are from the salon.",
+          "statLabel": "Leave by"
+        },
+        "nearby": {
+          "title": "Salons right next to you",
+          "body": "Sort by shortest wait or by nearest, and see who's free right now before you move.",
+          "statLabel": "Nearest free salon"
+        },
+        "barber": {
+          "title": "Pick your barber",
+          "body": "Any available barber is fastest — pick one by name and we tell you the extra wait first.",
+          "statLabel": "If you pick by name"
+        }
+      },
+      "steps": {
+        "title": "Up and running in a minute",
+        "subtitle": "No long sign-up and no card — just your phone number.",
+        "one": {
+          "title": "Download the app",
+          "body": "From the App Store or Google Play, or scan the code above with your camera."
+        },
+        "two": {
+          "title": "Confirm your number",
+          "body": "A code arrives by text and you're in. You can also browse salons without an account."
+        },
+        "three": {
+          "title": "Join the queue",
+          "body": "Pick a salon and a service and you get your number right away — track it from where you are."
+        },
+        "cash": {
+          "title": "Pay cash at the shop after your service",
+          "body": "We don't ask for a card and we don't hold any money up front — the app only saves your place."
+        },
+        "grace": {
+          "title": "You have 5 minutes to arrive once it's your turn",
+          "body": "Miss it and you drop one place, then it's cancelled — so the person behind you isn't left waiting."
+        }
+      },
+      "faq": {
+        "title": "Frequently asked",
+        "subtitle": "If your question isn't here, message us from inside the app and we'll reply in about two minutes.",
+        "q1": {
+          "q": "Is the app free?",
+          "a": "Yes, completely free for customers. You pay for the service in cash at the salon exactly as you do now, and the app takes no commission from you."
+        },
+        "q2": {
+          "q": "Do I need an account to browse salons?",
+          "a": "No. You can browse salons and wait times without one. An account is only needed when you join a queue, so we can send you the notification."
+        },
+        "q3": {
+          "q": "What if I'm late for my turn?",
+          "a": "You have 5 minutes to arrive after your turn comes up. Miss it and you drop just one place; miss that too and it's cancelled — and you can rejoin the queue right away."
+        },
+        "q4": {
+          "q": "How accurate is the estimated wait?",
+          "a": "We calculate it from the chairs actually running and the real length of each service, and it updates live. That's why we show a range (10–15 min) instead of one number — it's the promise we can keep."
+        },
+        "q5": {
+          "q": "I own a salon — how do I join?",
+          "a": "Through the \"Register your salon\" page at the top. The salon dashboard runs in a browser on any device — you don't need a second app."
+        }
+      },
+      "releases": {
+        "title": "What's new in the app",
+        "current": "Current",
+        "all": "All updates",
+        "autoUpdate": "Updates install themselves from the store — you don't need to do anything.",
+        "v24": {
+          "date": "September 2026",
+          "a": "Pick a barber by name with the extra wait shown",
+          "b": "A \"leave now\" alert that accounts for your journey"
+        },
+        "v23": {
+          "date": "August 2026",
+          "a": "English interface alongside Arabic",
+          "b": "Rate your visit after the service"
+        },
+        "v22": {
+          "date": "July 2026",
+          "a": "Salon offers and service bundles",
+          "b": "More accurate wait estimates"
+        }
+      },
+      "cta": {
+        "title": "Ready to try it?",
+        "subtitle": "Download the app now and join your first queue in under a minute."
+      },
+      "downloadOn": "Download on"
+    },
+    "partner": {
+      "badge": "Free to join — no contracts",
+      "title": "Your salon on <brand>{appName}</brand>, with the queue running itself",
+      "subtitle": "Take bookings and walk-ins without the phone ringing or a crowd at the door. Customers watch their own turn; you see the day laid out before it starts.",
+      "cta": {
+        "register": "Register your salon",
+        "how": "See how it works",
+        "title": "Ready for your first booking?",
+        "subtitle": "Register today — it's free to join and you're live within 24 hours.",
+        "login": "Salon sign-in"
+      },
+      "stats": {
+        "commissionLabel": "Booking commission",
+        "commissionValue": "[COMMISSION %]",
+        "activationLabel": "Time to go live",
+        "activationValue": "24 hours",
+        "monthlyLabel": "Monthly fee",
+        "monthlyValue": "None"
+      },
+      "panel": {
+        "mark": "b",
+        "title": "Salon dashboard",
+        "open": "Open now",
+        "todayValue": "14",
+        "todayLabel": "Bookings today",
+        "queueValue": "5",
+        "queueLabel": "In the queue",
+        "delayValue": "~8 m",
+        "delayLabel": "Average delay",
+        "currentQueue": "Current queue",
+        "viewAll": "View all",
+        "state": {
+          "onChair": "In the chair",
+          "waiting": "Waiting",
+          "booked": "Booked"
+        },
+        "rows": {
+          "one": {
+            "name": "Karim Abdullah",
+            "service": "Haircut + beard"
+          },
+          "two": {
+            "name": "Mahmoud Sayed",
+            "service": "Haircut"
+          },
+          "three": {
+            "name": "Ahmed Fathy",
+            "service": "Beard trim"
+          },
+          "four": {
+            "name": "Youssef Tarek",
+            "service": "Kids' haircut"
+          }
+        }
+      },
+      "steps": {
+        "title": "From sign-up to first booking in 3 steps",
+        "subtitle": "No rep visits and no training. All from your phone.",
+        "one": {
+          "title": "Sign up with your phone",
+          "body": "Salon name, address and a phone number. One confirmation code and you're in — no paperwork."
+        },
+        "two": {
+          "title": "Set your services and hours",
+          "body": "Prices, how long each service takes, and opening hours. Change them any time from the dashboard."
+        },
+        "three": {
+          "title": "Take your first booking",
+          "body": "Your salon shows up in search for customers nearby, and bookings land on the dashboard as they come."
+        }
+      },
+      "features": {
+        "title": "What you'll use every day",
+        "subtitle": "Everything from your phone — no hardware to buy and nothing to install.",
+        "queue": {
+          "title": "Walk-ins and bookings in one place",
+          "body": "Scheduled appointments and the open queue on one screen, ordered by time."
+        },
+        "notify": {
+          "title": "Customers track their own turn",
+          "body": "A heads-up shortly before their turn, so they arrive on time and the shop stays clear."
+        },
+        "barbers": {
+          "title": "Every barber and their hours",
+          "body": "Split the work across barbers, and let customers pick who cuts their hair."
+        },
+        "reports": {
+          "title": "Your day in numbers",
+          "body": "Today's revenue, your most-requested service, and peak hours — so you can plan properly."
+        },
+        "reviews": {
+          "title": "Reviews that bring customers",
+          "body": "Ratings show in search, so a salon that does good work rises on its own."
+        },
+        "payouts": {
+          "title": "Clear takings and payouts",
+          "body": "A statement for every booking and its commission, paid to your account on a fixed schedule."
+        }
+      },
+      "faq": {
+        "title": "Questions we get a lot",
+        "subtitle": "Anything else — message us and we'll answer.",
+        "q1": {
+          "q": "How long does signing up take?",
+          "a": "The form itself takes two minutes. After that we review your salon's details and you're live within 24 hours."
+        },
+        "q2": {
+          "q": "Do I need particular hardware or software?",
+          "a": "No. A phone with internet is enough. If you keep a tablet in the salon, the dashboard opens on that too."
+        },
+        "q3": {
+          "q": "What if a customer books and doesn't show up?",
+          "a": "[NO-SHOW POLICY — needs a final decision: whether the customer is charged, and when the slot is released automatically.]"
+        },
+        "q4": {
+          "q": "How and when do I get paid?",
+          "a": "[PAYOUT CYCLE — needs details: how often, and to a wallet or a bank account.]"
+        },
+        "q5": {
+          "q": "Can I pause bookings for a while?",
+          "a": "Yes. Close intake from the dashboard any time — a day off or a busy stretch — and reopen with one tap."
+        }
       }
     }
   }

@@ -25,11 +25,11 @@ function CardSkeleton() {
 
 function RailSkeleton() {
   return (
-    <div className="flex flex-col gap-3 pt-6 md:pt-11">
+    <div className="flex flex-col gap-4">
       <div className="mx-auto w-full max-w-[1312px] px-4 md:px-16">
         <Skeleton className="h-6 w-40" />
       </div>
-      <div className="mx-auto grid w-full max-w-[1312px] grid-cols-2 gap-4 px-4 md:grid-cols-4 md:gap-5 md:px-16">
+      <div className="mx-auto grid w-full max-w-[1312px] grid-cols-2 gap-4 px-4 md:grid-cols-4 md:px-16">
         {Array.from({ length: 4 }, (_, i) => (
           <CardSkeleton key={i} />
         ))}
@@ -44,7 +44,7 @@ function HomeSkeleton() {
   return (
     <div role="status" aria-label={t("loading")}>
       <div className="border-b border-tint-border bg-tint">
-        <div className="mx-auto flex w-full max-w-[1312px] flex-col gap-8 px-4 py-8 md:flex-row md:px-16 md:py-13">
+        <div className="mx-auto flex w-full max-w-[1312px] flex-col gap-8 px-4 py-8 md:flex-row md:px-16 md:py-16">
           <div className="flex flex-1 flex-col gap-4">
             <Skeleton className="h-10 w-full max-w-[520px]" />
             <Skeleton className="h-10 w-full max-w-[460px]" />
@@ -53,8 +53,11 @@ function HomeSkeleton() {
           <Skeleton className="h-[132px] w-full shrink-0 rounded-[14px] md:w-[560px]" />
         </div>
       </div>
-      <RailSkeleton />
-      <RailSkeleton />
+      {/* نفس stack الرفوف في الصفحة عشان مفيش قفزة لما البيانات توصل */}
+      <div className="flex flex-col gap-8 pt-8 pb-10 md:gap-10 md:pt-10 md:pb-16">
+        <RailSkeleton />
+        <RailSkeleton />
+      </div>
     </div>
   );
 }

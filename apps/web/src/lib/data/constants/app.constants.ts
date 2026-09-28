@@ -7,6 +7,15 @@ export const APP_NAME_EN = "bltdreeg";
 export function getAppName(locale: string) {
   return locale === "en" ? APP_NAME_EN : APP_NAME;
 }
+/** روابط المتاجر — مصدر واحد، تتغيّر من هنا بس */
+export const APP_STORE_URL = "https://apps.apple.com/app/id6813227521";
+export const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=app.kansel";
+/** أقل إصدار وحجم التطبيق — بيتعرضوا في صفحة التحميل */
+export const IOS_MIN_VERSION = "15";
+export const ANDROID_MIN_VERSION = "8";
+export const IOS_APP_SIZE_MB = 28;
+export const ANDROID_APP_SIZE_MB = 24;
+
 export const SESSION_COOKIE = "beltadreeg_session";
 /** اختيار "تصفح كزائر" — تفضيل متذكر، مش صلاحية دخول (proxy.ts بيتجاهله عمداً) */
 export const GUEST_COOKIE = "beltadreeg_guest";

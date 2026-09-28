@@ -28,6 +28,7 @@ export const ROUTE_ACCOUNT_HELP = `${ROUTE_ACCOUNT}/help`;
 export const ROUTE_BOOKING_CONFIRMATION = (salonId: string, bookingId: string) =>
   `${ROUTE_BOOK_ROOT}/${salonId}/confirmation/${bookingId}`;
 export const ROUTE_OFFLINE = "/offline";
+export const ROUTE_APP_DOWNLOAD = "/download";
 
 export const ROUTE_TERMS = "/terms";
 export const ROUTE_PRIVACY = "/privacy";
@@ -37,3 +38,8 @@ export const ROUTE_REFUND_POLICY = "/refund-policy";
 export const SALON_PANEL_URL = (process.env.NEXT_PUBLIC_SALON_PANEL_URL ?? "http://localhost:8010").replace(/\/$/, "");
 export const EXTERNAL_SALON_REGISTER = `${SALON_PANEL_URL}/register`;
 export const EXTERNAL_SALON_LOGIN = `${SALON_PANEL_URL}/login`;
+
+// حسابات السوشيال — ponytail: handles مؤقتة، بدّلها بالروابط الحقيقية أول ما الحسابات تتعمل
+export const EXTERNAL_FACEBOOK = "https://www.facebook.com/bltdreeg";
+export const EXTERNAL_INSTAGRAM = "https://www.instagram.com/bltdreeg";
+export const EXTERNAL_TIKTOK = "https://www.tiktok.com/@bltdreeg";

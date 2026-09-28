@@ -25,10 +25,12 @@ type RatingProps = {
   count?: number;
   /** عرض 5 نجوم بدل نجمة واحدة */
   showStars?: boolean;
+  /** حجم النجمة في وضع الـ 5 نجوم */
+  starSize?: number;
   className?: string;
 };
 
-function Rating({ value, count, showStars = false, className }: RatingProps) {
+function Rating({ value, count, showStars = false, starSize = 13, className }: RatingProps) {
   const t = useTranslations("common.rating");
   const label = count
     ? t("outOfWithCount", { rating: value, count })
@@ -37,9 +39,9 @@ function Rating({ value, count, showStars = false, className }: RatingProps) {
   return (
     <div className={cn("flex items-center gap-1.5", className)} aria-label={label}>
       {showStars ? (
-        <span className="flex gap-[3px]">
+        <span className="flex gap-1">
           {Array.from({ length: 5 }, (_, i) => (
-            <Star key={i} filled={i < Math.round(value)} size={13} />
+            <Star key={i} filled={i < Math.round(value)} size={starSize} />
           ))}
         </span>
       ) : (
