@@ -32,10 +32,12 @@ return [
     */
     'social' => [
         'google' => [
-            'client_ids' => array_values(array_filter(explode(',', env('GOOGLE_CLIENT_IDS', env('NEXT_PUBLIC_GOOGLE_CLIENT_ID', ''))))),
+            'client_ids' => array_values(array_filter(explode(',', (string) env('GOOGLE_CLIENT_IDS', '')))),
         ],
         'apple' => [
             'enabled' => (bool) env('APPLE_AUTH_ENABLED', false),
+            // Services ID للويب + Bundle ID للـ iOS، مفصولين بفاصلة
+            'client_ids' => array_values(array_filter(explode(',', (string) env('APPLE_CLIENT_IDS', '')))),
         ],
     ],
 

@@ -23,7 +23,7 @@ class AuthOptionsController extends Controller
         if (! empty(config('customer_auth.social.google.client_ids'))) {
             $socialProviders[] = 'google';
         }
-        if (! empty(config('customer_auth.social.apple.client_ids'))) {
+        if (config('customer_auth.social.apple.enabled') && ! empty(config('customer_auth.social.apple.client_ids'))) {
             $socialProviders[] = 'apple';
         }
 
