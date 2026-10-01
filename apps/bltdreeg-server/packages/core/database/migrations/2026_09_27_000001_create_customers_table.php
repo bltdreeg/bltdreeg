@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->decimal('last_lat', 10, 7)->nullable();
             $table->decimal('last_lng', 10, 7)->nullable();
-            $table->unsignedTinyInteger('location_source')->nullable(); // 1 = gps, 2 = ip
+            $table->unsignedTinyInteger('location_source')->nullable(); // 1 = gps, 2 = ip, 3 = manual
             $table->timestamp('location_updated_at')->nullable();
             $table->timestamp('terms_accepted_at')->nullable();
             $table->string('terms_version')->nullable();

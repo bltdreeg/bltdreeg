@@ -7,6 +7,8 @@ use App\Modules\V1\Customer\Auth\Http\Requests\UpdateLocationRequest;
 use App\Modules\V1\Customer\Auth\Http\Resources\CustomerResource;
 use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class MeLocationController extends Controller
@@ -22,7 +24,7 @@ class MeLocationController extends Controller
         if ($request->filled('lat') && $request->filled('lng')) {
             $customer->last_lat = (float) $request->input('lat');
             $customer->last_lng = (float) $request->input('lng');
-            $customer->location_source = LocationSourceEnum::Gps->value;
+            $customer->location_source = LocationSourceEnum::fromLabel((string) $request->input('source', 'gps'))->value;
             $customer->location_updated_at = now();
             $customer->save();
         } elseif ($customer->last_lat === null || $customer->location_source === LocationSourceEnum::Ip->value) {
@@ -39,5 +41,20 @@ class MeLocationController extends Controller
         }
 
         return new CustomerResource($customer->fresh());
+    }
+
+    /**
+     * Read-only IP estimate used to center the onboarding map. Never writes.
+     */
+    public function estimate(Request $request, IpGeolocator $geolocator): JsonResponse
+    {
+        $coords = $geolocator->locate($request->ip());
+
+        // VPN بيطلّع دولة تانية: مبنرجعش نقطة برا مصر، والويب بيبدأ الخريطة من القاهرة
+        $inEgypt = $coords !== null && UpdateLocationRequest::inEgypt($coords->lat, $coords->lng);
+
+        return response()->json([
+            'estimate' => $inEgypt ? ['lat' => $coords->lat, 'lng' => $coords->lng] : null,
+        ]);
     }
 }

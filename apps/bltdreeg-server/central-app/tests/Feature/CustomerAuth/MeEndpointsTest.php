@@ -258,3 +258,57 @@ test('ip fallback refreshes an existing ip location', function () {
         ->assertJsonPath('location.source', 'ip')
         ->assertJsonPath('location.lat', 30.05);
 });
+
+test('location estimate returns the ip point without saving it', function () {
+    $customer = Customer::factory()->create(['phone' => '+201012345672', 'phone_verified_at' => now(), 'last_lat' => null, 'last_lng' => null, 'location_source' => null]);
+
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->once()->andReturn(new Coordinates(30.05, 31.24));
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $this->actingAs($customer, 'customer')
+        ->getJson('/api/v1/me/location/estimate')
+        ->assertOk()
+        ->assertJsonPath('estimate.lat', 30.05)
+        ->assertJsonPath('estimate.lng', 31.24);
+
+    expect($customer->fresh()->last_lat)->toBeNull();
+});
+
+test('location estimate is null when the ip resolves outside egypt or fails', function () {
+    $customer = Customer::factory()->create(['phone' => '+201012345673', 'phone_verified_at' => now()]);
+
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->andReturn(new Coordinates(52.37, 4.90), null); // أمستردام (VPN) ثم فشل
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
+    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
+});
+
+test('a manual pin is saved as manual and survives the ip fallback', function () {
+    $customer = Customer::factory()->create(['phone' => '+201012345674', 'phone_verified_at' => now()]);
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', ['lat' => 31.2001, 'lng' => 29.9187, 'source' => 'manual'])
+        ->assertOk()
+        ->assertJsonPath('location.source', 'manual');
+
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->never();
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', [])
+        ->assertOk()
+        ->assertJsonPath('location.source', 'manual');
+});
+
+test('location source only accepts gps or manual', function () {
+    $customer = Customer::factory()->create(['phone' => '+201012345675', 'phone_verified_at' => now()]);
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', ['lat' => 30.05, 'lng' => 31.24, 'source' => 'ip'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['source']);
+});

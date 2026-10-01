@@ -14,12 +14,10 @@ use App\Modules\V1\Customer\Auth\Http\Controllers\RegisterController;
 use App\Modules\V1\Customer\Auth\Http\Controllers\SocialLoginController;
 use App\Modules\V1\Customer\Auth\Http\Middleware\ExtendCustomerToken;
 use App\Modules\V1\Customer\Auth\Http\Middleware\SetApiLocale;
-use App\Modules\V1\Customer\Auth\Http\Middleware\TrustBffClientIp;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')
     ->middleware([
-        TrustBffClientIp::class,
         SetApiLocale::class,
     ])
     ->group(function () {
@@ -53,6 +51,7 @@ Route::prefix('api/v1')
             Route::post('me/phone/verify', [MePhoneController::class, 'verify']);
             Route::post('me/email/resend', [MeEmailController::class, 'resend']);
             Route::post('me/email/verify', [MeEmailController::class, 'verify']);
+            Route::get('me/location/estimate', [MeLocationController::class, 'estimate']);
             Route::put('me/location', [MeLocationController::class, 'update']);
         });
     });

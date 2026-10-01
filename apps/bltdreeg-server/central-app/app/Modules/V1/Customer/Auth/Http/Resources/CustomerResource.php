@@ -2,6 +2,7 @@
 
 namespace App\Modules\V1\Customer\Auth\Http\Resources;
 
+use App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum;
 use App\Modules\V1\Customer\Auth\Support\OnboardingStatus;
 use App\Modules\V1\Customer\Auth\Support\PhoneNumber;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class CustomerResource extends JsonResource
             $location = [
                 'lat' => (float) $this->resource->last_lat,
                 'lng' => (float) $this->resource->last_lng,
-                'source' => $this->resource->location_source === 1 ? 'gps' : 'ip',
+                'source' => LocationSourceEnum::tryFrom((int) $this->resource->location_source)?->label(),
                 'updated_at' => $this->resource->location_updated_at?->toISOString(),
             ];
         }
