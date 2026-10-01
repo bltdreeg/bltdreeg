@@ -1,0 +1,8 @@
+{
+  "name": "bltdreeg-server",
+  "private": true,
+  "scripts": {
+    "dev": "node dev.mjs",
+    "start": "node dev.mjs"
+  }
+}

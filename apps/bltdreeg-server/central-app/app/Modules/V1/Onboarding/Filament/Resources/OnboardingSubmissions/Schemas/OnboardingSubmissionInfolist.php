@@ -2,8 +2,8 @@
 
 namespace App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\Schemas;
 
-use App\Modules\V1\Shared\Http\Controllers\PrivateFileController;
 use App\Modules\V1\Onboarding\Support\SubmissionComparison;
+use App\Modules\V1\Shared\Http\Controllers\PrivateFileController;
 use Bltdreeg\Core\Modules\Onboarding\Enums\SubmissionStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Models\TenantOnboardingSubmission;
 use Filament\Infolists\Components\TextEntry;

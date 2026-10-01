@@ -2,9 +2,10 @@
 
 namespace App\Modules\V1\Users\Filament\Resources\Users\Schemas;
 
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Hr\Enums\SalaryTypeEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
-use Bltdreeg\Core\Modules\Auth\Models\User;
+use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -14,7 +15,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
-use Closure;
 
 class UserForm
 {

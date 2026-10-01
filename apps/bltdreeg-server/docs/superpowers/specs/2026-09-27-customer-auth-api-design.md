@@ -50,67 +50,68 @@ Staff (`users`) auth is not touched.
 
 ## 3. Architecture
 
-Domain code lives in `packages/core`, because `tenant-app` will need `Customer` for bookings and
-walk-ins later. HTTP and admin UI live in `central-app`. This follows the existing module layout
-(`docs/superpowers/plans/2026-09-23-modular-structure.md`).
+Core identity (`Customer` model) lives in `packages/core`, so `tenant-app` can relate to customers for bookings and walk-ins without cross-app dependencies. All customer authentication machinery (OTP engine, social login, Sanctum token issuance, BFF middleware, and Landlord admin UI) lives strictly in `central-app`. Salon staff in `tenant-app` are completely isolated from customer auth logic.
 
 ```
-packages/core/src/Modules/Customers/
-├── Models/            Customer, CustomerSocialAccount
-├── Enums/             OtpChannelEnum, OtpPurposeEnum, SocialProviderEnum, LocationSourceEnum, OnboardingStepEnum
-├── Otp/
-│   ├── Contracts/OtpProvider.php          send(OtpMessage): DeliveryResult
-│   ├── OtpProviderManager.php             extends Illuminate\Support\Manager
-│   ├── Providers/LogOtpProvider.php       dev: writes the code to the log
-│   ├── Providers/FakeOtpProvider.php      tests: records sends, can be told to fail
-│   ├── Providers/MailOtpProvider.php      email channel via Laravel Mail
-│   ├── OtpDispatcher.php                  picks providers for a channel, falls back, logs
-│   ├── OtpService.php                     issue / resend / verify with all the rules in §6
-│   └── Models/  OtpChallenge, OtpChannelSetting, OtpDelivery
-├── Social/
-│   ├── Contracts/SocialTokenVerifier.php  verify(idToken, nonce?): SocialIdentity
-│   ├── GoogleTokenVerifier.php
-│   ├── AppleTokenVerifier.php
-│   └── SocialAuthService.php              find / link / create (§8.4)
-├── Location/
-│   ├── Contracts/IpGeolocator.php         locate(ip): ?Coordinates
-│   └── MaxMindIpGeolocator.php            GeoLite2 City DB, offline
-├── Support/
-│   ├── PhoneNumber.php                    normalise/validate Egyptian mobiles
-│   ├── CustomerTokenIssuer.php            creates Sanctum tokens with device + expiry
-│   ├── OnboardingStatus.php               computes required/skippable missing steps
-│   └── CustomerDeletion.php               soft delete + anonymize
-├── Exceptions/CustomerAuthException.php   code + HTTP status + data
-└── Database/Factories/CustomerFactory.php
+packages/core/
+├── src/Modules/Customers/
+│   ├── Models/Customer.php                Core entity for bookings/visits/relationships
+│   └── Database/Factories/CustomerFactory.php
+└── database/migrations/                   Shared DB migrations (run via CoreServiceProvider)
 
-packages/core/database/migrations/        (tenant-app runs migrations, see Makefile)
-packages/core/lang/{ar,en}/customer_auth.php
-packages/core/config/customer_auth.php     (merged by CoreServiceProvider: otp.*, token_ttl_days, terms_version, social.*)
-
-central-app/app/Modules/V1/CustomerAuth/
-├── CustomerAuthServiceProvider.php        routes, rate limiters, bindings
-├── Http/
-│   ├── Controllers/  AuthOptionsController, RegisterController, PasswordLoginController,
-│   │                 OtpController, SocialLoginController, PasswordResetController,
-│   │                 LogoutController, MeController, MePhoneController, MeEmailController,
-│   │                 MePasswordController, MeLocationController
-│   ├── Requests/     one FormRequest per write endpoint
-│   ├── Resources/    CustomerResource, AuthSessionResource, OtpChallengeResource
-│   └── Middleware/   TrustBffClientIp, SetApiLocale, EnsureCustomerOnboarded, ExtendCustomerToken
-├── Filament/
-│   ├── Pages/OtpChannelSettings.php
-│   └── Resources/ OtpDeliveries (read-only), Customers (list/view/disable)
-└── routes/api.php
+central-app/
+├── app/Modules/V1/Customer/
+│   ├── CustomerServiceProvider.php        Module service provider registering Customer domains
+│   └── Auth/
+│       ├── Models/                        CustomerSocialAccount, OtpChallenge, OtpChannelSetting, OtpDelivery
+│       ├── Enums/                         OtpChannelEnum, OtpPurposeEnum, SocialProviderEnum, LocationSourceEnum, OnboardingStepEnum
+│       ├── Otp/
+│       │   ├── Contracts/OtpProvider.php  send(OtpMessage): DeliveryResult
+│       │   ├── OtpProviderManager.php     extends Illuminate\Support\Manager
+│       │   ├── Providers/LogOtpProvider.php dev: writes code to laravel.log
+│       │   ├── Providers/FakeOtpProvider.php tests: records sends, mock failures
+│       │   ├── Providers/MailOtpProvider.php email channel via Laravel Mail
+│       │   ├── OtpDispatcher.php          picks providers for a channel, falls back, logs
+│       │   └── OtpService.php             issue / resend / verify with §6 rules
+│       ├── Social/
+│       │   ├── Contracts/SocialTokenVerifier.php verify(idToken, nonce?): SocialIdentity
+│       │   ├── GoogleTokenVerifier.php
+│       │   ├── AppleTokenVerifier.php
+│       │   └── SocialAuthService.php      find / link / create (§8.4)
+│       ├── Location/
+│       │   ├── Contracts/IpGeolocator.php locate(ip): ?Coordinates
+│       │   └── MaxMindIpGeolocator.php    GeoLite2 City DB, offline
+│       ├── Support/
+│       │   ├── PhoneNumber.php            normalise/validate Egyptian mobiles
+│       │   ├── CustomerTokenIssuer.php    creates Sanctum tokens with device + expiry
+│       │   ├── OnboardingStatus.php       computes required/skippable missing steps
+│       │   └── CustomerDeletion.php       soft delete + anonymize
+│       ├── Exceptions/CustomerAuthException.php code + HTTP status + data
+│       ├── Http/
+│       │   ├── Controllers/               AuthOptionsController, RegisterController, PasswordLoginController,
+│       │   │                              OtpController, SocialLoginController, PasswordResetController,
+│       │   │                              LogoutController, MeController, MePhoneController, MeEmailController,
+│       │   │                              MePasswordController, MeLocationController
+│       │   ├── Requests/                  one FormRequest per write endpoint
+│       │   ├── Resources/                 CustomerResource, AuthSessionResource, OtpChallengeResource
+│       │   └── Middleware/                TrustBffClientIp, SetApiLocale, EnsureCustomerOnboarded, ExtendCustomerToken
+│       ├── Filament/
+│       │   ├── Pages/OtpChannelSettings.php
+│       │   └── Resources/                 OtpDeliveries (read-only), Customers (list/view/disable)
+│       └── routes/api.php
+│   └── (Future subdomains: Bookings/, etc.)
+├── config/customer_auth.php               (otp.*, token_ttl_days, terms_version, social.*)
+└── lang/{ar,en}/customer_auth.php
 ```
 
 **Package additions:**
 - `central-app`: `laravel/sanctum`, `dedoc/scramble`, `firebase/php-jwt`, `geoip2/geoip2`.
-- `packages/core`: `laravel/sanctum`. `tenant-app` then gets Sanctum through `packages/core`.
+- `packages/core`: `laravel/sanctum` (for `Customer` HasApiTokens trait).
 
 **Auth wiring:**
-- **Guards:** `config/auth.php` gains provider `customers` (Eloquent, `Customer`) and guard `customer` (driver `sanctum`, provider `customers`).
+- **Guards:** `config/auth.php` gains provider `customers` (Eloquent, `Bltdreeg\Core\Modules\Customers\Models\Customer`) and guard `customer` (driver `sanctum`, provider `customers`).
 - **Sanctum config:** set `guard => []` so Sanctum never falls back to the Filament `web` session. A logged-in admin must not resolve as a customer on `/api/*`.
-- **Routing:** add `api:` to `bootstrap/app.php` `withRouting` with prefix `api/v1`. The module service provider loads its own route file there.
+- **Routing:** add `api:` to `bootstrap/app.php` `withRouting` with prefix `api/v1`. `CustomerServiceProvider` loads the auth route file there.
 
 ## 4. Data model
 
@@ -169,7 +170,7 @@ Only one open challenge exists per (identifier, purpose). Issuing a new one repl
 
 ### `otp_channel_settings`
 `channel` (unique), `is_enabled`, `providers` (JSON ordered list of provider keys), `sort`,
-timestamps. Seeded with three rows. Defaults: `whatsapp` disabled, `sms` enabled with
+timestamps. Seeded with three rows. Defaults: `whatsapp` enabled with provider `log`, `sms` enabled with
 provider `log`, `email` enabled with provider `mail`.
 
 ### `otp_deliveries`
@@ -192,11 +193,14 @@ The point of this design: you can add or swap a WhatsApp or SMS vendor without t
   The admin panel lists every configured provider key that supports a given channel.
 - **`OtpChannelSetting` (runtime control):** read through a cache (key `customer_auth.otp_channel_settings`) that is
   cleared when the Filament page saves. So changes apply to the next request, Octane workers included.
-- **`OtpDispatcher`:**
-  1. Checks that the requested channel is enabled, otherwise throws `auth.channel_unavailable`.
-  2. Tries that channel's providers in order.
-  3. Writes an `otp_deliveries` row per attempt.
-  4. Stops at the first success. If all fail, throws `auth.delivery_failed`.
+- **`OtpDispatcher` & Queue Job (`SendOtpDeliveryJob`):**
+  1. `OtpService::issue()` and `OtpService::resend()` save the challenge and dispatch `SendOtpDeliveryJob` to the dedicated high-priority `otp` queue (`php artisan queue:listen --queue=otp,default`).
+  2. Inside the worker, `OtpDispatcher` checks that the requested channel is enabled, otherwise throws `auth.channel_unavailable`.
+  3. Tries that channel's providers in order (fallback chain).
+  4. Writes an `otp_deliveries` row per attempt (with masked recipient).
+  5. Stops at the first success. If all fail, logs failure and throws `auth.delivery_failed`.
+  6. The HTTP endpoint returns `200 OK` with challenge timing metadata instantly (~20ms), isolating web server threads from external gateway network latency.
+  7. If the challenge is already consumed by the time the worker processes it, the worker skips sending.
 
   It **never switches to a different channel** than the one the user picked.
 - **Channel default:** `channel` is optional on every send endpoint. When it is missing (today's mobile

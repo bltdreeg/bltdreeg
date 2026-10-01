@@ -3,8 +3,8 @@
 use App\Modules\V1\Users\Filament\Resources\Users\Pages\CreateUser;
 use App\Modules\V1\Users\Filament\Resources\Users\Pages\EditUser;
 use App\Modules\V1\Users\Filament\Resources\Users\UserResource;
-use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantProvisioner;
 use Filament\Facades\Filament;
 use Filament\Panel;

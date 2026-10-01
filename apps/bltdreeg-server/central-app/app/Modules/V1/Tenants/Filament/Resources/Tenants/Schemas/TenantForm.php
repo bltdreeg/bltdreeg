@@ -2,8 +2,8 @@
 
 namespace App\Modules\V1\Tenants\Filament\Resources\Tenants\Schemas;
 
-use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
