@@ -25,7 +25,8 @@ class MeLocationController extends Controller
             $customer->location_source = LocationSourceEnum::Gps->value;
             $customer->location_updated_at = now();
             $customer->save();
-        } else {
+        } elseif ($customer->last_lat === null || $customer->location_source === LocationSourceEnum::Ip->value) {
+            // موقع الـ GPS أدق من تخمين الـ IP، فمبنستبدلوش أبداً بالـ fallback
             $coords = $geolocator->locate($request->ip());
 
             if ($coords !== null) {

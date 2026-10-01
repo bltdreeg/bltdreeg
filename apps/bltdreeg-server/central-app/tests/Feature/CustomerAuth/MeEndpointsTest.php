@@ -162,6 +162,8 @@ test('customer can update location with egypt coordinates and IP fallback', func
         ->assertJsonValidationErrors(['location']);
 
     // 3. Fallback to IP geolocation when coordinates are omitted
+    // (الـ fallback مبيستبدلش GPS، فنرجّع المصدر لـ ip الأول عشان نختبر التحديث)
+    $customer->forceFill(['location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value])->save();
     $fakeGeolocator = Mockery::mock(IpGeolocator::class);
     $fakeGeolocator->shouldReceive('locate')->once()->andReturn(
         new Coordinates(lat: 31.2001, lng: 29.9187)
@@ -214,4 +216,45 @@ test('customer deletion anonymizes data, soft deletes, and frees phone for re-re
         'password' => 'Password123',
     ]);
     $registerResponse->assertSuccessful();
+});
+
+test('ip fallback does not overwrite a gps location', function () {
+    $customer = Customer::factory()->create([
+        'phone' => '+201012345670',
+        'phone_verified_at' => now(),
+        'last_lat' => 30.0444,
+        'last_lng' => 31.2357,
+        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Gps->value,
+        'location_updated_at' => now()->subDays(3),
+    ]);
+
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->never();
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', [])
+        ->assertOk()
+        ->assertJsonPath('location.source', 'gps')
+        ->assertJsonPath('location.lat', 30.0444);
+});
+
+test('ip fallback refreshes an existing ip location', function () {
+    $customer = Customer::factory()->create([
+        'phone' => '+201012345671',
+        'phone_verified_at' => now(),
+        'last_lat' => 31.2,
+        'last_lng' => 29.9,
+        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value,
+    ]);
+
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->once()->andReturn(new Coordinates(30.05, 31.24));
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', [])
+        ->assertOk()
+        ->assertJsonPath('location.source', 'ip')
+        ->assertJsonPath('location.lat', 30.05);
 });
