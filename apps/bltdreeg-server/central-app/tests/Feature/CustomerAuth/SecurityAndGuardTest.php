@@ -84,22 +84,23 @@ test('ensure customer onboarded middleware blocks incomplete customer', function
         ]);
 });
 
-test('trust bff client ip respects shared secret', function () {
-    config()->set('customer_auth.bff.shared_secret', 'correct_secret_key');
+test('cors allows the configured web origin and rejects others', function () {
+    config()->set('cors.allowed_origins', ['https://app.example.com']);
 
-    // 1. Valid secret: X-Client-Ip is accepted
-    $this->withHeaders([
-        'X-Bff-Secret' => 'correct_secret_key',
-        'X-Client-Ip' => '196.205.120.45',
-    ])->getJson('/api/v1/auth/options');
+    $allowed = $this->withHeaders([
+        'Origin' => 'https://app.example.com',
+        'Access-Control-Request-Method' => 'POST',
+    ])->options('/api/v1/auth/login');
 
-    // 2. Invalid secret: X-Client-Ip ignored
-    $this->withHeaders([
-        'X-Bff-Secret' => 'wrong_secret',
-        'X-Client-Ip' => '196.205.120.45',
-    ])->getJson('/api/v1/auth/options');
+    expect($allowed->headers->get('Access-Control-Allow-Origin'))->toBe('https://app.example.com');
 
-    expect(true)->toBeTrue();
+    $blocked = $this->withHeaders([
+        'Origin' => 'https://evil.example.com',
+        'Access-Control-Request-Method' => 'POST',
+    ])->options('/api/v1/auth/login');
+
+    // With one allowed origin the header always names it, so the browser rejects any other caller.
+    expect($blocked->headers->get('Access-Control-Allow-Origin'))->not->toBe('https://evil.example.com');
 });
 
 test('error responses honor Accept-Language header', function () {

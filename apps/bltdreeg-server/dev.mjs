@@ -37,7 +37,7 @@ const colors = {
   bold: '\x1b[1m',
 };
 
-const services = [
+const allServices = [
   {
     name: 'Central:8022',
     color: colors.cyan,
@@ -58,12 +58,20 @@ const services = [
   },
 ];
 
+// `--central` runs only the Central API + the OTP queue worker (no Tenant app).
+const centralOnly = process.argv.includes('--central');
+const services = centralOnly
+  ? allServices.filter((svc) => svc.name !== 'Tenant:8011')
+  : allServices;
+
 console.log(`${colors.bold}${colors.green}================================================================${colors.reset}`);
 console.log(`${colors.bold}  BLTDREEG SERVER - LOCAL DEV RUNNER${colors.reset}`);
 console.log(`${colors.bold}${colors.green}================================================================${colors.reset}`);
 console.log(`  PHP Binary:  ${colors.gray}${php}${colors.reset}`);
 console.log(`  Central App: ${colors.cyan}http://127.0.0.1:8022${colors.reset} (Landlord & Customer Auth API)`);
-console.log(`  Tenant App:  ${colors.magenta}http://127.0.0.1:8011${colors.reset} (Salon Panel)`);
+if (!centralOnly) {
+  console.log(`  Tenant App:  ${colors.magenta}http://127.0.0.1:8011${colors.reset} (Salon Panel)`);
+}
 console.log(`  Queue Worker:${colors.yellow} queue:listen --queue=otp,default${colors.reset}`);
 console.log(`  Press ${colors.bold}Ctrl+C${colors.reset} to stop all services.`);
 console.log(`${colors.bold}${colors.green}================================================================${colors.reset}\n`);

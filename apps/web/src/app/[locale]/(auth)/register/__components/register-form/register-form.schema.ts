@@ -15,4 +15,6 @@ export interface RegisterFormErrors {
   phone?: string;
   password?: string;
   agreeToTerms?: string;
+  /** خطأ مش مربوط بحقل (شبكة، حد أقصى للإرسال...) */
+  general?: string;
 }

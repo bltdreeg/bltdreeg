@@ -29,7 +29,7 @@ Staff (`users`) auth is not touched.
 | Identity | Separate `customers` table + `customer` guard (ADR 0001 stands) |
 | Public id | ULID column exposed as `id`; bigint PK stays internal |
 | Tokens | Laravel Sanctum personal access tokens, one per device, 90-day sliding expiry |
-| Web | Backend-for-frontend (BFF): Next.js server holds the token in an httpOnly cookie; the browser never sees it |
+| Web | Calls the API directly from the browser (axios `apiClient` → plain `*.action.ts` functions → React Query hooks). No BFF, no route handlers, no server actions. The token lives in a JS-readable cookie; CORS is limited to the web origin |
 | Contract | Mobile's existing contract is the source of truth; web adapts |
 | Login methods | Phone+password, email+password (verified email only), phone OTP, Google, Apple |
 | Phone | Mandatory and verified for every account (Egyptian mobile) |
@@ -50,7 +50,7 @@ Staff (`users`) auth is not touched.
 
 ## 3. Architecture
 
-Core identity (`Customer` model) lives in `packages/core`, so `tenant-app` can relate to customers for bookings and walk-ins without cross-app dependencies. All customer authentication machinery (OTP engine, social login, Sanctum token issuance, BFF middleware, and Landlord admin UI) lives strictly in `central-app`. Salon staff in `tenant-app` are completely isolated from customer auth logic.
+Core identity (`Customer` model) lives in `packages/core`, so `tenant-app` can relate to customers for bookings and walk-ins without cross-app dependencies. All customer authentication machinery (OTP engine, social login, Sanctum token issuance, CORS config, and Landlord admin UI) lives strictly in `central-app`. Salon staff in `tenant-app` are completely isolated from customer auth logic.
 
 ```
 packages/core/
@@ -94,7 +94,7 @@ central-app/
 │       │   │                              MePasswordController, MeLocationController
 │       │   ├── Requests/                  one FormRequest per write endpoint
 │       │   ├── Resources/                 CustomerResource, AuthSessionResource, OtpChallengeResource
-│       │   └── Middleware/                TrustBffClientIp, SetApiLocale, EnsureCustomerOnboarded, ExtendCustomerToken
+│       │   └── Middleware/                SetApiLocale, EnsureCustomerOnboarded, ExtendCustomerToken
 │       ├── Filament/
 │       │   ├── Pages/OtpChannelSettings.php
 │       │   └── Resources/                 OtpDeliveries (read-only), Customers (list/view/disable)
@@ -364,7 +364,7 @@ is verified, another account that took that email as verified in the meantime ca
 ### 8.8 Location
 - **With coordinates:** `PUT /me/location {lat, lng}` saves them with source `gps`. Egypt bounding box
   is checked; otherwise the request is rejected with a validation error.
-- **Without coordinates:** the server uses `IpGeolocator` on the (BFF-trusted) client IP and saves source
+- **Without coordinates:** the server uses `IpGeolocator` on the request IP and saves source
   `ip`. If the lookup fails, location stays null (it is skippable).
 - **What it's for:** "near you / new in your area" ranking only. There is still no map search (BUSINESS.md).
 
@@ -420,44 +420,53 @@ Business-rule failures are **422, never 401**. Mobile's `ApiClient` treats 401 a
 
 ## 10. Security
 
-- **Client IP through the BFF.** All web traffic reaches Laravel from the Next.js server. The BFF sends
-  `X-Client-Ip` + `X-Bff-Secret`. `TrustBffClientIp` accepts the header only when the secret matches
-  (`hash_equals`, env `BFF_SHARED_SECRET`), and then rate limits and IP geolocation use that IP.
-  Without the secret the header is ignored.
+- **Client IP.** The browser calls Laravel directly, so rate limits and IP geolocation use the real request IP.
+  Behind a proxy, configure Laravel's trusted proxies so `X-Forwarded-For` resolves correctly.
 - **Tokens:** Sanctum stores only SHA-256 hashes. Staff sessions cannot authenticate on `/api`
   (`sanctum.guard = []`, and the guard resolves `Customer` only).
 - **Passwords:** bcrypt via the `hashed` cast. Min 8, must contain letters and numbers.
 - **OTP:** codes are hashed, the rules in §6 apply, and codes never appear in responses or logs outside `local`.
 - **Enumeration:** password login is generic. OTP login and forgot password reveal "not registered";
   this is accepted and rate limited (§8.3).
-- **CORS:** not needed for web, since the browser only talks to Next.js. Mobile is not a browser.
-  `config/cors.php` stays closed.
+- **CORS:** `config/cors.php` allows only the origins in `CORS_ALLOWED_ORIGINS` (default `http://localhost:3213`),
+  `paths = ['api/*']`, `supports_credentials = false` (auth is a Bearer token, not a cookie). Mobile is not a browser.
+- **Token in the browser:** because the browser calls the API, the Sanctum token cannot be httpOnly. It is stored in the
+  `beltadreeg_session` cookie (`SameSite=Lax`, `Secure` on https). The cost: an XSS bug could read it. Mitigations: 90-day
+  per-device tokens revocable by password change or admin disable, no third-party scripts beyond Google Identity Services,
+  and a strict CSP when the site is hardened.
 - **Scramble docs:** at `/docs/api`, available in `local` only, or to super admins elsewhere.
 
 ## 11. Web client (`apps/web`)
 
-### Server plumbing
-- **Env:** `LARAVEL_API_URL` (e.g. `http://localhost:8011/api/v1`), `BFF_SHARED_SECRET`,
-  `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
-- **`lib/utils/api/laravel-client.ts`** (server-only): a fetch wrapper. It adds the base URL,
-  `Accept-Language` from the locale, `Authorization` from the session cookie, and `X-Client-Ip` from
-  `x-forwarded-for` + the secret. It turns the error envelope into a typed `ApiError { status, code, data, errors }`.
-- **Cookies:**
-  - `beltadreeg_session` holds the Sanctum token: httpOnly, `secure` in production, `sameSite=lax`,
-    `maxAge` 90 days with "remember me", otherwise a session cookie.
-  - `beltadreeg_onboarding=1` (not httpOnly, no secrets) is set while `user.onboarding.complete` is
-    false, so `proxy.ts` can redirect without an API call.
-- **Route handlers** (`src/app/api/auth/*`) call the server actions in `lib/actions/auth/auth.action.ts`,
-  which call Laravel:
-  - `login`: `identifier` → `email` if it contains `@`, otherwise `phone`.
-  - `register`, `otp`, `otp/resend`, `verify-otp`, `password/forgot`, `password/verify`,
-    `password/reset`, `social/google`, `options`, `logout`.
-  - The `refresh` route and `API_AUTH_REFRESH` are removed (sliding tokens replace refresh).
-- **Browser-facing responses** return `{ user }`, never `accessToken`. The `AuthSession` type loses
-  `accessToken`/`expiresAt` on the web side.
-- **`/api/user`** `GET`/`PATCH` proxy to `/me`.
-- **`useUser()`** stops reading `document.cookie` for the session (httpOnly makes that impossible).
-  It uses React Query on `/api/user`, where 401 means signed out.
+### API client and data flow (mirrors the ATS dashboard)
+- **Env:** `NEXT_PUBLIC_API_URL` (e.g. `http://localhost:8011/api/v1`), `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
+- **`lib/api/axios-instance.ts`:** the only axios instance. The request interceptor adds
+  `Authorization: Bearer <token>` (from the cookie) and `Accept-Language` (from the URL locale).
+  The response interceptor turns every failure into a typed `ApiError { status, code, data, errors }`
+  (network failures become `http.network`) and clears the token on a 401 for a request that carried one.
+  There is no refresh flow: sliding tokens replace it.
+- **`lib/api/api-client.ts`:** a thin `apiClient` (`get/post/put/patch/delete`) that returns `response.data`.
+- **Cookies** (`lib/utils/auth/token-storage.ts`, written from the browser):
+  - `beltadreeg_session` holds the Sanctum token: JS-readable, `SameSite=Lax`, `Secure` on https,
+    `Max-Age` 90 days with "remember me", otherwise a session cookie. `proxy.ts` reads it on the server to
+    guard routes without a flash.
+  - `beltadreeg_onboarding=1` (no secrets) is set while `user.onboarding.complete` is false, so `proxy.ts`
+    can redirect without an API call.
+- **Data access rule: components use React Query hooks only; hooks call plain action functions; actions
+  call `apiClient`.** There are no `src/app/api/*` route handlers and no `"use server"` actions for this.
+  1. **Component** uses a hook only (`useLogin()`, `useUser()`, …). It never calls `axios`, `apiClient` or an
+     action itself, and never loads data in `useEffect`.
+  2. **Hook** (`lib/hooks/<domain>/use-*.hook.ts`) is a `useQuery` / `useMutation` whose function calls an
+     action. Mutations that open a session write `user` into the `QK_USER` cache on success.
+  3. **Action** (`lib/actions/<domain>/*.action.ts`) is a plain `async` function: it calls `apiClient`, maps
+     snake_case to camelCase (`lib/utils/auth/laravel-mappers.ts`), and persists the session when needed.
+  - A global `Register { defaultError: ApiError }` declaration types every React Query `error` as `ApiError`.
+  - Auth actions: `login` (`identifier` → `email` if it contains `@`, otherwise `phone`), `register`,
+    `sendLoginOtp`, `resendOtp`, `verifyOtp`, `socialLogin`, `forgotPassword`, `verifyResetCode`,
+    `resetPassword`, `logout`, `getAuthOptions`. User actions: `getMe`, `updateMe`.
+  - The `refresh` route and `API_AUTH_REFRESH` are removed.
+- **`useUser()`** is a `useQuery` over `getMe`. `getMe` returns `null` when there is no token or the API says 401
+  (not an error), and keeps the onboarding cookie in sync.
 - **Removed:** `dev-login.action.ts` and its uses. `continueAsGuest` stays, since guests are allowed.
 
 ### DTO changes
@@ -470,7 +479,7 @@ Business-rule failures are **422, never 401**. Mobile's `ApiClient` treats 401 a
   - Identifier + password, plus "remember me".
   - "Log in with a code" → phone + channel picker → verify-otp.
   - Google button via Google Identity Services in the existing `social-auth-buttons` component. It sends
-    the ID token to the BFF.
+    the ID token to the API through `useSocialLogin()`.
   - The Apple button renders only if `/auth/options` lists `apple`.
 - **Register:** first/last name split, phone, optional email, password, terms checkbox, WhatsApp/SMS
   picker (from `/auth/options`) → verify-otp.
@@ -503,7 +512,7 @@ Business-rule failures are **422, never 401**. Mobile's `ApiClient` treats 401 a
 - `bltdreeg-plan/docs/domain-model.md` (Customer entry): same change.
 - `bltdreeg-plan/plan/customer-app.md` CA-A1: points to this spec. Web done here, mobile follow-up.
 - `bltdreeg-plan/docs/adr/0001-separate-customers-table.md`: auth methods line updated. A new
-  ADR 0005 "Customer auth: Sanctum device tokens behind a web BFF" records the token decision.
+  ADR 0005 "Customer auth: Sanctum device tokens, web calls the API directly" records the token decision.
 - The draft customers migration gets a header note saying it is superseded by §4.
 
 ## 13. Testing
@@ -526,8 +535,7 @@ fake social verifiers, and a fake `IpGeolocator`:
   IP fallback, and outside Egypt.
 - **Deletion:** anonymization; the phone can register again.
 - **Tokens:** expiry; sliding extension; a revoked token returns 401.
-- **Security:** a staff Filament session cannot reach `/api/v1/me`; `X-Client-Ip` is ignored without
-  the secret.
+- **Security:** a staff Filament session cannot reach `/api/v1/me`; CORS allows only the configured web origin.
 - **Errors:** envelope shape, locale switching (ar/en).
 
 **Unit tests:** `PhoneNumber` normalisation (all input formats, invalid prefixes), `OnboardingStatus`,

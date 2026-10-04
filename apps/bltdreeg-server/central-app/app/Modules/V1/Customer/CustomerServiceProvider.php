@@ -2,10 +2,10 @@
 
 namespace App\Modules\V1\Customer;
 
+use App\Modules\V1\Customer\Auth\Console\PruneOtpChallengesCommand;
 use App\Modules\V1\Customer\Auth\Http\Middleware\EnsureCustomerOnboarded;
 use App\Modules\V1\Customer\Auth\Http\Middleware\ExtendCustomerToken;
 use App\Modules\V1\Customer\Auth\Http\Middleware\SetApiLocale;
-use App\Modules\V1\Customer\Auth\Http\Middleware\TrustBffClientIp;
 use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
 use App\Modules\V1\Customer\Auth\Location\MaxMindIpGeolocator;
 use App\Modules\V1\Customer\Auth\Otp\OtpDispatcher;
@@ -19,6 +19,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Router;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,6 +50,14 @@ class CustomerServiceProvider extends ServiceProvider
         $this->configureMiddleware();
         $this->configureRateLimiting();
         $this->loadRoutes();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([PruneOtpChallengesCommand::class]);
+        }
+
+        $this->callAfterResolving(Schedule::class, function (Schedule $schedule) {
+            $schedule->command('customer-auth:prune-otp')->daily();
+        });
     }
 
     protected function configureMiddleware(): void
@@ -57,7 +66,6 @@ class CustomerServiceProvider extends ServiceProvider
         $router = $this->app['router'];
         $router->aliasMiddleware('customer.onboarded', EnsureCustomerOnboarded::class);
         $router->aliasMiddleware('customer.extend_token', ExtendCustomerToken::class);
-        $router->aliasMiddleware('customer.bff_ip', TrustBffClientIp::class);
         $router->aliasMiddleware('customer.locale', SetApiLocale::class);
     }
 

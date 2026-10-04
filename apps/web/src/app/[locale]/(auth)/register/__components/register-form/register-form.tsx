@@ -7,17 +7,22 @@ import {
   ROUTE_LOGIN,
   ROUTE_VERIFY_OTP,
 } from "@/lib/data/constants/routes.constants";
+import { CALLBACK_PARAM } from "@/lib/data/constants/app.constants";
+import { useRegister } from "@/lib/hooks/auth";
+import { apiFieldErrors, authErrorMessage } from "@/lib/utils/auth/auth-error-message";
 import {
   checkPasswordCriteria,
   isValidEmail,
+  normalizeEgyptianPhone,
   validateEgyptianPhone,
 } from "@/lib/utils/auth-validation.utils";
 import { SocialAuthButtons } from "../../../__components/social-auth-buttons";
 import { PasswordRequirements } from "../password-requirements";
 import type { RegisterFormErrors } from "./register-form.schema";
 
-export function RegisterForm() {
+export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter();
+  const register = useRegister();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,7 +34,7 @@ export function RegisterForm() {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [errors, setErrors] = useState<RegisterFormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmitting = register.isPending;
 
   const firstNameId = useId();
   const lastNameId = useId();
@@ -83,14 +88,41 @@ export function RegisterForm() {
       return;
     }
 
-    setIsSubmitting(true);
-    // محاكاة إرسال كود التأكيد والانتقال لصفحة OTP
-    const cleanPhone = phone.replace(/\D/g, "");
-    const formattedPhone = cleanPhone.startsWith("0")
-      ? cleanPhone.slice(1)
-      : cleanPhone;
+    // الرقم الصحيح متوحّد بـ libphonenumber-js (+201XXXXXXXXX) سواء اتكتب بـ 0 أو 20 أو +20
+    const normalizedPhone = normalizeEgyptianPhone(phone) ?? phone;
 
-    router.push(`${ROUTE_VERIFY_OTP}?phone=${encodeURIComponent(formattedPhone)}`);
+    register.mutate(
+      {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        phone: normalizedPhone,
+        email: email.trim() || undefined,
+        password,
+        acceptedTerms: agreeToTerms,
+      },
+      {
+        onSuccess: () => {
+          const params = new URLSearchParams({ phone: normalizedPhone, purpose: "register" });
+          if (callbackUrl) params.set(CALLBACK_PARAM, callbackUrl);
+          router.push(`${ROUTE_VERIFY_OTP}?${params.toString()}`);
+        },
+        onError: (err) => {
+          // أخطاء السيرفر بتتوزع على الحقول (phone_taken، email_taken، قواعد كلمة السر...)
+          const fields = apiFieldErrors(err);
+          const next: RegisterFormErrors = {
+            firstName: fields.first_name,
+            lastName: fields.last_name,
+            email: fields.email,
+            phone: fields.phone,
+            password: fields.password,
+          };
+          if (err.code === "auth.phone_taken") next.phone = err.message;
+          if (err.code === "auth.email_taken") next.email = err.message;
+          if (!Object.values(next).some(Boolean)) next.general = authErrorMessage(err);
+          setErrors(next);
+        },
+      },
+    );
   }
 
   return (
@@ -352,6 +384,11 @@ export function RegisterForm() {
 
         {/* زرار إنشاء الحساب */}
         <div className="flex flex-col gap-2 pt-1">
+          {errors.general && (
+            <div role="alert" className="mb-3 rounded-xl border border-[#FECACA] bg-[#FEF2F2] px-3.5 py-2.5 text-[13px] font-medium text-[#B91C1C]">
+              {errors.general}
+            </div>
+          )}
           <button
             type="submit"
             disabled={isSubmitting}

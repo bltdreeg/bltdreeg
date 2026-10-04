@@ -50,8 +50,14 @@ class OtpChannelSetting extends Model
      */
     public static function getCached(): Collection
     {
-        return Cache::rememberForever(self::CACHE_KEY, function () {
-            return self::query()->orderBy('sort')->get();
+        // Cache raw attributes, not models: cache.serializable_classes is false, so a cached model
+        // collection comes back as __PHP_Incomplete_Class on the next read.
+        $rows = Cache::rememberForever(self::CACHE_KEY, function () {
+            return self::query()->orderBy('sort')->get()
+                ->map(fn (self $setting) => $setting->getAttributes())
+                ->all();
         });
+
+        return self::hydrate($rows);
     }
 }

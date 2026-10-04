@@ -14,7 +14,8 @@ export default async function VerifyOtpPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const query = await searchParams;
-  const phone = query.phone || "1023456789";
+  const phone = query.phone ?? "";
+  const purpose = query.purpose === "register" ? "register" : "login";
   const callbackUrl = query[CALLBACK_PARAM];
 
   return (
@@ -37,7 +38,7 @@ export default async function VerifyOtpPage({
 
       {/* مساحة النموذج في المنتصف */}
       <div className="flex w-full lg:w-1/2 flex-1 items-center justify-center p-4 sm:p-10 lg:p-12 xl:p-16">
-        <OtpForm phone={phone} callbackUrl={callbackUrl} />
+        <OtpForm phone={phone} purpose={purpose} callbackUrl={callbackUrl} />
       </div>
     </div>
   );

@@ -1,16 +1,21 @@
 "use client";
 
-import { useState, useTransition, useId } from "react";
+import { useState, useId } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import {
   ROUTE_FORGOT_PASSWORD,
+  ROUTE_HOME,
   ROUTE_REGISTER,
   ROUTE_VERIFY_OTP,
 } from "@/lib/data/constants/routes.constants";
 import { CALLBACK_PARAM } from "@/lib/data/constants/app.constants";
+import { useLogin, useSendLoginOtp } from "@/lib/hooks/auth";
+import { apiFieldErrors, authErrorMessage } from "@/lib/utils/auth/auth-error-message";
+import { enterGuestMode } from "@/lib/utils/auth/guest-mode";
 import {
   isValidEmail,
+  normalizeEgyptianPhone,
   validateEgyptianPhone,
 } from "@/lib/utils/auth-validation.utils";
 import { SocialAuthButtons } from "../../../__components/social-auth-buttons";
@@ -18,12 +23,12 @@ import type { LoginTab, LoginFormErrors } from "./login-form.schema";
 
 interface LoginFormProps {
   callbackUrl: string;
-  action: (formData: FormData) => void | Promise<void>;
-  guestAction: () => void | Promise<void>;
 }
 
-export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) {
+export function LoginForm({ callbackUrl }: LoginFormProps) {
   const router = useRouter();
+  const login = useLogin();
+  const sendOtp = useSendLoginOtp();
   const [tab, setTab] = useState<LoginTab>("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -31,7 +36,7 @@ export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const isPending = login.isPending || sendOtp.isPending;
 
   const emailInputId = useId();
   const phoneInputId = useId();
@@ -71,21 +76,37 @@ export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) 
     }
 
     if (tab === "phone") {
-      const cleanPhone = phone.replace(/\D/g, "");
-      const formattedPhone = cleanPhone.startsWith("0") ? cleanPhone.slice(1) : cleanPhone;
-      const params = new URLSearchParams({ phone: formattedPhone });
-      // بنمرّر وجهة الرجوع عشان اللي اتحوّل من صفحة محمية يرجعلها بعد التأكيد
-      if (callbackUrl) params.set(CALLBACK_PARAM, callbackUrl);
-      router.push(`${ROUTE_VERIFY_OTP}?${params.toString()}`);
+      const normalizedPhone = normalizeEgyptianPhone(phone) ?? phone;
+
+      sendOtp.mutate(
+        { phone: normalizedPhone },
+        {
+          onSuccess: () => {
+            const params = new URLSearchParams({ phone: normalizedPhone, purpose: "login" });
+            // بنمرّر وجهة الرجوع عشان اللي اتحوّل من صفحة محمية يرجعلها بعد التأكيد
+            if (callbackUrl) params.set(CALLBACK_PARAM, callbackUrl);
+            router.push(`${ROUTE_VERIFY_OTP}?${params.toString()}`);
+          },
+          // phone_not_registered وغيرها بتظهر تحت حقل الموبايل
+          onError: (err) => setErrors({ identifier: apiFieldErrors(err).phone ?? authErrorMessage(err) }),
+        },
+      );
       return;
     }
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    login.mutate(
+      { identifier: email, password },
+      {
+        onSuccess: () => router.replace(callbackUrl || ROUTE_HOME),
+        // بيانات غلط / حساب موقوف / كتر المحاولات: رسالة عامة فوق الزرار
+        onError: (err) => setErrors({ general: authErrorMessage(err) }),
+      },
+    );
+  }
 
-    startTransition(async () => {
-      await action(formData);
-    });
+  function handleGuest() {
+    enterGuestMode();
+    router.replace(ROUTE_HOME);
   }
 
   return (
@@ -100,11 +121,13 @@ export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) 
             سجّل دخول بحسابك عشان تتابع دورك وتحجز بلمستين.
           </p>
         </div>
-        <form action={guestAction}>
-          <button type="submit" className="text-[13px] font-bold text-[#0F766E] hover:underline cursor-pointer whitespace-nowrap mt-2">
-            تصفح كزائر
-          </button>
-        </form>
+        <button
+          type="button"
+          onClick={handleGuest}
+          className="text-[13px] font-bold text-[#0F766E] hover:underline cursor-pointer whitespace-nowrap mt-2"
+        >
+          تصفح كزائر
+        </button>
       </div>
 
       {/* 3. تبديل وضع الدخول: بريد إلكتروني أو موبايل */}
@@ -153,9 +176,6 @@ export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) 
 
       {/* 4. النموذج الفعلي */}
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-        <input type="hidden" name="callbackUrl" value={callbackUrl} />
-        <input type="hidden" name="tab" value={tab} />
-
         {/* حقل الإيميل أو الموبايل */}
         {tab === "email" ? (
           <>
@@ -292,6 +312,12 @@ export function LoginForm({ callbackUrl, action, guestAction }: LoginFormProps) 
                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle-2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                هنبعتلك كود تأكيد على الرقم ده.
             </span>
+          </div>
+        )}
+
+        {errors.general && (
+          <div role="alert" className="rounded-xl border border-[#FECACA] bg-[#FEF2F2] px-3.5 py-2.5 text-[13px] font-medium text-[#B91C1C]">
+            {errors.general}
           </div>
         )}
 

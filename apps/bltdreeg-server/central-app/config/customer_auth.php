@@ -49,13 +49,4 @@ return [
     'location' => [
         'maxmind_db_path' => database_path('geoip/GeoLite2-City.mmdb'),
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | BFF Security
-    |--------------------------------------------------------------------------
-    */
-    'bff' => [
-        'shared_secret' => env('BFF_SHARED_SECRET', 'test-bff-secret'),
-    ],
 ];

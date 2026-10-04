@@ -10,6 +10,7 @@ import {
 } from "@/lib/data/constants/routes.constants";
 import {
   isValidEmail,
+  normalizeEgyptianPhone,
   validateEgyptianPhone,
 } from "@/lib/utils/auth-validation.utils";
 import type {
@@ -60,7 +61,7 @@ export function ForgotPasswordForm() {
     }
 
     setIsSubmitting(true);
-    const target = mode === "phone" ? phone.replace(/\D/g, "") : email;
+    const target = mode === "phone" ? (normalizeEgyptianPhone(phone) ?? phone) : email;
     setTimeout(() => {
       setIsSubmitting(false);
       router.push(`${ROUTE_VERIFY_OTP}?mode=reset&target=${encodeURIComponent(target)}`);
