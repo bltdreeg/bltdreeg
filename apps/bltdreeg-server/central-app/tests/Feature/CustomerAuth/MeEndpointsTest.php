@@ -42,7 +42,7 @@ test('customer can get own profile via GET /me', function () {
             'first_name' => 'Kareem',
             'last_name' => 'Nabil',
             'phone' => '01012345678',
-            'area_name' => null,
+            'area_name' => 'Qasr El-Doubara',
         ]);
 });
 
@@ -276,15 +276,19 @@ test('location estimate returns the ip point without saving it', function () {
     expect($customer->fresh()->last_lat)->toBe(30.0444);
 });
 
-test('location estimate is null when the ip resolves outside egypt or fails', function () {
+test('location estimate falls back to the default area when the ip resolves outside egypt or fails', function () {
     $customer = Customer::factory()->create(['phone' => '+201012345673', 'phone_verified_at' => now()]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
     $geolocator->shouldReceive('locate')->andReturn(new Coordinates(52.37, 4.90), null); // أمستردام (VPN) ثم فشل
     app()->instance(IpGeolocator::class, $geolocator);
 
-    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
-    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
+    foreach (range(1, 2) as $attempt) {
+        $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')
+            ->assertOk()
+            ->assertJsonPath('estimate.area.id', 'EG011103')
+            ->assertJsonPath('estimate.source', 'default');
+    }
 });
 
 test('a manual pin is saved as manual and survives the ip fallback', function () {
@@ -305,11 +309,11 @@ test('a manual pin is saved as manual and survives the ip fallback', function ()
         ->assertJsonPath('location.source', 'manual');
 });
 
-test('location source only accepts gps or manual', function () {
+test('location source only accepts gps, ip or manual', function () {
     $customer = Customer::factory()->create(['phone' => '+201012345675', 'phone_verified_at' => now()]);
 
     $this->actingAs($customer, 'customer')
-        ->putJson('/api/v1/me/location', ['lat' => 30.05, 'lng' => 31.24, 'source' => 'ip'])
+        ->putJson('/api/v1/me/location', ['lat' => 30.05, 'lng' => 31.24, 'source' => 'satellite'])
         ->assertStatus(422)
         ->assertJsonValidationErrors(['source']);
 });

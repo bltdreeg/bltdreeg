@@ -4,9 +4,10 @@ namespace App\Modules\V1\Customer\Auth\Http\Controllers;
 
 use App\Modules\V1\Customer\Auth\Http\Requests\UpdateLocationRequest;
 use App\Modules\V1\Customer\Auth\Http\Resources\CustomerResource;
+use App\Modules\V1\Geo\Http\Resources\ResolvedLocationResource;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
-use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
 use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -14,47 +15,50 @@ use Illuminate\Routing\Controller;
 class MeLocationController extends Controller
 {
     /**
-     * Update customer location using GPS coordinates or client IP geolocation fallback.
+     * Update the customer's location.
+     *
+     * With `area_id` it is an explicit confirmation by the customer: it always wins and completes the
+     * onboarding step. Without it the update is automatic (GPS refresh, IP fallback) and never replaces
+     * a more trusted location.
      */
-    public function update(UpdateLocationRequest $request, IpGeolocator $geolocator): CustomerResource
+    public function update(UpdateLocationRequest $request, LocationResolver $resolver): CustomerResource
     {
         /** @var Customer $customer */
         $customer = $request->user();
 
-        if ($request->filled('lat') && $request->filled('lng')) {
-            $customer->last_lat = (float) $request->input('lat');
-            $customer->last_lng = (float) $request->input('lng');
-            $customer->location_source = (LocationSourceEnum::tryFromLabel((string) $request->input('source', 'gps')) ?? LocationSourceEnum::Gps)->value;
-            $customer->location_updated_at = now();
-            $customer->save();
-        } elseif ($customer->last_lat === null || $customer->location_source === LocationSourceEnum::Ip->value) {
-            // موقع الـ GPS أدق من تخمين الـ IP، فمبنستبدلوش أبداً بالـ fallback
-            $coords = $geolocator->locate($request->ip());
+        $current = LocationSourceEnum::tryFrom((int) $customer->location_source) ?? LocationSourceEnum::Default;
+        $lat = $request->filled('lat') ? (float) $request->input('lat') : null;
+        $lng = $request->filled('lng') ? (float) $request->input('lng') : null;
+        $source = LocationSourceEnum::tryFromLabel($request->input('source')) ?? LocationSourceEnum::Gps;
 
-            if ($coords !== null) {
-                $customer->last_lat = $coords->lat;
-                $customer->last_lng = $coords->lng;
-                $customer->location_source = LocationSourceEnum::Ip->value;
-                $customer->location_updated_at = now();
-                $customer->save();
+        if ($request->filled('area_id')) {
+            $location = $resolver->forArea((string) $request->input('area_id'), $lat, $lng, $source);
+
+            $customer->forceFill([...$location->toCustomerColumns(), 'location_confirmed_at' => now()])->save();
+        } elseif ($lat !== null && $lng !== null) {
+            $location = $resolver->nearest($lat, $lng, $source);
+
+            if ($source === LocationSourceEnum::Manual || $current->canBeReplacedAutomaticallyBy($source)) {
+                $customer->forceFill($location->toCustomerColumns())->save();
+            }
+        } elseif ($current->canBeReplacedAutomaticallyBy(LocationSourceEnum::Ip)) {
+            $location = $resolver->fromIp($request->ip());
+
+            if ($location->source === LocationSourceEnum::Ip) {
+                $customer->forceFill($location->toCustomerColumns())->save();
             }
         }
 
-        return new CustomerResource($customer->fresh());
+        return new CustomerResource($customer->fresh(['governorate', 'city', 'area']));
     }
 
     /**
-     * Read-only IP estimate used to center the onboarding map. Never writes.
+     * Read-only estimate used to pre-fill the onboarding dropdowns. Never writes, never null.
      */
-    public function estimate(Request $request, IpGeolocator $geolocator): JsonResponse
+    public function estimate(Request $request, LocationResolver $resolver): JsonResponse
     {
-        $coords = $geolocator->locate($request->ip());
-
-        // VPN بيطلّع دولة تانية: مبنرجعش نقطة برا مصر، والويب بيبدأ الخريطة من القاهرة
-        $inEgypt = $coords !== null && UpdateLocationRequest::inEgypt($coords->lat, $coords->lng);
-
         return response()->json([
-            'estimate' => $inEgypt ? ['lat' => $coords->lat, 'lng' => $coords->lng] : null,
+            'estimate' => (new ResolvedLocationResource($resolver->fromIp($request->ip())))->resolve($request),
         ]);
     }
 }

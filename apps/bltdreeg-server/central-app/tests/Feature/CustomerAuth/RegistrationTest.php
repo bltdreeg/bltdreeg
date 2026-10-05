@@ -118,7 +118,7 @@ test('registration verify creates customer with verified phone and returns AuthS
                 'email' => null,
                 'email_verified' => false,
                 'pending_email' => 'mohamed@example.com',
-                'area_name' => null,
+                'area_name' => 'Qasr El-Doubara',
                 'has_password' => true,
             ],
         ]);

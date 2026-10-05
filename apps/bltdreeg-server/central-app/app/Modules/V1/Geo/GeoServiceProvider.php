@@ -9,6 +9,8 @@ class GeoServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+
         if ($this->app->runningInConsole()) {
             $this->commands([GeoSyncCommand::class]);
         }

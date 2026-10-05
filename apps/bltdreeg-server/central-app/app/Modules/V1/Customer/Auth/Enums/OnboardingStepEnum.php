@@ -13,8 +13,8 @@ enum OnboardingStepEnum: string
     public function isRequired(): bool
     {
         return match ($this) {
-            self::Phone, self::Name, self::Terms => true,
-            self::Location, self::BirthDate => false,
+            self::Phone, self::Name, self::Terms, self::Location => true,
+            self::BirthDate => false,
         };
     }
 }

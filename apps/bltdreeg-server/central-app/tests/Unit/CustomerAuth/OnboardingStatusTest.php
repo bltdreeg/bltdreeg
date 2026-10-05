@@ -10,6 +10,7 @@ test('identifies fully onboarded customer', function () {
         'first_name' => 'Ahmed',
         'last_name' => 'Samy',
         'terms_accepted_at' => now(),
+        'location_confirmed_at' => now(),
     ]);
 
     $status = OnboardingStatus::for($customer);
@@ -48,4 +49,20 @@ test('identifies missing name', function () {
 
     expect($status['complete'])->toBeFalse()
         ->and($status['missing'])->toContain('name');
+});
+
+test('unconfirmed location is required, never skippable', function () {
+    $customer = new Customer([
+        'phone' => '+201012345678',
+        'phone_verified_at' => now(),
+        'first_name' => 'Ahmed',
+        'last_name' => 'Samy',
+        'terms_accepted_at' => now(),
+    ]);
+
+    $status = OnboardingStatus::for($customer);
+
+    expect($status['complete'])->toBeFalse()
+        ->and($status['missing'])->toBe(['location'])
+        ->and($status['skippable'])->not->toContain('location');
 });

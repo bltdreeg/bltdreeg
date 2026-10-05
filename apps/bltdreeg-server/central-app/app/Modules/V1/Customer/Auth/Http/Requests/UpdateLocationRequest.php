@@ -23,7 +23,8 @@ class UpdateLocationRequest extends FormRequest
         return [
             'lat' => ['nullable', 'numeric'],
             'lng' => ['nullable', 'numeric'],
-            'source' => ['nullable', 'in:gps,manual'],
+            'source' => ['nullable', 'in:gps,ip,manual'],
+            'area_id' => ['nullable', 'string', 'exists:geo_areas,id'],
         ];
     }
 
