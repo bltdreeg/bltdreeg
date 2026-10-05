@@ -2,6 +2,7 @@
 
 namespace App\Modules\V1\Customer\Auth\Filament\Resources\Customers\Schemas;
 
+use Bltdreeg\Core\Modules\Customers\Models\Customer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -46,6 +47,24 @@ class CustomerForm
                 Section::make('Location & Terms')
                     ->columns(2)
                     ->schema([
+                        TextInput::make('governorate_name')
+                            ->label(__('core::geo.governorate'))
+                            ->afterStateHydrated(fn (TextInput $component, Customer $record) => $component->state($record->governorate->getTranslation('name', app()->getLocale())))
+                            ->dehydrated(false)
+                            ->disabled(),
+                        TextInput::make('city_name')
+                            ->label(__('core::geo.city'))
+                            ->afterStateHydrated(fn (TextInput $component, Customer $record) => $component->state($record->city->getTranslation('name', app()->getLocale())))
+                            ->dehydrated(false)
+                            ->disabled(),
+                        TextInput::make('area_name')
+                            ->label(__('core::geo.area'))
+                            ->afterStateHydrated(fn (TextInput $component, Customer $record) => $component->state($record->area->getTranslation('name', app()->getLocale())))
+                            ->dehydrated(false)
+                            ->disabled(),
+                        TextInput::make('location_confirmed_at')
+                            ->label('Location Confirmed At')
+                            ->disabled(),
                         TextInput::make('last_lat')
                             ->label('Latitude')
                             ->disabled(),

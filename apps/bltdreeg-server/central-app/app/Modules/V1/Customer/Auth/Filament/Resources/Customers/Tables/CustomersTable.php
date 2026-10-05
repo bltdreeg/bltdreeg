@@ -4,11 +4,13 @@ namespace App\Modules\V1\Customer\Auth\Filament\Resources\Customers\Tables;
 
 use App\Modules\V1\Customer\Auth\Support\PhoneNumber;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Filament\Actions\Action;
 use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
@@ -38,6 +40,9 @@ class CustomersTable
                     ->label('Email')
                     ->searchable()
                     ->placeholder('—'),
+                TextColumn::make('city.name')
+                    ->label(__('core::geo.city'))
+                    ->formatStateUsing(fn (Customer $record): string => $record->city->getTranslation('name', app()->getLocale())),
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
@@ -49,6 +54,9 @@ class CustomersTable
             ->filters([
                 TernaryFilter::make('is_active')
                     ->label('Active Status'),
+                SelectFilter::make('governorate_id')
+                    ->label(__('core::geo.governorate'))
+                    ->options(fn (): array => GeoGovernorate::options()),
             ])
             ->recordActions([
                 ViewAction::make(),

@@ -2,6 +2,9 @@
 
 namespace App\Modules\V1\Onboarding\Support;
 
+use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
+use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
+use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\ServiceLocationTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
@@ -49,6 +52,9 @@ class SubmissionComparison
             'address' => __('core::onboarding.wizard.address'),
             'latitude' => __('core::onboarding.wizard.latitude'),
             'longitude' => __('core::onboarding.wizard.longitude'),
+            'governorate_id' => __('core::geo.governorate'),
+            'city_id' => __('core::geo.city'),
+            'area_id' => __('core::geo.area'),
             'document_type' => __('core::onboarding.wizard.document_type'),
             'document_id' => __('core::onboarding.admin.document'),
         ];
@@ -64,6 +70,9 @@ class SubmissionComparison
             'team_size' => TeamSizeEnum::tryFrom($value)?->label() ?? (string) $value,
             'service_location_type' => ServiceLocationTypeEnum::labels($value) ?: (is_string($value) ? $value : null),
             'document_type' => LegalDocumentTypeEnum::tryFrom($value)?->label() ?? (string) $value,
+            'governorate_id' => GeoGovernorate::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
+            'city_id' => GeoCity::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
+            'area_id' => GeoArea::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
             'document_id' => '#'.$value,
             default => (string) $value,
         };

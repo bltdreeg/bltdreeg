@@ -66,7 +66,7 @@
 | 05 | [Customer API: geo lookups, resolve, estimate, `/me/location`, onboarding status](tasks/05-customer-api.md) | API | 04 | done |
 | 06 | [Branches: NOT NULL geo columns, decimal lat/lng, back-fill](tasks/06-branch-geo-columns.md) | Core | 02 | done |
 | 07 | [Salon wizard: location step (map, GPS, Maps link, IP, dropdowns)](tasks/07-salon-wizard-location.md) | Tenant | 03, 06 | done |
-| 08 | [Central admin: Branch, Customer, submission review](tasks/08-admin-panels.md) | API | 04, 06, 07 | pending |
+| 08 | [Central admin: Branch, Customer, submission review](tasks/08-admin-panels.md) | API | 04, 06, 07 | done |
 | 09 | [Web: confirm-location onboarding step](tasks/09-web-location-step.md) | Web | 05 | pending |
 | 10 | [Mobile: confirm-location onboarding step](tasks/10-mobile-location-step.md) | Mobile | 05 | pending |
 | 11 | [Wrap-up: docs, superseded plan note, full suites, manual check](tasks/11-wrap-up.md) | All | all | pending |
