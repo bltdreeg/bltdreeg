@@ -4,10 +4,14 @@ namespace Bltdreeg\Core\Modules\Customers\Models;
 
 use App\Modules\V1\Customer\Auth\Models\CustomerSocialAccount;
 use Bltdreeg\Core\Modules\Customers\Database\Factories\CustomerFactory;
+use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
+use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
+use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +33,10 @@ use Laravel\Sanctum\HasApiTokens;
     'last_lng',
     'location_source',
     'location_updated_at',
+    'governorate_id',
+    'city_id',
+    'area_id',
+    'location_confirmed_at',
     'terms_accepted_at',
     'terms_version',
     'locale',
@@ -68,6 +76,7 @@ class Customer extends Authenticatable
             'phone_verified_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'location_updated_at' => 'datetime',
+            'location_confirmed_at' => 'datetime',
             'terms_accepted_at' => 'datetime',
             'birth_date' => 'date',
             'password' => 'hashed',
@@ -83,6 +92,21 @@ class Customer extends Authenticatable
         $fullName = trim("{$this->first_name} {$this->last_name}");
 
         return $fullName !== '' ? $fullName : ($this->phone ?? '');
+    }
+
+    public function governorate(): BelongsTo
+    {
+        return $this->belongsTo(GeoGovernorate::class, 'governorate_id');
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(GeoCity::class, 'city_id');
+    }
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(GeoArea::class, 'area_id');
     }
 
     public function socialAccounts(): HasMany

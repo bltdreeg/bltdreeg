@@ -30,11 +30,34 @@ class CustomerFactory extends Factory
             'last_lng' => 31.2357,
             'location_source' => 1, // GPS
             'location_updated_at' => now(),
+            'governorate_id' => 'EG01',
+            'city_id' => 'EG0111',
+            'area_id' => 'EG011103',
+            'location_confirmed_at' => now(),
             'terms_accepted_at' => now(),
             'terms_version' => '1.0',
             'locale' => 'ar',
             'is_active' => true,
         ];
+    }
+
+    public function unconfirmedLocation(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'location_source' => 2, // IP
+            'location_confirmed_at' => null,
+        ]);
+    }
+
+    public function inAlexandria(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'governorate_id' => 'EG02',
+            'city_id' => 'EG0204',
+            'area_id' => 'EG020405',
+            'last_lat' => 31.2001,
+            'last_lng' => 29.9187,
+        ]);
     }
 
     public function unverifiedPhone(): static

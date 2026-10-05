@@ -261,7 +261,7 @@ test('ip fallback refreshes an existing ip location', function () {
 });
 
 test('location estimate returns the ip point without saving it', function () {
-    $customer = Customer::factory()->create(['phone' => '+201012345672', 'phone_verified_at' => now(), 'last_lat' => null, 'last_lng' => null, 'location_source' => null]);
+    $customer = Customer::factory()->create(['phone' => '+201012345672', 'phone_verified_at' => now()]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
     $geolocator->shouldReceive('locate')->once()->andReturn(new Coordinates(30.05, 31.24));
@@ -273,7 +273,7 @@ test('location estimate returns the ip point without saving it', function () {
         ->assertJsonPath('estimate.lat', 30.05)
         ->assertJsonPath('estimate.lng', 31.24);
 
-    expect($customer->fresh()->last_lat)->toBeNull();
+    expect($customer->fresh()->last_lat)->toBe(30.0444);
 });
 
 test('location estimate is null when the ip resolves outside egypt or fails', function () {

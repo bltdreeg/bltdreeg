@@ -6,6 +6,7 @@ use App\Modules\V1\Customer\Auth\Enums\SocialProviderEnum;
 use App\Modules\V1\Customer\Auth\Models\CustomerSocialAccount;
 use App\Modules\V1\Customer\Auth\Social\Contracts\SocialTokenVerifier;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Illuminate\Support\Facades\DB;
 
 class SocialAuthService
@@ -13,6 +14,7 @@ class SocialAuthService
     public function __construct(
         protected readonly GoogleTokenVerifier $googleVerifier,
         protected readonly AppleTokenVerifier $appleVerifier,
+        protected readonly LocationResolver $locationResolver,
     ) {}
 
     public function getVerifier(SocialProviderEnum $provider): SocialTokenVerifier
@@ -32,6 +34,7 @@ class SocialAuthService
         ?string $nonce = null,
         ?string $firstName = null,
         ?string $lastName = null,
+        ?string $ipAddress = null,
     ): Customer {
         $verifier = $this->getVerifier($provider);
         $identity = $verifier->verify($idToken, $nonce);
@@ -46,7 +49,9 @@ class SocialAuthService
             return $existingLink->customer;
         }
 
-        return DB::transaction(function () use ($identity, $firstName, $lastName) {
+        $location = $this->locationResolver->fromIp($ipAddress);
+
+        return DB::transaction(function () use ($identity, $firstName, $lastName, $location) {
             // 2. Email match: token email is verified and matches a customer's verified email
             if ($identity->emailVerified && ! empty($identity->email)) {
                 $matchedCustomer = Customer::query()
@@ -91,6 +96,7 @@ class SocialAuthService
                 'password' => null, // social-only account
                 'is_active' => true,
                 'locale' => 'ar',
+                ...$location->toCustomerColumns(),
             ]);
 
             CustomerSocialAccount::create([
