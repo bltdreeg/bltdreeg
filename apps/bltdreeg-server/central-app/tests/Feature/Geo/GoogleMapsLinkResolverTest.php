@@ -64,3 +64,27 @@ test('timeouts and points outside egypt return null', function () {
         ->and($resolver->resolve('https://www.google.com/maps/@51.5074,-0.1278,15z'))->toBeNull()
         ->and($resolver->resolve('https://evil.example.com/x'))->toBeNull();
 });
+
+test('refuses non-https redirects and custom ports', function (string $location) {
+    Http::fake([
+        'maps.app.goo.gl/*' => Http::response('', 302, ['Location' => $location]),
+        'www.google.com*' => Http::response('', 200),
+    ]);
+
+    expect(app(GoogleMapsLinkResolver::class)->resolve('https://maps.app.goo.gl/AbC123'))->toBeNull();
+    Http::assertSentCount(1);
+})->with([
+    'http scheme' => ['http://www.google.com/maps/place/X'],
+    'custom port' => ['https://www.google.com:8443/maps/place/X'],
+    'other scheme' => ['gopher://www.google.com/maps/place/X'],
+]);
+
+test('short links with a custom port or non-https scheme are never requested', function (string $url) {
+    Http::fake();
+
+    expect(app(GoogleMapsLinkResolver::class)->resolve($url))->toBeNull();
+    Http::assertNothingSent();
+})->with([
+    'port' => ['https://maps.app.goo.gl:8080/AbC123'],
+    'http' => ['http://maps.app.goo.gl/AbC123'],
+]);

@@ -36,6 +36,10 @@ class GoogleMapsLinkResolver
     private function expand(string $url): ?string
     {
         for ($hop = 0; $hop < self::MAX_HOPS; $hop++) {
+            if (! $this->isSafeRequestUrl($url)) {
+                return null;
+            }
+
             try {
                 $response = Http::withoutRedirecting()
                     ->timeout(self::TIMEOUT_SECONDS)
@@ -57,16 +61,26 @@ class GoogleMapsLinkResolver
                 return $next;
             }
 
-            $host = strtolower((string) parse_url($next, PHP_URL_HOST));
-
-            if (! GoogleMapsUrlParser::isGoogleHost($host) && ! in_array($host, GoogleMapsUrlParser::shortHosts(), true)) {
-                return null;
-            }
-
             $url = $next;
         }
 
         return null;
+    }
+
+    /**
+     * Only plain https on the default port, and only to Google's own hosts, is ever requested.
+     */
+    private function isSafeRequestUrl(string $url): bool
+    {
+        $parts = parse_url($url);
+
+        if (! is_array($parts) || strtolower($parts['scheme'] ?? '') !== 'https' || ($parts['port'] ?? 443) !== 443) {
+            return false;
+        }
+
+        $host = strtolower($parts['host'] ?? '');
+
+        return GoogleMapsUrlParser::isGoogleHost($host) || in_array($host, GoogleMapsUrlParser::shortHosts(), true);
     }
 
     private function unwrapConsent(string $location): string
