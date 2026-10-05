@@ -4,6 +4,7 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { PageContainer } from "@/components/atoms/page-container";
 import { AppointmentStrip } from "@/components/molecules/appointment-strip";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
@@ -24,6 +25,7 @@ interface BookingsViewProps {
 }
 
 export function BookingsView({ initialBookings }: BookingsViewProps) {
+  const t = useTranslations("app.bookings");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -94,19 +96,19 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
         <AppointmentStrip
           time={formatTime(todayBooking.startAt)}
           queueNumber={todayBooking.queueNumber}
-          statusText="الصالون في ميعاده"
+          statusText={t("onSchedule")}
           bookingId={todayBooking.id}
         />
       )}
 
       {/* شريط المسار (Breadcrumb) لصفحات الحساب — أسفل الهيدر مباشرة كما في /favorites */}
-      <ProfileBreadcrumb items={[{ label: "حجوزاتي" }]} />
+      <ProfileBreadcrumb items={[{ label: t("title") }]} />
 
       <PageContainer className="flex flex-col gap-6 py-8 md:py-9">
         {/* عنوان الصفحة والتبويبات */}
         <div className="flex flex-col gap-5">
           <h1 className="text-[26px] font-extrabold text-foreground md:text-[28px]">
-            حجوزاتي
+            {t("title")}
           </h1>
 
           {/* شريط التبويبات — العرض الكامل كما في mobile.html */}
@@ -124,7 +126,7 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              الحالية
+              {t("tabs.upcoming")}
             </button>
 
             {/* تبويب الحجوزات السابقة */}
@@ -140,7 +142,7 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              السابقة
+              {t("tabs.past")}
             </button>
           </div>
         </div>

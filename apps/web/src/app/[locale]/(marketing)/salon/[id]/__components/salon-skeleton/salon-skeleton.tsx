@@ -1,10 +1,14 @@
+"use client";
 // هيكل تحميل صفحة الصالون — بيطابق التخطيط الحقيقي (عمودين) عشان مفيش قفز لما يتحمّل
+import { useTranslations } from "next-intl";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Skeleton } from "@/components/atoms/skeleton";
 
 export function SalonSkeleton() {
+  const t = useTranslations("common");
+
   return (
-    <div role="status" aria-label="جاري التحميل" className="flex flex-col gap-0">
+    <div role="status" aria-label={t("loading")} className="flex flex-col gap-0">
       {/* الجاليري */}
       <Skeleton className="h-[320px] w-full rounded-none" />
 

@@ -1,9 +1,13 @@
+"use client";
+
 // إطار خطوات الحجز: هيدر أخضر بعرض كامل + شريط خطوات متقدم + عمودين للمحتوى مطابق لتصميم FRAME 07
 import type { ReactNode } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { User } from "lucide-react";
 import { Avatar } from "@/components/atoms/avatar";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_ACCOUNT, ROUTE_HOME, ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import { salonDetailsById } from "@/lib/data/salon-details.constants";
 import { BookingStepper } from "../booking-stepper";
@@ -35,7 +39,9 @@ export function BookingShell({
   barberSummary,
   slotSummary,
 }: BookingShellProps) {
-  const resolvedSalonName = salonName ?? salonDetailsById(salonId)?.name ?? "الصالون";
+  const t = useTranslations("app.book.shell");
+  const locale = useLocale();
+  const resolvedSalonName = salonName ?? salonDetailsById(salonId)?.name ?? t("fallbackSalon");
 
   return (
     <div className="flex min-h-full flex-1 flex-col bg-background">
@@ -47,7 +53,7 @@ export function BookingShell({
               href={ROUTE_HOME}
               className="shrink-0 text-[17px] font-black leading-none tracking-tight text-white hover:opacity-95 sm:text-[19px]"
             >
-              بالتدريج
+              {getAppName(locale)}
             </Link>
             <span className="max-w-[85px] truncate text-xs font-semibold text-white/90 sm:max-w-none sm:text-[13px]">
               {resolvedSalonName}
@@ -59,12 +65,12 @@ export function BookingShell({
               href={ROUTE_SALON(salonId)}
               className="shrink-0 text-xs font-semibold text-white/90 transition-opacity hover:text-white sm:text-[13px]"
             >
-              اخرج من الحجز
+              {t("exitBooking")}
             </Link>
             <Link
               href={ROUTE_ACCOUNT}
-              title="الملف الشخصي"
-              aria-label="الملف الشخصي"
+              title={t("profileAria")}
+              aria-label={t("profileAria")}
               className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/20 text-white transition-colors hover:bg-white/30"
             >
               {userName ? (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { MessageSquareText, CheckCircle2, AlertCircle, RefreshCw, Clock } from "lucide-react";
 import {
@@ -27,6 +28,7 @@ interface OtpFormProps {
 }
 
 export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess }: OtpFormProps) {
+  const t = useTranslations("auth.otp");
   const router = useRouter();
   const verifyOtp = useVerifyOtp();
   const resendOtp = useResendOtp();
@@ -152,7 +154,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
     const code = slots.join("");
 
     if (!isValidOtp(code, codeLength)) {
-      setError("الكود غلط، حاول تاني.");
+      setError(t("errors.invalidCode"));
       return;
     }
 
@@ -184,7 +186,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
           setError(null);
           resetDigits();
           setResendNotification(
-            next.channel === "whatsapp" ? "تم إرسال كود تأكيد جديد على واتساب." : "تم إرسال كود تأكيد جديد في رسالة SMS.",
+            next.channel === "whatsapp" ? t("resendSuccessWhatsapp") : t("resendSuccess"),
           );
           setTimeout(() => setResendNotification(null), 5000);
         },
@@ -207,7 +209,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
       {/* 2. الترويسة ورقم الهاتف مع رابط التغيير */}
       <div className="flex flex-col gap-2 mt-2 w-full">
         <h1 className="text-[28px] font-extrabold leading-tight text-[#0E0F11]">
-          {hasError ? "في مشكلة في الكود" : "اكتب كود التأكيد"}
+          {hasError ? t("titleError") : t("titleDefault")}
         </h1>
         <div className="text-[14px] leading-relaxed text-[#6B7280]">
           {hasError ? (
@@ -218,21 +220,21 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
                   href={purpose === "register" ? ROUTE_REGISTER : ROUTE_LOGIN}
                   className="mt-1 inline-block font-bold text-[#0F766E] hover:underline"
                 >
-                  ابدأ من الأول
+                  {t("startOver")}
                 </Link>
               )}
             </>
           ) : (
             <>
               <div>
-                بعتنالك كود من {codeLength} أرقام {challenge?.channel === "whatsapp" ? "على واتساب" : "في رسالة"} على الرقم
+                {t(challenge?.channel === "whatsapp" ? "sentToWhatsapp" : "sentToSms", { length: codeLength })}
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <Link
                   href={purpose === "register" ? ROUTE_REGISTER : ROUTE_LOGIN}
                   className="font-bold text-[#0F766E] hover:underline"
                 >
-                  غيّر الرقم
+                  {t("changeNumber")}
                 </Link>
                 <span
                   dir="ltr"
@@ -290,7 +292,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
                   onFocus={() => setActiveIndex(idx)}
                   onChange={(e) => handleDigitChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
-                  aria-label={`الرقم ${idx + 1} من كود التأكيد`}
+                  aria-label={t("digitAriaLabel", { index: idx + 1 })}
                   className="size-full bg-transparent text-center font-cairo text-2xl font-extrabold tabular-nums text-[#0E0F11] focus:outline-none"
                 />
                 {/* خط الكاريت المتحرك عند الخانة الفارغة النشطة */}
@@ -308,7 +310,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
             <>
               <Clock className="size-4" />
               <span>
-                تقدر تطلب كود جديد بعد <span className="tabular-nums font-bold text-[#0E0F11]">{formattedTimer}</span>
+                {t("resendIn", { timer: formattedTimer })}
               </span>
             </>
           ) : (
@@ -319,7 +321,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
               className="flex items-center gap-1.5 font-bold text-[#0F766E] hover:underline cursor-pointer"
             >
               <RefreshCw className="size-4" />
-              {resendOtp.isPending ? "جاري الإرسال..." : "إعادة إرسال الكود"}
+              {resendOtp.isPending ? t("resendPending") : t("resend")}
             </button>
           )}
         </div>
@@ -331,13 +333,13 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
             disabled={!isComplete || isSubmitting}
             className="h-[52px] w-full rounded-xl text-[16px] font-bold shadow-xs transition-colors flex items-center justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-[#EAEFF0] disabled:text-[#A5ABB3] bg-[#0F766E] text-white hover:bg-[#0B5A54]"
           >
-            {isSubmitting ? "جاري التأكيد..." : "تأكيد"}
+            {isSubmitting ? t("submitPending") : t("submit")}
           </button>
 
           <div className="w-full flex items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white p-4 text-start text-[#6B7280]">
             <AlertCircle className="size-5 shrink-0" />
             <span className="text-[13px] font-medium leading-relaxed">
-              ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغالة.
+              {t("helpText")}
             </span>
           </div>
         </div>

@@ -1,12 +1,18 @@
-// بحث سريع: شرايح الخدمات + المناطق القريبة في شبكة 2×2
 import { MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { chipVariants } from "@/components/atoms/chip";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import type { Area } from "@/lib/types/area/area.interface";
 import { cn } from "@/lib/utils/cn.utils";
 
-const SERVICES = ["قص شعر", "تحديد دقن", "حلاقة بالموس", "صبغة", "قص شعر أطفال"];
+const SERVICE_KEYS = [
+  "haircut",
+  "beardTrim",
+  "razorShave",
+  "hairDye",
+  "kidsHaircut",
+] as const;
 
 type QuickSearchProps = {
   /** المناطق القريبة — 4 في شبكة 2×2 */
@@ -16,24 +22,29 @@ type QuickSearchProps = {
 };
 
 function QuickSearch({ areas, availableToday }: QuickSearchProps) {
+  const t = useTranslations("marketing.search.quickSearch");
+
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-[17px] font-bold">بحث سريع</h2>
+      <h2 className="text-[17px] font-bold">{t("title")}</h2>
 
       <ul className="flex flex-wrap gap-2">
-        {SERVICES.map((service) => (
-          <li key={service}>
-            <Link
-              href={`${ROUTE_SEARCH}?q=${encodeURIComponent(service)}`}
-              className={cn(chipVariants(), "px-[15px]")}
-            >
-              {service}
-            </Link>
-          </li>
-        ))}
+        {SERVICE_KEYS.map((key) => {
+          const service = t(`services.${key}`);
+          return (
+            <li key={key}>
+              <Link
+                href={`${ROUTE_SEARCH}?q=${encodeURIComponent(service)}`}
+                className={cn(chipVariants(), "px-[15px]")}
+              >
+                {service}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
 
-      <h3 className="text-[13px] font-semibold text-muted-foreground">مناطق قريبة منك</h3>
+      <h3 className="text-[13px] font-semibold text-muted-foreground">{t("nearbyAreas")}</h3>
       <ul className="grid grid-cols-2 gap-3">
         {areas.map((area) => (
           <li key={area.id}>
@@ -46,10 +57,10 @@ function QuickSearch({ areas, availableToday }: QuickSearchProps) {
                 {area.name}
               </span>
               <span className="tabular text-[13px] text-muted-foreground">
-                {area.shopCount} صالون
+                {t("shopCount", { count: area.shopCount })}
               </span>
               <span className="tabular text-[11.5px] font-semibold text-primary">
-                {availableToday[area.id] ?? 0} فيها ميعاد النهارده
+                {t("availableToday", { count: availableToday[area.id] ?? 0 })}
               </span>
             </Link>
           </li>

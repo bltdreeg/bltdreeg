@@ -1,11 +1,13 @@
-// الحالة الفاضية للمفضلة — رسمة المحل والقلب والعناوين والأزرار من FRAME 35 في mobile.html و FRAME 12B في web.html
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOKINGS, ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 
 export function FavoritesEmpty() {
+  const t = useTranslations("marketing.favorites.empty");
+
   return (
     <section
-      aria-label="لا توجد صالونات مفضلة"
+      aria-label={t("aria")}
       className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-muted/40 p-8 text-center md:p-14"
     >
       {/* الرسمة التوضيحية للمحل والقلب من Frame 35 في mobile.html */}
@@ -39,10 +41,10 @@ export function FavoritesEmpty() {
 
       {/* العنوان والشرح */}
       <h2 className="text-[20px] font-extrabold text-foreground md:text-[22px]">
-        مفيش صالونات مفضّلة
+        {t("title")}
       </h2>
       <p className="max-w-[460px] text-[14px] leading-relaxed text-muted-foreground md:text-[14.5px] text-balance">
-        دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة من غير بحث كل مرة.
+        {t("description")}
       </p>
 
       {/* أزرار الإجراءات */}
@@ -51,13 +53,13 @@ export function FavoritesEmpty() {
           href={ROUTE_SEARCH}
           className="inline-flex h-[46px] items-center justify-center rounded-[10px] bg-primary px-6 text-[14.5px] font-bold text-primary-foreground transition-colors hover:bg-primary-pressed whitespace-nowrap"
         >
-          اكتشف صالونات قريبة
+          {t("discoverNearby")}
         </Link>
         <Link
           href={ROUTE_BOOKINGS}
           className="inline-flex h-[46px] items-center justify-center rounded-[10px] border border-border bg-card px-5 text-[14.5px] font-bold text-foreground transition-colors hover:bg-muted whitespace-nowrap"
         >
-          صالونات زرتها قبل كده
+          {t("visitedBefore")}
         </Link>
       </div>
     </section>

@@ -2,8 +2,10 @@
 
 // دورك دلوقتي — الحالة المقلوبة (مطابق تماماً لتصميم FRAME 11C في web app design.html)
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Check, Phone, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_BOOKINGS } from "@/lib/data/constants/routes.constants";
 import type { Booking } from "@/lib/types/booking";
 import type { SalonDetails } from "@/lib/types/salon";
@@ -24,6 +26,8 @@ export function YourTurnState({
   barber,
   onBackToLive,
 }: YourTurnStateProps) {
+  const t = useTranslations("app.liveTracking.yourTurnState");
+  const locale = useLocale();
   const [inShopConfirmed, setInShopConfirmed] = useState(false);
 
   const barberName = barber?.name || booking.barberName || "كريم مصطفى";
@@ -42,7 +46,6 @@ export function YourTurnState({
     <section
       role="status"
       aria-live="assertive"
-      dir="rtl"
       className="min-h-screen w-full bg-[#0F766E] text-white flex flex-col justify-between font-sans selection:bg-white selection:text-[#0B5A54]"
     >
       {/* الشريط العلوي الغامق — مطابق لـ FRAME 11C */}
@@ -52,7 +55,7 @@ export function YourTurnState({
             href={ROUTE_BOOKINGS}
             className="text-[17px] font-black text-white hover:opacity-90"
           >
-            بالتدريج
+            {getAppName(locale)}
           </Link>
           {onBackToLive && (
             <button
@@ -60,8 +63,8 @@ export function YourTurnState({
               onClick={onBackToLive}
               className="flex items-center gap-1 text-xs text-white/80 hover:text-white cursor-pointer"
             >
-              <ArrowRight className="size-3.5" />
-              <span>رجوع للمتابعة</span>
+              <ArrowRight className="size-3.5 rtl:rotate-180" />
+              <span>{t("backToLive")}</span>
             </button>
           )}
         </div>
@@ -76,12 +79,12 @@ export function YourTurnState({
           {/* شارة التنبيه المضيئة */}
           <div className="flex items-center gap-2.5 rounded-[10px] bg-white/16 px-4 py-2 border border-white/20">
             <div className="size-2.5 rounded-full bg-white animate-ping" />
-            <span className="text-sm font-bold text-white">الصالون نداك دلوقتي</span>
+            <span className="text-sm font-bold text-white">{t("salonCalledYou")}</span>
           </div>
 
           {/* العنوان الضخم 86px */}
           <h1 className="text-5xl sm:text-7xl lg:text-[86px] font-black leading-[1.05] tracking-tight text-white drop-shadow-sm">
-            دورك دلوقتي
+            {t("yourTurnNow")}
           </h1>
 
           {/* مربع رقم الدور والتوجيه */}
@@ -92,13 +95,16 @@ export function YourTurnState({
               </span>
             </div>
 
-            <div className="flex flex-col gap-2.5 text-center sm:text-right max-w-[420px]">
+            <div className="flex flex-col gap-2.5 text-center sm:text-start max-w-[420px]">
               <h2 className="text-xl sm:text-[26px] font-extrabold leading-[1.3] text-white">
-                اتفضل على كرسي {barberName}
+                {t("takeChairOf", { barberName })}
               </h2>
               <p className="text-sm sm:text-base leading-[1.7] text-white/90">
-                ميعادك كان {timeText} · دخلت في وقتك تقريبًا. {servicesText} ·{" "}
-                {formatPrice(booking.totalPrice)} تدفعها في الصالون.
+                {t("turnSummary", {
+                  time: timeText,
+                  services: servicesText,
+                  price: formatPrice(booking.totalPrice),
+                })}
               </p>
             </div>
           </div>
@@ -117,10 +123,10 @@ export function YourTurnState({
               {inShopConfirmed ? (
                 <>
                   <Check className="size-5 stroke-[3] text-[#15803D]" />
-                  <span>تم تأكيد تواجدك في الصالون</span>
+                  <span>{t("inShopConfirmed")}</span>
                 </>
               ) : (
-                "أنا جوه الصالون"
+                t("inShopButton")
               )}
             </button>
 
@@ -129,7 +135,7 @@ export function YourTurnState({
               className="flex h-[54px] items-center justify-center gap-2 rounded-xl border-[1.5px] border-white/55 bg-transparent px-6 text-base font-bold text-white transition-colors hover:bg-white/10 cursor-pointer"
             >
               <Phone className="size-4" />
-              <span>وصّلني بالصالون</span>
+              <span>{t("callSalon")}</span>
             </a>
           </div>
 
@@ -137,7 +143,7 @@ export function YourTurnState({
           <div className="flex items-center gap-2.5 rounded-[11px] bg-black/15 px-4 py-3 sm:px-4.5">
             <div className="size-2 rounded-full bg-[#FDE68A] shrink-0" />
             <span className="text-sm font-medium leading-[1.6] text-white">
-              لو مش في الصالون، الدور بيستناك 5 دقايق وبعدها اللي وراك يتقدّم قبلك.
+              {t("fiveMinuteRule")}
             </span>
           </div>
         </div>

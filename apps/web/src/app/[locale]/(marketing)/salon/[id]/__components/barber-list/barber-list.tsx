@@ -1,5 +1,7 @@
+"use client";
 // قائمة الحلاقين — استعراض بس، اختيار الحلاق بيحصل في مسار الحجز (فريم ٢٢)
 import { Star, Clock, Check, Users } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import type { Barber } from "@/lib/types/barber/barber.interface";
 import { barberOffReturns, barberQueueAhead, yearsExperience } from "@/lib/utils/format/queue-labels.utils";
 
@@ -17,9 +19,12 @@ function getInitials(name: string): string {
 }
 
 export function BarberList({ barbers }: BarberListProps) {
+  const t = useTranslations("marketing.salon.barbers");
+  const locale = useLocale();
+
   return (
     <section id="barbers" className="scroll-mt-28 px-4 sm:px-8 lg:rounded-[14px] lg:border lg:border-border lg:bg-background lg:p-6 lg:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-      <h2 className="mb-4 text-base font-bold text-foreground">طاقم الحلاقين</h2>
+      <h2 className="mb-4 text-base font-bold text-foreground">{t("title")}</h2>
 
       <div className="flex flex-col">
         {barbers.map((barber, i) => (
@@ -47,19 +52,19 @@ export function BarberList({ barbers }: BarberListProps) {
                 {barber.queue !== null && (
                   <>
                     <span>·</span>
-                    <span>{yearsExperience(barber.experienceYears)}</span>
+                    <span>{yearsExperience(barber.experienceYears, locale)}</span>
                   </>
                 )}
               </div>
               <div className="mt-1.5">
                 {barber.queue === null ? (
-                  <BarberStatusPill tone="off" label={barberOffReturns(barber.returnsOnDay ?? "بكرة")} />
+                  <BarberStatusPill tone="off" label={barberOffReturns(barber.returnsOnDay ?? t("tomorrow"), locale)} />
                 ) : barber.queue.peopleAhead === 0 ? (
-                  <BarberStatusPill tone="free" label="فاضي دلوقتي" />
+                  <BarberStatusPill tone="free" label={t("availableNow")} />
                 ) : (
                   <BarberStatusPill
                     tone={barber.queue.peopleAhead <= 3 ? "moderate" : "busy"}
-                    label={barberQueueAhead(barber.queue.peopleAhead, barber.queue.waitMinutes)}
+                    label={barberQueueAhead(barber.queue.peopleAhead, barber.queue.waitMinutes, locale)}
                   />
                 )}
               </div>

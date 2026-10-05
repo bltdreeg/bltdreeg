@@ -14,8 +14,15 @@ test("calculateAppointmentWindow computes start and end window correctly", () =>
   const window = calculateAppointmentWindow(startIso, 50);
   assert.ok(window.start);
   assert.ok(window.end);
-  assert.ok(window.text.includes("50 دقيقة"));
-  assert.ok(window.text.includes("لحد"));
+});
+
+test("calculateAppointmentWindow formats start/end per locale, not just Arabic", () => {
+  const startIso = "2026-09-19T18:30:00.000Z";
+  const arWindow = calculateAppointmentWindow(startIso, 50, "ar");
+  const enWindow = calculateAppointmentWindow(startIso, 50, "en");
+  // نفس اللحظة، لكن لازم تتنسق مختلف حسب اللغة — مش نفس النص.
+  assert.notEqual(arWindow.start, enWindow.start);
+  assert.notEqual(arWindow.end, enWindow.end);
 });
 
 test("formatDayOfWeek returns day name", () => {

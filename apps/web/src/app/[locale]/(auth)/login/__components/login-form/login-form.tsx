@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useId } from "react";
+import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import {
@@ -26,6 +27,8 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
+  const t = useTranslations("auth.login");
+  const tShared = useTranslations("auth.shared");
   const router = useRouter();
   const login = useLogin();
   const sendOtp = useSendLoginOtp();
@@ -47,12 +50,12 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
 
     if (tab === "email") {
       if (!email.trim()) {
-        errs.identifier = "اكتب البريد الإلكتروني";
+        errs.identifier = t("errors.emailRequired");
       } else if (!isValidEmail(email)) {
-        errs.identifier = "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com).";
+        errs.identifier = t("errors.emailInvalid");
       }
       if (!password) {
-        errs.password = "اكتب كلمة السر للمتابعة.";
+        errs.password = t("errors.passwordRequired");
       }
     } else {
       const phoneValidation = validateEgyptianPhone(phone);
@@ -115,10 +118,10 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-[28px] font-extrabold leading-tight text-[#0E0F11]">
-            أهلاً بيك تاني
+            {t("title")}
           </h1>
           <p className="text-sm leading-relaxed text-[#6B7280]">
-            سجّل دخول بحسابك عشان تتابع دورك وتحجز بلمستين.
+            {t("subtitle")}
           </p>
         </div>
         <button
@@ -126,14 +129,14 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           onClick={handleGuest}
           className="text-[13px] font-bold text-[#0F766E] hover:underline cursor-pointer whitespace-nowrap mt-2"
         >
-          تصفح كزائر
+          {t("browseAsGuest")}
         </button>
       </div>
 
       {/* 3. تبديل وضع الدخول: بريد إلكتروني أو موبايل */}
       <div
         role="tablist"
-        aria-label="طريقة تسجيل الدخول"
+        aria-label={t("tabsAriaLabel")}
         className="flex rounded-[11px] border border-[#E5E7EB] bg-[#F7F8FA] p-1 gap-1"
       >
         <button
@@ -152,7 +155,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               : "font-semibold text-[#6B7280] hover:text-[#0E0F11]"
           }`}
         >
-          بريد إلكتروني
+          {t("tabEmail")}
         </button>
         <button
           type="button"
@@ -170,7 +173,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               : "font-semibold text-[#6B7280] hover:text-[#0E0F11]"
           }`}
         >
-          رقم الموبايل
+          {t("tabPhone")}
         </button>
       </div>
 
@@ -184,7 +187,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
                 htmlFor={emailInputId}
                 className="text-[13px] font-semibold text-[#0E0F11]"
               >
-                البريد الإلكتروني
+                {t("emailLabel")}
               </label>
               <input
                 id={emailInputId}
@@ -220,13 +223,13 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
                   htmlFor={passwordInputId}
                   className="text-[13px] font-semibold text-[#0E0F11]"
                 >
-                  كلمة السر
+                  {t("passwordLabel")}
                 </label>
                 <Link
                   href={ROUTE_FORGOT_PASSWORD}
                   className="text-[12.5px] font-bold text-[#0F766E] hover:underline"
                 >
-                  نسيت كلمة السر؟
+                  {t("forgotPassword")}
                 </Link>
               </div>
               <div
@@ -255,7 +258,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F7F8FA] text-[#6B7280] transition-colors hover:text-[#0E0F11] cursor-pointer"
-                  aria-label={showPassword ? "إخفاء كلمة السر" : "إظهار كلمة السر"}
+                  aria-label={showPassword ? t("hidePassword") : t("showPassword")}
                 >
                   {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </button>
@@ -273,7 +276,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               htmlFor={phoneInputId}
               className="text-[13px] font-semibold text-[#0E0F11]"
             >
-              رقم الموبايل
+              {t("phoneLabel")}
             </label>
             <div
               dir="ltr"
@@ -310,7 +313,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
             )}
             <span className="text-[12px] text-[#0F766E] mt-1 font-medium flex items-center gap-1.5">
                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle-2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-               هنبعتلك كود تأكيد على الرقم ده.
+               {tShared("confirmCodeHint")}
             </span>
           </div>
         )}
@@ -328,15 +331,15 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           className="mt-1 flex h-[50px] w-full items-center justify-center rounded-xl bg-[#0F766E] text-[15.5px] font-bold text-white shadow-xs transition-colors hover:bg-[#0B5A54] disabled:cursor-not-allowed disabled:bg-[#E7EAEC] disabled:text-[#A5ABB3] cursor-pointer"
         >
           {isPending 
-            ? (tab === "email" ? "جاري تسجيل الدخول..." : "جاري الإرسال...") 
-            : (tab === "email" ? "سجّل دخول" : "إرسال كود التأكيد")}
+            ? (tab === "email" ? t("submitEmailPending") : t("submitPhonePending")) 
+            : (tab === "email" ? t("submitEmail") : t("submitPhone"))}
         </button>
       </form>
 
       {/* 5. فاصل "أو" */}
       <div className="flex items-center gap-3 my-0.5">
         <div className="h-px flex-1 bg-[#E5E7EB]" />
-        <span className="text-[12.5px] text-[#6B7280]">أو</span>
+        <span className="text-[12.5px] text-[#6B7280]">{t("or")}</span>
         <div className="h-px flex-1 bg-[#E5E7EB]" />
       </div>
 
@@ -346,12 +349,12 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       {/* 7. إنشاء حساب */}
       <div className="flex flex-col gap-3 pt-3 border-t border-[#E5E7EB]">
         <div className="text-center text-[13.5px] text-[#6B7280]">
-          لسه معندكش حساب؟{" "}
+          {t("noAccount")}{" "}
           <Link
             href={ROUTE_REGISTER}
             className="font-bold text-[#0F766E] hover:underline"
           >
-            اعمل واحد دلوقتي
+            {t("createOne")}
           </Link>
         </div>
       </div>

@@ -2,30 +2,27 @@
 
 import { useState } from "react";
 import { Globe, Check, AlertCircle } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import { Button } from "@/components/atoms/button";
 import { cn } from "@/lib/utils/cn.utils";
 
-const LANGUAGES = [
+const LANGUAGES_META = [
   {
     code: "ar",
     name: "العربية",
     nativeName: "العربية",
-    dir: "من اليمين إلى اليسار (RTL)",
-    description: "اللغة الافتراضية للتطبيق وكافة تفاصيل المواعيد والصالونات",
   },
   {
     code: "en",
     name: "English",
     nativeName: "English",
-    dir: "Left to right (LTR)",
-    description: "App interface in English. Salon & service names remain in their original Arabic text.",
   },
 ];
 
 export function LanguageSelector() {
+  const t = useTranslations("app.account.language");
   const currentLocale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -50,8 +47,11 @@ export function LanguageSelector() {
   return (
     <div className="flex flex-col gap-6 max-w-2xl mx-auto w-full">
       <div className="grid grid-cols-1 gap-3.5">
-        {LANGUAGES.map((lang) => {
+        {LANGUAGES_META.map((lang) => {
           const isCurrent = lang.code === currentLocale;
+          const dirText = lang.code === "ar" ? t("arDir") : t("enDir");
+          const descText = lang.code === "ar" ? t("arDesc") : t("enDesc");
+
           return (
             <button
               key={lang.code}
@@ -88,16 +88,16 @@ export function LanguageSelector() {
                   </div>
                   {isCurrent && (
                     <span className="rounded-md bg-tint px-2 py-0.5 text-xs font-bold text-primary-pressed border border-tint-border">
-                      اللغة الحالية
+                      {t("currentBadge")}
                     </span>
                   )}
                 </div>
 
                 <span className="text-xs font-semibold text-muted-foreground">
-                  {lang.dir}
+                  {dirText}
                 </span>
                 <p className="mt-1 text-xs text-muted-foreground/90 leading-relaxed">
-                  {lang.description}
+                  {descText}
                 </p>
               </div>
             </button>
@@ -115,13 +115,11 @@ export function LanguageSelector() {
             </div>
 
             <Dialog.Title className="text-lg font-extrabold text-foreground">
-              {targetLocale === "en" ? "تحوّل التطبيق لـ English؟" : "تحويل التطبيق إلى العربية؟"}
+              {targetLocale === "en" ? t("modal.titleEn") : t("modal.titleAr")}
             </Dialog.Title>
 
             <Dialog.Description className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {targetLocale === "en"
-                ? "الواجهة هتتقلب من اليمين للشمال (LTR). أسماء الصالونات والخدمات هتفضل زي ما صاحب الصالون كتبها بالعربي."
-                : "سيتم تحويل الواجهة لتبدأ من اليمين إلى اليسار (RTL) باللغة العربية بالكامل."}
+              {targetLocale === "en" ? t("modal.descEn") : t("modal.descAr")}
             </Dialog.Description>
 
             <div className="mt-6 flex flex-col gap-2.5">
@@ -130,7 +128,7 @@ export function LanguageSelector() {
                 onClick={handleConfirmSwitch}
                 className="h-11 w-full text-xs font-extrabold shadow-xs"
               >
-                {targetLocale === "en" ? "حوّل لـ English" : "حوّل للعربية"}
+                {targetLocale === "en" ? t("modal.confirmEn") : t("modal.confirmAr")}
               </Button>
               <Button
                 type="button"
@@ -138,7 +136,7 @@ export function LanguageSelector() {
                 onClick={() => setConfirmModalOpen(false)}
                 className="h-11 w-full text-xs font-bold border-border bg-card text-foreground hover:bg-muted"
               >
-                {currentLocale === "ar" ? "خليها عربي" : "Keep English"}
+                {currentLocale === "ar" ? t("modal.cancelKeepAr") : t("modal.cancelKeepEn")}
               </Button>
             </div>
           </Dialog.Popup>

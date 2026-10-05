@@ -1,4 +1,4 @@
-// آراء العملاء — 3 شهادات على الرئيسية
+import { useTranslations } from "next-intl";
 import { Avatar } from "@/components/atoms/avatar";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Rating } from "@/components/atoms/rating";
@@ -30,15 +30,17 @@ const TESTIMONIALS = [
 ] as const;
 
 function HomeReviews() {
+  const t = useTranslations("marketing.home.reviews");
+
   return (
     <PageContainer as="section" className="pt-10 md:pt-12">
       <div className="mb-4.5 flex items-baseline justify-between gap-4">
-        <h2 className="text-lg font-bold md:text-[21px]">آراء العملاء</h2>
+        <h2 className="text-lg font-bold md:text-[21px]">{t("title")}</h2>
         <Link
           href={ROUTE_SEARCH}
           className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-primary hover:text-primary-pressed"
         >
-          كل التقييمات
+          {t("allReviews")}
         </Link>
       </div>
 

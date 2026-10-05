@@ -1,4 +1,4 @@
-// كارت بروفايل المستخدم: الصورة، الاسم، وتاريخ الانضمام، وإحصائيات الحلاقة والمفضلة
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/atoms/button";
 import type { User } from "@/lib/types/user/user.interface";
 
@@ -9,12 +9,13 @@ type AccountHeaderProps = {
 };
 
 export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProps) {
+  const t = useTranslations("app.account.header");
   const completedCuts = user.completedBookingsCount ?? 12;
   const favCount = favoriteCount ?? user.favoriteShopIds?.length ?? 4;
 
   return (
     <section
-      aria-label="بيانات المستخدم"
+      aria-label={t("ariaLabel")}
       className="flex flex-col items-start gap-4 rounded-2xl border border-border bg-card p-6 shadow-xs sm:flex-row sm:items-center sm:gap-5.5"
     >
       {/* الصورة / الرمز الأولي */}
@@ -33,7 +34,7 @@ export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProp
           {user.name}
         </h2>
         <p className="tabular text-sm text-muted-foreground">
-          {user.phone ? "01xxxxxxxxx" : "01xxxxxxxxx"} · انضم {user.joinedDate ?? "يونيو 2025"}
+          {user.phone ? "01xxxxxxxxx" : "01xxxxxxxxx"} · {t("joinedDate", { date: user.joinedDate ?? "يونيو 2025" })}
         </p>
       </div>
 
@@ -44,7 +45,7 @@ export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProp
             {completedCuts}
           </span>
           <span className="whitespace-nowrap text-[12.5px] text-muted-foreground">
-            حلاقة خلصتها
+            {t("completedCuts")}
           </span>
         </div>
 
@@ -53,7 +54,7 @@ export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProp
             {favCount}
           </span>
           <span className="whitespace-nowrap text-[12.5px] text-muted-foreground">
-            صالونات مفضلة
+            {t("favoriteSalons")}
           </span>
         </div>
       </div>
@@ -65,7 +66,7 @@ export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProp
         onClick={onEdit}
         className="h-11 w-full shrink-0 rounded-xl px-5 text-sm font-bold text-foreground hover:bg-muted sm:w-auto"
       >
-        تعديل
+        {t("edit")}
       </Button>
     </section>
   );

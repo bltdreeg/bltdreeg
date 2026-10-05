@@ -1,5 +1,6 @@
-// صفحة الصالون — تصميم ناعم ومرتفع مستوحى من UX-Pilot مع الحفاظ على كل البيانات
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { barbersByShop } from "@/lib/data/barbers.constants";
 import { salonDetailsById } from "@/lib/data/salon-details.constants";
 import { reviewsByShop } from "@/lib/data/reviews.constants";
@@ -11,14 +12,15 @@ import { SalonBooking } from "./__components/salon-booking";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
   const salon = salonDetailsById(id);
   if (!salon) return {};
+  const t = await getTranslations("marketing.salon");
   return {
-    title: `${salon.name} | بلتدريج`,
-    description: `اعرف خدمات ${salon.name} ومواعيده المتاحة واحجز أونلاين`,
+    title: `${salon.name} | ${getAppName(locale)}`,
+    description: t("metaDescription", { name: salon.name }),
   };
 }
 
@@ -37,7 +39,7 @@ export default async function SalonPage({
   const reviews = reviewsByShop(id);
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-background">
       <div className="w-full max-w-[1440px] mx-auto px-0 lg:px-12 py-0 lg:py-6">
         {/* معرض الصور العلوي */}
         <SalonGallery photos={salon.photos} name={salon.name} salonId={salon.id} />

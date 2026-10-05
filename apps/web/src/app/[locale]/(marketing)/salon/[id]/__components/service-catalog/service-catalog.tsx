@@ -1,5 +1,7 @@
+"use client";
 // كتالوج الخدمات — صفوف فسيحة بزرار دائري (+) و (✓) فريم ٢١
 import { Plus, Check, Clock } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 import {
   SERVICE_CATEGORY_ORDER,
@@ -14,6 +16,9 @@ type ServiceCatalogProps = {
 };
 
 export function ServiceCatalog({ services, selectedIds, onToggle }: ServiceCatalogProps) {
+  const t = useTranslations("marketing.salon.services");
+  const locale = useLocale();
+
   // تجميع الخدمات بالفئة
   const byCategory = SERVICE_CATEGORY_ORDER.reduce<Map<ServiceCategory, Service[]>>(
     (acc, cat) => acc.set(cat, []),
@@ -25,7 +30,7 @@ export function ServiceCatalog({ services, selectedIds, onToggle }: ServiceCatal
 
   return (
     <section id="services" className="scroll-mt-28 px-4 sm:px-8 lg:rounded-[14px] lg:border lg:border-border lg:bg-background lg:p-6 lg:shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-      <h2 className="mb-4 text-base font-bold text-foreground">الخدمات</h2>
+      <h2 className="mb-4 text-base font-bold text-foreground">{t("title")}</h2>
 
       <div className="flex flex-col">
         {[...byCategory.entries()]
@@ -50,14 +55,14 @@ export function ServiceCatalog({ services, selectedIds, onToggle }: ServiceCatal
                         <span className="text-[14.5px] font-bold text-foreground">{svc.name}</span>
                         <span className="mt-0.75 flex items-center gap-1.25 text-xs text-muted-foreground">
                           <Clock className="size-3 text-muted-foreground shrink-0" />
-                          <span>{svc.durationMinutes} دقيقة</span>
+                          <span>{t("durationMinutes", { count: svc.durationMinutes })}</span>
                           {svc.note ? ` · ${svc.note}` : null}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-3 shrink-0">
                         <span className="tabular text-[15px] font-extrabold text-foreground">
-                          {formatPrice(svc.price)}
+                          {formatPrice(svc.price, locale)}
                         </span>
 
                         <button
@@ -66,7 +71,7 @@ export function ServiceCatalog({ services, selectedIds, onToggle }: ServiceCatal
                             e.stopPropagation();
                             onToggle(svc.id);
                           }}
-                          aria-label={isSelected ? `إلغاء اختيار ${svc.name}` : `اختيار ${svc.name}`}
+                          aria-label={isSelected ? t("deselectService", { name: svc.name }) : t("selectService", { name: svc.name })}
                           className={`relative flex size-8.5 shrink-0 items-center justify-center rounded-[9px] border-[1.5px] border-primary transition-colors cursor-pointer before:absolute before:-inset-2.5 ${
                             isSelected ? "bg-primary text-primary-foreground" : "bg-background text-primary"
                           }`}

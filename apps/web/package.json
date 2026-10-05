@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\""
+    "test": "node --experimental-strip-types --test \"src/**/*.test.ts\"",
+    "i18n:scan": "i18next --config i18next-parser.config.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -32,6 +33,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "i18next-parser": "^9.4.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

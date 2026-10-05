@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useId } from "react";
+import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff, Check } from "lucide-react";
 import {
@@ -21,6 +22,8 @@ import { PasswordRequirements } from "../password-requirements";
 import type { RegisterFormErrors } from "./register-form.schema";
 
 export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
+  const t = useTranslations("auth.register");
+  const tShared = useTranslations("auth.shared");
   const router = useRouter();
   const register = useRegister();
 
@@ -49,15 +52,15 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
     const errs: RegisterFormErrors = {};
 
     if (!firstName.trim()) {
-      errs.firstName = "اكتب اسمك الأول.";
+      errs.firstName = t("errors.firstNameRequired");
     }
 
     if (!lastName.trim()) {
-      errs.lastName = "الصالون بيحتاج اسمك كامل عشان يناديك في الدور.";
+      errs.lastName = t("errors.lastNameRequired");
     }
 
     if (email.trim() && !isValidEmail(email)) {
-      errs.email = "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com).";
+      errs.email = t("errors.emailInvalid");
     }
 
     const phoneValidation = validateEgyptianPhone(phone);
@@ -66,11 +69,11 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
     }
 
     if (!passwordCriteria.isValid) {
-      errs.password = "كلمة السر مش مستوفية كل الشروط.";
+      errs.password = t("errors.passwordInvalid");
     }
 
     if (!agreeToTerms) {
-      errs.agreeToTerms = "لازم توافق على الشروط وسياسة الخصوصية.";
+      errs.agreeToTerms = t("errors.agreeTermsRequired");
     }
 
     return errs;
@@ -130,10 +133,10 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
       {/* 1. ترويسة النموذج */}
       <div className="flex flex-col gap-1.5">
         <h1 className="text-[26px] font-extrabold leading-tight text-[#0E0F11]">
-          اعمل حساب
+          {t("title")}
         </h1>
         <p className="text-[13.5px] leading-relaxed text-[#6B7280]">
-          دقيقة واحدة وتبقى جاهز تحجز.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -147,13 +150,13 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
               htmlFor={firstNameId}
               className="text-[12.5px] font-semibold text-[#0E0F11]"
             >
-              الاسم الأول
+              {t("firstNameLabel")}
             </label>
             <input
               id={firstNameId}
               type="text"
               autoComplete="given-name"
-              placeholder="كريم"
+              placeholder={t("firstNamePlaceholder")}
               value={firstName}
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -180,13 +183,13 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
               htmlFor={lastNameId}
               className="text-[12.5px] font-semibold text-[#0E0F11]"
             >
-              اسم العائلة
+              {t("lastNameLabel")}
             </label>
             <input
               id={lastNameId}
               type="text"
               autoComplete="family-name"
-              placeholder="مصطفى"
+              placeholder={t("lastNamePlaceholder")}
               value={lastName}
               onChange={(e) => {
                 setLastName(e.target.value);
@@ -214,8 +217,8 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
             htmlFor={emailId}
             className="text-[12.5px] font-semibold text-[#0E0F11] flex justify-between"
           >
-            البريد الإلكتروني
-            <span className="text-[#6B7280] font-normal">(اختياري)</span>
+            {t("emailLabel")}
+            <span className="text-[#6B7280] font-normal">{t("emailOptional")}</span>
           </label>
           <input
             id={emailId}
@@ -249,7 +252,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
             htmlFor={phoneId}
             className="text-[12.5px] font-semibold text-[#0E0F11]"
           >
-            رقم الموبايل
+            {t("phoneLabel")}
           </label>
           <div
             dir="ltr"
@@ -284,7 +287,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
             </span>
           ) : (
             <span className="text-[12px] text-[#6B7280]">
-              هنبعتلك كود تأكيد على الرقم ده.
+              {tShared("confirmCodeHint")}
             </span>
           )}
         </div>
@@ -295,7 +298,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
             htmlFor={passwordId}
             className="text-[12.5px] font-semibold text-[#0E0F11]"
           >
-            كلمة السر
+            {t("passwordLabel")}
           </label>
           <div
             className={`flex h-[46px] w-full items-center rounded-xl bg-white px-3.5 transition-all focus-within:ring-2 ${
@@ -324,7 +327,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-[#E5E7EB] bg-[#F7F8FA] text-[#6B7280] transition-colors hover:text-[#0E0F11] cursor-pointer"
-              aria-label={showPassword ? "إخفاء كلمة السر" : "إظهار كلمة السر"}
+              aria-label={showPassword ? t("hidePassword") : t("showPassword")}
             >
               {showPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
             </button>
@@ -364,15 +367,15 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
               onClick={() => setAgreeToTerms((v) => !v)}
               className="cursor-pointer select-none text-[13px] leading-[1.7] text-[#0E0F11]"
             >
-              موافق على{" "}
+              {t("agreeTermsPrefix")}{" "}
               <Link href="/terms" className="font-bold underline">
-                الشروط
+                {t("termsLink")}
               </Link>{" "}
-              و
+              {t("and")}{" "}
               <Link href="/privacy" className="font-bold underline">
-                سياسة الخصوصية
+                {t("privacyLink")}
               </Link>
-              ، وإن الصالون يشوف اسمك ورقمك لما تحجز.
+              {t("agreeTermsSuffix")}
             </span>
           </div>
           {errors.agreeToTerms && (
@@ -394,7 +397,7 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
             disabled={isSubmitting}
             className="flex h-[50px] w-full items-center justify-center rounded-xl bg-[#0F766E] text-[15.5px] font-bold text-white shadow-xs transition-colors hover:bg-[#0B5A54] disabled:cursor-not-allowed disabled:bg-[#E7EAEC] disabled:text-[#A5ABB3] cursor-pointer"
           >
-            {isSubmitting ? "جاري إنشاء الحساب..." : "اعمل الحساب"}
+            {isSubmitting ? t("submitPending") : t("submit")}
           </button>
         </div>
       </form>
@@ -404,12 +407,12 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string }) {
 
       {/* 5. الانتقال لتسجيل الدخول */}
       <div className="text-center text-[13.5px] text-[#6B7280] pt-1">
-        عندك حساب بالفعل؟{" "}
+        {t("haveAccount")}{" "}
         <Link
           href={ROUTE_LOGIN}
           className="font-bold text-[#0E0F11] hover:text-[#0F766E] hover:underline"
         >
-          سجّل دخول
+          {t("login")}
         </Link>
       </div>
     </div>

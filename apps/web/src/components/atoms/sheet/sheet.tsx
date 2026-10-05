@@ -1,6 +1,6 @@
-// شيت سفلي للموبايل، كارت في المنتصف على الشاشات الواسعة
 import { Dialog } from "@base-ui/react/dialog";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn.utils";
 
 const Sheet = Dialog.Root;
@@ -8,6 +8,8 @@ const SheetTrigger = Dialog.Trigger;
 const SheetClose = Dialog.Close;
 
 function SheetContent({ title, className, children, ...props }: Dialog.Popup.Props & { title: string }) {
+  const t = useTranslations("common");
+
   return (
     <Dialog.Portal>
       <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/40 transition-opacity data-[ending-style]:opacity-0 data-[starting-style]:opacity-0" />
@@ -22,7 +24,7 @@ function SheetContent({ title, className, children, ...props }: Dialog.Popup.Pro
       >
         <div className="mb-4 flex items-center justify-between">
           <Dialog.Title className="text-lg font-bold">{title}</Dialog.Title>
-          <Dialog.Close aria-label="إغلاق" className="rounded-full p-1 hover:bg-muted">
+          <Dialog.Close aria-label={t("close")} className="rounded-full p-1 hover:bg-muted">
             <XIcon className="size-5" />
           </Dialog.Close>
         </div>

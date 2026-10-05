@@ -1,4 +1,4 @@
-// الرئيسية / اكتشف
+import { getTranslations } from "next-intl/server";
 import { METADATA_HOME } from "@/lib/data/constants/metadata.constants";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { shops } from "@/lib/data/shops.constants";
@@ -13,7 +13,9 @@ export const metadata = METADATA_HOME;
 
 const DEFAULT_AREA = "المعادي";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t = await getTranslations("marketing.home.rails");
+
   // عدد مختلف لكل قسم عشان الصفحة ما تبقاش شبكة مكررة — 4 في الصف والزيادة تنزل تحت
   const recentlyViewed = shops.slice(0, 5);
   const recommended = shops.filter((s) => s.rating >= 4.4 && !s.isNew).slice(0, 4);
@@ -26,22 +28,22 @@ export default function HomePage() {
     <>
       <Hero areaName={DEFAULT_AREA} />
 
-      <ShopRail title="آخر ما شفته" shops={recentlyViewed} href={ROUTE_SEARCH} />
+      <ShopRail title={t("recentlyViewed.title")} shops={recentlyViewed} href={ROUTE_SEARCH} />
       <ShopRail
-        title="مقترح لك"
-        subtitle="حسب تقييمك وزياراتك"
+        title={t("recommended.title")}
+        subtitle={t("recommended.subtitle")}
         shops={recommended}
         href={ROUTE_SEARCH}
       />
       <ShopRail
-        title="جديد في منطقتك"
-        subtitle="صالونات فتحت من شهرين"
+        title={t("newInArea.title")}
+        subtitle={t("newInArea.subtitle")}
         shops={newInArea}
         href={ROUTE_SEARCH}
       />
       <ShopRail
-        title="الأكثر طلباً"
-        subtitle={`${availableToday} صالون فيهم ميعاد النهارده`}
+        title={t("mostBooked.title")}
+        subtitle={t("mostBooked.subtitle", { count: availableToday })}
         shops={mostBooked}
         href={ROUTE_SEARCH}
       />

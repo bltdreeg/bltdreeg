@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Star, Heart, Check, Store } from "lucide-react";
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/atoms/button";
 import { ROUTE_HOME, ROUTE_BOOKINGS } from "@/lib/data/constants/routes.constants";
 import type { Booking } from "@/lib/types/booking";
@@ -15,6 +16,7 @@ interface RateSentViewProps {
 }
 
 export function RateSentView({ booking, salon }: RateSentViewProps) {
+  const t = useTranslations("app.rate.sent");
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -34,10 +36,10 @@ export function RateSentView({ booking, salon }: RateSentViewProps) {
 
       {/* 2 — العنوان ورسالة الطمأنة */}
       <h1 className="text-2xl font-black text-foreground sm:text-3xl">
-        شكراً — تقييمك اتبعت
+        {t("thanksTitle")}
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base max-w-md">
-        رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.
+        {t("thanksSubtitle")}
       </p>
 
       {/* 3 — كارت ملخص تقييمك */}
@@ -62,8 +64,8 @@ export function RateSentView({ booking, salon }: RateSentViewProps) {
               {shopName}
             </span>
             <div className="flex items-center gap-1.5 direction-ltr">
-              <span className="text-xs font-bold text-muted-foreground mr-1.5 direction-rtl">
-                تقييمك:
+              <span className="text-xs font-bold text-muted-foreground me-1.5">
+                {t("yourRating")}
               </span>
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
@@ -88,10 +90,10 @@ export function RateSentView({ booking, salon }: RateSentViewProps) {
           </div>
           <div className="flex flex-1 flex-col gap-0.5">
             <span className="text-sm font-extrabold text-primary-pressed">
-              تضيفه للمفضلة؟
+              {t("favoritePrompt")}
             </span>
             <span className="text-xs text-muted-foreground leading-relaxed">
-              هنقولك لما يبقى فاضي في وقتك المعتاد.
+              {t("favoriteHint")}
             </span>
           </div>
         </div>
@@ -107,12 +109,12 @@ export function RateSentView({ booking, salon }: RateSentViewProps) {
           {isFavorited ? (
             <>
               <Check className="size-3.5 stroke-[2.5]" />
-              <span>مُضاف لمفضلاتك</span>
+              <span>{t("favorited")}</span>
             </>
           ) : (
             <>
               <Heart className="size-3.5 text-[#EF4444]" />
-              <span>ضيفه للمفضلة</span>
+              <span>{t("addToFavorites")}</span>
             </>
           )}
         </button>
@@ -124,14 +126,14 @@ export function RateSentView({ booking, salon }: RateSentViewProps) {
           onClick={() => router.push(ROUTE_HOME)}
           className="h-12 w-full rounded-xl text-sm font-extrabold cursor-pointer"
         >
-          تمام، ارجعني للرئيسية
+          {t("backToHome")}
         </Button>
         <Button
           variant="outline"
           onClick={() => router.push(`${ROUTE_BOOKINGS}?tab=past`)}
           className="h-11 w-full rounded-xl text-sm font-bold border-border bg-card text-foreground hover:bg-muted cursor-pointer"
         >
-          الرجوع لحجوزاتي السابقة
+          {t("backToPastBookings")}
         </Button>
       </div>
     </div>

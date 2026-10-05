@@ -1,5 +1,6 @@
 // شريط مسار التنقل لصفحات الحساب والبروفايل (حسابي > ...)
 import { ChevronLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PageContainer } from "@/components/atoms/page-container";
 import { ROUTE_ACCOUNT } from "@/lib/data/constants/routes.constants";
@@ -21,9 +22,11 @@ export function ProfileBreadcrumb({
   className,
   extraContent,
 }: ProfileBreadcrumbProps) {
+  const t = useTranslations("common.profileBreadcrumb");
+
   return (
     <nav
-      aria-label="مسار التنقل"
+      aria-label={t("navAria")}
       className={cn("border-b border-border bg-card", className)}
     >
       <PageContainer className="flex h-14 items-center justify-between gap-3">
@@ -32,7 +35,7 @@ export function ProfileBreadcrumb({
             href={ROUTE_ACCOUNT}
             className="font-semibold text-muted-foreground transition-colors hover:text-foreground"
           >
-            حسابي
+            {t("account")}
           </Link>
           {items.map((item, index) => {
             const isLast = index === items.length - 1;

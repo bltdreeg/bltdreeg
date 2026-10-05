@@ -1,7 +1,8 @@
 // تسجيل الدخول — مطابق لتصميم FRAME 13A
 import { METADATA_LOGIN } from "@/lib/data/constants/metadata.constants";
-import { CALLBACK_PARAM } from "@/lib/data/constants/app.constants";
+import { CALLBACK_PARAM, getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AuthBrandPanel } from "../__components/auth-brand-panel";
 import { LoginForm } from "./__components/login-form";
@@ -9,12 +10,16 @@ import { LoginForm } from "./__components/login-form";
 export const metadata = METADATA_LOGIN;
 
 export default async function LoginPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
+  const { locale } = await params;
   const query = await searchParams;
   const callbackUrl = query[CALLBACK_PARAM] || ROUTE_HOME;
+  const t = await getTranslations("auth.shared");
 
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row bg-white text-[#0E0F11]">
@@ -24,10 +29,10 @@ export default async function LoginPage({
           href={ROUTE_HOME}
           className="text-xl font-black leading-none text-[#0B5A54]"
         >
-          بالتدريج
+          {getAppName(locale)}
         </Link>
         <span className="text-xs font-bold text-[#0B5A54]">
-          ميعادك ورقمك في الدور
+          {t("tagline")}
         </span>
       </div>
 

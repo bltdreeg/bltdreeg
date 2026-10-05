@@ -2,6 +2,7 @@
 
 // كارت "انت على الكرسي" — مطابق للمرحلة أثناء تلقي الخدمة
 import { Navigation, Phone, Store, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 
 interface InServiceQueueCardProps {
@@ -19,6 +20,7 @@ export function InServiceQueueCard({
   salonPhone = "01012345678",
   onFinishService,
 }: InServiceQueueCardProps) {
+  const t = useTranslations("app.liveTracking.inServiceCard");
   const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(shopName)}`;
 
   return (
@@ -46,10 +48,10 @@ export function InServiceQueueCard({
       {/* 2. العنوان ونصوص التهنئة */}
       <div className="flex flex-col gap-1">
         <h2 className="text-2xl sm:text-3xl font-black text-foreground">
-          انت على الكرسي
+          {t("title")}
         </h2>
         <p className="text-sm sm:text-base font-semibold text-muted-foreground max-w-sm">
-          نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -78,14 +80,14 @@ export function InServiceQueueCard({
             className="flex h-11 items-center justify-center gap-1.5 rounded-xl border border-border bg-card text-xs font-bold text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             <Navigation className="size-3.5" />
-            <span>الاتجاهات</span>
+            <span>{t("directions")}</span>
           </a>
           <a
             href={`tel:${salonPhone}`}
             className="flex h-11 items-center justify-center gap-1.5 rounded-xl border border-border bg-card text-xs font-bold text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
             <Phone className="size-3.5" />
-            <span>اتصل</span>
+            <span>{t("call")}</span>
           </a>
         </div>
       </div>
@@ -97,7 +99,7 @@ export function InServiceQueueCard({
           onClick={onFinishService}
           className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#0F766E] text-sm font-extrabold text-white shadow-md hover:bg-[#0B5A54] active:scale-98 transition-all cursor-pointer"
         >
-          <span>خلصت الحلاقة (إنهاء الخدمة)</span>
+          <span>{t("finishHaircut")}</span>
           <Check className="size-4 stroke-[3]" />
         </button>
       </div>

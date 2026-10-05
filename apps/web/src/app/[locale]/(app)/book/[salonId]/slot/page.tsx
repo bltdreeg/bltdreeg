@@ -1,8 +1,9 @@
-// خطوة الحجز 1/3: امتى تحب تيجي؟
+import { getTranslations } from "next-intl/server";
 import { redirect } from "@/i18n/navigation";
 import { salonDetailsById } from "@/lib/data/salon-details.constants";
 import { ROUTE_SALON } from "@/lib/data/constants/routes.constants";
 import { METADATA_BOOK } from "@/lib/data/constants/metadata.constants";
+import { formatPrice } from "@/lib/utils/format/price.utils";
 import { BookingShell } from "../__components/booking-shell";
 import { BookingSummaryPanel } from "../__components/booking-summary-panel";
 import { StepSlot } from "../__sections/step-slot";
@@ -20,6 +21,9 @@ export default async function BookingSlotPage({
   const { locale, salonId } = await params;
   const query = await searchParams;
 
+  const t = await getTranslations("app.book.slot");
+  const tSummary = await getTranslations("app.book.summary");
+
   const salon = salonDetailsById(salonId);
   if (!salon) return redirect({ href: ROUTE_SALON(salonId), locale });
 
@@ -32,9 +36,8 @@ export default async function BookingSlotPage({
     services.map((s) => ["service", s.id] as [string, string]),
   ).toString();
 
-  const serviceCountText =
-    services.length === 1 ? "خدمة واحدة" : services.length === 2 ? "خدمتين" : `${services.length} خدمات`;
-  const serviceSummary = `${serviceCountText} · ${totalPrice} ج.م`;
+  const serviceCountText = tSummary("servicesCount", { count: services.length });
+  const serviceSummary = `${serviceCountText} · ${formatPrice(totalPrice)}`;
 
   const barber = resolveSelectedBarber(salonId, query);
   const barberSummary = barber?.name ?? "كريم مصطفى";
@@ -44,8 +47,8 @@ export default async function BookingSlotPage({
       salonId={salonId}
       salonName={salon.name}
       step={2}
-      title="اختار الميعاد"
-      subtitle={`المواعيد المعروضة بتكفي مدة خدمتك (${totalMinutes} دقيقة).`}
+      title={t("title")}
+      subtitle={t("subtitle", { minutes: totalMinutes })}
       serviceSummary={serviceSummary}
       panel={<BookingSummaryPanel salon={salon} services={services} cta={null} />}
     >

@@ -2,7 +2,9 @@
 import { METADATA_REGISTER } from "@/lib/data/constants/metadata.constants";
 import { CALLBACK_PARAM } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { AuthBrandPanel } from "../__components/auth-brand-panel";
 import { RegisterForm } from "./__components/register-form";
 
@@ -14,6 +16,8 @@ export default async function RegisterPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const callbackUrl = (await searchParams)[CALLBACK_PARAM];
+  const t = await getTranslations("auth.shared");
+  const locale = await getLocale();
 
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row bg-white text-[#0E0F11]">
@@ -23,10 +27,10 @@ export default async function RegisterPage({
           href={ROUTE_HOME}
           className="text-xl font-black leading-none text-[#0B5A54]"
         >
-          بالتدريج
+          {getAppName(locale)}
         </Link>
         <span className="text-xs font-bold text-[#0B5A54]">
-          ميعادك ورقمك في الدور
+          {t("tagline")}
         </span>
       </div>
 

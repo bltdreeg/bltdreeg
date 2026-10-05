@@ -1,4 +1,6 @@
+"use client";
 import { CheckCircle2, Star } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils/cn.utils";
 import type { SalonDetails } from "@/lib/types/salon";
 import type { Review } from "@/lib/types/review";
@@ -38,15 +40,18 @@ function StarRating({ rating, size = 13 }: { rating: number; size?: number }) {
 }
 
 export function ReviewSection({ salon, reviews }: ReviewSectionProps) {
+  const t = useTranslations("marketing.salon.reviews");
+  const locale = useLocale();
+
   const counts = salon.ratingCounts || { 5: 94, 4: 26, 3: 11, 2: 4, 1: 3 };
   const total = Object.values(counts).reduce((a, b) => a + b, 0) || salon.reviewCount;
 
   const breakdown = salon.ratingBreakdown && salon.ratingBreakdown.length > 0
     ? salon.ratingBreakdown
     : [
-        { label: "جودة القصة", value: 4.7 },
-        { label: "النظافة", value: 4.6 },
-        { label: "دقة الوقت", value: 4.2 },
+        { label: t("criteria.cutQuality"), value: 4.7 },
+        { label: t("criteria.cleanliness"), value: 4.6 },
+        { label: t("criteria.punctuality"), value: 4.2 },
       ];
 
   return (
@@ -56,9 +61,9 @@ export function ReviewSection({ salon, reviews }: ReviewSectionProps) {
     >
       {/* رأس القسم */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-bold text-slate-900">التقييمات وآراء العملاء</h2>
+        <h2 className="text-lg font-bold text-slate-900">{t("title")}</h2>
         <span className="text-xs text-primary font-semibold cursor-pointer hover:underline">
-          عرض كل الـ <span className="tabular">{total}</span> تقييم
+          {t("viewAllReviews", { count: total })}
         </span>
       </div>
 
@@ -71,7 +76,7 @@ export function ReviewSection({ salon, reviews }: ReviewSectionProps) {
           </span>
           <StarRating rating={salon.rating} />
           <span className="tabular text-xs text-slate-400">
-            {total} تقييم حقيقي
+            {t("verifiedReviews", { count: total })}
           </span>
         </div>
 
@@ -123,7 +128,7 @@ export function ReviewSection({ salon, reviews }: ReviewSectionProps) {
                 <StarRating rating={rv.rating} />
               </div>
               <span className="tabular text-[11px] text-slate-400">
-                {formatDayMonth(rv.createdAt)}
+                {formatDayMonth(rv.createdAt, locale)}
               </span>
             </div>
 
@@ -145,7 +150,7 @@ export function ReviewSection({ salon, reviews }: ReviewSectionProps) {
                   </div>
                   {rv.barberName && (
                     <span className="text-[10px] text-slate-400">
-                      مع {rv.barberName}
+                      {t("withBarber", { name: rv.barberName })}
                     </span>
                   )}
                 </div>

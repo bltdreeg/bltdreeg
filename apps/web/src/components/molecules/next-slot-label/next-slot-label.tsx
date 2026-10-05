@@ -1,4 +1,4 @@
-// أقرب ميعاد: النهارده 6:30 م — الوقت أكبر عنصر، ده اللي بيبيع
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils/cn.utils";
 import { formatDayLabel, formatTime } from "@/lib/utils/format/date.utils";
 
@@ -11,13 +11,16 @@ type NextSlotLabelProps = {
 };
 
 function NextSlotLabel({ slotAt, muted = false, className }: NextSlotLabelProps) {
+  const t = useTranslations("common.nextSlot");
+  const locale = useLocale();
+
   if (!slotAt) {
     return (
       <div className={cn("flex flex-col gap-1.5", className)}>
         <span className="text-[11.5px] font-semibold tracking-[0.04em] text-muted-foreground">
-          مفيش مواعيد
+          {t("noSlots")}
         </span>
-        <span className="text-[20px] font-bold text-muted-foreground">خلاص النهارده</span>
+        <span className="text-[20px] font-bold text-muted-foreground">{t("leftToday")}</span>
       </div>
     );
   }
@@ -25,7 +28,7 @@ function NextSlotLabel({ slotAt, muted = false, className }: NextSlotLabelProps)
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <span className="text-[10.5px] sm:text-[11.5px] font-semibold tracking-[0.02em] sm:tracking-[0.04em] text-muted-foreground leading-tight">
-        أقرب ميعاد · {formatDayLabel(slotAt)}
+        {t("nearestSlot")} · {formatDayLabel(slotAt, locale)}
       </span>
       <span
         className={cn(
@@ -33,7 +36,7 @@ function NextSlotLabel({ slotAt, muted = false, className }: NextSlotLabelProps)
           muted ? "text-muted-foreground" : "text-foreground",
         )}
       >
-        {formatTime(slotAt)}
+        {formatTime(slotAt, locale)}
       </span>
     </div>
   );

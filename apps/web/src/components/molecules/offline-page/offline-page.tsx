@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useOnline } from "@/lib/hooks/use-online.hook";
 import { ROUTE_BOOKINGS } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
@@ -20,10 +21,14 @@ export function OfflinePage({
   onBrowseCached,
   cachedHref = ROUTE_BOOKINGS,
   className = "",
-  title = "النت فاصل",
-  description = "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
+  title,
+  description,
 }: OfflinePageProps) {
+  const t = useTranslations("common.offlinePage");
   const { checkOnline } = useOnline();
+
+  const pageTitle = title ?? t("defaultTitle");
+  const pageDescription = description ?? t("defaultDescription");
 
   const handleRetry = () => {
     checkOnline();
@@ -36,9 +41,8 @@ export function OfflinePage({
 
   return (
     <div
-      dir="rtl"
       role="region"
-      aria-label="صفحة انقطاع الاتصال بالإنترنت"
+      aria-label={t("ariaLabel")}
       className={cn(
         "flex min-h-[68vh] w-full flex-col items-center justify-center px-4 py-8 text-center sm:px-6",
         className
@@ -100,12 +104,12 @@ export function OfflinePage({
 
         {/* العنوان */}
         <h2 className="mt-5 text-[20px] font-extrabold text-foreground md:text-[22px]">
-          {title}
+          {pageTitle}
         </h2>
 
         {/* الوصف الموجه للمستخدم */}
         <p className="mt-2 mb-6 text-[14px] leading-[1.8] text-muted-foreground">
-          {description}
+          {pageDescription}
         </p>
 
         {/* زر المحاولة من جديد البترولي مع الأيقونة */}
@@ -126,7 +130,7 @@ export function OfflinePage({
             <path d="M20 12a8 8 0 1 1-2.6-5.9" />
             <path d="M20.5 4v4.5H16" />
           </svg>
-          <span>جرّب تاني</span>
+          <span>{t("retry")}</span>
         </button>
 
         {/* زر تصفح آخر حجز */}
@@ -135,7 +139,7 @@ export function OfflinePage({
             href={cachedHref}
             className="mt-2.5 flex h-[48px] w-full items-center justify-center rounded-[10px] border border-border bg-card text-[14.5px] font-bold text-foreground transition-colors hover:bg-muted active:scale-[0.99]"
           >
-            افتح آخر حجز شوفته
+            {t("browseCached")}
           </Link>
         ) : (
           <button
@@ -143,25 +147,25 @@ export function OfflinePage({
             onClick={onBrowseCached}
             className="mt-2.5 flex h-[48px] w-full cursor-pointer items-center justify-center rounded-[10px] border border-border bg-card text-[14.5px] font-bold text-foreground transition-colors hover:bg-muted active:scale-[0.99]"
           >
-            افتح آخر حجز شوفته
+            {t("browseCached")}
           </button>
         )}
 
         {/* نصائح حل المشكلة (Frame 18) */}
         <div className="mt-7 w-full rounded-[14px] border border-border bg-muted/60 p-4 text-start">
           <div className="mb-2.5 text-[13.5px] font-bold text-foreground">
-            جرّب الحاجات دي:
+            {t("tipsTitle")}
           </div>
           <div className="mb-2 flex items-center gap-2.5">
             <span className="size-[5px] shrink-0 rounded-full bg-muted-foreground" />
             <span className="text-[13px] font-medium text-muted-foreground">
-              اتأكد إن بيانات الموبايل أو الواي فاي شغّالين
+              {t("tip1")}
             </span>
           </div>
           <div className="flex items-center gap-2.5">
             <span className="size-[5px] shrink-0 rounded-full bg-muted-foreground" />
             <span className="text-[13px] font-medium text-muted-foreground">
-              قفل وضع الطيران لو مفتوح
+              {t("tip2")}
             </span>
           </div>
         </div>

@@ -72,8 +72,10 @@ function PhoneStatusBar() {
   );
 }
 
+type MockupT = ReturnType<typeof useTranslations>;
+
 /** الهاتف الأمامي — متابعة الدور الحية (مطابق للفريم ٢٧ في mobile.html) */
-function PhoneFront() {
+function PhoneFront({ t, locale }: { t: MockupT; locale: string }) {
   return (
     <div
       className="absolute z-2 select-none"
@@ -102,7 +104,7 @@ function PhoneFront() {
         {/* محتوى الشاشة (FRAME 27) */}
         <div
           className="flex flex-1 flex-col overflow-hidden font-[Cairo]"
-          dir="rtl"
+          dir={locale === "en" ? "ltr" : "rtl"}
           style={{ padding: "4px 12px 10px" }}
         >
           {/* Header bar */}
@@ -116,7 +118,7 @@ function PhoneFront() {
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
-              <span className="text-[13.5px] font-black text-[#0E0F11]">دورك</span>
+              <span className="text-[13.5px] font-black text-[#0E0F11]">{t("front.headerTitle")}</span>
             </div>
             <div
               className="flex items-center gap-1 rounded-full px-2 py-0.5"
@@ -126,7 +128,7 @@ function PhoneFront() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#16A34A] opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
               </span>
-              <span className="text-[9.5px] font-black text-[#15803D]">لايف</span>
+              <span className="text-[9.5px] font-black text-[#15803D]">{t("front.live")}</span>
             </div>
           </div>
 
@@ -139,9 +141,9 @@ function PhoneFront() {
               padding: "9px 10px 8px",
             }}
           >
-            <div className="text-[10.5px] font-bold text-[#0B5A54]">رقم دورك</div>
+            <div className="text-[10.5px] font-bold text-[#0B5A54]">{t("front.queueNumberLabel")}</div>
             <div className="my-0.5 font-[Cairo] text-[46px] font-black leading-[1.02] text-[#0F766E]">
-              ٤
+              4
             </div>
             <div
               className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-0.5"
@@ -153,7 +155,7 @@ function PhoneFront() {
                 <path d="M16 5.6a3.2 3.2 0 0 1 0 6" />
                 <path d="M17.5 14.6c1.8.5 3 2 3.4 4.4" />
               </svg>
-              <span className="text-[10.5px] font-black text-[#0B5A54]">قدامك ٣ أنفار</span>
+              <span className="text-[10.5px] font-black text-[#0B5A54]">{t("front.peopleAhead", { count: 3 })}</span>
             </div>
           </div>
 
@@ -166,9 +168,9 @@ function PhoneFront() {
               <span className="h-1 flex-1 rounded-full bg-[#E5E7EB]" />
             </div>
             <div className="flex justify-between text-[9px] font-bold">
-              <span className="text-[#0F766E]">دخلت الطابور</span>
-              <span className="text-[#6B7280]">قرّب دورك</span>
-              <span className="text-[#6B7280]">دورك دلوقتي</span>
+              <span className="text-[#0F766E]">{t("front.stepJoined")}</span>
+              <span className="text-[#6B7280]">{t("front.stepApproaching")}</span>
+              <span className="text-[#6B7280]">{t("front.stepNow")}</span>
             </div>
           </div>
 
@@ -178,13 +180,13 @@ function PhoneFront() {
             style={{ background: "#F7F8FA", border: "1px solid #E5E7EB" }}
           >
             <div className="flex-1">
-              <div className="text-[8.5px] font-bold text-[#6B7280]">الوقت المتوقع</div>
-              <div className="text-[13.5px] font-black leading-tight text-[#0E0F11]">~ ٢٨ د</div>
+              <div className="text-[8.5px] font-bold text-[#6B7280]">{t("front.estimatedTimeLabel")}</div>
+              <div className="text-[13.5px] font-black leading-tight text-[#0E0F11]">{t("front.estimatedTimeValue", { minutes: 28 })}</div>
             </div>
             <div style={{ width: 1, height: 24, background: "#E5E7EB" }} />
             <div className="flex-1">
-              <div className="text-[8.5px] font-bold text-[#6B7280]">تتحرك الساعة</div>
-              <div className="text-[13.5px] font-black leading-tight text-[#0E0F11]">١٠:٠٥</div>
+              <div className="text-[8.5px] font-bold text-[#6B7280]">{t("front.leaveAtLabel")}</div>
+              <div className="text-[13.5px] font-black leading-tight text-[#0E0F11]" style={{ direction: "ltr" }}>10:05</div>
             </div>
           </div>
 
@@ -205,10 +207,10 @@ function PhoneFront() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-[11px] font-black text-[#0E0F11]">
-                  صالون الكابتن حسام
+                  {t("demoSalonName")}
                 </div>
                 <div className="text-[8.5px] font-semibold text-[#6B7280]">
-                  قصة شعر + دقن • ١٠٠ ج.م
+                  {t("front.serviceLine")} • {formatPrice(100, locale)}
                 </div>
               </div>
             </div>
@@ -218,13 +220,13 @@ function PhoneFront() {
                   <path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z" />
                   <circle cx="12" cy="10" r="2.6" />
                 </svg>
-                <span>الاتجاهات</span>
+                <span>{t("front.directions")}</span>
               </div>
               <div className="flex flex-1 items-center justify-center gap-1 rounded-md border border-[#E5E7EB] bg-[#F7F8FA] py-1 text-[9px] font-bold text-[#0E0F11]">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
-                <span>اتصل</span>
+                <span>{t("front.call")}</span>
               </div>
             </div>
           </div>
@@ -234,7 +236,7 @@ function PhoneFront() {
             className="flex items-center justify-center rounded-lg text-[9.5px] font-bold text-[#EF4444]"
             style={{ border: "1px solid #F3CFCF", height: 26, background: "#FFFBFB" }}
           >
-            اطلع من الطابور
+            {t("front.leaveQueue")}
           </div>
 
           {/* Home indicator bar */}
@@ -249,7 +251,7 @@ function PhoneFront() {
 }
 
 /** الهاتف الخلفي — الرئيسية / اكتشف الصالونات (مطابق للفريم ٠٧ في mobile.html) */
-function PhoneBack() {
+function PhoneBack({ t, tNav, locale }: { t: MockupT; tNav: MockupT; locale: string }) {
   return (
     <div
       className="absolute z-1 select-none"
@@ -277,19 +279,19 @@ function PhoneBack() {
         {/* محتوى الشاشة (FRAME 07) */}
         <div
           className="flex flex-1 flex-col overflow-hidden font-[Cairo]"
-          dir="rtl"
+          dir={locale === "en" ? "ltr" : "rtl"}
           style={{ padding: "4px 11px 8px" }}
         >
           {/* هيدر الموقع والإشعارات */}
           <div className="mb-2 flex items-center justify-between">
             <div>
-              <div className="text-[8px] font-semibold text-[#6B7280]">بنعرضلك اللي قريب من</div>
-              <div className="flex items-center gap-1 text-[12px] font-black text-[#0E0F11]">
+              <div className="text-[8px] font-semibold text-[#6B7280]">{t("back.nearYou")}</div>
+              <div className="flex items-center gap-1 text-[11px] font-black text-[#0E0F11]">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0F766E" strokeWidth="2.4">
                   <path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z" />
                   <circle cx="12" cy="10" r="2.6" />
                 </svg>
-                <span>المعادي، القاهرة</span>
+                <span className="truncate max-w-[130px]">{t("back.demoArea")}</span>
                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.5">
                   <path d="m6 9 6 6 6-6" />
                 </svg>
@@ -316,7 +318,7 @@ function PhoneBack() {
               <circle cx="11" cy="11" r="7" />
               <path d="m16.5 16.5 4.5 4.5" />
             </svg>
-            <span className="text-[9px] font-semibold text-[#9CA3AF]">دوّر باسم الصالون أو الخدمة</span>
+            <span className="text-[9px] font-semibold text-[#9CA3AF]">{t("back.searchPlaceholder")}</span>
           </div>
 
           {/* شرائح الفلترة */}
@@ -329,20 +331,20 @@ function PhoneBack() {
                 <circle cx="12" cy="12" r="8.5" />
                 <path d="M12 7.5V12l3 1.8" />
               </svg>
-              <span>أقل انتظار دلوقتي</span>
+              <span>{t("back.filterShortestWait")}</span>
             </div>
             <div
               className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[8.5px] font-bold text-[#0E0F11]"
               style={{ border: "1px solid #E5E7EB" }}
             >
-              الأقرب ليك
+              {t("back.filterNearest")}
             </div>
           </div>
 
           {/* عنوان القسم */}
           <div className="mb-1.5 flex items-center justify-between">
-            <span className="text-[11px] font-black text-[#0E0F11]">تقدر تدخل دلوقتي</span>
-            <span className="text-[9px] font-extrabold text-[#0F766E]">شوف الكل</span>
+            <span className="text-[11px] font-black text-[#0E0F11]">{t("back.sectionTitle")}</span>
+            <span className="text-[9px] font-extrabold text-[#0F766E]">{t("back.viewAll")}</span>
           </div>
 
           {/* كارت الصالون المتاح */}
@@ -363,22 +365,22 @@ function PhoneBack() {
                 style={{ border: "1px solid #E2E8F0" }}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
-                <span className="text-[8px] font-black text-[#15803D]">فاضي دلوقتي</span>
+                <span className="text-[8px] font-black text-[#15803D]">{t("back.availableNow")}</span>
               </div>
             </div>
 
             <div className="p-1.5">
               <div className="truncate text-[11px] font-black text-[#0E0F11]">
-                صالون الكابتن حسام
+                {t("demoSalonName")}
               </div>
-              <div className="text-[8.5px] font-semibold text-[#6B7280]">المعادي • ٠.٨ كم</div>
+              <div className="text-[8.5px] font-semibold text-[#6B7280]">{t("back.demoAreaShort")} • {formatDistance(0.8, locale)}</div>
               <div className="mt-0.5 flex items-center justify-between">
                 <div className="flex items-center gap-0.5 text-[8.5px] font-black text-[#D97706]">
                   <span>★</span>
-                  <span>٤.٨</span>
-                  <span className="font-normal text-[#9CA3AF]">(٢١٤)</span>
+                  <span>4.8</span>
+                  <span className="font-normal text-[#9CA3AF]">(214)</span>
                 </div>
-                <div className="text-[9px] font-extrabold text-[#0F766E]">من ٧٠ ج.م</div>
+                <div className="text-[9px] font-extrabold text-[#0F766E]">{formatFrom(70, locale)}</div>
               </div>
             </div>
           </div>
@@ -393,28 +395,28 @@ function PhoneBack() {
                 <path d="M3 10.5 12 3l9 7.5" />
                 <path d="M5.5 9.5V20h13V9.5" />
               </svg>
-              <span className="text-[7.5px] font-black">الرئيسية</span>
+              <span className="text-[7.5px] font-black">{tNav("home")}</span>
             </div>
             <div className="flex flex-col items-center text-[#6B7280]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3.5" y="5" width="17" height="15.5" rx="3" />
                 <path d="M3.5 9.5h17M8 3v4M16 3v4" />
               </svg>
-              <span className="text-[7.5px] font-semibold">حجوزاتي</span>
+              <span className="text-[7.5px] font-semibold">{tNav("bookings")}</span>
             </div>
             <div className="flex flex-col items-center text-[#6B7280]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="7" />
                 <path d="m16.5 16.5 4.5 4.5" />
               </svg>
-              <span className="text-[7.5px] font-semibold">البحث</span>
+              <span className="text-[7.5px] font-semibold">{tNav("search")}</span>
             </div>
             <div className="flex flex-col items-center text-[#6B7280]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M4.5 20c.9-4 3.8-6 7.5-6s6.6 2 7.5 6" />
               </svg>
-              <span className="text-[7.5px] font-semibold">حسابي</span>
+              <span className="text-[7.5px] font-semibold">{tNav("account")}</span>
             </div>
           </div>
 
@@ -429,15 +431,19 @@ function PhoneBack() {
   );
 }
 
+import { useLocale, useTranslations } from "next-intl";
+import { getAppName } from "@/lib/data/constants/app.constants";
+import { formatDistance, formatFrom, formatPrice } from "@/lib/utils/format/price.utils";
+
 const QR_PATH =
   "M0,0h1v1h-1zM1,0h1v1h-1zM2,0h1v1h-1zM3,0h1v1h-1zM4,0h1v1h-1zM5,0h1v1h-1zM6,0h1v1h-1zM12,0h1v1h-1zM13,0h1v1h-1zM15,0h1v1h-1zM16,0h1v1h-1zM18,0h1v1h-1zM19,0h1v1h-1zM20,0h1v1h-1zM21,0h1v1h-1zM22,0h1v1h-1zM23,0h1v1h-1zM24,0h1v1h-1zM0,1h1v1h-1zM6,1h1v1h-1zM8,1h1v1h-1zM10,1h1v1h-1zM12,1h1v1h-1zM16,1h1v1h-1zM18,1h1v1h-1zM24,1h1v1h-1zM0,2h1v1h-1zM2,2h1v1h-1zM3,2h1v1h-1zM4,2h1v1h-1zM6,2h1v1h-1zM8,2h1v1h-1zM9,2h1v1h-1zM11,2h1v1h-1zM16,2h1v1h-1zM18,2h1v1h-1zM20,2h1v1h-1zM21,2h1v1h-1zM22,2h1v1h-1zM24,2h1v1h-1zM0,3h1v1h-1zM2,3h1v1h-1zM3,3h1v1h-1zM4,3h1v1h-1zM6,3h1v1h-1zM10,3h1v1h-1zM11,3h1v1h-1zM12,3h1v1h-1zM13,3h1v1h-1zM16,3h1v1h-1zM18,3h1v1h-1zM20,3h1v1h-1zM21,3h1v1h-1zM22,3h1v1h-1zM24,3h1v1h-1zM0,4h1v1h-1zM2,4h1v1h-1zM3,4h1v1h-1zM4,4h1v1h-1zM6,4h1v1h-1zM10,4h1v1h-1zM11,4h1v1h-1zM12,4h1v1h-1zM15,4h1v1h-1zM16,4h1v1h-1zM18,4h1v1h-1zM20,4h1v1h-1zM21,4h1v1h-1zM22,4h1v1h-1zM24,4h1v1h-1zM0,5h1v1h-1zM6,5h1v1h-1zM8,5h1v1h-1zM9,5h1v1h-1zM11,5h1v1h-1zM12,5h1v1h-1zM13,5h1v1h-1zM14,5h1v1h-1zM18,5h1v1h-1zM24,5h1v1h-1zM0,6h1v1h-1zM1,6h1v1h-1zM2,6h1v1h-1zM3,6h1v1h-1zM4,6h1v1h-1zM5,6h1v1h-1zM6,6h1v1h-1zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h1v1h-1zM16,6h1v1h-1zM18,6h1v1h-1zM19,6h1v1h-1zM20,6h1v1h-1zM21,6h1v1h-1zM22,6h1v1h-1zM23,6h1v1h-1zM24,6h1v1h-1zM8,7h1v1h-1zM9,7h1v1h-1zM10,7h1v1h-1zM11,7h1v1h-1zM12,7h1v1h-1zM14,7h1v1h-1zM2,8h1v1h-1zM5,8h1v1h-1zM6,8h1v1h-1zM7,8h1v1h-1zM8,8h1v1h-1zM11,8h1v1h-1zM13,8h1v1h-1zM14,8h1v1h-1zM15,8h1v1h-1zM16,8h1v1h-1zM17,8h1v1h-1zM18,8h1v1h-1zM20,8h1v1h-1zM21,8h1v1h-1zM23,8h1v1h-1zM24,8h1v1h-1zM0,9h1v1h-1zM4,9h1v1h-1zM7,9h1v1h-1zM8,9h1v1h-1zM15,9h1v1h-1zM16,9h1v1h-1zM17,9h1v1h-1zM18,9h1v1h-1zM19,9h1v1h-1zM21,9h1v1h-1zM23,9h1v1h-1zM2,10h1v1h-1zM3,10h1v1h-1zM5,10h1v1h-1zM6,10h1v1h-1zM7,10h1v1h-1zM8,10h1v1h-1zM11,10h1v1h-1zM12,10h1v1h-1zM16,10h1v1h-1zM18,10h1v1h-1zM19,10h1v1h-1zM23,10h1v1h-1zM0,11h1v1h-1zM1,11h1v1h-1zM2,11h1v1h-1zM4,11h1v1h-1zM7,11h1v1h-1zM8,11h1v1h-1zM9,11h1v1h-1zM12,11h1v1h-1zM14,11h1v1h-1zM18,11h1v1h-1zM19,11h1v1h-1zM20,11h1v1h-1zM23,11h1v1h-1zM0,12h1v1h-1zM1,12h1v1h-1zM2,12h1v1h-1zM3,12h1v1h-1zM5,12h1v1h-1zM6,12h1v1h-1zM10,12h1v1h-1zM11,12h1v1h-1zM14,12h1v1h-1zM16,12h1v1h-1zM18,12h1v1h-1zM19,12h1v1h-1zM20,12h1v1h-1zM21,12h1v1h-1zM22,12h1v1h-1zM2,13h1v1h-1zM3,13h1v1h-1zM5,13h1v1h-1zM7,13h1v1h-1zM10,13h1v1h-1zM11,13h1v1h-1zM12,13h1v1h-1zM13,13h1v1h-1zM17,13h1v1h-1zM18,13h1v1h-1zM20,13h1v1h-1zM24,13h1v1h-1zM2,14h1v1h-1zM4,14h1v1h-1zM6,14h1v1h-1zM8,14h1v1h-1zM9,14h1v1h-1zM10,14h1v1h-1zM11,14h1v1h-1zM12,14h1v1h-1zM13,14h1v1h-1zM15,14h1v1h-1zM16,14h1v1h-1zM17,14h1v1h-1zM18,14h1v1h-1zM20,14h1v1h-1zM21,14h1v1h-1zM0,15h1v1h-1zM1,15h1v1h-1zM2,15h1v1h-1zM3,15h1v1h-1zM4,15h1v1h-1zM5,15h1v1h-1zM10,15h1v1h-1zM12,15h1v1h-1zM14,15h1v1h-1zM15,15h1v1h-1zM16,15h1v1h-1zM18,15h1v1h-1zM19,15h1v1h-1zM20,15h1v1h-1zM21,15h1v1h-1zM22,15h1v1h-1zM0,16h1v1h-1zM3,16h1v1h-1zM5,16h1v1h-1zM6,16h1v1h-1zM7,16h1v1h-1zM11,16h1v1h-1zM16,16h1v1h-1zM17,16h1v1h-1zM18,16h1v1h-1zM19,16h1v1h-1zM20,16h1v1h-1zM22,16h1v1h-1zM23,16h1v1h-1zM8,17h1v1h-1zM10,17h1v1h-1zM13,17h1v1h-1zM15,17h1v1h-1zM16,17h1v1h-1zM20,17h1v1h-1zM22,17h1v1h-1zM23,17h1v1h-1zM0,18h1v1h-1zM1,18h1v1h-1zM2,18h1v1h-1zM3,18h1v1h-1zM4,18h1v1h-1zM5,18h1v1h-1zM6,18h1v1h-1zM9,18h1v1h-1zM11,18h1v1h-1zM13,18h1v1h-1zM14,18h1v1h-1zM15,18h1v1h-1zM16,18h1v1h-1zM18,18h1v1h-1zM20,18h1v1h-1zM23,18h1v1h-1zM0,19h1v1h-1zM6,19h1v1h-1zM8,19h1v1h-1zM9,19h1v1h-1zM10,19h1v1h-1zM11,19h1v1h-1zM14,19h1v1h-1zM15,19h1v1h-1zM16,19h1v1h-1zM20,19h1v1h-1zM22,19h1v1h-1zM23,19h1v1h-1zM0,20h1v1h-1zM2,20h1v1h-1zM3,20h1v1h-1zM4,20h1v1h-1zM6,20h1v1h-1zM8,20h1v1h-1zM13,20h1v1h-1zM14,20h1v1h-1zM15,20h1v1h-1zM16,20h1v1h-1zM17,20h1v1h-1zM18,20h1v1h-1zM19,20h1v1h-1zM20,20h1v1h-1zM23,20h1v1h-1zM0,21h1v1h-1zM2,21h1v1h-1zM3,21h1v1h-1zM4,21h1v1h-1zM6,21h1v1h-1zM10,21h1v1h-1zM14,21h1v1h-1zM15,21h1v1h-1zM16,21h1v1h-1zM18,21h1v1h-1zM19,21h1v1h-1zM21,21h1v1h-1zM22,21h1v1h-1zM0,22h1v1h-1zM2,22h1v1h-1zM3,22h1v1h-1zM4,22h1v1h-1zM6,22h1v1h-1zM11,22h1v1h-1zM13,22h1v1h-1zM19,22h1v1h-1zM20,22h1v1h-1zM22,22h1v1h-1zM24,22h1v1h-1zM0,23h1v1h-1zM6,23h1v1h-1zM8,23h1v1h-1zM9,23h1v1h-1zM10,23h1v1h-1zM11,23h1v1h-1zM12,23h1v1h-1zM13,23h1v1h-1zM14,23h1v1h-1zM15,23h1v1h-1zM18,23h1v1h-1zM19,23h1v1h-1zM22,23h1v1h-1zM0,24h1v1h-1zM1,24h1v1h-1zM2,24h1v1h-1zM3,24h1v1h-1zM4,24h1v1h-1zM5,24h1v1h-1zM6,24h1v1h-1zM8,24h1v1h-1zM11,24h1v1h-1zM12,24h1v1h-1zM14,24h1v1h-1zM16,24h1v1h-1zM17,24h1v1h-1zM18,24h1v1h-1zM19,24h1v1h-1zM22,24h1v1h-1zM23,24h1v1h-1z";
 
 /** مصفوفة QR Code واقعية بدون أي ظلال */
-function QrMatrix() {
+function QrMatrix({ ariaLabel }: { ariaLabel?: string }) {
   return (
     <div
       className="qrcode flex shrink-0 items-center justify-center rounded-xl bg-white p-1.5"
-      aria-label="QR Code للتحميل السريع"
+      aria-label={ariaLabel}
       style={{
         width: 68,
         height: 68,
@@ -458,41 +464,48 @@ function QrMatrix() {
 /* ————————— Main Component ————————— */
 
 function AppDownload() {
+  const t = useTranslations("marketing.home.appDownload");
+  const tMockup = useTranslations("marketing.home.appDownload.mockup");
+  const tNav = useTranslations("common.bottomNav");
+  const locale = useLocale();
+
   return (
     <section className="mt-10 bg-white md:mt-14">
       <div
         className="relative mx-auto grid max-w-[1312px] items-center gap-10 overflow-hidden px-4 py-[50px] max-md:grid-cols-1 max-md:gap-9 max-md:py-10 md:grid-cols-[1.05fr_1fr] md:px-16"
       >
-        {/* ————— العمود الأيمن في الـ RTL: النصوص + QR + أزرار المتاجر ————— */}
-        <div className="flex flex-col gap-[18px] text-right max-md:order-1 max-md:items-center max-md:text-center md:order-1">
+        {/* ————— النصوص + QR + أزرار المتاجر ————— */}
+        <div className="flex flex-col gap-[18px] text-start max-md:order-1 max-md:items-center max-md:text-center md:order-1">
           {/* شارة التوفر */}
           <div className="inline-flex w-fit items-center gap-2 rounded-full bg-tint px-[14px] py-1.5 text-[13px] font-bold text-primary">
             <div className="flex items-center gap-1">
               <GooglePlayIcon className="h-3.5 w-3.5 fill-current" />
               <AppleIcon className="h-3.5 w-3.5 fill-current" />
             </div>
-            <span>متوفّر الآن لجميع الأجهزة</span>
+            <span>{t("badge")}</span>
           </div>
 
           {/* العنوان الرئيسي */}
           <h2 className="text-[38px] font-black leading-[1.25] tracking-tight text-foreground max-md:text-[30px]">
-            حمّل تطبيق<br />
-            <span className="inline-block text-primary">بالتدريج</span> الآن واحجز دورك
+            {t.rich("title", {
+              appName: getAppName(locale),
+              brand: (chunks) => <span className="inline-block text-primary">{chunks}</span>,
+            })}
           </h2>
 
           {/* الوصف */}
           <p className="max-w-[440px] text-[15.5px] leading-[1.75] text-muted-foreground max-md:max-w-full">
-            استنّى دورك وأنت في مكانك. ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة، وهنبعتلك إشعار لما يقرب دورك.
+            {t("description")}
           </p>
 
           {/* QR + أزرار المتاجر */}
           <div className="mt-2.5 flex flex-wrap items-center gap-5 border-t border-border pt-4 max-md:flex-col max-md:items-center">
             {/* بطاقة QR */}
             <div className="flex h-full min-h-[98px] items-center gap-3.5 rounded-2xl border border-border bg-muted px-4 py-2.5">
-              <QrMatrix />
-              <div className="flex flex-col text-right">
-                <span className="text-[13px] font-extrabold text-foreground">امسح الكود للتحميل</span>
-                <span className="mt-0.5 text-[11.5px] font-semibold text-muted-foreground">متاح لنظام iOS و Android</span>
+              <QrMatrix ariaLabel={t("qrAria")} />
+              <div className="flex flex-col text-start">
+                <span className="text-[13px] font-extrabold text-foreground">{t("scanCode")}</span>
+                <span className="mt-0.5 text-[11.5px] font-semibold text-muted-foreground">{t("availableOn")}</span>
               </div>
             </div>
 
@@ -527,15 +540,15 @@ function AppDownload() {
           </div>
         </div>
 
-        {/* ————— العمود الأيسر في الـ RTL: شاشات الموبايل الواقعية بدون أي ظلال ————— */}
+        {/* ————— شاشات الموبايل ————— */}
         <div
           className="relative flex items-center justify-center overflow-hidden max-md:order-2 max-md:min-h-[460px] md:order-2"
-          aria-label="شاشات تطبيق بالتدريج للموبايل"
+          aria-label={t("screensAria")}
           style={{ minHeight: 540, direction: "ltr" }}
         >
           <div className="relative h-[536px] w-[430px] max-w-full shrink-0 origin-center scale-[0.72] xs:scale-[0.82] sm:scale-95 md:scale-[0.9] lg:scale-100 transition-transform">
-            <PhoneBack />
-            <PhoneFront />
+            <PhoneBack t={tMockup} tNav={tNav} locale={locale} />
+            <PhoneFront t={tMockup} locale={locale} />
           </div>
         </div>
       </div>

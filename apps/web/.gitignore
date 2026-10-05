@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# i18next-parser scan output — a "what's new" report, never the real dictionaries
+/.i18n-scan/

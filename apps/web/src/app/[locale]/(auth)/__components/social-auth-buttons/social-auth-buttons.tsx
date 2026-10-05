@@ -1,13 +1,15 @@
 "use client";
 
-// أزرار تسجيل الدخول بواسطة جوجل وآبل — مطابقة لتصميم FRAME 13A و 13B
+import { useTranslations } from "next-intl";
+
 interface SocialAuthButtonsProps {
   prefix?: "continue" | "simple";
 }
 
 export function SocialAuthButtons({ prefix = "simple" }: SocialAuthButtonsProps) {
-  const googleLabel = prefix === "continue" ? "كمّل بجوجل" : "جوجل";
-  const appleLabel = prefix === "continue" ? "كمّل بآبل" : "آبل";
+  const t = useTranslations("auth.social");
+  const googleLabel = prefix === "continue" ? t("continueGoogle") : t("google");
+  const appleLabel = prefix === "continue" ? t("continueApple") : t("apple");
 
   return (
     <div className="flex gap-2.5">

@@ -5,6 +5,7 @@ import { Clock, Scissors } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/atoms/button";
+import { useTranslations } from "next-intl";
 import { ROUTE_BOOKING_DETAILS } from "@/lib/data/constants/routes.constants";
 import { BookingStatus, type Booking } from "@/lib/types/booking";
 import { formatDayLabel, formatTime, isToday } from "@/lib/utils/format/date.utils";
@@ -21,6 +22,7 @@ export function UpcomingCard({
   onCancel,
   coverImage,
 }: UpcomingCardProps) {
+  const t = useTranslations("app.bookings");
   const isBookingToday = isToday(booking.startAt);
 
   // ١. كارت الدور النشط في حال حجز اليوم (Active Queue Card مطابقة للفريم ٠٩)
@@ -35,7 +37,7 @@ export function UpcomingCard({
           <div className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[13px] font-extrabold text-primary-pressed">
-              دورك شغّال دلوقتي
+              {t("activeQueue.liveStatus")}
             </span>
           </div>
           <span className="text-[13px] font-bold text-primary-pressed truncate">
@@ -46,18 +48,22 @@ export function UpcomingCard({
         {/* أرقام الدور والانتظار */}
         <div className="mb-4.5 flex items-end gap-5">
           <div>
-            <div className="mb-1 text-[12px] font-bold text-primary-pressed">رقمك</div>
+            <div className="mb-1 text-[12px] font-bold text-primary-pressed">
+              {t("activeQueue.queueNumberLabel")}
+            </div>
             <div className="tabular text-[48px] md:text-[52px] font-extrabold leading-none text-primary">
               {booking.queueNumber}
             </div>
           </div>
           <div className="h-12 w-px bg-tint-border" />
           <div className="pb-1">
-            <div className="mb-1 text-[12px] font-bold text-primary-pressed">فاضلك</div>
+            <div className="mb-1 text-[12px] font-bold text-primary-pressed">
+              {t("activeQueue.aheadLabel")}
+            </div>
             <div className="text-[18px] md:text-[19px] font-extrabold text-primary-pressed">
-              <span className="tabular">{peopleAhead} {peopleAhead === 1 ? "نفر" : peopleAhead === 2 ? "نفرين" : "أنفار"}</span>{" "}
+              <span className="tabular">{t("activeQueue.peopleAhead", { count: peopleAhead })}</span>{" "}
               <span className="text-[14.5px] font-semibold text-primary-pressed/80 tabular">
-                ~ {estimatedMinutes} دقيقة
+                {t("activeQueue.minutesEstimated", { count: estimatedMinutes })}
               </span>
             </div>
           </div>
@@ -67,7 +73,7 @@ export function UpcomingCard({
         <div className="mb-4 flex flex-wrap items-center gap-2 text-[12.5px] font-semibold text-primary-pressed">
           <span>{booking.serviceNames.join(" + ")}</span>
           <span className="text-tint-border">|</span>
-          <span>مع {booking.barberName}</span>
+          <span>{t("withBarber", { name: booking.barberName })}</span>
           <span className="text-tint-border">|</span>
           <span className="tabular font-bold">{formatPrice(booking.totalPrice)}</span>
         </div>
@@ -77,7 +83,7 @@ export function UpcomingCard({
           href={ROUTE_BOOKING_DETAILS(booking.id)}
           className="flex h-12 w-full items-center justify-center rounded-[10px] bg-primary text-[15px] font-bold text-primary-foreground shadow-xs transition-colors hover:bg-primary-pressed"
         >
-          تابع دورك
+          {t("activeQueue.trackQueue")}
         </Link>
       </article>
     );
@@ -93,12 +99,12 @@ export function UpcomingCard({
         {isWaiting ? (
           <span className="inline-flex h-6.5 items-center gap-1.5 rounded-[7px] bg-[#FDF1DE] px-2.5 text-[12px] font-bold text-[#B45309]">
             <Clock className="size-3.5" />
-            مستني تأكيد الصالون
+            {t("status.waiting")}
           </span>
         ) : (
           <span className="inline-flex h-6.5 items-center gap-1.5 rounded-[7px] border border-tint-border bg-tint px-2.5 text-[12px] font-bold text-primary-pressed">
             <Clock className="size-3.5" />
-            حجز مؤكد
+            {t("status.confirmed")}
           </span>
         )}
         <span className="tabular text-xs font-semibold text-muted-foreground">
@@ -125,7 +131,7 @@ export function UpcomingCard({
           <div className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
             <span>{booking.serviceNames.join(" + ")}</span>
             <span>·</span>
-            <span>مع {booking.barberName}</span>
+            <span>{t("withBarber", { name: booking.barberName })}</span>
           </div>
           <div className="flex items-center gap-1.5 text-[13px] font-bold text-foreground">
             <span className="tabular">{formatPrice(booking.totalPrice)}</span>
@@ -139,7 +145,7 @@ export function UpcomingCard({
           href={ROUTE_BOOKING_DETAILS(booking.id)}
           className="flex h-11 flex-1 items-center justify-center rounded-[10px] border border-border bg-card text-[14px] font-bold text-foreground transition-colors hover:bg-muted"
         >
-          تفاصيل الحجز
+          {t("bookingDetails")}
         </Link>
         <Button
           type="button"
@@ -147,7 +153,7 @@ export function UpcomingCard({
           onClick={() => onCancel(booking)}
           className="h-11 flex-1 rounded-[10px] border border-[#F3CFCF] bg-card text-[14px] font-bold text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
         >
-          إلغاء
+          {t("cancel")}
         </Button>
       </div>
     </article>

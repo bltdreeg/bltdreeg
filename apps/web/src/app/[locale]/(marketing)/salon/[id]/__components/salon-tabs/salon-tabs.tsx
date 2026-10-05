@@ -2,22 +2,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { HEADER_HEIGHT_PX } from "@/lib/data/constants/app.constants";
 import { cn } from "@/lib/utils/cn.utils";
 
-const TABS = [
-  { id: "services", label: "الخدمات" },
-  { id: "barbers", label: "الحلاقين" },
-  { id: "offers", label: "العروض" },
-  { id: "reviews", label: "التقييمات" },
-  { id: "hours", label: "المواعيد" },
-] as const;
+const TAB_KEYS = ["services", "barbers", "offers", "reviews", "hours"] as const;
 
 export function SalonTabs() {
-  const [activeId, setActiveId] = useState<string>(TABS[0].id);
+  const t = useTranslations("marketing.salon.tabs");
+  const [activeId, setActiveId] = useState<string>(TAB_KEYS[0]);
 
   useEffect(() => {
-    const sections = TABS.map((t) => document.getElementById(t.id)).filter(
+    const sections = TAB_KEYS.map((id) => document.getElementById(id)).filter(
       (el): el is HTMLElement => el !== null,
     );
     if (sections.length === 0) return;
@@ -37,16 +33,16 @@ export function SalonTabs() {
 
   return (
     <nav
-      aria-label="أقسام الصفحة"
+      aria-label={t("navAria")}
       className="sticky z-30 flex w-full gap-1.5 overflow-x-auto border-b border-border bg-background px-4 sm:px-8 scrollbar-none lg:px-0"
       style={{ top: HEADER_HEIGHT_PX }}
     >
-      {TABS.map((tab) => {
-        const active = tab.id === activeId;
+      {TAB_KEYS.map((key) => {
+        const active = key === activeId;
         return (
           <a
-            key={tab.id}
-            href={`#${tab.id}`}
+            key={key}
+            href={`#${key}`}
             aria-current={active ? "true" : undefined}
             className={cn(
               "shrink-0 whitespace-nowrap px-3 pb-3 text-sm transition-colors",
@@ -55,7 +51,7 @@ export function SalonTabs() {
                 : "font-semibold text-muted-foreground",
             )}
           >
-            {tab.label}
+            {t(key)}
           </a>
         );
       })}

@@ -1,8 +1,8 @@
-// شريط الميعاد الثابت في الهيدر يوم الحجز — FRAME 10A
+import { useLocale, useTranslations } from "next-intl";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
 import { ROUTE_BOOKING_DETAILS } from "@/lib/data/constants/routes.constants";
-import { APP_NAME } from "@/lib/data/constants/app.constants";
+import { getAppName } from "@/lib/data/constants/app.constants";
 import { cn } from "@/lib/utils/cn.utils";
 
 type AppointmentStripProps = {
@@ -16,10 +16,14 @@ type AppointmentStripProps = {
 export function AppointmentStrip({
   time = "6:30 م",
   queueNumber = 3,
-  statusText = "الصالون في ميعاده",
+  statusText,
   bookingId,
   className,
 }: AppointmentStripProps) {
+  const t = useTranslations("common.appointmentStrip");
+  const locale = useLocale();
+  const displayStatus = statusText ?? t("onSchedule");
+
   const content = (
     <div
       className={cn(
@@ -31,7 +35,7 @@ export function AppointmentStrip({
         {/* معلومات الميعاد والدور */}
         <div className="flex flex-wrap items-center gap-3 md:gap-4">
           <span className="text-[17px] font-black tracking-tight text-white">
-            {APP_NAME}
+            {getAppName(locale)}
           </span>
 
           <div
@@ -41,7 +45,7 @@ export function AppointmentStrip({
 
           <div className="flex items-baseline gap-2">
             <span className="text-xs font-medium text-white/90">
-              ميعادك النهارده
+              {t("yourAppointmentToday")}
             </span>
             <span className="tabular text-[17px] font-extrabold text-white">
               {time}
@@ -50,7 +54,7 @@ export function AppointmentStrip({
 
           <div className="flex items-baseline gap-2">
             <span className="text-xs font-medium text-white/90">
-              رقمك في الدور
+              {t("queueNumber")}
             </span>
             <span className="tabular text-[17px] font-extrabold text-white">
               {queueNumber}
@@ -61,7 +65,7 @@ export function AppointmentStrip({
         {/* حالة الصالون: الصالون في ميعاده */}
         <div className="flex shrink-0 items-center gap-2 rounded-lg bg-[#DCFCE7] px-2.5 py-1.5 text-[#15803D]">
           <span className="size-1.5 shrink-0 rounded-full bg-[#15803D]" />
-          <span className="text-xs font-bold">{statusText}</span>
+          <span className="text-xs font-bold">{displayStatus}</span>
         </div>
       </PageContainer>
     </div>
@@ -71,7 +75,7 @@ export function AppointmentStrip({
     return (
       <Link
         href={ROUTE_BOOKING_DETAILS(bookingId)}
-        aria-label="متابعة الحجز المباشر"
+        aria-label={t("trackingAria")}
         className="block transition-opacity hover:opacity-95 focus-visible:outline-none"
       >
         {content}
