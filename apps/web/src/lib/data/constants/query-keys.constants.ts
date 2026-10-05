@@ -2,7 +2,8 @@
 
 export const QK_AREAS = ["areas"] as const;
 export const QK_USER = ["user"] as const;
-export const QK_LOCATION_PREFILL = ["user", "location-prefill"] as const;
+/** مفصول عن QK_USER عن قصد: invalidate للمستخدم بيطابق بالبادئة وكان هيعيد طلب إذن الموقع */
+export const QK_LOCATION_PREFILL = ["location-prefill"] as const;
 export const QK_GEO_GOVERNORATES = ["geo", "governorates"] as const;
 export const QK_GEO_CITIES = (governorateId: string | null) => ["geo", "cities", governorateId] as const;
 export const QK_GEO_AREAS = (cityId: string | null) => ["geo", "areas", cityId] as const;
