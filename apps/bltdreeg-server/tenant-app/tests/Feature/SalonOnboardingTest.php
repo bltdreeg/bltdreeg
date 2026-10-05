@@ -5,23 +5,23 @@ declare(strict_types=1);
 use App\Modules\V1\Auth\Filament\Pages\Register;
 use App\Modules\V1\Onboarding\Filament\Pages\Onboarding;
 use App\Modules\V1\Onboarding\Filament\Pages\OnboardingStatus;
+use App\Modules\V1\Onboarding\Services\OnboardingService;
+use Bltdreeg\Core\Modules\Auth\Models\Role;
+use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
+use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
+use Bltdreeg\Core\Modules\Hr\Models\JobType;
 use Bltdreeg\Core\Modules\Onboarding\Enums\SubmissionStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
-use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
-use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
-use Bltdreeg\Core\Modules\Hr\Models\JobType;
-use Bltdreeg\Core\Modules\Auth\Models\Role;
-use Bltdreeg\Core\Modules\Services\Models\Service;
-use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Onboarding\Models\TenantLegalDocument;
 use Bltdreeg\Core\Modules\Onboarding\Models\TenantOnboardingSubmission;
-use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Onboarding\Notifications\OnboardingSubmitted;
-use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
-use App\Modules\V1\Onboarding\Services\OnboardingService;
 use Bltdreeg\Core\Modules\Onboarding\Support\LegalTerms;
-use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
 use Bltdreeg\Core\Modules\Onboarding\Support\SalonRegistrationService;
+use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantSeeder;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantSlug;
@@ -386,7 +386,9 @@ it('does not require an address for mobile salons', function () {
     $branch = Branch::query()->withoutGlobalScopes()->where('tenant_id', $tenant->id)->sole();
 
     expect(blank($branch->getTranslation('address', 'en', false)))->toBeTrue()
-        ->and($branch->latitude)->toBeNull();
+        // لا عنوان للفرع المتنقل، لكن الأعمدة NOT NULL فبياخد مركز المنطقة الافتراضية
+        ->and($branch->area_id)->toBe('EG011103')
+        ->and($branch->latitude)->toBe(30.042);
 });
 
 it('refuses a second submission while one is pending', function () {

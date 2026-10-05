@@ -62,9 +62,9 @@
 | 01 | [Geo tables, models, importer, snapshot, `geo:sync`](tasks/01-geo-data.md) | Core / API | — | done |
 | 02 | [LocationResolver, source enum, IP geolocator → core](tasks/02-location-resolver.md) | Core | 01 | done |
 | 03 | [Google Maps link parser + short-link resolver](tasks/03-google-maps-links.md) | Core | 02 | done |
-| 04 | [Customers: NOT NULL geo columns, back-fill, creation paths](tasks/04-customer-geo-columns.md) | Core / API | 02 | pending |
-| 05 | [Customer API: geo lookups, resolve, estimate, `/me/location`, onboarding status](tasks/05-customer-api.md) | API | 04 | pending |
-| 06 | [Branches: NOT NULL geo columns, decimal lat/lng, back-fill](tasks/06-branch-geo-columns.md) | Core | 02 | pending |
+| 04 | [Customers: NOT NULL geo columns, back-fill, creation paths](tasks/04-customer-geo-columns.md) | Core / API | 02 | done |
+| 05 | [Customer API: geo lookups, resolve, estimate, `/me/location`, onboarding status](tasks/05-customer-api.md) | API | 04 | done |
+| 06 | [Branches: NOT NULL geo columns, decimal lat/lng, back-fill](tasks/06-branch-geo-columns.md) | Core | 02 | done |
 | 07 | [Salon wizard: location step (map, GPS, Maps link, IP, dropdowns)](tasks/07-salon-wizard-location.md) | Tenant | 03, 06 | pending |
 | 08 | [Central admin: Branch, Customer, submission review](tasks/08-admin-panels.md) | API | 04, 06, 07 | pending |
 | 09 | [Web: confirm-location onboarding step](tasks/09-web-location-step.md) | Web | 05 | pending |

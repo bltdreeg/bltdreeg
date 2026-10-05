@@ -8,6 +8,8 @@ use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
 use Bltdreeg\Core\Modules\Auth\Support\RoleTemplateImporter;
 use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
 use Bltdreeg\Core\Modules\Catalog\Support\CatalogImporter;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
@@ -106,6 +108,7 @@ class DemoData
                 'phone' => $branch['phone'],
                 'address' => $branch['address'],
                 'is_active' => true,
+                ...app(LocationResolver::class)->fallback()->withSource(LocationSourceEnum::Manual)->toBranchColumns(),
             ]);
         }
     }

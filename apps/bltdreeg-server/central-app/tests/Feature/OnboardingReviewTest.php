@@ -9,6 +9,8 @@ use App\Modules\V1\Shared\Http\Controllers\PrivateFileController;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
 use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\SubmissionStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
@@ -70,6 +72,7 @@ function pendingSalon(string $website = 'https://glow.test'): array
         ->first() ?? new Branch(['tenant_id' => $tenant->id, 'is_active' => true]);
 
     $branch->forceFill([
+        ...app(LocationResolver::class)->fallback()->withSource(LocationSourceEnum::Manual)->toBranchColumns(),
         'name' => ['ar' => 'Glow Studio', 'en' => 'Glow Studio'],
         'phone' => $tenant->phone,
         'address' => ['ar' => '10 Tahrir Square, Cairo', 'en' => '10 Tahrir Square, Cairo'],

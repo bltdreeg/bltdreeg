@@ -89,7 +89,8 @@ test('registration with foreign ip stores default area', function () {
 });
 
 test('migration back-fills legacy customers and confirms only gps and manual ones', function () {
-    $this->artisan('migrate:rollback', ['--step' => 1, '--no-interaction' => true])->assertSuccessful();
+    // خطوتين: آخر migration هو الخاص بالفروع، وقبله العملاء
+    $this->artisan('migrate:rollback', ['--step' => 2, '--no-interaction' => true])->assertSuccessful();
 
     $insert = fn (?float $lat, ?float $lng, ?int $source): int => DB::table('customers')->insertGetId([
         'ulid' => (string) Str::ulid(),

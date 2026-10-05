@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Modules\V1\Onboarding\Services;
 
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
+use Bltdreeg\Core\Modules\Geo\Support\EgyptBounds;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\ServiceLocationTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\SubmissionStatusEnum;
@@ -166,12 +169,20 @@ class OnboardingService
             ->orderBy('id')
             ->first() ?? new Branch(['tenant_id' => $tenant->getKey(), 'is_active' => true]);
 
+        $lat = $answers['latitude'] ?? null;
+        $lng = $answers['longitude'] ?? null;
+        $resolver = app(LocationResolver::class);
+
+        // مؤقتاً لحد ما خطوة الموقع الجديدة في الـ wizard: نقطة مصرية صالحة، أو الموقع الحالي للفرع، أو القاهرة الافتراضية
+        $location = $needsAddress && is_numeric($lat) && is_numeric($lng) && EgyptBounds::contains((float) $lat, (float) $lng)
+            ? $resolver->nearest((float) $lat, (float) $lng, LocationSourceEnum::Manual)
+            : ($branch->exists ? null : $resolver->fallback()->withSource(LocationSourceEnum::Manual));
+
         $branch->fill([
             'name' => ['ar' => $answers['business_name'], 'en' => $answers['business_name']],
             'phone' => $branch->phone ?? $tenant->phone,
             'address' => $address === null ? null : ['ar' => $address, 'en' => $address],
-            'latitude' => $needsAddress ? ($answers['latitude'] ?? null) : null,
-            'longitude' => $needsAddress ? ($answers['longitude'] ?? null) : null,
+            ...($location?->toBranchColumns() ?? []),
             'team_size' => $teamSize,
             'service_location_type' => $locationTypes,
         ]);
