@@ -14,3 +14,5 @@ Location is skippable, and `PUT /me/location` without coordinates already works 
 
 ## Done when
 - [ ] Pest with a fake geolocator: IP fallback saves source `ip`; lookup failure leaves location null.
+
+> **Moved:** `IpGeolocator`, `Coordinates` and `MaxMindIpGeolocator` now live in `packages/core` (`Bltdreeg\Core\Modules\Geo`), with `geoip2/geoip2` in core's composer.json. The database path is `config('geo.maxmind_db_path')` / env `GEOIP_DATABASE_PATH` (default `apps/bltdreeg-server/storage/geoip/GeoLite2-City.mmdb`). A failed or foreign IP now resolves to the default Cairo area instead of leaving location null. See `plan/geo-location`.

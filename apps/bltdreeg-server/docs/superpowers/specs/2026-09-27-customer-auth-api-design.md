@@ -36,7 +36,7 @@ Staff (`users`) auth is not touched.
 | Password | Required at registration; nullable only for social-only accounts |
 | Social | ID-token exchange; Google wired for real, Apple built behind the same interface and disabled until keys exist |
 | Social sign-up | Creates an incomplete account → customer onboarding (phone + OTP, name, terms) |
-| Onboarding | Required: verified phone, first/last name, terms. Skippable: location, birth date |
+| Onboarding | Required: verified phone, first/last name, terms, **confirmed location** (governorate/city/area, pre-filled). Skippable: birth date |
 | OTP channels | WhatsApp, SMS (user picks), email (email verification / reset only) |
 | OTP control | Central admin panel: enable/disable channels, order providers per channel; keys stay in `.env` |
 | OTP rules | 6 digits, 5 min expiry, resend 60s → 120s → 300s, 5 wrong → 15 min lock, max 5 sends/identifier/hour, hashed |
@@ -133,7 +133,7 @@ by this schema and gets a note pointing here.
 | password | string nullable | hashed; null for social-only accounts |
 | birth_date | date nullable | |
 | last_lat, last_lng | decimal(10,7) nullable | |
-| location_source | tinyint nullable | `gps` / `ip` |
+| location_source | tinyint | `gps` / `ip` / `manual` / `maps_url` / `default` (NOT NULL; see 8.8) |
 | location_updated_at | timestamp nullable | |
 | terms_accepted_at | timestamp nullable | |
 | terms_version | string nullable | copied from `config('customer_auth.terms_version')` at acceptance |
@@ -362,6 +362,8 @@ Handled by `PUT /me` → `pending_email` → code by email → `/me/email/verify
 is verified, another account that took that email as verified in the meantime causes `auth.email_taken`.
 
 ### 8.8 Location
+> **Updated by `plan/geo-location`:** every customer always has `governorate_id`, `city_id`, `area_id` (NOT NULL foreign keys to `geo_*` tables seeded from OpenAdminData) plus `last_lat/last_lng` and `location_source`. At signup they come from the request IP, falling back to the default Cairo area (source `default`). `location_confirmed_at` is set when the customer confirms them (`PUT /me/location` with `area_id`) and completes the onboarding `location` step, which is now **required**. `GET /me/location/estimate` never returns null. `GET /geo/governorates`, `/geo/governorates/{id}/cities`, `/geo/cities/{id}/areas` and `GET /geo/resolve?lat&lng` are public. Trust order: default < ip < gps < manual = maps_url; an automatic update never replaces a more trusted or user-confirmed location. The text below is the original design.
+
 - **With coordinates:** `PUT /me/location {lat, lng}` saves them with source `gps`. Egypt bounding box
   is checked; otherwise the request is rejected with a validation error.
 - **Without coordinates:** the server uses `IpGeolocator` on the request IP and saves source
