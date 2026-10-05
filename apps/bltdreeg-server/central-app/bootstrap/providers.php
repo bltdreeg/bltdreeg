@@ -3,6 +3,7 @@
 use App\Modules\V1\Branches\BranchesServiceProvider;
 use App\Modules\V1\Catalog\CatalogServiceProvider;
 use App\Modules\V1\Customer\CustomerServiceProvider;
+use App\Modules\V1\Geo\GeoServiceProvider;
 use App\Modules\V1\Onboarding\OnboardingServiceProvider;
 use App\Modules\V1\Shared\SharedServiceProvider;
 use App\Modules\V1\Tenants\TenantsServiceProvider;
@@ -20,4 +21,5 @@ return [
     TenantsServiceProvider::class,
     UsersServiceProvider::class,
     CustomerServiceProvider::class,
+    GeoServiceProvider::class,
 ];
