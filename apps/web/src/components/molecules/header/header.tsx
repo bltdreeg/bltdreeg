@@ -45,7 +45,7 @@ export function Header({
     propUserName !== undefined
       ? propUserName
       : isAuth
-        ? hookUser?.name || "كريم"
+        ? hookUser?.firstName || "كريم"
         : null;
 
   const firstName = activeUserName ? activeUserName.split(" ")[0] : "";

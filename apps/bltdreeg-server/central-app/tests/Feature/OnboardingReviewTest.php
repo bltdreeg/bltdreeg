@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-use App\Modules\V1\Shared\Http\Controllers\PrivateFileController;
 use App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\OnboardingSubmissionResource;
 use App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\Pages\ViewOnboardingSubmission;
 use App\Modules\V1\Onboarding\Services\OnboardingReviewService;
+use App\Modules\V1\Shared\Http\Controllers\PrivateFileController;
+use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
+use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\SubmissionStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
-use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
-use Bltdreeg\Core\Modules\Services\Models\Service;
-use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
-use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Onboarding\Models\TenantLegalDocument;
 use Bltdreeg\Core\Modules\Onboarding\Models\TenantOnboardingSubmission;
-use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Onboarding\Notifications\OnboardingApproved;
 use Bltdreeg\Core\Modules\Onboarding\Notifications\OnboardingDeclined;
-use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
-use Bltdreeg\Core\Modules\Auth\Support\RoleCatalog;
 use Bltdreeg\Core\Modules\Onboarding\Support\SalonRegistrationService;
+use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use DomainException;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;

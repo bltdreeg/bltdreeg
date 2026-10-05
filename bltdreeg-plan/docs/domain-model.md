@@ -49,7 +49,7 @@ A bookable time moment on a **chair** (each chair has its own slots; a chair is 
 _Avoid_: appointment
 
 **User account**:
-A customer's registered identity, used across all salons and branches. Required to use the app: a customer must register to see salons and to join/queue or book a slot. Registration is by phone + SMS OTP or email + password (both accepted).
+A customer's registered identity, used across all salons and branches. Required to book: guests can browse salons, but a customer must register and finish onboarding to join a queue, book a slot, favorite or rate. Every account has a verified Egyptian phone (OTP via WhatsApp or SMS). Login is by phone + password, verified email + password, phone OTP, or Google / Apple.
 _Avoid_: profile, login
 
 **Notification**:

@@ -4,8 +4,8 @@ namespace App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\Pag
 
 use App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\OnboardingSubmissionResource;
 use App\Modules\V1\Onboarding\Services\OnboardingReviewService;
-use Bltdreeg\Core\Modules\Onboarding\Models\TenantOnboardingSubmission;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Onboarding\Models\TenantOnboardingSubmission;
 use DomainException;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;

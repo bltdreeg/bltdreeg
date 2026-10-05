@@ -1,8 +1,8 @@
 <?php
 
+use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
-use Bltdreeg\Core\Modules\Auth\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

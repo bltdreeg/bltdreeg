@@ -7,6 +7,9 @@ use App\Modules\V1\Catalog\Filament\Resources\CatalogServiceCategories\CatalogSe
 use App\Modules\V1\Catalog\Filament\Resources\CatalogServices\CatalogServiceResource;
 use App\Modules\V1\Catalog\Filament\Resources\JobTypes\JobTypeResource;
 use App\Modules\V1\Catalog\Filament\Resources\RoleTemplates\RoleTemplateResource;
+use App\Modules\V1\Customer\Auth\Filament\Resources\Customers\CustomerResource;
+use App\Modules\V1\Customer\Auth\Filament\Resources\OtpChannelSettings\OtpChannelSettingResource;
+use App\Modules\V1\Customer\Auth\Filament\Resources\OtpDeliveries\OtpDeliveryResource;
 use App\Modules\V1\Onboarding\Filament\Resources\OnboardingSubmissions\OnboardingSubmissionResource;
 use App\Modules\V1\Tenants\Filament\Resources\Tenants\TenantResource;
 use App\Modules\V1\Users\Filament\Resources\Users\UserResource;
@@ -115,6 +118,9 @@ class AdminPanelProvider extends PanelProvider
                 JobTypeResource::class,
                 RoleTemplateResource::class,
                 BranchResource::class,
+                CustomerResource::class,
+                OtpChannelSettingResource::class,
+                OtpDeliveryResource::class,
             ])
             ->pages([
                 Dashboard::class,

@@ -25,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::before(fn ($user): ?bool => $user?->is_super_admin ? true : null);
 
+        // Scramble API docs: open in local, super admins only elsewhere.
+        Gate::define('viewApiDocs', fn ($user = null): bool => app()->isLocal() || (bool) $user?->is_super_admin);
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['en', 'ar']);
 

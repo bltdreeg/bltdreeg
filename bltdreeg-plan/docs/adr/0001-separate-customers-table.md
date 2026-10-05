@@ -14,7 +14,8 @@ platform operators, and RBAC (`tenant_user`, `is_super_admin`).
 No shared identity table between staff and customers.
 
 ## Consequences
-- Customer auth (phone+OTP or email+password) is independent of staff auth
+- Customer auth (verified phone; phone/email + password, phone OTP, Google/Apple —
+  see ADR 0005) is independent of staff auth
   (email+password only, feature 11) — no risk of RBAC/permission logic leaking
   into customer-facing code paths.
 - Ratings, visits, reservations, and QR scans all key off `customers.id`, never

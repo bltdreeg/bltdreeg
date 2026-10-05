@@ -31,7 +31,6 @@ class BranchResource extends Resource
 
     protected static ?string $slug = 'branches';
 
-
     protected static ?int $navigationSort = 5;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
@@ -62,7 +61,7 @@ class BranchResource extends Resource
             ->schema([
                 Select::make('tenant_id')
                     ->label(__('core::tenants.tenant'))
-                    ->options(fn(): array => Tenant::query()->pluck('name', 'id')->all())
+                    ->options(fn (): array => Tenant::query()->pluck('name', 'id')->all())
                     ->searchable()
                     ->required(),
                 TextInput::make('name')

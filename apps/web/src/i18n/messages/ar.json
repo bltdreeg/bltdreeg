@@ -116,6 +116,11 @@
       }
     },
     "otp": {
+      "sentToWhatsapp": "بعتنالك كود من {length} أرقام على واتساب على الرقم",
+      "sentToSms": "بعتنالك كود من {length} أرقام في رسالة على الرقم",
+      "resendSuccessWhatsapp": "تم إرسال كود تأكيد جديد على واتساب.",
+      "resendPending": "جاري الإرسال...",
+      "startOver": "ابدأ من الأول",
       "titleDefault": "اكتب كود التأكيد",
       "titleError": "الكود غلط",
       "descriptionError": "اتأكد من الكود اللي جالك وحاول تاني.",

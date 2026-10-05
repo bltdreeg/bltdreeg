@@ -116,6 +116,11 @@
       }
     },
     "otp": {
+      "sentToWhatsapp": "We sent a {length}-digit code on WhatsApp to",
+      "sentToSms": "We sent a {length}-digit code in a message to",
+      "resendSuccessWhatsapp": "A new confirmation code was sent on WhatsApp.",
+      "resendPending": "Sending...",
+      "startOver": "Start over",
       "titleDefault": "Enter confirmation code",
       "titleError": "Wrong code",
       "descriptionError": "Check the code you received and try again.",

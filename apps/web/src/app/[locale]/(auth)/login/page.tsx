@@ -2,7 +2,6 @@
 import { METADATA_LOGIN } from "@/lib/data/constants/metadata.constants";
 import { CALLBACK_PARAM, getAppName } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
-import { continueAsGuest, devLogin } from "@/lib/actions/auth/dev-login.action";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AuthBrandPanel } from "../__components/auth-brand-panel";
@@ -21,16 +20,6 @@ export default async function LoginPage({
   const query = await searchParams;
   const callbackUrl = query[CALLBACK_PARAM] || ROUTE_HOME;
   const t = await getTranslations("auth.shared");
-
-  async function action(formData: FormData) {
-    "use server";
-    await devLogin(formData, locale);
-  }
-
-  async function guestAction() {
-    "use server";
-    await continueAsGuest(locale);
-  }
 
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row bg-white text-[#0E0F11]">
@@ -52,7 +41,7 @@ export default async function LoginPage({
 
       {/* مساحة النموذج في المنتصف */}
       <div className="flex w-full lg:w-1/2 flex-1 items-center justify-center p-6 sm:p-10 lg:p-12 xl:p-16">
-        <LoginForm callbackUrl={callbackUrl} action={action} guestAction={guestAction} />
+        <LoginForm callbackUrl={callbackUrl} />
       </div>
     </div>
   );

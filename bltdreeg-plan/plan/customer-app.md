@@ -1,7 +1,9 @@
 # Customer App — Customer-Facing Mobile Surface
 
-Separate surface from both Filament panels. It talks to the shared backend
-(`packages/core` models + engines); no panel code.
+Separate surface from both Filament panels. Customer identity/auth talks to the
+**central-app** `/api/v1` customer API (domain owned by `central-app`, not
+`packages/core` or `tenant-app`). Salon browse/queue later uses central + tenant
+backends as those features land; no panel code in the customer apps.
 
 Legend — **Status**: `pending` (nothing for the customer app exists yet).
 **Migrations**: draft filenames under `docs/schema/migrations-draft/` until
@@ -12,11 +14,14 @@ applied.
 ## Section A · Identity
 
 ### CA-A1 · Registration & login
-Phone+OTP or email+password on a dedicated customer identity (`customers`).
-- **Status:** `pending`
-- **Migrations:** `2026_10_02_000000_create_customers_table.php`
-- **Steps:** OTP flow; JWT/sanctum tokens; profile edit; soft-delete
-  (hide-history intended).
+Verified phone on every account; login by phone/email + password, phone OTP
+(WhatsApp or SMS), Google / Apple; customer onboarding; Sanctum device tokens.
+Guests browse, an account is required to book.
+- **Status:** `designed` — API + web in progress, mobile wiring is a follow-up
+- **Spec:** `apps/bltdreeg-server/docs/superpowers/specs/2026-09-27-customer-auth-api-design.md`
+- **Migrations:** replaced by the spec's §4 (draft `2026_10_02_000000_create_customers_table.php` superseded)
+- **Mobile follow-up:** `BACKEND=real`, channel picker, `/auth/options`,
+  social buttons, onboarding, forgot password, nullable phone, error-code parsing.
 - **Refs:** `01-customer-booking-and-live-queue.md`
 
 ---

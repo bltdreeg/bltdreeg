@@ -2,9 +2,8 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
-import { CALLBACK_PARAM, SESSION_COOKIE } from "@/lib/data/constants/app.constants";
-import { ROUTE_LOGIN } from "@/lib/data/constants/routes.constants";
-import { isProtectedPath } from "./middleware.config";
+import { CALLBACK_PARAM, ONBOARDING_COOKIE, SESSION_COOKIE } from "@/lib/data/constants/app.constants";
+import { guardRedirect } from "@/lib/utils/auth/route-guard";
 
 const intl = createIntlMiddleware(routing);
 
@@ -16,10 +15,17 @@ export default function proxy(request: NextRequest) {
   const locale = localeMatch?.[1] ?? routing.defaultLocale;
   const pathWithoutLocale = pathname.replace(localePrefix, "") || "/";
 
-  if (isProtectedPath(pathWithoutLocale) && !request.cookies.has(SESSION_COOKIE)) {
-    const login = new URL(`/${locale}${ROUTE_LOGIN}`, request.url);
-    login.searchParams.set(CALLBACK_PARAM, pathWithoutLocale + request.nextUrl.search);
-    return NextResponse.redirect(login);
+  const redirect = guardRedirect({
+    path: pathWithoutLocale,
+    search: request.nextUrl.search,
+    hasSession: request.cookies.has(SESSION_COOKIE),
+    needsOnboarding: request.cookies.has(ONBOARDING_COOKIE),
+  });
+
+  if (redirect) {
+    const url = new URL(`/${locale}${redirect.to === "/" ? "" : redirect.to}`, request.url);
+    if (redirect.callback) url.searchParams.set(CALLBACK_PARAM, redirect.callback);
+    return NextResponse.redirect(url);
   }
 
   return intl(request);

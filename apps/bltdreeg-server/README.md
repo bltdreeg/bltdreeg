@@ -45,6 +45,21 @@ make migrate-fresh # drop all tables and re-run migrations
 make seed
 ```
 
+### Local Dev Runner (Without Docker)
+
+To run both apps and the queue worker with a single command from `apps/bltdreeg-server`:
+
+```bash
+npm run dev        # or .\dev.bat, .\dev.ps1, or make dev
+```
+
+This concurrently starts:
+- **Central App (Landlord & Customer Auth API):** `http://127.0.0.1:8022`
+- **Tenant App (Salon Panel):** `http://127.0.0.1:8011`
+- **Queue Worker:** `php artisan queue:listen --queue=otp,default` (processes OTP deliveries asynchronously)
+
+Pressing `Ctrl+C` cleanly shuts down all 3 processes.
+
 `make` / `make start` / `make up` are the same. After editing `tenant-app/resources/css/filament/app/theme.css`, run `make tenant-assets` so the new hashed CSS is built and Octane picks it up. Without Make: build assets with `npm --prefix central-app install && npm --prefix central-app run build` (and the same for `tenant-app`), then `docker compose -f infra/local/docker-compose.yml up -d --build --wait`, then `docker compose -f infra/local/docker-compose.yml exec -T tenant-app php artisan migrate --force` and `db:seed --force`.
 
 ## Module layout

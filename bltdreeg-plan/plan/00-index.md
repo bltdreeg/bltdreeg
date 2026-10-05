@@ -3,21 +3,22 @@
 Status of the whole build across the four workstream files. Facts verified
 against the codebase (not assumed): two Filament panels already exist
 (`central-app` = platform/`admin`, `tenant-app` = salon/`app` + Filament
-tenancy), shared schema lives in `packages/core`, and the customer surface is a
-separate (mobile) app with no panel.
+tenancy), shared **salon/platform** schema lives in `packages/core`, and the
+customer surface is a separate (mobile/web) app whose **API and domain live in
+`central-app`** (not in `packages/core` or `tenant-app`).
 
 ## Repo map
 
 | Path | Role in this plan |
 |---|---|
-| `packages/core/database/migrations/` | **existing, applied** migrations — never edited |
+| `packages/core/database/migrations/` | **existing, applied** salon/platform migrations — never edited |
 | `bltdreeg-plan/docs/schema/migrations-draft/` | **26 new draft migrations** (this deliverable) |
 | `bltdreeg-plan/docs/schema/erd.mermaid` | ERD aligned to actual table names |
 | `bltdreeg-plan/docs/schema/schema-notes.md` | mapping, conventions, invariant enforcement |
 | `bltdreeg-plan/docs/features/NN-*.md` | acceptance criteria (cross-referenced below) |
 | `bltdreeg-plan/plan/tenant-dashboard.md` | salon/branch panel work | see file |
-| `packages/core/src/Modules/{Tenancy,Auth,Catalog,Services,Hr,Onboarding}/` | shared models/policies/engines |
-| `central-app/app/Modules/V1/*` | platform Filament UI |
+| `packages/core/src/Modules/{Tenancy,Auth,Catalog,Services,Hr,Onboarding}/` | shared **salon/staff** models/policies/engines |
+| `central-app/app/Modules/V1/*` | platform Filament UI **and customer auth** (`CustomerAuth`) |
 | `tenant-app/app/Modules/V1/*` | salon/branch Filament UI + Livewire |
 
 ## Workstream files

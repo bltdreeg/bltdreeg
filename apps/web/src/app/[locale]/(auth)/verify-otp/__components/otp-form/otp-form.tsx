@@ -6,51 +6,68 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { MessageSquareText, CheckCircle2, AlertCircle, RefreshCw, Clock } from "lucide-react";
 import {
   ROUTE_HOME,
+  ROUTE_LOGIN,
   ROUTE_REGISTER,
 } from "@/lib/data/constants/routes.constants";
-import { DEMO_OTP, DEMO_OTP_MAX_ATTEMPTS } from "@/lib/data/constants/app.constants";
-import { completeOtpLogin } from "@/lib/actions/auth/dev-login.action";
-import { isValidOtp } from "@/lib/utils/auth-validation.utils";
+import type { ApiError } from "@/lib/utils/api/api-error";
+import { authErrorMessage } from "@/lib/utils/auth/auth-error-message";
+import { useOtpChallenge, useResendOtp, useVerifyOtp } from "@/lib/hooks/auth";
+import {
+  DEFAULT_OTP_LENGTH,
+  formatLocalEgyptianPhone,
+  isValidOtp,
+  normalizeEgyptianPhone,
+} from "@/lib/utils/auth-validation.utils";
 
 interface OtpFormProps {
   phone?: string;
+  /** register: تأكيد حساب جديد، login: دخول بالكود */
+  purpose?: "register" | "login";
   callbackUrl?: string;
   onSuccess?: () => void;
 }
 
-export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFormProps) {
+export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess }: OtpFormProps) {
   const t = useTranslations("auth.otp");
   const router = useRouter();
-  const [digits, setDigits] = useState<string[]>(["", "", "", ""]);
+  const verifyOtp = useVerifyOtp();
+  const resendOtp = useResendOtp();
+  const { data: challenge } = useOtpChallenge(purpose, phone);
+  const codeLength = challenge?.codeLength ?? DEFAULT_OTP_LENGTH;
+
+  const [digits, setDigits] = useState<string[]>(() => Array(codeLength).fill(""));
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
-  const [attemptsLeft, setAttemptsLeft] = useState(DEMO_OTP_MAX_ATTEMPTS);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [secondsRemaining, setSecondsRemaining] = useState(51);
+  const [needsRestart, setNeedsRestart] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const [resendNotification, setResendNotification] = useState<string | null>(null);
+  const isSubmitting = verifyOtp.isPending;
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // عداد تنازلي لإعادة إرسال الكود
+  // العداد التنازلي بيتحسب من وقت السيرفر (resend_available_at) مش من رقم ثابت
   useEffect(() => {
-    if (secondsRemaining <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsRemaining((prev) => prev - 1);
-    }, 1000);
+    const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
-  }, [secondsRemaining]);
+  }, []);
 
   // التركيز على الخانة النشطة أول مرة
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
 
-  const isComplete = digits.every((d) => d.length === 1);
-  const formattedTimer = `00:${secondsRemaining < 10 ? `0${secondsRemaining}` : secondsRemaining}`;
+  const slots = Array.from({ length: codeLength }, (_, i) => digits[i] ?? "");
+  const resendAt = challenge ? Date.parse(challenge.resendAvailableAt) : 0;
+  const secondsRemaining = Math.max(0, Math.ceil((resendAt - now) / 1000));
+  const isComplete = slots.every((d) => d.length === 1);
+  const minutes = Math.floor(secondsRemaining / 60);
+  const seconds = secondsRemaining % 60;
+  const formattedTimer = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   const hasError = error !== null;
 
   // تنسيق رقم الهاتف ليظهر بمسافات كما في التصميم 0102 345 6789
-  const displayPhone = phone.startsWith("1") ? `0${phone}` : phone;
+  const e164 = normalizeEgyptianPhone(phone) ?? phone;
+  const displayPhone = formatLocalEgyptianPhone(phone);
   let formattedPhone = displayPhone;
   if (displayPhone.length === 11) {
     formattedPhone = displayPhone.replace(/(\d{4})(\d{3})(\d{4})/, "$1 $2 $3");
@@ -61,19 +78,19 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
     // قبول الأرقام فقط
     const sanitized = val.replace(/\D/g, "");
     if (!sanitized) {
-      const nextDigits = [...digits];
+      const nextDigits = [...slots];
       nextDigits[index] = "";
       setDigits(nextDigits);
       return;
     }
 
     const char = sanitized.slice(-1);
-    const nextDigits = [...digits];
+    const nextDigits = [...slots];
     nextDigits[index] = char;
     setDigits(nextDigits);
 
     // نقل التركيز تلقائياً للخانة التالية
-    if (index < 3) {
+    if (index < codeLength - 1) {
       setActiveIndex(index + 1);
       inputRefs.current[index + 1]?.focus();
     }
@@ -83,13 +100,13 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
     if (e.key === "Backspace") {
       if (!digits[index] && index > 0) {
         // لو الخانة فاضية، ارجع للي قبلها وامسحها
-        const nextDigits = [...digits];
+        const nextDigits = [...slots];
         nextDigits[index - 1] = "";
         setDigits(nextDigits);
         setActiveIndex(index - 1);
         inputRefs.current[index - 1]?.focus();
       } else {
-        const nextDigits = [...digits];
+        const nextDigits = [...slots];
         nextDigits[index] = "";
         setDigits(nextDigits);
       }
@@ -97,7 +114,7 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
       // في وضع LTR، السهم الأيسر ينقل للخانة السابقة
       setActiveIndex(index - 1);
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === "ArrowRight" && index < 3) {
+    } else if (e.key === "ArrowRight" && index < codeLength - 1) {
       // في وضع LTR، السهم الأيمن ينقل للخانة التالية
       setActiveIndex(index + 1);
       inputRefs.current[index + 1]?.focus();
@@ -106,67 +123,76 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
 
   function handlePaste(e: React.ClipboardEvent) {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, codeLength);
     if (!pasted) return;
 
-    const nextDigits = [...digits];
-    for (let i = 0; i < 4; i++) {
+    const nextDigits = [...slots];
+    for (let i = 0; i < codeLength; i++) {
       nextDigits[i] = pasted[i] || "";
     }
     setDigits(nextDigits);
 
-    const focusIdx = Math.min(pasted.length, 3);
+    const focusIdx = Math.min(pasted.length, codeLength - 1);
     setActiveIndex(focusIdx);
     inputRefs.current[focusIdx]?.focus();
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const code = digits.join("");
+  function handleFailure(err: ApiError) {
+    setError(authErrorMessage(err));
+    // otp_expired = مفيش طلب مفتوح للرقم ده (اتمسح أو اتأكد قبل كده): الحل إنه يبدأ من الأول
+    setNeedsRestart(err.code === "auth.otp_expired");
+  }
 
-    if (!isValidOtp(code)) {
+  function resetDigits() {
+    setDigits(Array(codeLength).fill(""));
+    setActiveIndex(0);
+    inputRefs.current[0]?.focus();
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const code = slots.join("");
+
+    if (!isValidOtp(code, codeLength)) {
       setError(t("errors.invalidCode"));
       return;
     }
 
-    // ponytail: تحقق ديمو زي الموبايل — الكود الصح 1234 و3 محاولات غلط بتقفل.
-    if (code !== DEMO_OTP) {
-      const left = attemptsLeft - 1;
-      setAttemptsLeft(left);
-      setDigits(["", "", "", ""]);
-      setActiveIndex(0);
-      inputRefs.current[0]?.focus();
-      setError(
-        left > 0
-          ? t("errors.attemptsLeft", { count: left })
-          : t("errors.tooManyAttempts"),
-      );
-      return;
-    }
-
-    setIsSubmitting(true);
-    await completeOtpLogin();
-    setIsSubmitting(false);
-
-    if (onSuccess) {
-      onSuccess();
-      return;
-    }
-    // refresh عشان الهيدر (Server Components) يقرا الكوكي الجديدة
-    router.replace(callbackUrl || ROUTE_HOME);
-    router.refresh();
+    verifyOtp.mutate(
+      { phone: e164, code, purpose },
+      {
+        onSuccess: () => {
+          if (onSuccess) {
+            onSuccess();
+            return;
+          }
+          router.replace(callbackUrl || ROUTE_HOME);
+        },
+        onError: (err) => {
+          handleFailure(err);
+          // الكود الغلط بيتمسح عشان يتكتب من جديد؛ باقي الأخطاء (قفل/انتهاء) الكود فيها زي ما هو
+          if (err.code === "auth.otp_invalid") resetDigits();
+        },
+      },
+    );
   }
 
   function handleResend() {
-    if (secondsRemaining > 0) return;
-    setSecondsRemaining(51);
-    setAttemptsLeft(DEMO_OTP_MAX_ATTEMPTS);
-    setError(null);
-    setDigits(["", "", "", ""]);
-    setActiveIndex(0);
-    inputRefs.current[0]?.focus();
-    setResendNotification(t("resendSuccess"));
-    setTimeout(() => setResendNotification(null), 5000);
+    if (secondsRemaining > 0 || resendOtp.isPending) return;
+    resendOtp.mutate(
+      { phone: e164, purpose },
+      {
+        onSuccess: (next) => {
+          setError(null);
+          resetDigits();
+          setResendNotification(
+            next.channel === "whatsapp" ? t("resendSuccessWhatsapp") : t("resendSuccess"),
+          );
+          setTimeout(() => setResendNotification(null), 5000);
+        },
+        onError: handleFailure,
+      },
+    );
   }
 
   return (
@@ -187,13 +213,25 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
         </h1>
         <div className="text-[14px] leading-relaxed text-[#6B7280]">
           {hasError ? (
-            t("descriptionError")
+            <>
+              <div>{error}</div>
+              {needsRestart && (
+                <Link
+                  href={purpose === "register" ? ROUTE_REGISTER : ROUTE_LOGIN}
+                  className="mt-1 inline-block font-bold text-[#0F766E] hover:underline"
+                >
+                  {t("startOver")}
+                </Link>
+              )}
+            </>
           ) : (
             <>
-              <div>{t("sentTo")}</div>
+              <div>
+                {t(challenge?.channel === "whatsapp" ? "sentToWhatsapp" : "sentToSms", { length: codeLength })}
+              </div>
               <div className="flex items-center gap-2 mt-1">
                 <Link
-                  href={ROUTE_REGISTER}
+                  href={purpose === "register" ? ROUTE_REGISTER : ROUTE_LOGIN}
                   className="font-bold text-[#0F766E] hover:underline"
                 >
                   {t("changeNumber")}
@@ -225,7 +263,7 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
           onPaste={handlePaste}
           className="flex justify-center gap-3 w-full"
         >
-          {digits.map((digit, idx) => {
+          {slots.map((digit, idx) => {
             const isCurrent = activeIndex === idx;
             const hasVal = digit !== "";
 
@@ -279,10 +317,11 @@ export function OtpForm({ phone = "01023456789", callbackUrl, onSuccess }: OtpFo
             <button
               type="button"
               onClick={handleResend}
+              disabled={resendOtp.isPending}
               className="flex items-center gap-1.5 font-bold text-[#0F766E] hover:underline cursor-pointer"
             >
               <RefreshCw className="size-4" />
-              {t("resend")}
+              {resendOtp.isPending ? t("resendPending") : t("resend")}
             </button>
           )}
         </div>

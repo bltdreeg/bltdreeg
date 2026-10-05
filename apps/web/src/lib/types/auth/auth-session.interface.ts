@@ -1,8 +1,6 @@
-// شكل الجلسة بعد تسجيل الدخول
+// شكل الجلسة اللي المتصفح بيشوفها — التوكن في كوكي httpOnly ومبيتبعتش هنا
+import type { Customer } from "./customer.interface";
+
 export interface AuthSession {
-  userId: string;
-  name: string;
-  phone: string;
-  accessToken: string;
-  expiresAt: string;
+  user: Customer;
 }

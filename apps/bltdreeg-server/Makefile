@@ -4,7 +4,10 @@ CENTRAL := central-app
 
 .DEFAULT_GOAL := up
 
-.PHONY: up start down migrate migrate-fresh seed fresh-seed assets tenant-assets
+.PHONY: up start down migrate migrate-fresh seed fresh-seed assets tenant-assets dev
+
+dev:
+	node dev.mjs
 
 up start: assets
 	$(COMPOSE) up -d --build --wait
