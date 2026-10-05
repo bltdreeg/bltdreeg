@@ -59,9 +59,9 @@
 
 | # | Task | Side | Depends on | Status |
 |---|---|---|---|---|
-| 01 | [Geo tables, models, importer, snapshot, `geo:sync`](tasks/01-geo-data.md) | Core / API | — | pending |
-| 02 | [LocationResolver, source enum, IP geolocator → core](tasks/02-location-resolver.md) | Core | 01 | pending |
-| 03 | [Google Maps link parser + short-link resolver](tasks/03-google-maps-links.md) | Core | 02 | pending |
+| 01 | [Geo tables, models, importer, snapshot, `geo:sync`](tasks/01-geo-data.md) | Core / API | — | done |
+| 02 | [LocationResolver, source enum, IP geolocator → core](tasks/02-location-resolver.md) | Core | 01 | done |
+| 03 | [Google Maps link parser + short-link resolver](tasks/03-google-maps-links.md) | Core | 02 | done |
 | 04 | [Customers: NOT NULL geo columns, back-fill, creation paths](tasks/04-customer-geo-columns.md) | Core / API | 02 | pending |
 | 05 | [Customer API: geo lookups, resolve, estimate, `/me/location`, onboarding status](tasks/05-customer-api.md) | API | 04 | pending |
 | 06 | [Branches: NOT NULL geo columns, decimal lat/lng, back-fill](tasks/06-branch-geo-columns.md) | Core | 02 | pending |
