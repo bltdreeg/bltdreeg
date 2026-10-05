@@ -69,7 +69,7 @@
 | 08 | [Central admin: Branch, Customer, submission review](tasks/08-admin-panels.md) | API | 04, 06, 07 | done |
 | 09 | [Web: confirm-location onboarding step](tasks/09-web-location-step.md) | Web | 05 | done |
 | 10 | [Mobile: confirm-location onboarding step](tasks/10-mobile-location-step.md) | Mobile | 05 | blocked: no Flutter SDK on this machine |
-| 11 | [Wrap-up: docs, superseded plan note, full suites, manual check](tasks/11-wrap-up.md) | All | all | partial: docs + MySQL check done; mobile, Scramble and manual e2e pending |
+| 11 | [Wrap-up: docs, superseded plan note, full suites, manual check](tasks/11-wrap-up.md) | All | all | partial: docs, MySQL, Scramble and next build done; manual browser e2e + mobile pending |
 
 **Critical path:** 01 → 02 → 04 → 05 → 09.
 **In parallel once unblocked:** 03 and 06 after 02 · 07 after 03 + 06 · 08, 09 and 10 after their dependencies.
