@@ -2,6 +2,8 @@
 
 namespace Bltdreeg\Core\Providers;
 
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Support\MaxMindIpGeolocator;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogJobType;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
@@ -31,6 +33,8 @@ class CoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../../config/geo.php', 'geo');
+
+        $this->app->singleton(IpGeolocator::class, MaxMindIpGeolocator::class);
 
         $this->app->scoped(TenantContext::class);
         $this->app->scoped(BranchContext::class);

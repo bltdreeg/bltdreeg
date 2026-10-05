@@ -2,9 +2,9 @@
 
 namespace App\Modules\V1\Customer\Auth\Http\Resources;
 
-use App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum;
 use App\Modules\V1\Customer\Auth\Support\OnboardingStatus;
 use App\Modules\V1\Customer\Auth\Support\PhoneNumber;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

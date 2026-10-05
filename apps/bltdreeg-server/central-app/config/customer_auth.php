@@ -40,13 +40,4 @@ return [
             'client_ids' => array_values(array_filter(explode(',', (string) env('APPLE_CLIENT_IDS', '')))),
         ],
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Location Settings
-    |--------------------------------------------------------------------------
-    */
-    'location' => [
-        'maxmind_db_path' => database_path('geoip/GeoLite2-City.mmdb'),
-    ],
 ];

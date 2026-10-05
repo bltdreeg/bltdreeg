@@ -2,18 +2,15 @@
 
 namespace App\Modules\V1\Customer\Auth\Http\Requests;
 
+use Bltdreeg\Core\Modules\Geo\Support\EgyptBounds;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
 class UpdateLocationRequest extends FormRequest
 {
-    /** Egypt bounding box: [min, max] */
-    public const EGYPT_BOUNDS = ['lat' => [21.5, 32.0], 'lng' => [24.5, 37.0]];
-
     public static function inEgypt(float $lat, float $lng): bool
     {
-        return $lat >= self::EGYPT_BOUNDS['lat'][0] && $lat <= self::EGYPT_BOUNDS['lat'][1]
-            && $lng >= self::EGYPT_BOUNDS['lng'][0] && $lng <= self::EGYPT_BOUNDS['lng'][1];
+        return EgyptBounds::contains($lat, $lng);
     }
 
     public function authorize(): bool

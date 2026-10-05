@@ -2,11 +2,11 @@
 
 namespace App\Modules\V1\Customer\Auth\Http\Controllers;
 
-use App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum;
 use App\Modules\V1\Customer\Auth\Http\Requests\UpdateLocationRequest;
 use App\Modules\V1\Customer\Auth\Http\Resources\CustomerResource;
-use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -24,7 +24,7 @@ class MeLocationController extends Controller
         if ($request->filled('lat') && $request->filled('lng')) {
             $customer->last_lat = (float) $request->input('lat');
             $customer->last_lng = (float) $request->input('lng');
-            $customer->location_source = LocationSourceEnum::fromLabel((string) $request->input('source', 'gps'))->value;
+            $customer->location_source = (LocationSourceEnum::tryFromLabel((string) $request->input('source', 'gps')) ?? LocationSourceEnum::Gps)->value;
             $customer->location_updated_at = now();
             $customer->save();
         } elseif ($customer->last_lat === null || $customer->location_source === LocationSourceEnum::Ip->value) {

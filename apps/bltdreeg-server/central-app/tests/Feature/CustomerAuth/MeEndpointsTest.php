@@ -1,9 +1,10 @@
 <?php
 
-use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
-use App\Modules\V1\Customer\Auth\Location\Data\Coordinates;
 use App\Modules\V1\Customer\Auth\Models\OtpChannelSetting;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Data\Coordinates;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -163,7 +164,7 @@ test('customer can update location with egypt coordinates and IP fallback', func
 
     // 3. Fallback to IP geolocation when coordinates are omitted
     // (الـ fallback مبيستبدلش GPS، فنرجّع المصدر لـ ip الأول عشان نختبر التحديث)
-    $customer->forceFill(['location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value])->save();
+    $customer->forceFill(['location_source' => LocationSourceEnum::Ip->value])->save();
     $fakeGeolocator = Mockery::mock(IpGeolocator::class);
     $fakeGeolocator->shouldReceive('locate')->once()->andReturn(
         new Coordinates(lat: 31.2001, lng: 29.9187)
@@ -224,7 +225,7 @@ test('ip fallback does not overwrite a gps location', function () {
         'phone_verified_at' => now(),
         'last_lat' => 30.0444,
         'last_lng' => 31.2357,
-        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Gps->value,
+        'location_source' => LocationSourceEnum::Gps->value,
         'location_updated_at' => now()->subDays(3),
     ]);
 
@@ -245,7 +246,7 @@ test('ip fallback refreshes an existing ip location', function () {
         'phone_verified_at' => now(),
         'last_lat' => 31.2,
         'last_lng' => 29.9,
-        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value,
+        'location_source' => LocationSourceEnum::Ip->value,
     ]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);

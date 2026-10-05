@@ -6,8 +6,6 @@ use App\Modules\V1\Customer\Auth\Console\PruneOtpChallengesCommand;
 use App\Modules\V1\Customer\Auth\Http\Middleware\EnsureCustomerOnboarded;
 use App\Modules\V1\Customer\Auth\Http\Middleware\ExtendCustomerToken;
 use App\Modules\V1\Customer\Auth\Http\Middleware\SetApiLocale;
-use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
-use App\Modules\V1\Customer\Auth\Location\MaxMindIpGeolocator;
 use App\Modules\V1\Customer\Auth\Otp\OtpDispatcher;
 use App\Modules\V1\Customer\Auth\Otp\OtpProviderManager;
 use App\Modules\V1\Customer\Auth\Otp\OtpService;
@@ -16,10 +14,10 @@ use App\Modules\V1\Customer\Auth\Social\GoogleTokenVerifier;
 use App\Modules\V1\Customer\Auth\Social\SocialAuthService;
 use App\Modules\V1\Customer\Auth\Support\CustomerTokenIssuer;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Router;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,7 +38,6 @@ class CustomerServiceProvider extends ServiceProvider
         $this->app->singleton(AppleTokenVerifier::class);
         $this->app->singleton(SocialAuthService::class);
 
-        $this->app->singleton(IpGeolocator::class, MaxMindIpGeolocator::class);
         $this->app->singleton(CustomerTokenIssuer::class);
     }
 

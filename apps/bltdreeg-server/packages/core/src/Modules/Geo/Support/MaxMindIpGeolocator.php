@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\V1\Customer\Auth\Location;
+namespace Bltdreeg\Core\Modules\Geo\Support;
 
-use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
-use App\Modules\V1\Customer\Auth\Location\Data\Coordinates;
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Data\Coordinates;
 use GeoIp2\Database\Reader;
 use Throwable;
 
@@ -16,15 +16,14 @@ class MaxMindIpGeolocator implements IpGeolocator
             return null;
         }
 
-        $dbPath = config('customer_auth.location.maxmind_db_path', database_path('geoip/GeoLite2-City.mmdb'));
+        $dbPath = config('geo.maxmind_db_path');
 
-        if (! file_exists($dbPath)) {
+        if (! is_string($dbPath) || ! file_exists($dbPath)) {
             return null;
         }
 
         try {
-            $reader = new Reader($dbPath);
-            $record = $reader->city($ip);
+            $record = (new Reader($dbPath))->city($ip);
 
             $lat = $record->location->latitude;
             $lng = $record->location->longitude;
