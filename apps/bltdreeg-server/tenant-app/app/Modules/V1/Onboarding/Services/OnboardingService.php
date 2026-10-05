@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Modules\V1\Onboarding\Services;
 
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Geo\Data\ResolvedLocation;
 use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
-use Bltdreeg\Core\Modules\Geo\Support\EgyptBounds;
+use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\ServiceLocationTypeEnum;
@@ -40,6 +41,10 @@ class OnboardingService
         'address',
         'latitude',
         'longitude',
+        'governorate_id',
+        'city_id',
+        'area_id',
+        'location_source',
         'document_type',
         'document_id',
     ];
@@ -84,7 +89,7 @@ class OnboardingService
     }
 
     /**
-     * @param  array{business_name: string, website?: ?string, team_size: string, service_location_type: list<string>|string, address?: ?string, latitude?: mixed, longitude?: mixed, document_type: string}  $answers
+     * @param  array{business_name: string, website?: ?string, team_size: string, service_location_type: list<string>|string, address?: ?string, latitude?: mixed, longitude?: mixed, governorate_id: string, city_id: string, area_id: string, location_source?: ?string, document_type: string}  $answers
      * @param  string|null  $documentPath  Path on the identity_documents disk; null keeps the previous document.
      */
     public function submit(Tenant $tenant, User $submitter, array $answers, ?string $documentPath, ?string $originalFilename = null): TenantOnboardingSubmission
@@ -106,6 +111,7 @@ class OnboardingService
             $documentType = LegalDocumentTypeEnum::from($answers['document_type']);
             $needsAddress = ServiceLocationTypeEnum::selectionRequiresAddress($locationTypes);
             $address = $needsAddress ? trim((string) ($answers['address'] ?? '')) : null;
+            $location = $this->resolveLocation($answers);
 
             $tenant->forceFill([
                 'name' => $answers['business_name'],
@@ -113,7 +119,7 @@ class OnboardingService
                 'address' => $address ?? '',
             ])->save();
 
-            $this->saveFirstBranch($tenant, $answers, $teamSize, $locationTypes, $address, $needsAddress);
+            $this->saveFirstBranch($tenant, $answers, $teamSize, $locationTypes, $address, $location);
 
             $document = $this->resolveDocument($tenant, $documentType, $documentPath, $originalFilename);
 
@@ -131,8 +137,12 @@ class OnboardingService
                     'team_size' => $teamSize->value,
                     'service_location_type' => $locationTypes,
                     'address' => $address,
-                    'latitude' => $needsAddress ? ($answers['latitude'] ?? null) : null,
-                    'longitude' => $needsAddress ? ($answers['longitude'] ?? null) : null,
+                    'latitude' => $location->lat,
+                    'longitude' => $location->lng,
+                    'governorate_id' => $location->governorateId(),
+                    'city_id' => $location->cityId(),
+                    'area_id' => $location->areaId(),
+                    'location_source' => $location->source->label(),
                     'document_type' => $document->type->value,
                     'document_id' => $document->getKey(),
                 ],
@@ -161,7 +171,7 @@ class OnboardingService
      * @param  array<string, mixed>  $answers
      * @param  list<string>  $locationTypes
      */
-    private function saveFirstBranch(Tenant $tenant, array $answers, TeamSizeEnum $teamSize, array $locationTypes, ?string $address, bool $needsAddress): Branch
+    private function saveFirstBranch(Tenant $tenant, array $answers, TeamSizeEnum $teamSize, array $locationTypes, ?string $address, ResolvedLocation $location): Branch
     {
         $branch = Branch::query()
             ->withoutGlobalScopes()
@@ -169,20 +179,11 @@ class OnboardingService
             ->orderBy('id')
             ->first() ?? new Branch(['tenant_id' => $tenant->getKey(), 'is_active' => true]);
 
-        $lat = $answers['latitude'] ?? null;
-        $lng = $answers['longitude'] ?? null;
-        $resolver = app(LocationResolver::class);
-
-        // مؤقتاً لحد ما خطوة الموقع الجديدة في الـ wizard: نقطة مصرية صالحة، أو الموقع الحالي للفرع، أو القاهرة الافتراضية
-        $location = $needsAddress && is_numeric($lat) && is_numeric($lng) && EgyptBounds::contains((float) $lat, (float) $lng)
-            ? $resolver->nearest((float) $lat, (float) $lng, LocationSourceEnum::Manual)
-            : ($branch->exists ? null : $resolver->fallback()->withSource(LocationSourceEnum::Manual));
-
         $branch->fill([
             'name' => ['ar' => $answers['business_name'], 'en' => $answers['business_name']],
             'phone' => $branch->phone ?? $tenant->phone,
             'address' => $address === null ? null : ['ar' => $address, 'en' => $address],
-            ...($location?->toBranchColumns() ?? []),
+            ...$location->toBranchColumns(),
             'team_size' => $teamSize,
             'service_location_type' => $locationTypes,
         ]);
@@ -190,6 +191,29 @@ class OnboardingService
         $branch->save();
 
         return $branch;
+    }
+
+    /**
+     * The area is the source of truth: a city or governorate that does not match it is a tampered
+     * request, and the exact point is only kept when it lies in the area's city.
+     *
+     * @param  array<string, mixed>  $answers
+     */
+    private function resolveLocation(array $answers): ResolvedLocation
+    {
+        $area = GeoArea::query()->find($answers['area_id'] ?? null);
+
+        if ($area === null
+            || $area->city_id !== ($answers['city_id'] ?? null)
+            || $area->governorate_id !== ($answers['governorate_id'] ?? null)) {
+            throw new DomainException('Invalid location.');
+        }
+
+        $lat = is_numeric($answers['latitude'] ?? null) ? (float) $answers['latitude'] : null;
+        $lng = is_numeric($answers['longitude'] ?? null) ? (float) $answers['longitude'] : null;
+        $source = LocationSourceEnum::tryFromLabel($answers['location_source'] ?? null) ?? LocationSourceEnum::Manual;
+
+        return app(LocationResolver::class)->forArea($area->getKey(), $lat, $lng, $source);
     }
 
     private function resolveDocument(Tenant $tenant, LegalDocumentTypeEnum $type, ?string $documentPath, ?string $originalFilename): TenantLegalDocument

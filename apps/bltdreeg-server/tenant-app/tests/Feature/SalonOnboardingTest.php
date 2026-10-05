@@ -66,6 +66,10 @@ function wizardAnswers(array $overrides = []): array
         'address' => '10 Tahrir Square, Cairo',
         'latitude' => '30.0444',
         'longitude' => '31.2357',
+        'governorate_id' => 'EG01',
+        'city_id' => 'EG0111',
+        'area_id' => 'EG011103',
+        'location_source' => 'manual',
         'document_type' => 'national_id',
         ...$overrides,
     ];
