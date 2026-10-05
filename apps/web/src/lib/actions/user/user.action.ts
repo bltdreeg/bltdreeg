@@ -1,8 +1,9 @@
 // أفعال الملف الشخصي — /me في Laravel عن طريق apiClient
 import { apiClient } from "@/lib/api";
 import type { Customer, UpdateProfileDto } from "@/lib/types/auth";
+import type { ConfirmLocationDto, ResolvedLocation } from "@/lib/types/geo";
 import { ApiError } from "@/lib/utils/api/api-error";
-import { mapCustomer, type RawCustomer } from "@/lib/utils/auth/laravel-mappers";
+import { mapCustomer, mapResolvedLocation, type RawCustomer, type RawResolvedLocation } from "@/lib/utils/auth/laravel-mappers";
 import { tokenStorage } from "@/lib/utils/auth/token-storage";
 
 function syncOnboarding(raw: RawCustomer): Customer {
@@ -31,6 +32,23 @@ export async function updateMe(dto: UpdateProfileDto): Promise<Customer> {
       email: dto.email,
       birth_date: dto.birthDate,
       accepted_terms: dto.acceptedTerms,
+    }),
+  );
+}
+
+/** تقدير الموقع من الـ IP (أو القاهرة الافتراضية) — قراءة بس، مبتكتبش حاجة */
+export async function getLocationEstimate(): Promise<ResolvedLocation> {
+  return mapResolvedLocation((await apiClient.get<{ estimate: RawResolvedLocation }>("/me/location/estimate")).estimate);
+}
+
+/** تأكيد المحافظة/المدينة/المنطقة — بيكمّل خطوة الموقع في الـ onboarding */
+export async function confirmLocation(dto: ConfirmLocationDto): Promise<Customer> {
+  return syncOnboarding(
+    await apiClient.put<RawCustomer>("/me/location", {
+      area_id: dto.areaId,
+      lat: dto.lat,
+      lng: dto.lng,
+      source: dto.source,
     }),
   );
 }

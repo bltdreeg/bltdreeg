@@ -138,6 +138,21 @@
         "attemptsLeft": "Wrong code, {count} {count, plural, one {attempt} other {attempts}} left.",
         "tooManyAttempts": "Too many attempts. Request a new code."
       }
+    },
+    "onboarding": {
+      "location": {
+        "title": "Confirm your location",
+        "subtitle": "We filled this in for you. Change anything that's wrong.",
+        "approximate": "This is approximate, based on your connection.",
+        "denied": "Location access is off, so we used your connection instead.",
+        "governorate": "Governorate",
+        "city": "City",
+        "area": "Area",
+        "choose": "Choose…",
+        "continue": "Continue",
+        "error": "Couldn't save your location. Try again.",
+        "loading": "Finding your location…"
+      }
     }
   },
   "app": {

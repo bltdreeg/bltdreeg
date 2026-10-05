@@ -1,5 +1,27 @@
 // تحويل استجابات Laravel (snake_case) لأنواع الويب (camelCase)
 import type { AuthOptions, Customer, OtpChallenge } from "../../types/auth/index.ts";
+import type { LocationSource, ResolvedLocation } from "../../types/geo/geo.interface.ts";
+
+export interface RawNamedRef {
+  id: string;
+  name: string;
+}
+
+export interface RawGeoDivision {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+}
+
+export interface RawResolvedLocation {
+  governorate: RawNamedRef;
+  city: RawNamedRef;
+  area: RawNamedRef;
+  lat: number;
+  lng: number;
+  source: LocationSource;
+}
 
 export interface RawCustomer {
   id: string;
@@ -13,7 +35,7 @@ export interface RawCustomer {
   birth_date: string | null;
   has_password: boolean;
   social_providers: string[];
-  location: { lat: number; lng: number; source: "gps" | "ip"; updated_at: string | null } | null;
+  location: RawResolvedLocation & { updated_at: string | null; confirmed: boolean };
   onboarding: { complete: boolean; missing: Customer["onboarding"]["missing"]; skippable: Customer["onboarding"]["skippable"] };
 }
 
@@ -54,11 +76,22 @@ export function mapCustomer(raw: RawCustomer): Customer {
     birthDate: raw.birth_date,
     hasPassword: raw.has_password,
     socialProviders: raw.social_providers,
-    location: raw.location
-      ? { lat: raw.location.lat, lng: raw.location.lng, source: raw.location.source, updatedAt: raw.location.updated_at }
-      : null,
+    location: {
+      lat: raw.location.lat,
+      lng: raw.location.lng,
+      source: raw.location.source,
+      updatedAt: raw.location.updated_at,
+      confirmed: raw.location.confirmed,
+      governorate: raw.location.governorate,
+      city: raw.location.city,
+      area: raw.location.area,
+    },
     onboarding: raw.onboarding,
   };
+}
+
+export function mapResolvedLocation(raw: RawResolvedLocation): ResolvedLocation {
+  return { governorate: raw.governorate, city: raw.city, area: raw.area, lat: raw.lat, lng: raw.lng, source: raw.source };
 }
 
 export function mapOtpChallenge(raw: RawOtpChallenge): OtpChallenge {
