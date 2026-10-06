@@ -13,16 +13,16 @@ const prefill = (source: ResolvedLocation["source"]): ResolvedLocation => ({
 });
 
 test("gps and ip prefills send their point so the server can keep it", () => {
-  assert.deepEqual(toConfirmPayload("EG011102", prefill("gps")), { areaId: "EG011102", lat: 30.0444, lng: 31.2357, source: "gps" });
-  assert.deepEqual(toConfirmPayload("EG011103", prefill("ip")), { areaId: "EG011103", lat: 30.0444, lng: 31.2357, source: "ip" });
+  assert.deepEqual(toConfirmPayload("EG011102", prefill("gps")), { cityId: "EG011102", lat: 30.0444, lng: 31.2357, source: "gps" });
+  assert.deepEqual(toConfirmPayload("EG011103", prefill("ip")), { cityId: "EG011103", lat: 30.0444, lng: 31.2357, source: "ip" });
 });
 
 test("default prefill sends only the area (server uses its centroid)", () => {
-  assert.deepEqual(toConfirmPayload("EG011103", prefill("default")), { areaId: "EG011103" });
+  assert.deepEqual(toConfirmPayload("EG011103", prefill("default")), { cityId: "EG011103" });
 });
 
 test("a maps_url prefill is not resent as a source the confirm endpoint rejects", () => {
-  assert.deepEqual(toConfirmPayload("EG011103", prefill("maps_url")), { areaId: "EG011103" });
+  assert.deepEqual(toConfirmPayload("EG011103", prefill("maps_url")), { cityId: "EG011103" });
 });
 
 test("egypt bounds", () => {

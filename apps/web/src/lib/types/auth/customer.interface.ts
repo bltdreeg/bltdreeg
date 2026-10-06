@@ -30,7 +30,6 @@ export interface Customer {
   phoneVerified: boolean;
   email: string | null;
   emailVerified: boolean;
-  pendingEmail: string | null;
   birthDate: string | null;
   hasPassword: boolean;
   socialProviders: string[];

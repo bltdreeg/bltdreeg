@@ -1,23 +1,25 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { MessageSquareText, CheckCircle2, AlertCircle, RefreshCw, Clock } from "lucide-react";
 import {
-  ROUTE_HOME,
   ROUTE_LOGIN,
   ROUTE_REGISTER,
 } from "@/lib/data/constants/routes.constants";
 import type { ApiError } from "@/lib/utils/api/api-error";
 import { authErrorMessage } from "@/lib/utils/auth/auth-error-message";
+import { afterAuthPath } from "@/lib/utils/auth/post-auth-redirect";
 import { useOtpChallenge, useResendOtp, useVerifyOtp } from "@/lib/hooks/auth";
 import {
   DEFAULT_OTP_LENGTH,
   formatLocalEgyptianPhone,
-  isValidOtp,
   normalizeEgyptianPhone,
 } from "@/lib/utils/auth-validation.utils";
+import { createOtpSchema, type OtpFormValues } from "./otp-form.schema";
 
 interface OtpFormProps {
   phone?: string;
@@ -35,9 +37,16 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
   const { data: challenge } = useOtpChallenge(purpose, phone);
   const codeLength = challenge?.codeLength ?? DEFAULT_OTP_LENGTH;
 
-  const [digits, setDigits] = useState<string[]>(() => Array(codeLength).fill(""));
+  const { handleSubmit, setValue, clearErrors, formState } = useForm<OtpFormValues>({
+    resolver: zodResolver(createOtpSchema(codeLength, t("errors.invalidCode"))),
+    defaultValues: { code: "" },
+  });
+
+  const [digits, setDigitsState] = useState<string[]>(() => Array(codeLength).fill(""));
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [error, setError] = useState<string | null>(null);
+  // أخطاء السيرفر (كود غلط/منتهي/قفل) — أخطاء الشكل بتيجي من الفورم
+  const [serverError, setServerError] = useState<string | null>(null);
+  const error = serverError ?? formState.errors.code?.message ?? null;
   const [needsRestart, setNeedsRestart] = useState(false);
   const [now, setNow] = useState(() => Date.now());
   const [resendNotification, setResendNotification] = useState<string | null>(null);
@@ -73,8 +82,15 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
     formattedPhone = displayPhone.replace(/(\d{4})(\d{3})(\d{4})/, "$1 $2 $3");
   }
 
+  // الخانات هي مصدر الحقل: أي تعديل بيتنقل لقيمة code في الفورم
+  function setDigits(next: string[]) {
+    setDigitsState(next);
+    setValue("code", next.join(""));
+    clearErrors("code");
+  }
+
   function handleDigitChange(index: number, val: string) {
-    setError(null);
+    setServerError(null);
     // قبول الأرقام فقط
     const sanitized = val.replace(/\D/g, "");
     if (!sanitized) {
@@ -138,7 +154,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
   }
 
   function handleFailure(err: ApiError) {
-    setError(authErrorMessage(err));
+    setServerError(authErrorMessage(err));
     // otp_expired = مفيش طلب مفتوح للرقم ده (اتمسح أو اتأكد قبل كده): الحل إنه يبدأ من الأول
     setNeedsRestart(err.code === "auth.otp_expired");
   }
@@ -149,24 +165,19 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
     inputRefs.current[0]?.focus();
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const code = slots.join("");
-
-    if (!isValidOtp(code, codeLength)) {
-      setError(t("errors.invalidCode"));
-      return;
-    }
+  function onValid({ code }: OtpFormValues) {
+    setServerError(null);
 
     verifyOtp.mutate(
       { phone: e164, code, purpose },
       {
-        onSuccess: () => {
+        onSuccess: (session) => {
           if (onSuccess) {
             onSuccess();
             return;
           }
-          router.replace(callbackUrl || ROUTE_HOME);
+          // حساب جديد أو ناقص بيروح للـ onboarding قبل أي صفحة تانية
+          router.replace(afterAuthPath(session.user, callbackUrl, { isNewAccount: purpose === "register" }));
         },
         onError: (err) => {
           handleFailure(err);
@@ -183,7 +194,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
       { phone: e164, purpose },
       {
         onSuccess: (next) => {
-          setError(null);
+          setServerError(null);
           resetDigits();
           setResendNotification(
             next.channel === "whatsapp" ? t("resendSuccessWhatsapp") : t("resendSuccess"),
@@ -257,7 +268,7 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
       )}
 
       {/* 3. الخانات الأربع لكود التأكيد */}
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6 mt-2">
+      <form onSubmit={(e) => void handleSubmit(onValid)(e)} className="w-full flex flex-col gap-6 mt-2">
         <div
           dir="ltr"
           onPaste={handlePaste}

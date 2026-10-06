@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\SetContentLength;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,7 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Behind a tunnel/proxy the socket peer is the proxy; trust X-Forwarded-For so $request->ip() is the real client (needed for IP geolocation).
+        // Only local dev (tunnels) trusts every peer by default; elsewhere list proxy IPs/CIDRs in TRUSTED_PROXIES. Rate limits key on ip(), so a spoofable IP bypasses them.
+        $trustedProxies = env('TRUSTED_PROXIES', env('APP_ENV') === 'local' ? '*' : '');
+
+        $middleware->trustProxies(
+            at: $trustedProxies === '*' ? '*' : array_filter(array_map('trim', explode(',', (string) $trustedProxies))),
+            headers: Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_PROTO,
+        );
+
+        if (env('APP_ENV') === 'local') {
+            $middleware->append(SetContentLength::class);
+        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

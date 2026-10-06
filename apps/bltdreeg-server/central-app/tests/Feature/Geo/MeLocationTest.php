@@ -101,3 +101,28 @@ test('ip refresh upgrades a default location', function () {
         ->assertJsonPath('location.area.id', 'EG020405')->assertJsonPath('location.source', 'ip')
         ->assertJsonPath('location.confirmed', false);
 });
+
+test('confirming with only a city and a point inside it keeps the point and its nearest area', function () {
+    $customer = Customer::factory()->unconfirmedLocation()->create();
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', ['city_id' => 'EG0111', 'lat' => 30.0444, 'lng' => 31.2357, 'source' => 'gps'])
+        ->assertOk()
+        ->assertJsonPath('location.city.id', 'EG0111')
+        ->assertJsonPath('location.lat', 30.0444)
+        ->assertJsonPath('location.source', 'gps')
+        ->assertJsonPath('location.confirmed', true)
+        ->assertJsonPath('onboarding.complete', true);
+});
+
+test('confirming with only a city and no point in it uses one of its areas at the centroid', function () {
+    $customer = Customer::factory()->unconfirmedLocation()->create();
+    $area = GeoArea::query()->where('city_id', 'EG0204')->orderBy('is_placeholder')->orderBy('id')->firstOrFail();
+
+    $this->actingAs($customer, 'customer')
+        ->putJson('/api/v1/me/location', ['city_id' => 'EG0204', 'lat' => 30.0444, 'lng' => 31.2357, 'source' => 'gps'])
+        ->assertOk()
+        ->assertJsonPath('location.area.id', $area->id)
+        ->assertJsonPath('location.source', 'manual')
+        ->assertJsonPath('onboarding.complete', true);
+});

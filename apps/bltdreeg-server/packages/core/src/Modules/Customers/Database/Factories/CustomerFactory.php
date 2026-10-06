@@ -23,7 +23,6 @@ class CustomerFactory extends Factory
             'phone_verified_at' => now(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'pending_email' => null,
             'password' => 'password123',
             'birth_date' => fake()->date('Y-m-d', '-18 years'),
             'last_lat' => 30.0444,

@@ -233,13 +233,16 @@ test('submit rejects an unknown area', function () {
     submitServiceAnswers($tenant, $owner, ['area_id' => 'EG999999']);
 })->throws(DomainException::class, 'Invalid location.');
 
-test('physical salons see the map and mobile-only salons do not', function () {
+test('the map is the first step for every salon and only physical salons are asked for an address', function () {
     ipIsIn(null);
 
     [$wizard] = openWizard();
 
-    $wizard->set('data.service_location_type', ['physical'])
-        ->assertSeeHtml('x-ref="map"')
+    $wizard->assertSeeHtml('x-ref="map"')
+        ->assertSeeHtml('useMyLocation()')
         ->set('data.service_location_type', ['mobile'])
-        ->assertDontSeeHtml('x-ref="map"');
+        ->assertSeeHtml('x-ref="map"')
+        ->assertDontSeeHtml('data.address')
+        ->set('data.service_location_type', ['physical'])
+        ->assertSeeHtml('data.address');
 });

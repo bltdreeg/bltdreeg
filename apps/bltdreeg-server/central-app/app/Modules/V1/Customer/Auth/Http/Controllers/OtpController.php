@@ -140,7 +140,7 @@ class OtpController extends Controller
                 'phone' => $normalizedPhone,
                 'phone_verified_at' => now(),
                 'password' => $payload['password'] ?? null,
-                'pending_email' => $payload['email'] ?? null,
+                'email' => $payload['email'] ?? null,
                 'terms_accepted_at' => ! empty($payload['accepted_terms']) ? now() : null,
                 'terms_version' => ! empty($payload['accepted_terms']) ? config('customer_auth.terms_version') : null,
                 'is_active' => true,
@@ -149,10 +149,10 @@ class OtpController extends Controller
             ]);
         });
 
-        if ($customer->pending_email) {
+        if ($customer->email) {
             try {
                 $this->otpService->issue(
-                    identifier: $customer->pending_email,
+                    identifier: $customer->email,
                     purpose: OtpPurposeEnum::VerifyEmail,
                     channel: OtpChannelEnum::Email,
                     customer: $customer,

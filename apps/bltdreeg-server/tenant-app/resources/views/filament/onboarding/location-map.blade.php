@@ -25,6 +25,8 @@
             this.$watch('lng', () => this.syncMarker());
             // الخطوة بتبقى مخفية لحد ما المستخدم يوصلها؛ Leaflet محتاج يعيد الحساب لما تظهر
             new ResizeObserver(() => this.map.invalidateSize()).observe(this.$refs.map);
+            // نطلب إذن الموقع فوراً أول ما الخطوة تفتح، من غير ما المالك يضغط على الزرار
+            this.useMyLocation();
         },
         moved(point, source) {
             this.marker.setLatLng(point);
@@ -60,10 +62,9 @@
 >
     <div x-ref="map" class="h-80 w-full overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"></div>
 
-    <button type="button" x-on:click="useMyLocation"
-            class="fi-btn fi-btn-size-md fi-color fi-color-gray inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ring-1 ring-gray-950/10 dark:ring-white/20">
+    <x-filament::button type="button" color="gray" icon="heroicon-m-map-pin" x-on:click="useMyLocation">
         {{ __('core::onboarding.wizard.use_my_location') }}
-    </button>
+    </x-filament::button>
 
     <p x-show="error" x-text="error" class="text-sm text-danger-600 dark:text-danger-400"></p>
 </div>

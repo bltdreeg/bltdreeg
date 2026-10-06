@@ -2,6 +2,8 @@
 
 // نموذج استعادة كلمة السر — متسق مع FRAME 13A و FRAME 13D
 import { useState, useId } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { ArrowRight, KeyRound } from "lucide-react";
@@ -9,68 +11,48 @@ import {
   ROUTE_LOGIN,
   ROUTE_VERIFY_OTP,
 } from "@/lib/data/constants/routes.constants";
+import { normalizeEgyptianPhone } from "@/lib/utils/auth-validation.utils";
 import {
-  isValidEmail,
-  normalizeEgyptianPhone,
-  validateEgyptianPhone,
-} from "@/lib/utils/auth-validation.utils";
-import type {
-  ResetIdentifierMode,
-  ForgotPasswordFormErrors,
+  createForgotPasswordSchema,
+  type ForgotPasswordFormValues,
+  type ResetIdentifierMode,
 } from "./forgot-password-form.schema";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth.forgotPassword");
   const router = useRouter();
-  const [mode, setMode] = useState<ResetIdentifierMode>("phone");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
-  const [errors, setErrors] = useState<ForgotPasswordFormErrors>({});
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    clearErrors,
+    formState: { errors, submitCount },
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: zodResolver(createForgotPasswordSchema((key) => t(`errors.${key}`))),
+    defaultValues: { mode: "phone", email: "", phone: "" },
+  });
+  const mode = watch("mode");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailId = useId();
   const phoneId = useId();
 
-  function validate(): ForgotPasswordFormErrors {
-    const errs: ForgotPasswordFormErrors = {};
-
-    if (mode === "email") {
-      if (!email.trim()) {
-        errs.identifier = t("errors.emailRequired");
-      } else if (!isValidEmail(email)) {
-        errs.identifier = t("errors.emailInvalid");
-      }
-    } else {
-      const phoneValidation = validateEgyptianPhone(phone);
-      if (!phoneValidation.isValid) {
-        errs.identifier = phoneValidation.errorMessage;
-      }
-    }
-
-    return errs;
+  function switchMode(next: ResetIdentifierMode) {
+    setValue("mode", next);
+    clearErrors();
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setHasAttemptedSubmit(true);
-
-    const validationErrors = validate();
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
+  function onValid(values: ForgotPasswordFormValues) {
     setIsSubmitting(true);
-    const target = mode === "phone" ? (normalizeEgyptianPhone(phone) ?? phone) : email;
+    const target = values.mode === "phone" ? (normalizeEgyptianPhone(values.phone) ?? values.phone) : values.email;
     setTimeout(() => {
       setIsSubmitting(false);
       router.push(`${ROUTE_VERIFY_OTP}?mode=reset&target=${encodeURIComponent(target)}`);
     }, 600);
   }
 
-  const hasErrors = hasAttemptedSubmit && Object.keys(errors).length > 0;
+  const hasErrors = submitCount > 0 && Object.keys(errors).length > 0;
 
   return (
     <div className="w-full max-w-[420px] flex flex-col gap-5">
@@ -114,12 +96,7 @@ export function ForgotPasswordForm() {
           type="button"
           role="tab"
           aria-selected={mode === "phone"}
-          onClick={() => {
-            setMode("phone");
-            if (hasAttemptedSubmit) {
-              setErrors((prev) => ({ ...prev, identifier: undefined }));
-            }
-          }}
+          onClick={() => switchMode("phone")}
           className={`flex-1 h-9.5 rounded-lg text-[13.5px] transition-all flex items-center justify-center cursor-pointer ${
             mode === "phone"
               ? "bg-white border border-[#E5E7EB] font-bold text-[#0E0F11] shadow-xs"
@@ -132,12 +109,7 @@ export function ForgotPasswordForm() {
           type="button"
           role="tab"
           aria-selected={mode === "email"}
-          onClick={() => {
-            setMode("email");
-            if (hasAttemptedSubmit) {
-              setErrors((prev) => ({ ...prev, identifier: undefined }));
-            }
-          }}
+          onClick={() => switchMode("email")}
           className={`flex-1 h-9.5 rounded-lg text-[13.5px] transition-all flex items-center justify-center cursor-pointer ${
             mode === "email"
               ? "bg-white border border-[#E5E7EB] font-bold text-[#0E0F11] shadow-xs"
@@ -149,7 +121,7 @@ export function ForgotPasswordForm() {
       </div>
 
       {/* النموذج الفعلي */}
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onValid)} noValidate className="flex flex-col gap-4">
         {mode === "phone" ? (
           <div className="flex flex-col gap-1.5">
             <label
@@ -162,7 +134,7 @@ export function ForgotPasswordForm() {
             <div
               dir="ltr"
               className={`flex h-13 w-full items-center rounded-xl bg-white px-3.5 transition-all focus-within:ring-2 ${
-                errors.identifier
+                errors.phone
                   ? "border-[1.5px] border-[#EF4444] focus-within:ring-[#FEF2F2]"
                   : "border border-[#E5E7EB] focus-within:border-[#0F766E] focus-within:ring-[#F0FAF8]"
               }`}
@@ -176,19 +148,13 @@ export function ForgotPasswordForm() {
                 type="tel"
                 autoComplete="tel"
                 placeholder="1xxxxxxxxx"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                  if (errors.identifier) {
-                    setErrors((prev) => ({ ...prev, identifier: undefined }));
-                  }
-                }}
+                {...register("phone")}
                 className="w-full bg-transparent ps-2.5 text-[15px] tabular-nums text-[#0E0F11] placeholder:text-[#A5ABB3] focus:outline-none"
               />
             </div>
-            {errors.identifier && (
+            {errors.phone && (
               <span className="text-[12px] font-medium text-[#B91C1C]">
-                {errors.identifier}
+                {errors.phone?.message}
               </span>
             )}
           </div>
@@ -206,22 +172,16 @@ export function ForgotPasswordForm() {
               dir="ltr"
               autoComplete="email"
               placeholder="karim.mostafa@gmail.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (errors.identifier) {
-                  setErrors((prev) => ({ ...prev, identifier: undefined }));
-                }
-              }}
+              {...register("email")}
               className={`h-13 w-full rounded-xl bg-white px-3.5 text-[15px] text-[#0E0F11] transition-all placeholder:text-[#A5ABB3] focus:outline-none ${
-                errors.identifier
+                errors.email
                   ? "border-[1.5px] border-[#EF4444] focus:ring-2 focus:ring-[#FEF2F2]"
                   : "border border-[#E5E7EB] focus:border-[#0F766E] focus:ring-2 focus:ring-[#F0FAF8]"
               }`}
             />
-            {errors.identifier && (
+            {errors.email && (
               <span className="text-[12px] font-medium text-[#B91C1C]">
-                {errors.identifier}
+                {errors.email?.message}
               </span>
             )}
           </div>

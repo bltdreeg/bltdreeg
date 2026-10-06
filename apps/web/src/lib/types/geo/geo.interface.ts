@@ -23,7 +23,7 @@ export interface ResolvedLocation {
 }
 
 export interface ConfirmLocationDto {
-  areaId: string;
+  cityId: string;
   lat?: number;
   lng?: number;
   source?: "gps" | "ip" | "manual";

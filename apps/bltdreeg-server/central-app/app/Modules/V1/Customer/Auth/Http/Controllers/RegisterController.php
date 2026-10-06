@@ -29,7 +29,7 @@ class RegisterController extends Controller
             'last_name' => $request->input('last_name'),
             'phone' => $normalizedPhone,
             'password' => Hash::make($request->input('password')),
-            'email' => $request->input('email'),
+            'email' => $request->filled('email') ? strtolower(trim((string) $request->input('email'))) : null,
             'accepted_terms' => (bool) $request->input('accepted_terms', false),
         ];
 

@@ -40,7 +40,6 @@ class CustomerResource extends JsonResource
             'phone_verified' => $this->resource->phone_verified_at !== null,
             'email' => $this->resource->email,
             'email_verified' => $this->resource->email_verified_at !== null,
-            'pending_email' => $this->resource->pending_email,
             'birth_date' => $this->resource->birth_date?->format('Y-m-d'),
             'area_name' => $this->resource->area->getTranslation('name', $locale),
             'has_password' => ! empty($this->resource->password),

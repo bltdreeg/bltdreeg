@@ -44,8 +44,7 @@ class RegisterRequest extends FormRequest
 
         if ($this->filled('email')) {
             $emailTaken = Customer::query()
-                ->where('email', $this->input('email'))
-                ->whereNotNull('email_verified_at')
+                ->where('email', strtolower(trim((string) $this->input('email'))))
                 ->exists();
 
             if ($emailTaken) {

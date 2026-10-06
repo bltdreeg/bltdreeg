@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(['ar', 'en'])
                 ->displayLocale('ar')
+                // Arabic unless the user switched manually; otherwise the browser's Accept-Language wins.
+                ->userPreferredLocale(fn (): string => config('app.locale'))
                 // Floating switch on auth only; onboarding pages use the navbar LocaleToggle.
                 ->visible(insidePanels: true, outsidePanels: true)
                 ->outsidePanelRoutes([

@@ -129,7 +129,7 @@ by this schema and gets a note pointing here.
 | phone_verified_at | timestamp nullable | |
 | email | string nullable unique | only ever holds a **verified** email |
 | email_verified_at | timestamp nullable | |
-| pending_email | string nullable | set by PUT /me, promoted to `email` after code verification |
+| email | string nullable unique | may be unverified; `email_verified_at` marks verification (login works either way) |
 | password | string nullable | hashed; null for social-only accounts |
 | birth_date | date nullable | |
 | last_lat, last_lng | decimal(10,7) nullable | |

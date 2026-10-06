@@ -71,15 +71,14 @@ test('customer can update profile and pending email flow works end to end', func
             'first_name' => 'Kareem Updated',
             'last_name' => 'Nabil Updated',
             'birth_date' => '1995-05-15',
-            'email' => null,
+            'email' => 'kareem.new@example.com',
             'email_verified' => false,
-            'pending_email' => 'kareem.new@example.com',
         ]);
 
     $customer->refresh();
     expect($customer->terms_accepted_at)->not->toBeNull()
-        ->and($customer->pending_email)->toBe('kareem.new@example.com')
-        ->and($customer->email)->toBeNull();
+        ->and($customer->email)->toBe('kareem.new@example.com')
+        ->and($customer->email_verified_at)->toBeNull();
 
     // 2. Verify email code
     $verifyEmailResponse = $this->postJson('/api/v1/me/email/verify', [
@@ -90,13 +89,11 @@ test('customer can update profile and pending email flow works end to end', func
         ->assertJson([
             'email' => 'kareem.new@example.com',
             'email_verified' => true,
-            'pending_email' => null,
         ]);
 
     $customer->refresh();
     expect($customer->email)->toBe('kareem.new@example.com')
-        ->and($customer->email_verified_at)->not->toBeNull()
-        ->and($customer->pending_email)->toBeNull();
+        ->and($customer->email_verified_at)->not->toBeNull();
 });
 
 test('customer can change password and other active tokens are revoked', function () {

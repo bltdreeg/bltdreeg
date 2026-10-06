@@ -16,7 +16,6 @@ test("mapCustomer converts snake_case and never carries tokens", () => {
     phone_verified: true,
     email: null,
     email_verified: false,
-    pending_email: "p@x.com",
     birth_date: null,
     has_password: true,
     social_providers: ["google"],
@@ -34,7 +33,6 @@ test("mapCustomer converts snake_case and never carries tokens", () => {
   };
   const user = mapCustomer(raw);
   assert.equal(user.firstName, "أحمد");
-  assert.equal(user.pendingEmail, "p@x.com");
   assert.equal(user.location.updatedAt, "2026-01-01T00:00:00Z");
   assert.equal(user.location.confirmed, true);
   assert.deepEqual(user.location.governorate, { id: "EG01", name: "القاهرة" });

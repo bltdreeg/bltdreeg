@@ -26,7 +26,6 @@ use Laravel\Sanctum\HasApiTokens;
     'phone_verified_at',
     'email',
     'email_verified_at',
-    'pending_email',
     'password',
     'birth_date',
     'last_lat',

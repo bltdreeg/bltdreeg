@@ -59,7 +59,6 @@ class MeController extends Controller
             if ($newEmail === null) {
                 $customer->email = null;
                 $customer->email_verified_at = null;
-                $customer->pending_email = null;
             } else {
                 $newEmail = strtolower(trim((string) $newEmail));
 
@@ -67,14 +66,14 @@ class MeController extends Controller
                     $emailTaken = Customer::query()
                         ->where('email', $newEmail)
                         ->where('id', '!=', $customer->id)
-                        ->whereNotNull('email_verified_at')
                         ->exists();
 
                     if ($emailTaken) {
                         throw new CustomerAuthException('auth.email_taken', 422);
                     }
 
-                    $customer->pending_email = $newEmail;
+                    $customer->email = $newEmail;
+                    $customer->email_verified_at = null;
 
                     $this->otpService->issue(
                         identifier: $newEmail,

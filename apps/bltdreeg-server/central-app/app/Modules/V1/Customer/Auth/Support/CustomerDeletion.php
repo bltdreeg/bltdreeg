@@ -30,7 +30,6 @@ class CustomerDeletion
                 'phone_verified_at' => null,
                 'email' => null,
                 'email_verified_at' => null,
-                'pending_email' => null,
                 'first_name' => 'Deleted',
                 'last_name' => 'customer',
                 'password' => null,

@@ -100,53 +100,17 @@ class Onboarding extends Page
         return $schema
             ->components([
                 Wizard::make([
-                    Step::make('business')
-                        ->label(__('core::onboarding.wizard.steps.business'))
-                        ->schema([
-                            TextInput::make('business_name')
-                                ->label(__('core::onboarding.wizard.business_name'))
-                                ->required()
-                                ->maxLength(255),
-                            TextInput::make('website')
-                                ->label(__('core::onboarding.wizard.website'))
-                                ->url()
-                                ->maxLength(255),
-                        ]),
-                    Step::make('team')
-                        ->label(__('core::onboarding.wizard.steps.team'))
-                        ->schema([
-                            Radio::make('team_size')
-                                ->label(__('core::onboarding.wizard.team_size'))
-                                ->options(TeamSizeEnum::options())
-                                ->in(array_keys(TeamSizeEnum::options()))
-                                ->required(),
-                        ]),
-                    Step::make('location_type')
-                        ->label(__('core::onboarding.wizard.steps.location_type'))
-                        ->schema([
-                            CheckboxList::make('service_location_type')
-                                ->label(__('core::onboarding.wizard.service_location_type'))
-                                ->options(ServiceLocationTypeEnum::options())
-                                ->in(array_keys(ServiceLocationTypeEnum::options()))
-                                ->required()
-                                ->bulkToggleable(false)
-                                ->live(),
-                        ]),
                     Step::make('address')
                         ->label(__('core::onboarding.wizard.location_step'))
                         ->schema([
-                            Text::make(fn (Get $get): string => $this->requiresAddress($get)
-                                ? __('core::onboarding.wizard.location_intro')
-                                : __('core::onboarding.wizard.location_intro_area_only')),
+                            Text::make(__('core::onboarding.wizard.location_intro')),
                             Text::make(__('core::onboarding.wizard.approximate_location'))
                                 ->visible(fn (Get $get): bool => in_array($get('location_source'), ['ip', 'default'], true)),
-                            View::make('filament.onboarding.location-map')
-                                ->visible(fn (Get $get): bool => $this->requiresAddress($get)),
+                            View::make('filament.onboarding.location-map'),
                             TextInput::make('maps_url')
                                 ->label(__('core::onboarding.wizard.maps_url'))
                                 ->placeholder(__('core::onboarding.wizard.maps_url_placeholder'))
                                 ->dehydrated(false)
-                                ->visible(fn (Get $get): bool => $this->requiresAddress($get))
                                 ->suffixAction(
                                     Action::make('applyMapsUrl')
                                         ->label(__('core::onboarding.wizard.maps_url_apply'))
@@ -191,15 +155,47 @@ class Onboarding extends Page
                                         }
                                     }),
                             ]),
+                            Hidden::make('latitude')->required(),
+                            Hidden::make('longitude')->required(),
+                            Hidden::make('location_source')->required(),
+                        ]),
+                    Step::make('business')
+                        ->label(__('core::onboarding.wizard.steps.business'))
+                        ->schema([
+                            TextInput::make('business_name')
+                                ->label(__('core::onboarding.wizard.business_name'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('website')
+                                ->label(__('core::onboarding.wizard.website'))
+                                ->url()
+                                ->maxLength(255),
+                        ]),
+                    Step::make('team')
+                        ->label(__('core::onboarding.wizard.steps.team'))
+                        ->schema([
+                            Radio::make('team_size')
+                                ->label(__('core::onboarding.wizard.team_size'))
+                                ->options(TeamSizeEnum::options())
+                                ->in(array_keys(TeamSizeEnum::options()))
+                                ->required(),
+                        ]),
+                    Step::make('location_type')
+                        ->label(__('core::onboarding.wizard.steps.location_type'))
+                        ->schema([
+                            CheckboxList::make('service_location_type')
+                                ->label(__('core::onboarding.wizard.service_location_type'))
+                                ->options(ServiceLocationTypeEnum::options())
+                                ->in(array_keys(ServiceLocationTypeEnum::options()))
+                                ->required()
+                                ->bulkToggleable(false)
+                                ->live(),
                             Textarea::make('address')
                                 ->label(__('core::onboarding.wizard.address'))
                                 ->rows(2)
                                 ->maxLength(500)
                                 ->required(fn (Get $get): bool => $this->requiresAddress($get))
                                 ->visible(fn (Get $get): bool => $this->requiresAddress($get)),
-                            Hidden::make('latitude')->required(),
-                            Hidden::make('longitude')->required(),
-                            Hidden::make('location_source')->required(),
                         ]),
                     Step::make('document')
                         ->label(__('core::onboarding.wizard.steps.document'))

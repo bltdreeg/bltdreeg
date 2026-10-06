@@ -31,7 +31,6 @@ export interface RawCustomer {
   phone_verified: boolean;
   email: string | null;
   email_verified: boolean;
-  pending_email: string | null;
   birth_date: string | null;
   has_password: boolean;
   social_providers: string[];
@@ -72,7 +71,6 @@ export function mapCustomer(raw: RawCustomer): Customer {
     phoneVerified: raw.phone_verified,
     email: raw.email,
     emailVerified: raw.email_verified,
-    pendingEmail: raw.pending_email,
     birthDate: raw.birth_date,
     hasPassword: raw.has_password,
     socialProviders: raw.social_providers,

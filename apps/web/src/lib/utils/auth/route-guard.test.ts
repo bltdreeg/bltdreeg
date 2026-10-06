@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { guardRedirect, isProtectedPath } from "./route-guard.ts";
+import { guardRedirect, isProtectedPath, isPublicPath } from "./route-guard.ts";
 
 const base = { search: "", hasSession: false, needsOnboarding: false };
 
@@ -29,7 +29,17 @@ test("auth pages with a session go home (or to onboarding), never loop", () => {
   assert.equal(guardRedirect({ ...s, path: "/" }), null);
 });
 
-test("isProtectedPath matches sub paths but not prefixes of other words", () => {
+test("anything outside the public allowlist is protected", () => {
   assert.ok(isProtectedPath("/account/profile"));
-  assert.ok(!isProtectedPath("/accounting"));
+  assert.ok(isProtectedPath("/accounting"));
+  assert.ok(isProtectedPath("/book/5/slot"));
+  assert.ok(isProtectedPath("/onboarding"));
+});
+
+test("public paths: exact routes and prefix routes, no word-prefix leaks", () => {
+  assert.ok(isPublicPath("/"));
+  assert.ok(isPublicPath("/terms"));
+  assert.ok(isPublicPath("/salon/12"));
+  assert.ok(!isPublicPath("/salonx"));
+  assert.ok(!isPublicPath("/terms/extra"));
 });

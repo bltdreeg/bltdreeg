@@ -6,6 +6,7 @@ use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
 use Bltdreeg\Core\Modules\Geo\Data\ResolvedLocation;
 use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Turns a point, an IP or a chosen area into a full governorate/city/area location.
@@ -13,36 +14,43 @@ use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
  */
 class LocationResolver
 {
-    /** Box half-widths in degrees, widened until candidates exist. null = all areas. */
-    private const SEARCH_DELTAS = [0.05, 0.2, 1.0, null];
-
     public function __construct(private IpGeolocator $ipGeolocator) {}
 
     public function nearest(float $lat, float $lng, LocationSourceEnum $source): ResolvedLocation
     {
-        foreach (self::SEARCH_DELTAS as $delta) {
-            $query = GeoArea::query();
+        // MySQL POINT takes (lng, lat)
+        $nearest = GeoArea::query()
+            ->orderByRaw('ST_Distance_Sphere(POINT(lng, lat), POINT(?, ?))', [$lng, $lat])
+            ->first();
 
-            if ($delta !== null) {
-                $query->whereBetween('lat', [$lat - $delta, $lat + $delta])
-                    ->whereBetween('lng', [$lng - $delta, $lng + $delta]);
-            }
+        return $nearest !== null
+            ? new ResolvedLocation($nearest, $lat, $lng, $source)
+            : $this->fallback();
+    }
 
-            $nearest = $query->get()
-                ->sortBy(fn (GeoArea $area): float => self::distanceKm($lat, $lng, $area->lat, $area->lng))
-                ->first();
+    /**
+     * The user picked only a city. Keep their precise point (and its nearest area) if it lies in that
+     * city, otherwise use the city's first real area at its centroid.
+     */
+    public function forCity(string $cityId, ?float $lat, ?float $lng, LocationSourceEnum $source): ResolvedLocation
+    {
+        if ($lat !== null && $lng !== null && EgyptBounds::contains($lat, $lng)) {
+            $nearest = $this->nearest($lat, $lng, $source);
 
-            if ($nearest !== null) {
-                return new ResolvedLocation($nearest, $lat, $lng, $source);
+            if ($nearest->cityId() === $cityId) {
+                return $nearest;
             }
         }
 
-        return $this->fallback();
+        $area = GeoArea::query()->where('city_id', $cityId)->orderBy('is_placeholder')->orderBy('id')->firstOrFail();
+
+        return new ResolvedLocation($area, $area->lat, $area->lng, LocationSourceEnum::Manual);
     }
 
     public function fromIp(?string $ip): ResolvedLocation
     {
         $coordinates = $ip === null ? null : $this->ipGeolocator->locate($ip);
+        Log::info('geo.from_ip', ['ip' => $ip, 'lat' => $coordinates?->lat, 'lng' => $coordinates?->lng]);
 
         // VPN بيطلّع دولة تانية: منقبلش نقطة برا مصر
         if ($coordinates === null || ! EgyptBounds::contains($coordinates->lat, $coordinates->lng)) {
@@ -72,14 +80,5 @@ class LocationResolver
         }
 
         return new ResolvedLocation($area, $area->lat, $area->lng, LocationSourceEnum::Manual);
-    }
-
-    private static function distanceKm(float $lat1, float $lng1, float $lat2, float $lng2): float
-    {
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLng = deg2rad($lng2 - $lng1);
-        $a = sin($dLat / 2) ** 2 + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLng / 2) ** 2;
-
-        return 6371 * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }
 }

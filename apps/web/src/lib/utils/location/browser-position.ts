@@ -10,7 +10,8 @@ export function requestBrowserPosition(timeoutMs = 10000): Promise<BrowserPositi
     navigator.geolocation.getCurrentPosition(
       (position) => resolve({ lat: position.coords.latitude, lng: position.coords.longitude }),
       (failure) => resolve({ error: failure.code === failure.PERMISSION_DENIED ? "denied" : "unavailable" }),
-      { enableHighAccuracy: true, timeout: timeoutMs, maximumAge: 60000 },
+      // high accuracy بيعمل timeout على اللابتوب (مفيش GPS chip) فكان بيرجّع لتقدير الـ IP بصمت — مدينة/منطقة مش محتاجة دقة GPS
+      { enableHighAccuracy: false, timeout: timeoutMs, maximumAge: 5 * 60000 },
     );
   });
 }

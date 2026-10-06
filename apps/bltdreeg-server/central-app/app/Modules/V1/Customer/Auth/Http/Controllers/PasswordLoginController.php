@@ -26,10 +26,7 @@ class PasswordLoginController extends Controller
             $customer = Customer::query()->where('phone', $normalizedPhone)->first();
         } elseif ($request->filled('email')) {
             $email = strtolower(trim((string) $request->input('email')));
-            $customer = Customer::query()
-                ->where('email', $email)
-                ->whereNotNull('email_verified_at')
-                ->first();
+            $customer = Customer::query()->where('email', $email)->first();
         }
 
         if (! $customer || empty($customer->password) || ! Hash::check($request->input('password'), $customer->password)) {
