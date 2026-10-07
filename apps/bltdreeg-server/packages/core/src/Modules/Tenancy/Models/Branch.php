@@ -12,6 +12,7 @@ use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Tenancy\Database\Factories\BranchFactory;
 use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
+use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,6 +96,7 @@ class Branch extends Model
             'latitude' => 'float',
             'longitude' => 'float',
             'location_source' => 'integer',
+            'currency' => CurrencyEnum::class,
             'team_size' => TeamSizeEnum::class,
             'service_location_type' => 'array',
             'images' => 'array',
