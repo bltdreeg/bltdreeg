@@ -6,8 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { QK_VISITOR_POSITION } from "@/lib/data/constants/query-keys.constants";
 import { requestBrowserPosition } from "@/lib/utils/location/browser-position";
 import { toQueryPosition } from "@/lib/utils/location/query-position";
+import { shouldRefetchPosition, visitorListSettled, type VisitorPermission } from "@/lib/utils/location/visitor-list-state";
 
-export type VisitorPermission = PermissionState | "unsupported" | null;
+export type { VisitorPermission };
 
 export function useVisitorPosition() {
   const [permission, setPermission] = useState<VisitorPermission>(() =>
@@ -36,7 +37,8 @@ export function useVisitorPosition() {
 
   const query = useQuery({
     queryKey: QK_VISITOR_POSITION,
-    queryFn: () => requestBrowserPosition(15000),
+    // granted بالفعل من زيارة سابقة: timeout أقصر — مفيش داعي نوري القائمة فاضية 15 ثانية لو GPS بطيء
+    queryFn: () => requestBrowserPosition(permission === "granted" ? 5000 : 15000),
     // denied: المتصفح مش هيسأل تاني، فمفيش لازمة نطلب
     enabled: permission !== null && permission !== "denied",
     staleTime: Infinity,
@@ -47,7 +49,7 @@ export function useVisitorPosition() {
   const { refetch, data } = query;
   const failed = !!data && "error" in data;
   useEffect(() => {
-    if (permission === "granted" && failed) void refetch();
+    if (shouldRefetchPosition(permission, failed)) void refetch();
   }, [permission, failed, refetch]);
 
   const requestPosition = useCallback(() => void refetch(), [refetch]);
@@ -55,8 +57,7 @@ export function useVisitorPosition() {
   return {
     position: toQueryPosition(data),
     permission,
-    // سمح قبل كده: نستنى الإحداثيات بدل ما نجيب قائمة الـ IP وبعدها بثانية قائمة تانية
-    settled: permission !== null && !(permission === "granted" && query.isPending),
+    settled: visitorListSettled(permission, query.isPending),
     locating: query.isFetching,
     requestPosition,
   };
