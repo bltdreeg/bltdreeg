@@ -75,6 +75,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        // Branch images, shared with tenant-app — see CoreServiceProvider::registerBranchImagesDisk()
+        public_path('storage-shared') => base_path('../storage/public'),
     ],
 
 ];

@@ -40,6 +40,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->scoped(BranchContext::class);
 
         $this->registerIdentityDocumentsDisk();
+        $this->registerBranchImagesDisk();
     }
 
     /**
@@ -59,6 +60,29 @@ class CoreServiceProvider extends ServiceProvider
             'root' => env('IDENTITY_DOCUMENTS_ROOT', base_path('../storage/identity-documents')),
             'visibility' => 'private',
             'serve' => false,
+            'throw' => true,
+            'report' => false,
+        ]]);
+    }
+
+    /**
+     * Branch images live outside both apps' storage/ so tenant-app (where they're uploaded)
+     * and central-app (which serves them to the marketing site) see the same files. Each app
+     * exposes them at its own APP_URL via the "storage-shared" link (see config/filesystems.php).
+     */
+    private function registerBranchImagesDisk(): void
+    {
+        $key = 'filesystems.disks.'.Branch::IMAGES_DISK;
+
+        if (config()->has($key)) {
+            return;
+        }
+
+        config([$key => [
+            'driver' => 'local',
+            'root' => env('BRANCH_IMAGES_ROOT', base_path('../storage/public')),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage-shared',
+            'visibility' => 'public',
             'throw' => true,
             'report' => false,
         ]]);

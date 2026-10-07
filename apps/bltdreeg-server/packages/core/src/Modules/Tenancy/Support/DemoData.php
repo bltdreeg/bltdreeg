@@ -14,6 +14,7 @@ use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DemoData
@@ -86,11 +87,25 @@ class DemoData
                 'name' => ['en' => 'Downtown', 'ar' => 'وسط البلد'],
                 'phone' => '2000000001',
                 'address' => ['en' => '1 Main Street, Cairo', 'ar' => '١ شارع رئيسي، القاهرة'],
+                'lat' => 30.0420,
+                'lng' => 31.2350,
+                'image' => 'branch-1.jpg',
             ],
             [
                 'name' => ['en' => 'Old Town', 'ar' => 'المدينة القديمة'],
                 'phone' => '2000000002',
                 'address' => ['en' => '5 Old Market, Giza', 'ar' => '٥ سوق قديم، الجيزة'],
+                'lat' => 30.0350,
+                'lng' => 31.2330,
+                'image' => 'branch-2.jpg',
+            ],
+            [
+                'name' => ['en' => 'Nasr City', 'ar' => 'مدينة نصر'],
+                'phone' => '2000000003',
+                'address' => ['en' => '20 Makram Ebeid, Cairo', 'ar' => '٢٠ مكرم عبيد، القاهرة'],
+                'lat' => 30.0970,
+                'lng' => 31.2460,
+                'image' => 'branch-3.jpg',
             ],
         ] as $branch) {
             $alreadySeeded = Branch::query()
@@ -102,15 +117,34 @@ class DemoData
                 continue;
             }
 
+            $location = app(LocationResolver::class)
+                ->nearest($branch['lat'], $branch['lng'], LocationSourceEnum::Manual);
+
             Branch::query()->create([
                 'tenant_id' => $tenant->id,
                 'name' => $branch['name'],
                 'phone' => $branch['phone'],
                 'address' => $branch['address'],
                 'is_active' => true,
-                ...app(LocationResolver::class)->fallback()->withSource(LocationSourceEnum::Manual)->toBranchColumns(),
+                'cover_image' => self::storeDemoImage($branch['image']),
+                ...$location->toBranchColumns(),
             ]);
         }
+    }
+
+    /**
+     * Copies a bundled demo photo into the shared branch-images disk under a fresh,
+     * upload-like name, so seeded branches look the same as a real upload would.
+     */
+    private static function storeDemoImage(string $filename): string
+    {
+        $source = __DIR__.'/../../../../resources/demo-images/'.$filename;
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $path = 'branches/'.(string) Str::ulid().'.'.$extension;
+
+        Storage::disk(Branch::IMAGES_DISK)->put($path, file_get_contents($source));
+
+        return $path;
     }
 
     /**

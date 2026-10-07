@@ -44,7 +44,9 @@ use Spatie\Translatable\HasTranslations;
 #[Translatable('name', 'address')]
 class Branch extends Model
 {
-    public const IMAGES_DISK = 'public';
+    // Shared outside both apps' storage/ (like TenantLegalDocument::DISK) so central-app,
+    // which serves branches to the marketing site, can see what tenant-app uploaded.
+    public const IMAGES_DISK = 'branch_images';
 
     use BelongsToBranch;
     use BelongsToTenant;
