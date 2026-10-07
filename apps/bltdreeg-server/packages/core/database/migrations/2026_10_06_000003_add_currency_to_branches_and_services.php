@@ -10,7 +10,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('branches', function (Blueprint $table): void {
-            $table->unsignedTinyInteger('currency')->default(CurrencyEnum::EGP->value)->after('location_source');
+            // مش بعد location_source: العمود ده (وده اللي بيحتاجه) بييجي بعد ميجريشن الـ geo، مش قبلها
+            $table->unsignedTinyInteger('currency')->default(CurrencyEnum::EGP->value)->after('is_active');
         });
 
         Schema::table('services', function (Blueprint $table): void {

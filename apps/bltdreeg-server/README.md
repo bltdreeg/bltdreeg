@@ -34,7 +34,7 @@ Both apps include `laravel/octane` (`config/octane.php`). `TenantContext` is flu
 
 ## Setup
 
-From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6382** (Redis), **8010** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
+From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6385** (Redis), **8010** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
 
 ```bash
 make start         # build frontend assets, start stack, migrate (same as make up)
