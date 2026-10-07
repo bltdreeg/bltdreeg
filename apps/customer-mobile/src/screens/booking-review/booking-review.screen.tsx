@@ -70,7 +70,7 @@ function Review({ page, draft, barberId, startAt }: StepProps) {
   return (
     <>
       <View style={styles.salon}>
-        <SalonThumb size={58} />
+        <SalonThumb size={58} salonId={s.id} imageUrl={s.imageUrl} />
         <View style={styles.main}>
           <Text variant="itemTitle" numberOfLines={1}>
             {salonName(s.name)}

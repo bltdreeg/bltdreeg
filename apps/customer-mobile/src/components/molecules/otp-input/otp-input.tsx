@@ -34,7 +34,6 @@ export function OtpInput({ value, onChange, length, error, success, onComplete, 
             <Text dense variant="displayXs" size={26} color={success ? colors.okDark : error ? colors.errText : colors.textPrimary}>
               {value[i] ?? ""}
             </Text>
-            {isActive && !value[i] && <View style={styles.caret} />}
           </View>
         );
       })}
@@ -80,7 +79,6 @@ const styles = StyleSheet.create({
   active: { borderColor: colors.primary, backgroundColor: colors.bg, ...shadow.focusRing },
   error: { borderColor: colors.error, backgroundColor: colors.errTint },
   success: { borderColor: colors.success, backgroundColor: colors.okTint, transform: [{ scale: 1.06 }] },
-  caret: { position: "absolute", width: 2, height: 26, borderRadius: 1, backgroundColor: colors.primary },
   // فوق الخانات كلها وشفاف: اللمس في أي خانة بيفتح الكيبورد
   hiddenInput: { ...StyleSheet.absoluteFill, opacity: 0.02, color: "transparent", fontSize: 1 },
 });

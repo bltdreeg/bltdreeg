@@ -95,7 +95,7 @@ export function SalonCard({ booking, page }: { booking: QueueBooking; page: Salo
   return (
     <View style={[styles.outlined, styles.salon]}>
       <View style={styles.salonTop}>
-        <SalonThumb size={48} />
+        <SalonThumb size={48} salonId={booking.salonId} />
         <View style={styles.flex}>
           <Text variant="bodyStrong" numberOfLines={1}>
             {salonName(booking.salonName)}

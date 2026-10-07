@@ -293,12 +293,8 @@ export function OtpForm({ phone = "", purpose = "login", callbackUrl, onSuccess 
                   onChange={(e) => handleDigitChange(idx, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(idx, e)}
                   aria-label={t("digitAriaLabel", { index: idx + 1 })}
-                  className="size-full bg-transparent text-center font-cairo text-2xl font-extrabold tabular-nums text-[#0E0F11] focus:outline-none"
+                  className="size-full bg-transparent text-center font-cairo text-2xl font-extrabold tabular-nums text-[#0E0F11] caret-transparent focus:outline-none"
                 />
-                {/* خط الكاريت المتحرك عند الخانة الفارغة النشطة */}
-                {isCurrent && !hasVal && !hasError && (
-                  <div className="pointer-events-none absolute h-6 w-0.5 animate-pulse bg-[#0F766E]" />
-                )}
               </div>
             );
           })}

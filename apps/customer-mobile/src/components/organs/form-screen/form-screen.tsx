@@ -34,7 +34,7 @@ export function FormScreen({ header, keyboardOffset = KEYBOARD_OFFSET, children 
  * فتح شاشة الكود من فورم: الكيبورد بيتقفل الأول عشان يتفتح من جديد على شاشة الكود —
  * لو فضل مفتوح، KeyboardAwareScrollView هناك مش بيوصله حدث ظهور الكيبورد فمش بيسكرول والخلايا تتغطى (360×640).
  */
-export function toOtp(params: { phone: string; purpose: "login" | "register"; from?: string }) {
+export function toOtp(params: { phone: string; purpose: "login" | "register" | "reset_password"; from?: string }) {
   Keyboard.dismiss();
   router.push({ pathname: "/otp", params });
 }

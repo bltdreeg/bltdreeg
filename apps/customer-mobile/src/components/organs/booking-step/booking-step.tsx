@@ -55,7 +55,7 @@ export function BookingStep({ salonId, title, step, children, footer }: Props) {
   } else if (!q.isError && online) {
     body = (
       <View style={[styles.content, styles.skeleton, width]} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-        <Skeleton height={20} width={120} />
+        <Skeleton height={20} width={120} strong />
         {[0, 1, 2].map((i) => (
           <Skeleton key={i} height={72} radius={radius.card} />
         ))}

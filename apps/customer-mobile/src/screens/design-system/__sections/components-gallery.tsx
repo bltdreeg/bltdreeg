@@ -177,7 +177,7 @@ export function ComponentsGallery() {
           ))}
         </View>
         <Skeleton height={86} radius={12} />
-        <Skeleton height={14} width="60%" />
+        <Skeleton height={14} width="60%" strong />
       </Block>
 
       <Block title="Empty state">

@@ -67,7 +67,7 @@ function Form({ booking: b }: { booking: QueueBooking }) {
     <>
       <KeyboardAwareScrollView bottomOffset={24} keyboardShouldPersistTaps="handled" contentContainerStyle={[styles.content, column]}>
         <View style={styles.visit}>
-          <SalonThumb size={52} />
+          <SalonThumb size={52} salonId={b.salonId} />
           <View style={styles.visitText}>
             <Text variant="itemTitle" numberOfLines={1}>
               {salonName(b.salonName)}

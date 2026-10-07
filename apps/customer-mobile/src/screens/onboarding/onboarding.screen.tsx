@@ -1,17 +1,13 @@
 // الأونبوردنج (فريم 01–03) — نفس رحلة Flutter (onboarding_page.dart):
 // "تخطّي" بينط لآخر شريحة عشان الاختيارين يفضلوا ظاهرين، "ادخل على الصالونات" = ضيف → الرئيسية، "عندي حساب" → تسجيل الدخول.
 import { router } from "expo-router";
-import { useState } from "react";
-import { I18nManager, StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { StyleSheet, View } from "react-native";
+import { GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
   FadeIn,
   interpolate,
   useAnimatedStyle,
-  useReducedMotion,
-  useSharedValue,
-  withTiming,
 } from "react-native-reanimated";
 import {
   SafeAreaView,
@@ -23,63 +19,24 @@ import { Pressable } from "@/components/atoms/pressable";
 import { Text } from "@/components/atoms/text";
 import { Button } from "@/components/molecules/button";
 import { useFormat } from "@/lib/hooks/use-format.hook";
+import { useSwipePager } from "@/lib/hooks/use-swipe-pager.hook";
 import { useResponsive } from "@/lib/hooks/use-responsive.hook";
 import { appPreferences } from "@/lib/utils/app-preferences";
 import { colors, radius } from "@/styles/tokens";
-import { duration, easing } from "@/theme/motion";
+import { duration } from "@/theme/motion";
 import { ONBOARDING_ART } from "./__components/onboarding-art";
 import { PageDots } from "./__components/page-dots";
 
 const SLIDES = [{ key: "s1" }, { key: "s2" }, { key: "s3" }] as const;
 const LAST = SLIDES.length - 1;
-/** السحب لازم يعدّي ربع الشاشة أو يبقى سريع عشان يقلب الصفحة */
-const SWIPE_RATIO = 0.25;
-const SWIPE_VELOCITY = 500;
 
 export default function OnboardingScreen() {
   const t = useTranslations("mobile.onboarding");
   const f = useFormat();
   const { width, height, gutter, isShort, formMaxWidth } = useResponsive();
   const insets = useSafeAreaInsets();
-  const reduceMotion = useReducedMotion();
-  const [page, setPage] = useState(0);
+  const { page, goTo, pan, track, position } = useSwipePager(SLIDES.length, width);
 
-  // position = رقم الصفحة (عشري وقت السحب). في RTL الصفوف بتتقلب، فالإزاحة بتتعكس
-  const position = useSharedValue(0);
-  const dir = I18nManager.isRTL ? 1 : -1;
-
-  const goTo = (index: number) => {
-    const target = Math.max(0, Math.min(LAST, index));
-    setPage(target);
-    position.set(
-      reduceMotion
-        ? target
-        : withTiming(target, { duration: duration.slow, easing: easing.page }),
-    );
-  };
-
-  const pan = Gesture.Pan()
-    .runOnJS(true)
-    .activeOffsetX([-12, 12])
-    .failOffsetY([-12, 12])
-    .onUpdate((e) => {
-      const raw = page + (e.translationX * dir) / width;
-      // مقاومة عند الأطراف
-      const clamped =
-        raw < 0 ? raw / 3 : raw > LAST ? LAST + (raw - LAST) / 3 : raw;
-      position.set(clamped);
-    })
-    .onEnd((e) => {
-      const forward = e.translationX * dir > 0;
-      const passed =
-        Math.abs(e.translationX) > width * SWIPE_RATIO ||
-        Math.abs(e.velocityX) > SWIPE_VELOCITY;
-      goTo(passed ? page + (forward ? 1 : -1) : page);
-    });
-
-  const track = useAnimatedStyle(() => ({
-    transform: [{ translateX: dir * position.get() * width }],
-  }));
   // "تخطّي" بيختفي مع الوصول لآخر شريحة (بيتبع السحب)
   const skipStyle = useAnimatedStyle(() => ({
     opacity: interpolate(

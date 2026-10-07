@@ -33,7 +33,7 @@ export default function RatingSentScreen() {
         {b && (
           <>
             <View style={styles.card}>
-              <SalonThumb size={48} />
+              <SalonThumb size={48} salonId={b.salonId} />
               <View style={styles.flex}>
                 <Text variant="bodyStrong" numberOfLines={1}>
                   {salonName(b.salonName)}

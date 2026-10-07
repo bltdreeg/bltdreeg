@@ -10,8 +10,10 @@ const raw = {
   tealTint2: "#D3E5E3",
   bg: "#FFFFFF",
   surf: "#F7F8FA",
-  /** لمعة الـ skeleton (Flutter Shimmer) */
-  surfSheen: "#EDEFF2",
+  /** الـ skeleton زي البورد (web.html §03): الأساس، سطور العنوان والسعر، واللمعة اللي بتعدّي عليهم */
+  skeleton: "#F1F3F5",
+  skeletonStrong: "#EDEFF2",
+  skeletonSheen: "#E5E7EB",
   tx: "#0E0F11",
   tx2: "#6B7280",
   line: "#E5E7EB",

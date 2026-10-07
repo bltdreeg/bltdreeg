@@ -103,7 +103,7 @@ function OutlinedCard({ booking: b, badge, caption, extraMeta, rating, children,
         </Text>
       </View>
       <View style={styles.salon}>
-        <SalonThumb size={56} />
+        <SalonThumb size={56} salonId={b.salonId} />
         <View style={styles.salonText}>
           <Text variant="itemTitle" numberOfLines={1}>
             {salonName(b.salonName)}

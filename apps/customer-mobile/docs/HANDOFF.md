@@ -53,7 +53,8 @@
 | Batch 10 storage + quality (kv-store prefs with SecureStore migration, Cairo embedded, layering lint rule, toast bus) | ✅ `docs/plans/batch-10-storage-quality.md` |
 | Batch 11 polish (animated onboarding D4, joined check 26, initials, avatar ring, `MetaBar`, 140% tab strip) | ✅ `docs/plans/batch-11-polish.md` |
 | Batch 12 review leftovers (copy drift → Flutter wording, recursive copy audit, frame 33 checked, skeleton RTL fix) | ✅ `docs/plans/batch-12-review-leftovers.md` |
-| Later: language 38 (English batch), auth batch (forgot password D3, complete-profile #7, OTP D5/D6), icon/splash (needs a ≥1024 logo), iOS (needs `eas init` + build) | waiting on the user |
+| Batch 13 last UI gaps (badge, forgot password D3, OTP D5/D6, photo swipe D8, D1) + web salon photos + release APK | ✅ `docs/plans/batch-13-ui-gaps.md` |
+| Later: language 38 (English freeze), complete-profile #7 (with social sign-in), icon/splash (needs a ≥1024 logo), iOS (needs `eas init` + build), design review of the 6 reset strings | waiting on the user |
 
 ## 4. Done this session
 

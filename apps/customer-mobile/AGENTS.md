@@ -68,5 +68,6 @@ src/
 - Digits: Arabic-Indic in Arabic, Western in English — format every displayed number through `useFormat()` / `fmt(locale)`
   (`src/lib/utils/format/number-format.utils.ts`; `intlLocale()` = `ar-EG-u-nu-arab`). Data, API payloads, the phone field
   and OTP cells stay Western; normalize typed input with `onlyDigits()`.
+- Skeletons: `components/atoms/skeleton` only. Colors come from the design-system board (`web.html` §03), not Flutter: `skeleton` `#F1F3F5` base, `strong` (`#EDEFF2`) on title/price lines, Flutter's 1300 ms sweep on top (`skeletonSheen`). Layout = Flutter's skeleton for that page, same sizes, spacing and row count (no filling the screen). A skeleton rendered outside a `SafeAreaView` sets its own white `flex: 1` root (the navigator default is grey `#F2F2F2`) — see `screens/salon/__sections/salon-skeleton.tsx` and `docs/plans/skeleton-board-colors.md`.
 - Forms: wrap in `FormScreen`; pass `keyboardOffset` when the CTA sits more than ~96 below the last field, and check it at 360×640.
 - Checks: `npx tsc --noEmit`, `npx expo lint`, `pnpm test` (node test runner, `src/**/*.test.ts`). Windows Android builds need the hoisted `.npmrc` (see GAPS §5).

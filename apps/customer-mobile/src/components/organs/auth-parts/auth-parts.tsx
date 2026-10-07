@@ -7,6 +7,7 @@ import { Text } from "@/components/atoms/text";
 import { Button, LinkButton } from "@/components/molecules/button";
 import type { ApiError } from "@/lib/utils/api/api-error";
 import { useFormat } from "@/lib/hooks/use-format.hook";
+import { checkPasswordCriteria } from "@/lib/utils/auth-validation.utils";
 import { colors, radius } from "@/styles/tokens";
 
 /** مربع teal بالمقص (52) — أو أيقونة تانية في شاشة الكود (رسالة / خطأ) */
@@ -82,6 +83,31 @@ export function FooterLink({ text, link, onPress }: { text: string; link: string
 }
 
 /** رسالة الخطأ للمستخدم من ApiError — نصوص التطبيق (البورد/ARB) مش رسالة السيرفر الخام */
+/** شروط كلمة السر تحت الحقل (فريم 06): ✓ أخضر لما يتحقق، ✕ رمادي — وأحمر لو ناقص بعد الضغط */
+export function PasswordRules({ password, highlight }: { password: string; highlight: boolean }) {
+  const t = useTranslations("mobile.auth");
+  const f = useFormat();
+  const rules = checkPasswordCriteria(password);
+  return (
+    <View style={styles.rules} accessibilityLiveRegion="polite">
+      <Rule ok={rules.min8} label={t("ruleLength", { count: f.count(8) })} highlight={highlight} />
+      <Rule ok={rules.hasNumber} label={t("ruleDigit")} highlight={highlight} />
+    </View>
+  );
+}
+
+function Rule({ ok, label, highlight }: { ok: boolean; label: string; highlight: boolean }) {
+  const color = ok ? colors.okDark : highlight ? colors.error : colors.textSecondary;
+  return (
+    <View style={styles.rule} accessible accessibilityLabel={label} accessibilityState={{ checked: ok }}>
+      <Icon name={ok ? "check_bold" : "close"} size={15} color={color} />
+      <Text dense variant="metaStrong" weight="semibold" color={color}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 export function useAuthErrorText() {
   const t = useTranslations("mobile.auth");
   const f = useFormat();
@@ -94,6 +120,7 @@ export function useAuthErrorText() {
       case "auth.invalid_credentials":
         return t("invalidCredentials");
       case "auth.phone_not_registered":
+      case "auth.account_not_found":
         return t("phoneNotRegistered");
       case "auth.phone_taken":
         return t("phoneTaken");
@@ -117,5 +144,7 @@ const styles = StyleSheet.create({
   socialCol: { gap: 10 },
   socialRow: { flexDirection: "row", gap: 10 },
   flex: { flex: 1 },
+  rules: { flexDirection: "row", flexWrap: "wrap", gap: 14, marginHorizontal: 2, marginTop: -6 },
+  rule: { flexDirection: "row", alignItems: "center", gap: 5 },
   footer: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 4, marginTop: 26, marginBottom: 8 },
 });

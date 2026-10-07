@@ -4,14 +4,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
 import { StyleSheet, View, type TextInput } from "react-native";
 import { useTranslations } from "use-intl";
-import { Icon } from "@/components/atoms/icon";
 import { Pressable } from "@/components/atoms/pressable";
 import { Checkbox } from "@/components/atoms/selection-controls";
 import { Text } from "@/components/atoms/text";
 import { Button } from "@/components/molecules/button";
 import { FieldError, PhoneField, TextField } from "@/components/molecules/text-field";
 import { TopBar } from "@/components/molecules/top-bar";
-import { AuthTitle, FooterLink, OrDivider, SocialButtons, useAuthErrorText } from "@/components/organs/auth-parts";
+import { AuthTitle, FooterLink, OrDivider, PasswordRules, SocialButtons, useAuthErrorText } from "@/components/organs/auth-parts";
 import { FormScreen, toOtp } from "@/components/organs/form-screen";
 import { useRegister, useSocialLogin } from "@/lib/hooks/auth";
 import { useFormat } from "@/lib/hooks/use-format.hook";
@@ -114,10 +113,7 @@ export default function RegisterScreen() {
         />
         <TextField ref={passwordRef} label={t("password")} password value={password} onChangeText={setPassword} autoComplete="new-password" textContentType="newPassword" returnKeyType="done" />
 
-        <View style={styles.rules} accessibilityLiveRegion="polite">
-          <Rule ok={rules.min8} label={t("ruleLength", { count: f.count(8) })} highlight={submitted} />
-          <Rule ok={rules.hasNumber} label={t("ruleDigit")} highlight={submitted} />
-        </View>
+        <PasswordRules password={password} highlight={submitted} />
 
         <View style={styles.terms}>
           <Checkbox checked={terms} onPress={() => setTerms((v) => !v)} accessibilityLabel={`${t("termsPrefix")}${t("terms")}${t("and")}${t("privacy")}`} />
@@ -153,25 +149,10 @@ export default function RegisterScreen() {
   );
 }
 
-/** شرط كلمة السر: ✓ أخضر لما يتحقق، ✕ رمادي — وأحمر لو ناقص بعد الضغط */
-function Rule({ ok, label, highlight }: { ok: boolean; label: string; highlight: boolean }) {
-  const color = ok ? colors.okDark : highlight ? colors.error : colors.textSecondary;
-  return (
-    <View style={styles.rule} accessible accessibilityLabel={label} accessibilityState={{ checked: ok }}>
-      <Icon name={ok ? "check_bold" : "close"} size={15} color={color} />
-      <Text dense variant="metaStrong" weight="semibold" color={color}>
-        {label}
-      </Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   top: { paddingTop: 12, paddingBottom: 22 },
   form: { gap: 14 },
   row: { flexDirection: "row", gap: 10 },
   flex: { flex: 1 },
-  rules: { flexDirection: "row", flexWrap: "wrap", gap: 14, marginHorizontal: 2, marginTop: -6 },
-  rule: { flexDirection: "row", alignItems: "center", gap: 5 },
   terms: { flexDirection: "row", alignItems: "flex-start", gap: 10, marginTop: 6 },
 });

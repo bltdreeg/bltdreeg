@@ -3,7 +3,7 @@
 //   بريد karim.abdelrahman@gmail.com / كلمة السر barber2026
 //   موبايل 01023456789 متسجّل · أي كود OTP = 1234 · 3 محاولات غلط = قفل 10 دقايق
 import type { RawAuthSession, RawCustomer, RawOtpChallenge } from "@/lib/utils/auth/laravel-mappers";
-import { MockHttpError, route, type MockRequest } from "./router";
+import { MockHttpError, route, type MockRequest } from "./router.ts";
 
 export const DEMO = { email: "karim.abdelrahman@gmail.com", password: "barber2026", phone: "01023456789", otp: "1234" };
 
@@ -43,6 +43,7 @@ const attemptsLeft = new Map<string, number>();
 const lockedUntil = new Map<string, number>();
 const resendAt = new Map<string, number>();
 const sessions = new Map<string, string>(); // token → phone key
+const resetTokens = new Map<string, string>(); // reset token → phone key
 
 const t = (req: MockRequest, ar: string, en: string) => (req.locale === "en" ? en : ar);
 
@@ -71,6 +72,27 @@ function session(key: string): RawAuthSession {
 export function currentUserKey(req: MockRequest): string {
   if (!req.token) throw new MockHttpError(401, "auth.unauthenticated", t(req, "سجّل دخولك الأول.", "Please sign in first."));
   return sessions.get(req.token) ?? phoneKey(DEMO.phone);
+}
+
+/** نفس فحص الكود في otp/verify و password/verify: قفل بعد المحاولات، والكود الصح DEMO.otp */
+function checkCode(req: MockRequest, key: string): void {
+  const locked = lockedUntil.get(key) ?? 0;
+  if (Date.now() < locked) {
+    throw new MockHttpError(422, "auth.otp_locked", t(req, "حاولت كتير.", "Too many attempts."), {
+      lockMinutes: Math.max(1, Math.ceil((locked - Date.now()) / 60_000)),
+    });
+  }
+  if (req.body.code !== DEMO.otp) {
+    const left = (attemptsLeft.get(key) ?? MAX_ATTEMPTS) - 1;
+    if (left <= 0) {
+      lockedUntil.set(key, Date.now() + LOCK_MS);
+      attemptsLeft.delete(key);
+      throw new MockHttpError(422, "auth.otp_locked", t(req, "حاولت كتير.", "Too many attempts."), { lockMinutes: LOCK_MS / 60_000 });
+    }
+    attemptsLeft.set(key, left);
+    throw new MockHttpError(422, "auth.otp_invalid", t(req, "الكود مش مظبوط.", "That code isn't right."), { attemptsLeft: left });
+  }
+  attemptsLeft.delete(key);
 }
 
 export const authRoutes = [
@@ -119,23 +141,7 @@ export const authRoutes = [
 
   route("POST", "/auth/otp/verify", (req) => {
     const key = phoneKey(req.body.phone);
-    const locked = lockedUntil.get(key) ?? 0;
-    if (Date.now() < locked) {
-      throw new MockHttpError(422, "auth.otp_locked", t(req, "حاولت كتير.", "Too many attempts."), {
-        lockMinutes: Math.max(1, Math.ceil((locked - Date.now()) / 60_000)),
-      });
-    }
-    if (req.body.code !== DEMO.otp) {
-      const left = (attemptsLeft.get(key) ?? MAX_ATTEMPTS) - 1;
-      if (left <= 0) {
-        lockedUntil.set(key, Date.now() + LOCK_MS);
-        attemptsLeft.delete(key);
-        throw new MockHttpError(422, "auth.otp_locked", t(req, "حاولت كتير.", "Too many attempts."), { lockMinutes: LOCK_MS / 60_000 });
-      }
-      attemptsLeft.set(key, left);
-      throw new MockHttpError(422, "auth.otp_invalid", t(req, "الكود مش مظبوط.", "That code isn't right."), { attemptsLeft: left });
-    }
-    attemptsLeft.delete(key);
+    checkCode(req, key);
     if (req.body.purpose === "register") {
       const r = pendingRegistrations.get(key);
       if (!r) throw new MockHttpError(422, "auth.otp_expired", t(req, "الكود انتهى، اطلب كود جديد.", "The code expired, request a new one."));
@@ -143,6 +149,32 @@ export const authRoutes = [
       const email = typeof r.email === "string" && r.email ? r.email : null;
       accounts.set(key, { user: customer(`u-${Date.now()}`, String(r.first_name), String(r.last_name), local(key), email, null), password: String(r.password) });
     }
+    return session(key);
+  }),
+
+  // استعادة كلمة السر: forgot → كود → reset token → كلمة سر جديدة + جلسة (السيرفر بيقفل باقي الجلسات)
+  route("POST", "/auth/password/forgot", (req) => {
+    const email = typeof req.body.email === "string" ? req.body.email.toLowerCase() : null;
+    const key = email ? [...accounts.entries()].find(([, a]) => a.user.email?.toLowerCase() === email)?.[0] : phoneKey(req.body.phone);
+    if (!key || !accounts.has(key)) throw new MockHttpError(422, "auth.account_not_found", t(req, "مفيش حساب بالبيانات دي.", "No account matches these details."));
+    return issue(key, "reset_password");
+  }),
+
+  route("POST", "/auth/password/verify", (req) => {
+    const key = phoneKey(req.body.phone);
+    checkCode(req, key);
+    const token = `reset.${key}.${Date.now()}`;
+    resetTokens.set(token, key);
+    return { reset_token: token, expires_at: new Date(Date.now() + 10 * 60_000).toISOString() };
+  }),
+
+  route("POST", "/auth/password/reset", (req) => {
+    const resetToken = String(req.body.reset_token);
+    const key = resetTokens.get(resetToken);
+    if (!key) throw new MockHttpError(422, "auth.reset_token_invalid", t(req, "الطلب انتهى، ابدأ من الأول.", "This request expired, start again."));
+    resetTokens.delete(resetToken);
+    accounts.get(key)!.password = String(req.body.password);
+    for (const [token, k] of sessions) if (k === key) sessions.delete(token);
     return session(key);
   }),
 

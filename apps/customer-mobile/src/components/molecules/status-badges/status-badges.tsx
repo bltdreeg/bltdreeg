@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   wait: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 27, paddingHorizontal: 10, borderRadius: radius.sm, alignSelf: "flex-start", maxWidth: "100%" },
   shrink: { flexShrink: 1 },
   pin: { flexDirection: "row", alignItems: "center", gap: 4, height: 26, paddingHorizontal: 9, borderRadius: radius.pill, backgroundColor: "rgba(255,255,255,0.94)", ...shadow.pin },
-  badge: { flexDirection: "row", alignItems: "center", gap: 5, minHeight: 26, paddingHorizontal: 10, borderRadius: 7, alignSelf: "flex-start" },
+  badge: { flexDirection: "row", alignItems: "center", gap: 5, minHeight: 26, paddingHorizontal: 10, borderRadius: 7 },
   live: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill },
   liveDot: { width: 7, height: 7 },
   round: { borderRadius: 4 },

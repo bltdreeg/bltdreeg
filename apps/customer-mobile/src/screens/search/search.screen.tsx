@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   scroll: { flexGrow: 1, width: "100%", alignSelf: "center", paddingBottom: 22 },
   bar: { flexDirection: "row", alignItems: "center", gap: 10, paddingTop: 8 },
   applied: { marginTop: 12 },
-  skeleton: { paddingTop: 4 },
+  skeleton: { paddingTop: 16 },
   recent: { paddingTop: 20 },
   rowBetween: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 },
   wrap: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 12 },

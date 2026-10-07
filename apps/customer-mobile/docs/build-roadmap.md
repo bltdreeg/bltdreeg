@@ -34,7 +34,8 @@ This is how we turn the rest of the design board (`apps/web/Beltadreeg customer 
 ## Where we are
 
 - **Built and checked** (Arabic; 320, 360, 393, 430, iPad portrait and landscape, 140% font, keyboard open where there are inputs): onboarding 01–03, login 04/05, register 06, OTP 19/20; Home 07, 08, 18, area sheet 40 (batch 3); salon 21–23, gallery 39 (batch 4); booking 24–30 + Flutter's "امتى تحب تيجي؟" step (batch 5); bookings 09–11, search 12–15, account 16, 17, 43 (batch 6); rate 31/41, notifications 32/33, favorites 34/35, profile 36, notification settings 37, help 42 (batch 7). After the 6 steps: Flutter UI gaps (batch 8), storage + quality (batch 10), polish incl. animated onboarding (batch 11), review leftovers (batch 12).
-- **Still "coming soon" placeholders:** none in the 6 build steps. Next: the "Later" list below.
+- **Batch 13 (2026-10-07):** forgot password (D3), OTP D5/D6, RTL photo swipe (D8, shared `useSwipePager`), badge alignment, the web's salon photos as demo images, release APK.
+- **Still "coming soon" placeholders:** language 38 only (English freeze). Next: the "Later" list below.
 
 ## Rules that apply to every step
 

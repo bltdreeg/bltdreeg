@@ -1,16 +1,18 @@
 // كروت الصالون: SalonRailCard (.hcard — الشرايط الأفقية) و SalonListItem (.shop — القوايم) + useSalonLabels.
 // الرئيسية والبحث والمفضلة بيستخدموهم — نصوص الحالة من مكان واحد (salon_labels.dart في Flutter).
+import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Fragment, type ReactElement, type ReactNode } from "react";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useTranslations } from "use-intl";
 import { getLocale } from "@/i18n/config";
-import { Icon, type IconName } from "@/components/atoms/icon";
+import type { IconName } from "@/components/atoms/icon";
 import { Pressable } from "@/components/atoms/pressable";
 import { Text } from "@/components/atoms/text";
 import { Rating } from "@/components/molecules/rating";
 import { Badge, StatusPin, WaitBadge } from "@/components/molecules/status-badges";
+import { salonCover, type SalonPhotoSource } from "@/lib/data/salon-photos";
 import { useFormat } from "@/lib/hooks/use-format.hook";
 import type { WaitStatus } from "@/lib/types/queue";
 import type { SalonSummary } from "@/lib/types/salon";
@@ -117,7 +119,7 @@ export function SalonRailCard({ salon, now, showNewBadge }: RailProps) {
   return (
     <Pressable onPress={() => openSalon(salon.id)} accessibilityLabel={`${salon.name}، ${pin.label}`} style={styles.card}>
       <View style={styles.cardImage}>
-        <Icon name="store" size={28} color={colors.placeholderIcon} />
+        <SalonImage source={salonCover(salon.id, salon.imageUrl)} />
         <Animated.View key={pin.label} entering={FadeIn.duration(duration.medium)} style={styles.pin}>
           <StatusPin status={pin.status} label={pin.label} />
         </Animated.View>
@@ -160,7 +162,7 @@ export function SalonListItem({ salon, now, live = true, divider = true, price, 
       style={[styles.row, divider && styles.rowDivider]}
     >
       <View style={styles.thumb}>
-        <Icon name="store" size={26} color={colors.placeholderIcon} />
+        <SalonImage source={salonCover(salon.id, salon.imageUrl)} />
       </View>
       <View style={styles.rowMain}>
         <View style={styles.nameRow}>
@@ -186,23 +188,28 @@ const styles = StyleSheet.create({
   meta: { flexDirection: "row", alignItems: "center", gap: 8, minWidth: 0 },
   bar: { width: 1, height: 11, backgroundColor: colors.line },
   card: { width: RAIL_CARD_WIDTH, borderWidth: 1, borderColor: colors.line, borderRadius: radius.card, overflow: "hidden", backgroundColor: colors.bg },
-  cardImage: { height: 104, backgroundColor: colors.surf, alignItems: "center", justifyContent: "center", borderBottomWidth: 1, borderBottomColor: colors.line },
+  cardImage: { height: 104, backgroundColor: colors.surf, borderBottomWidth: 1, borderBottomColor: colors.line },
   pin: { position: "absolute", top: 8, start: 8 },
   cardBody: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 12, gap: 6 },
   cardBottom: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 },
   row: { flexDirection: "row", gap: 12, paddingVertical: 12 },
   rowDivider: { borderBottomWidth: 1, borderBottomColor: colors.line },
-  thumb: { width: 86, height: 86, borderRadius: radius.md, backgroundColor: colors.surf, borderWidth: 1, borderColor: colors.line, alignItems: "center", justifyContent: "center" },
+  thumb: { width: 86, height: 86, borderRadius: radius.md, backgroundColor: colors.surf, borderWidth: 1, borderColor: colors.line, overflow: "hidden" },
   rowMain: { flex: 1, minWidth: 0, gap: 5, paddingTop: 1 },
   nameRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 },
   waitWrap: { alignSelf: "flex-start", maxWidth: "100%" },
 });
 
 /** صورة الصالون المصغّرة في الحجز والطابور (.thumb ٤٨–٥٨) */
-export function SalonThumb({ size }: { size: number }) {
+export function SalonThumb({ size, salonId, imageUrl }: { size: number; salonId: string; imageUrl?: string | null }) {
   return (
     <View style={[styles.thumb, { width: size, height: size, borderRadius: size > 50 ? 11 : 10 }]}>
-      <Icon name="store" size={20} color={colors.placeholderIcon} />
+      <SalonImage source={salonCover(salonId, imageUrl)} />
     </View>
   );
+}
+
+/** الصورة بتملا الصندوق اللي هي فيه (الصندوق عليه overflow hidden) — expo-image: كاش + ظهور ناعم */
+export function SalonImage({ source, fit = "cover" }: { source: SalonPhotoSource; fit?: "cover" | "contain" }) {
+  return <Image source={source} contentFit={fit} transition={duration.fast} style={StyleSheet.absoluteFill} accessible={false} />;
 }

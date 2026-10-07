@@ -40,7 +40,7 @@ English frozen (user, 2026-10-06): Arabic-only copy for new screens; en.json is 
 
 | # | Gap | Notes |
 |---|---|---|
-| 7 | **Complete-profile flow (onboarding gate).** Booking, favorites and rating endpoints return `403 auth.onboarding_required` until the missing steps are done: phone, name + terms, location (skippable), birth date (skippable). | Spec §7.4, §8.5; plan task 16. `tokenStorage.needsOnboarding` is tracked but unused. Mobile `/onboarding` is the intro slides, so use a separate route, e.g. `complete-profile`, guarded by `hasSession && needsOnboarding`; 🔒 routes need `hasSession && !needsOnboarding`. |
+| 7 | ⏸ waits on social sign-in (batch 13 check) — only Google/Apple sign-in can create an account with no phone, name or terms (register and phone login always have them), and the server applies its `customer.onboarded` middleware to no route yet. Build it with real Google/Apple sign-in (§3). **Complete-profile flow (onboarding gate).** Booking, favorites and rating endpoints return `403 auth.onboarding_required` until the missing steps are done: phone, name + terms, location (skippable), birth date (skippable). | Spec §7.4, §8.5; plan task 16. `tokenStorage.needsOnboarding` is tracked but unused. Mobile `/onboarding` is the intro slides, so use a separate route, e.g. `complete-profile`, guarded by `hasSession && needsOnboarding`; 🔒 routes need `hasSession && !needsOnboarding`. |
 | 8 | 🟡 partly done (batch 6–7: `getMe`/`updateMe`/`deleteMe`, `useCurrentUser`, `useUpdateProfile`, `useDeleteAccount`); the rest below is still open. **User layer.** The onboarding flag still never re-syncs from `/me`. These `/me` endpoints have no action yet: `PUT /me/password`, `POST /me/phone` + `/verify` (**must store the new token on a merge**), `/me/email/resend` + `/verify`, `PUT /me/location`, `GET /me/location/estimate`. | Add each with the screen that needs it (change phone and password are help-only today). |
 | 9 | ✅ fixed — **Login doesn't return you where you were.** A guest opening a 🔒 route lands on home; Flutter sends them to `login?from=…` and back after sign-in. | `ponytail:` note in `src/app/_layout.tsx`. Do it with the real login screen. |
 | 10 | ✅ fixed — **OTP without a pending challenge** should redirect to `login?method=phone` (Flutter `app_router.dart`). | With the real OTP screen. |
@@ -69,14 +69,14 @@ The screens follow `mobile.html` (and Flutter, which follows it) until you decid
 
 | # | Topic | Built now | Options | Recommendation |
 |---|---|---|---|---|
-| D1 | Google button mark | multicolor "G" | A multicolor (Google branding rules) · B grey like the board | **A** — Google's sign-in guidelines require the colored mark |
+| D1 | Google button mark | multicolor "G" | A multicolor (Google branding rules) · B grey like the board | ✅ **A** (user, batch 13) — already built multicolor (`assets/icons/google.svg`) |
 | D2 | After the last onboarding slide | Flutter + board: "ادخل على الصالونات" → Home as guest; "عندي حساب" → login | A as built · B always login first (journey step 1 in your brief) | **A** — browsing without an account is the board's promise; login is asked for only when booking |
-| D3 | "نسيت كلمة السر؟" | "coming soon" screen | A build the reset flow now (server has `PasswordResetController`) · B later | **B** — after Home/salon/booking; phone + OTP login covers locked-out users |
+| D3 | "نسيت كلمة السر؟" | phone → code → new password → signed in | A build the reset flow now · B later | ✅ **A** (user, batch 13) — `forgot-password` → OTP `purpose=reset_password` → `new-password`; built from board pieces (frame 05 phone field, 19/20 code, 06 password rules). Neither the board nor Flutter draws it, so 6 strings are new and **need design review**: `auth.forgotSubtitle`, `newPasswordTitle`, `newPasswordSubtitle`, `newPassword`, `savePassword`, `passwordChanged` (toast). Phone only — email reset needs a verified email; add a tab if design wants it. |
 | D4 | ✅ done (batch 11: animated, Flutter port; reduced motion = final frame) — Onboarding illustrations | static SVG per slide | A port Flutter's layered animation · B keep static | **A in the polish batch** — layers are already in `assets/illustrations/onboarding_*` |
-| D5 | OTP wrong-code state (found in Step 0) | the error replaces the countdown; "ابعتلي كود جديد" shows but stays disabled with no time left visible until the user edits the code | A show the countdown under the error too · B as built | **A** — check board frame 20 first; one line in `otp.screen.tsx` (`below` block) |
-| D6 | OTP at 140% font, 360×640, keyboard open (found in Step 0) | `keyboardOffset={205}` keeps countdown + "تأكيد" visible, the code cells scroll off the top | A scale the offset with `fontScale` · B accept for the edge case | **A in the polish batch** — keyboard closed, everything fits |
+| D5 | OTP wrong-code state (found in Step 0) | the countdown shows under the error until resend opens | A show the countdown under the error too · B as built | ✅ **A** (batch 13) — frame 20 is the state after the countdown; device-checked |
+| D6 | OTP at 140% font, 360×640, keyboard open (found in Step 0) | cells, countdown and "تأكيد" all visible | A scale the offset with `fontScale` · B accept for the edge case | ✅ fixed (batch 13) — measured at 140%: everything fit, only the cells' focus halo was clipped, with ~57 dp spare under "تأكيد" → `keyboardOffset` 205 → 195 |
 | D7 | "ادخل الطابور" target (batch 4) | → barber (24, board journey); Flutter goes to a time-slot step first that the board doesn't draw | A barber → confirm (board) · B Flutter's slot step before barber | ✅ **B — decided by the user 2026-10-07** ("امتي تحب تيجي" before the barber). Built in batch 5: slot step (now / day + time), barber per slot, review time row, scheduled bookings (upcoming, cancel) |
-| D8 | Photo viewer swipe (batch 4) | LTR pager: swipe left = next photo | A as built · B RTL (swipe right = next) | **B when the RTL offset bug is fixed** — Android RTL FlatList ignores `initialScrollIndex`/reports flipped offsets; built LTR so the right photo opens |
+| D8 | Photo viewer swipe (batch 4) | RTL: swipe right = next photo | A as built · B RTL (swipe right = next) | ✅ **B** (batch 13) — the viewer uses `useSwipePager` (onboarding's Pan + Reanimated pager, now shared) instead of a FlatList; reversed data and `inverted` both failed because Android's RTL scroller flips them back. Device-checked: opens on the tapped photo, right = next |
 
 ## 2d. Libraries: brief → this repo
 
@@ -173,7 +173,7 @@ The screens follow `mobile.html` (and Flutter, which follows it) until you decid
 | 08 | Offline bar with no update time | always "آخر تحديث الساعة …" | always has a time | Kept "مفيش نت — الأرقام دي مش متحدّثة" as the fallback when no data was ever loaded (no time to show) |
 | 32 | Notifications load error | not drawn | no error state (fake stream) | Kept "معرفناش نجيب الإشعارات" (Flutter's "معرفناش نجيب …" pattern) |
 | 33 | Empty | drawn | same | ✅ device-checked in batch 12 (mock emptied for the check) |
-| — | Loading skeletons (batch 8) | not drawn | `Shimmer`: `surf` boxes + darker band `#EDEFF2` sweeping every 1300 ms; salon-row skeletons on search/favorites | ✅ Flutter (was an opacity pulse = paler, blinking) |
+| — | Loading skeletons (batch 8) | not drawn in mobile.html; web.html §03: `#F1F3F5` boxes, title/price lines `#EDEFF2`, static | `Shimmer`: `surf` `#F7F8FA` boxes + darker band `#EDEFF2` sweeping every 1300 ms; salon-row skeletons on search/favorites | ✅ Board colors + Flutter sweep (2026-10-07): `skeleton`/`skeletonStrong` fills, `#E5E7EB` band — see `docs/plans/skeleton-board-colors.md` |
 | — | Link can't open (batch 8) | — | toast "مش قادرين نفتح التطبيق ده على موبايلك" | ✅ Flutter (app-wide `showToast`; not device-checked — the emulator has maps + dialer) |
 | — | Session expired (batch 8) | — | "جلستك انتهت. سجّل دخولك تاني." | ✅ toast when a 401 clears a live token (not device-checked — the mock has no expiry) |
 | 40 | "Use my location" result (batch 8) | — | toast "حددنا منطقتك: {area}" | ✅ Flutter (toast inside the sheet) |
@@ -195,6 +195,11 @@ The screens follow `mobile.html` (and Flutter, which follows it) until you decid
 **Batch 7 deviations (2026-10-07):** ratings submit online only (Flutter queues them in an outbox); photos go as uris in the JSON body (Flutter: multipart) — both wait for the backend endpoint. The profile's area is the device-selected area (no area on `Customer`). Notification settings live on the device like Flutter. New packages: `@react-native-community/datetimepicker` 9.1.0 (native — dev client rebuilt with `gradlew :app:installDebug`, `ANDROID_SERIAL=emulator-5554`), `@rn-primitives/accordion`. `AreaSheet` moved to `components/organs/area-sheet` (Home + profile); `Meta` exported from `salon-card` (booking cards, rate) and `SalonListItem` takes an `action`.
 
 ## 3. Blocked on the backend
+
+- **Salon photos are demo images until the API sends them** (batch 13). `lib/data/salon-photos.ts` uses the web's
+  `public/dummy_salon` images (9 unique, `5.png` = `4.png`; 800 px JPEG, ~750 KB in all) in cards, booking thumbs, the salon
+  hero, gallery and viewer. A real `image_url` / gallery `url` always wins; the image is picked from the id, so a salon looks
+  the same everywhere. Delete the folder and the fallback once the API has images. Videos show a still + play button.
 
 - **No customer endpoints beyond auth and `/me`.** The central app only has `Customer/Auth` routes. Salons, search,
   availability, bookings, queue, favorites, ratings and notifications don't exist yet.
@@ -233,9 +238,9 @@ The screens follow `mobile.html` (and Flutter, which follows it) until you decid
 - **Changing the device display size (density) restarts the JS app**: Android recreates the activity (`density` is not
   in `configChanges`). Normal Android behavior; in-memory state such as a pending OTP challenge is lost.
 - **Hermes `Intl` on device:** `date.utils.ts` uses `ar-EG-u-nu-latn`, and `IntlProvider` sets `timeZone="Africa/Cairo"`. Confirm both on Android and iOS.
-- **Tests:** 86 node tests (utils, mock rules, pref migration, toast bus). Native-backed stores (`token-storage`, `app-preferences`) have no Node test — their logic is `migrate-pref.ts`, which is tested.
+- **Tests:** 87 node tests (utils, mock rules incl. password reset, pref migration, toast bus). Native-backed stores (`token-storage`, `app-preferences`) have no Node test — their logic is `migrate-pref.ts`, which is tested.
 - ✅ **Layering (batch 10):** ESLint `no-restricted-imports` — `components/`, `screens/`, `app/` can't import `lib/actions` or `lib/api` (types allowed); `lib/` can't import UI. Same idea as Flutter's `test/architecture/layering_test.dart`.
-- **Build/CI:** no `eas.json`, no CI.
+- **Build/CI:** `eas.json` exists (development, development-simulator, preview, production; mock on except production). Open: `eas init` on the Expo account, iOS build, CI.
 - ✅ **Startup (batch 10):** Cairo is embedded with the `expo-font` config plugin (Android names = file names, iOS = PostScript names, picked in `tokens.font`); no runtime `useFonts` wait. iOS names to confirm on the EAS build.
 - **Lint:** 8 warnings, all in files copied verbatim from web (kept identical on purpose).
 
@@ -352,3 +357,15 @@ Not run yet: needs `eas init` on your Expo account and an iPhone registered for 
 | Help: search filters, one FAQ open, call, terms/privacy, version | ✅ |
 | 320×568, 360, 393, 430, 820×1180, 1180×820 + 140% (8 screens) + keyboard open (profile, help) | ✅ |
 | Recording | ✅ (session scratchpad `b7/b7-rest.mp4`) |
+
+## 12. Batch 13 verification — last UI gaps + salon photos (Android emulator, Pixel 9, 2026-10-07)
+
+| Check | Result |
+|---|---|
+| Profile phone field: "متأكّد" badge centred (fix in `Badge` itself: `alignSelf: flex-start` pinned it to the top of every row) | ✅ |
+| Forgot password: phone → code (`reset_password`) → new password, rules red on early save then green → home signed in | ✅ |
+| OTP wrong code with the countdown still running: error + countdown + disabled resend (D5) | ✅ |
+| OTP at 140% font on 360×640 with the keyboard: cells, countdown, "تأكيد" visible (D6) | ✅ at 205 (only the halo clipped) → 195; the floating emulator keyboard blocked a re-shot |
+| Photo viewer: opens on the tapped photo, swipe right = next, left = previous (D8) | ✅ |
+| Onboarding on the shared `useSwipePager`: slides 1→2→3, dots, "تخطّي" hides | ✅ |
+| Salon photos: home list + rails, salon hero (light status bar + top scrim over the photo, dark again when the white bar shows), gallery grid + review photos, viewer (contain, light status bar) | ✅ |

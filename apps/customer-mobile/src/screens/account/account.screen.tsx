@@ -74,7 +74,7 @@ function SignedIn() {
             </>
           ) : (
             <View style={styles.nameSkeleton}>
-              <Skeleton width="60%" height={18} />
+              <Skeleton width="60%" height={18} strong />
               <Skeleton width="40%" height={14} />
             </View>
           )}

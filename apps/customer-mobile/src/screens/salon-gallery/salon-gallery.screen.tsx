@@ -11,6 +11,8 @@ import { Text } from "@/components/atoms/text";
 import { Chip, ChipRail } from "@/components/molecules/chip";
 import { GroupLabel } from "@/components/molecules/settings-group";
 import { TopBar } from "@/components/molecules/top-bar";
+import { SalonImage } from "@/components/organs/salon-card";
+import { galleryPhoto } from "@/lib/data/salon-photos";
 import { useFormat } from "@/lib/hooks/use-format.hook";
 import { useResponsive } from "@/lib/hooks/use-responsive.hook";
 import { useSalonPage } from "@/lib/hooks/salons";
@@ -25,7 +27,12 @@ const openPhoto = (salonId: string, index: number, kind: GalleryKind | null) =>
 function Tile({ item, height, overlay, onPress }: { item: GalleryItem; height: number; overlay?: string; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityLabel={overlay ?? item.caption ?? undefined} style={[styles.tile, { height }]}>
-      {!overlay && <Icon name={item.kind === "video" ? "play" : "camera"} size={height > 120 ? 28 : 20} color={colors.placeholderIcon} />}
+      <SalonImage source={galleryPhoto(item)} />
+      {item.kind === "video" && !overlay && (
+        <View style={styles.play}>
+          <Icon name="play" size={height > 120 ? 24 : 18} color={colors.textPrimary} />
+        </View>
+      )}
       {overlay && (
         <View style={styles.overlay}>
           <Text variant="titleLg" size={19} weight="extrabold" color={colors.onPrimary}>
@@ -132,7 +139,7 @@ export default function SalonGalleryScreen() {
               <View style={styles.reviewRow}>
                 {page.reviewPhotos.map((g) => (
                   <View key={g.id} style={styles.small}>
-                    <Icon name="camera" size={16} color={colors.placeholderIcon} />
+                    <SalonImage source={galleryPhoto(g)} />
                   </View>
                 ))}
               </View>
@@ -150,11 +157,12 @@ const styles = StyleSheet.create({
   chips: { marginTop: 14, marginBottom: 4 },
   body: { paddingTop: 14, gap: 10 },
   tile: { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md, backgroundColor: colors.surf, alignItems: "center", justifyContent: "center", overflow: "hidden" },
+  play: { width: 48, height: 48, borderRadius: 24, backgroundColor: "rgba(255,255,255,0.9)", alignItems: "center", justifyContent: "center" },
   overlay: { ...StyleSheet.absoluteFill, backgroundColor: colors.scrim, alignItems: "center", justifyContent: "center" },
   videoBadge: { position: "absolute", bottom: 10, start: 12, flexDirection: "row", alignItems: "center", gap: 5, height: 26, paddingHorizontal: 9, borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.bg },
   row: { flexDirection: "row", gap: 10 },
   cell: { flex: 1 },
   reviewPhotos: { marginTop: 10 },
   reviewRow: { flexDirection: "row", gap: 10 },
-  small: { width: 96, height: 96, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surf, alignItems: "center", justifyContent: "center" },
+  small: { width: 96, height: 96, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surf, overflow: "hidden" },
 });

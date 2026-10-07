@@ -1,8 +1,11 @@
 // رأس صفحة الصالون: الصورة بعرض الشاشة تحت شريط الحالة (فريم 21) + شريط علوي ثابت بيظهر لما تسكرول (فريم 22–23):
 // رجوع ومشاركة وقلب دايماً، والاسم + "المعادي · فاضي دلوقتي" بيظهروا مع خلفية الشريط.
-import { router } from "expo-router";
+import { router, useIsFocused } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { Share, StyleSheet, View } from "react-native";
-import Animated, { Extrapolation, interpolate, useAnimatedStyle, type SharedValue } from "react-native-reanimated";
+import Animated, { Extrapolation, interpolate, useAnimatedReaction, useAnimatedStyle, type SharedValue } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslations } from "use-intl";
 import { Icon } from "@/components/atoms/icon";
@@ -10,7 +13,8 @@ import { Pressable } from "@/components/atoms/pressable";
 import { Text } from "@/components/atoms/text";
 import { IconButton } from "@/components/molecules/icon-button";
 import { FavoriteButton } from "@/components/organs/favorite-button";
-import { useSalonLabels } from "@/components/organs/salon-card";
+import { SalonImage, useSalonLabels } from "@/components/organs/salon-card";
+import { salonCover } from "@/lib/data/salon-photos";
 import { useFormat } from "@/lib/hooks/use-format.hook";
 import type { SalonPage } from "@/lib/types/salon";
 import { colors, radius } from "@/styles/tokens";
@@ -32,7 +36,9 @@ export function SalonHero({ page }: { page: SalonPage }) {
   const hasVideo = page.gallery.some((g) => g.kind === "video");
   return (
     <Pressable onPress={() => openGallery(page.summary.id)} pressedScale={1} accessibilityLabel={t("photosCount", { count: photos, n: f.count(photos) })} style={[styles.hero, { height: heroHeight(insets.top) }]}>
-      <Icon name="camera" size={42} color={colors.placeholderIcon} />
+      <SalonImage source={salonCover(page.summary.id, page.summary.imageUrl)} />
+      {/* ظل خفيف فوق عشان أيقونات شريط الحالة (فاتحة فوق الصورة) تتقري */}
+      <View style={[styles.scrim, { height: insets.top + TOP_BAR }]} pointerEvents="none" />
       <View style={styles.heroChips}>
         <View style={styles.heroChip}>
           <Icon name="camera" size={15} color={colors.textSecondary} />
@@ -67,11 +73,21 @@ export function SalonTopBar({ page, scrollY, collapseAt }: { page: SalonPage; sc
   const s = page.summary;
   const fade = useAnimatedStyle(() => ({ opacity: interpolate(scrollY.get(), [collapseAt - 40, collapseAt], [0, 1], Extrapolation.CLAMP) }));
   const status = s.opensAt ? tSalon("closedNow") : labels.pin(s).label;
+  // شريط الحالة فاتح فوق الصورة، وغامق لما الشريط الأبيض يظهر (أو لما شاشة تانية تتفتح فوقها)
+  const [overPhoto, setOverPhoto] = useState(true);
+  const focused = useIsFocused();
+  useAnimatedReaction(
+    () => scrollY.get() < collapseAt - 20,
+    (cur, prev) => {
+      if (cur !== prev) scheduleOnRN(setOverPhoto, cur);
+    },
+  );
 
   const share = () => void Share.share({ message: tSalon("shareText", { salon: s.name, link: `https://beltadreeg.app/salon/${s.id}` }) });
 
   return (
     <View style={[styles.bar, { paddingTop: insets.top, height: insets.top + TOP_BAR }]} pointerEvents="box-none">
+      {overPhoto && focused && <StatusBar style="light" />}
       <Animated.View style={[StyleSheet.absoluteFill, styles.barBg, fade]} pointerEvents="none" />
       <IconButton icon="chevron_left" mirror onPress={goBack} accessibilityLabel={tA11y("back")} />
       <Animated.View style={[styles.barTitle, fade]} pointerEvents="none">
@@ -89,12 +105,14 @@ export function SalonTopBar({ page, scrollY, collapseAt }: { page: SalonPage; sc
 }
 
 const styles = StyleSheet.create({
-  hero: { backgroundColor: colors.surf, borderBottomWidth: 1, borderBottomColor: colors.line, alignItems: "center", justifyContent: "center" },
+  hero: { backgroundColor: colors.surf, borderBottomWidth: 1, borderBottomColor: colors.line, overflow: "hidden" },
+  scrim: { position: "absolute", top: 0, start: 0, end: 0, experimental_backgroundImage: "linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0))" },
   heroChips: { position: "absolute", bottom: 12, start: 16, flexDirection: "row", gap: 8 },
   heroChip: { flexDirection: "row", alignItems: "center", gap: 5, height: 28, paddingHorizontal: 10, borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.bg },
   dots: { position: "absolute", bottom: 24, end: 16, flexDirection: "row", gap: 4 },
-  dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: colors.line },
-  dotOn: { width: 16, backgroundColor: colors.textSecondary },
+  // على الصورة: نقط بيضا
+  dot: { width: 4, height: 4, borderRadius: 2, backgroundColor: "rgba(255,255,255,0.6)" },
+  dotOn: { width: 16, backgroundColor: colors.onPrimary },
   bar: { position: "absolute", top: 0, start: 0, end: 0, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 16 },
   barBg: { backgroundColor: colors.bg, borderBottomWidth: 1, borderBottomColor: colors.line },
   barTitle: { flex: 1, minWidth: 0 },

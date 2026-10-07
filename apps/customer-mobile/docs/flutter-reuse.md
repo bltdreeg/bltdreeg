@@ -77,7 +77,7 @@ Differences from Flutter (each on the decision list or justified):
 | Content entrance | `FadeSlideIn` slow + standard, `scaleFrom` 0.92 for art | Reanimated `entering` with `duration.slow` / `easing.standard` (batch 3+) |
 | Onboarding art | layered entrance 1300 ms + 2600 ms loop (`bounceOut` pin drop) | static SVG now — **D4** |
 | Live dot | 1400 ms pulse, scale 1 → 2.6 | `duration.livePulse` in `status-badges` |
-| Skeleton | 1300 ms shimmer sweep | `duration.shimmer` — an opacity pulse, simpler than a sweep; same feel |
+| Skeleton | 1300 ms shimmer sweep | `duration.shimmer` — same sweep; colors from the board (web.html §03), not Flutter's `surf` |
 | Favorite heart | 420 ms, 1 → 1.35 then `elasticOut` | batch 4 (`easing.emphasized`) |
 | Queue joined / your turn / rating sent art | 1500–1800 ms phased entrances, `elasticOut` discs, ripple loop | batches 5 + 7 |
 
