@@ -10,7 +10,6 @@ use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Tenancy\Database\Factories\BranchFactory;
-use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Bltdreeg\Core\Modules\Onboarding\Enums\TeamSizeEnum;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -111,9 +110,7 @@ class Branch extends Model
     {
         return $query->withoutGlobalScopes(['tenant', 'branch'])
             ->where('branches.is_active', true)
-            ->whereHas('tenant', fn (Builder $tenant) => $tenant
-                ->where('status', TenantStatusEnum::APPROVED)
-                ->where('is_active', true));
+            ->whereHas('tenant', fn (Builder $tenant) => $tenant->visibleOnMarketplace());
     }
 
     /**
