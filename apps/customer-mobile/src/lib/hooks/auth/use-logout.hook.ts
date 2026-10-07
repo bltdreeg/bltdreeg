@@ -7,7 +7,8 @@ export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => logout(),
-    onSuccess: () => {
+    // onSettled مش onSuccess: الأكشن بيمسح التوكن حتى لو الطلب فشل (من غير نت)، فالكاش لازم يتمسح برضه
+    onSettled: () => {
       queryClient.clear();
       queryClient.setQueryData(QK_USER, null);
     },

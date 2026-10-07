@@ -14,7 +14,8 @@ Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
 
 ```bash
 npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
+pnpm start                  # dev server on port 8090 (8081 is taken on the team's machines; .env sets RCT_METRO_PORT)
+pnpm android | pnpm ios     # native build + run, same port
 npx expo lint               # lint
 npx tsc --noEmit            # typecheck
 npx expo-doctor             # diagnose dependency and config issues
@@ -60,4 +61,12 @@ src/
 - `lib/types`, `lib/actions/auth`, `lib/hooks/auth`, `lib/utils/{api,auth,format}`, messages are **copies of web** — change both when the API changes.
 - Mobile-only: `lib/utils/auth/token-storage.ts` (SecureStore, same API as web), `lib/api/axios-instance.ts` (`EXPO_PUBLIC_API_URL`, Android emulator: `http://10.0.2.2:8011/api/v1`), `i18n/config.ts`.
 - Always render text through `components/atoms/text` with a `variant` from the type scale; icons via `components/atoms/icon` (`mirror` for chevrons/back), art via `components/atoms/illustration`. New SVG → add it to the registry (`icons.ts` / `illustrations.ts`). Dev gallery: `/dev/design-system`. Use logical style props (`marginStart`, `paddingEnd`) for RTL.
-- Checks: `npx tsc --noEmit`, `npx expo lint`, `pnpm test` (node test runner, `src/**/*.test.ts`).
+- **Mock API (default):** `src/lib/api/mock/` is an axios adapter; hooks/actions don't know. Add a domain = a `*.mock.ts` route table + register it in `adapter.ts`. Laravel: `EXPO_PUBLIC_API_MOCK=0`. Demo login `karim.abdelrahman@gmail.com` / `barber2026`, OTP `1234`.
+- **Responsive:** layouts are flex; `useResponsive()` (`lib/hooks/use-responsive.hook.ts`) gives `gutter`, `isShort`, `isTablet`, `formMaxWidth`/`listMaxWidth`, `scale`/`moderateScale`. `Text` scales fonts itself (use `size` for one-off design sizes, `dense` for chips/badges/nav).
+- **Components first:** `Pressable` (never TouchableOpacity), `Button`, `IconButton`, `TextField`/`PhoneField`/`SearchField`, `OtpInput`, `Chip`/`ChipRail`, tabs, `WaitBadge`/`StatusPin` (from `WaitStatus` via `waitStatus()`), `Notice`/`OfflineBar`, `ListGroup`/`ListRow`, `TopBar`/`SectionHeader`, `EmptyState`. Mobile-only copy goes under `mobile.*` in the messages (during the English freeze, new keys go into `ar.json` only).
+- **Component rule:** visual parts (Text, Button, fields, cards, chips, badges, lists, empty states) are our own in `src/components`. Interactive parts (switch, checkbox, radio, tabs, dialogs, accordion, slider, select/popover) are built on `@rn-primitives/*` and styled with our tokens (`Toggle`/`Checkbox`/`RadioGroup`+`Radio`/`SegmentedTabs`/`UnderlineTabs` already are). Bottom sheets: `@gorhom/bottom-sheet`. No full UI kit (Paper, Tamagui, gluestack) and no `@expo/ui`. Add a package only when the batch that needs it starts, with `npx expo install`. A `PortalHost` goes in `src/app/_layout.tsx` with the first dialog.
+- Digits: Arabic-Indic in Arabic, Western in English — format every displayed number through `useFormat()` / `fmt(locale)`
+  (`src/lib/utils/format/number-format.utils.ts`; `intlLocale()` = `ar-EG-u-nu-arab`). Data, API payloads, the phone field
+  and OTP cells stay Western; normalize typed input with `onlyDigits()`.
+- Forms: wrap in `FormScreen`; pass `keyboardOffset` when the CTA sits more than ~96 below the last field, and check it at 360×640.
+- Checks: `npx tsc --noEmit`, `npx expo lint`, `pnpm test` (node test runner, `src/**/*.test.ts`). Windows Android builds need the hoisted `.npmrc` (see GAPS §5).

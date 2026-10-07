@@ -1,6 +1,6 @@
 // Design tokens — 1:1 with the Flutter app (apps/bltdreeg_cutsomer_mobile/lib/core/theme/*), which is the
 // cleaned-up source of "Beltadreeg customer app design/mobile.html". Light only, Cairo, RTL.
-import type { TextStyle, ViewStyle } from "react-native";
+import { Platform, type TextStyle, type ViewStyle } from "react-native";
 
 // ---- app_colors.dart ----------------------------------------------------------
 const raw = {
@@ -10,6 +10,8 @@ const raw = {
   tealTint2: "#D3E5E3",
   bg: "#FFFFFF",
   surf: "#F7F8FA",
+  /** لمعة الـ skeleton (Flutter Shimmer) */
+  surfSheen: "#EDEFF2",
   tx: "#0E0F11",
   tx2: "#6B7280",
   line: "#E5E7EB",
@@ -102,24 +104,15 @@ export const shadow = {
   focusRing: { boxShadow: `0 0 0 3px ${raw.focusRing}` },
 } satisfies Record<string, ViewStyle>;
 
-/** milliseconds */
-export const motion = {
-  press: 90,
-  release: 160,
-  fast: 180,
-  medium: 280,
-  slow: 480,
-  celebrate: 900,
-  pressedScale: 0.97,
-} as const;
-
 // ---- app_typography.dart ---------------------------------------------------------
+// Cairo متضمّن في البيلد (expo-font plugin في app.json): Android بيسمّيه باسم الملف، iOS باسم الـ PostScript
+const cairo = (file: string, postScript: string) => (Platform.OS === "ios" ? postScript : file);
 export const font = {
-  regular: "Cairo_400Regular",
-  medium: "Cairo_500Medium",
-  semibold: "Cairo_600SemiBold",
-  bold: "Cairo_700Bold",
-  extrabold: "Cairo_800ExtraBold",
+  regular: cairo("Cairo_400Regular", "Cairo-Regular"),
+  medium: cairo("Cairo_500Medium", "Cairo-Medium"),
+  semibold: cairo("Cairo_600SemiBold", "Cairo-SemiBold"),
+  bold: cairo("Cairo_700Bold", "Cairo-Bold"),
+  extrabold: cairo("Cairo_800ExtraBold", "Cairo-ExtraBold"),
 } as const;
 export type FontWeight = keyof typeof font;
 

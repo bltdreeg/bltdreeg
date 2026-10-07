@@ -1,5 +1,7 @@
 // نصوص العروض — منقولة حرفياً من app_ar.arb
-import { formatPrice } from "@/lib/utils/format/price.utils";
+import { fmt, type AppLocale } from "@/lib/utils/format/number-format.utils";
+
+const formatPrice = (egp: number, locale: string) => fmt(locale === "en" ? "en" : "ar" as AppLocale).price(egp);
 
 export const offersHeader = "عروض شغّالة دلوقتي";
 

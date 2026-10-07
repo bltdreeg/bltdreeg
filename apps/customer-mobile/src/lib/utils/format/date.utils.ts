@@ -11,6 +11,11 @@ export function formatTime(iso: string, locale = "ar") {
   return new Intl.DateTimeFormat(getIntlLocale(locale), { hour: "numeric", minute: "2-digit" }).format(new Date(iso));
 }
 
+/** الساعة من غير دقايق: "12 م" */
+export function formatHour(iso: string, locale = "ar") {
+  return new Intl.DateTimeFormat(getIntlLocale(locale), { hour: "numeric" }).format(new Date(iso));
+}
+
 export function formatDate(iso: string, locale = "ar") {
   return new Intl.DateTimeFormat(getIntlLocale(locale), { weekday: "long", day: "numeric", month: "long" }).format(new Date(iso));
 }

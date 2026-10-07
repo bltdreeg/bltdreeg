@@ -1,10 +1,12 @@
 // أفعال المصادقة: async functions عادية بتكلم Laravel عن طريق apiClient (مفيش server actions ولا route handlers).
 // بتتنادى من React Query hooks بس. فتح الجلسة (حفظ التوكن) بيحصل هنا.
+import * as Device from "expo-device";
 import { Platform } from "react-native";
 import { apiClient } from "@/lib/api";
 import type {
   AuthOptions,
   AuthSession,
+  Customer,
   ForgotPasswordDto,
   LoginDto,
   OtpChallenge,
@@ -14,6 +16,7 @@ import type {
   ResetPasswordDto,
   ResetToken,
   SocialLoginDto,
+  UpdateProfileDto,
   VerifyOtpDto,
   VerifyResetCodeDto,
 } from "@/lib/types/auth";
@@ -24,11 +27,12 @@ import {
   mapOtpChallenge,
   type RawAuthOptions,
   type RawAuthSession,
+  type RawCustomer,
   type RawOtpChallenge,
 } from "@/lib/utils/auth/laravel-mappers";
 import { tokenStorage } from "@/lib/utils/auth/token-storage";
 
-const DEVICE_NAME = Platform.OS;
+const DEVICE_NAME = Device.modelName ?? Platform.OS;
 
 function openSession(raw: RawAuthSession, remember = true): AuthSession {
   tokenStorage.setSession(raw.access_token, raw.user.onboarding.complete, remember);
@@ -116,6 +120,23 @@ export async function resetPassword(dto: ResetPasswordDto): Promise<AuthSession>
     device_name: DEVICE_NAME,
   });
   return openSession(raw);
+}
+
+export async function getMe(): Promise<Customer> {
+  return mapCustomer(await apiClient.get<RawCustomer>("/me"));
+}
+
+/** الحقول اللي مش مبعوتة مش بتتغير؛ email: null بيمسح البريد (فريم 36) */
+export async function updateMe(dto: UpdateProfileDto): Promise<Customer> {
+  return mapCustomer(
+    await apiClient.put<RawCustomer>("/me", { first_name: dto.firstName, last_name: dto.lastName, email: dto.email, birth_date: dto.birthDate }),
+  );
+}
+
+/** امسح حسابي — الجلسة بتتقفل محلياً بعد ما السيرفر يمسح */
+export async function deleteMe(): Promise<void> {
+  await apiClient.delete<void>("/me");
+  tokenStorage.clear();
 }
 
 export async function logout(): Promise<void> {

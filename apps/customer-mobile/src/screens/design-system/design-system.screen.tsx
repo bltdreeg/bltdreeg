@@ -1,26 +1,28 @@
 // معرض الـ design system (dev بس) — زي lib/core/dev/design_system_gallery_page.dart في Flutter.
 // الهدف: نشوف على جهاز حقيقي إن الألوان والخطوط والأيقونات اتنقلت صح (تلوين currentColor، قلب RTL، أوزان Cairo).
-import { router } from "expo-router";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Icon, icons, type IconName } from "@/components/atoms/icon";
 import { Illustration, illustrations, type IllustrationName } from "@/components/atoms/illustration";
 import { Text } from "@/components/atoms/text";
+import { TopBar } from "@/components/molecules/top-bar";
+import { useResponsive } from "@/lib/hooks/use-responsive.hook";
 import { colors, radius, shadow, spacing, tone, type, type Tone, type TypeVariant } from "@/styles/tokens";
+import { ComponentsGallery } from "./__sections/components-gallery";
 
 const SAMPLE = "احجز ميعاد — رقمك في الدور 3";
 
 export default function DesignSystemScreen() {
+  const { gutter, listMaxWidth } = useResponsive();
   return (
     <SafeAreaView style={styles.root} edges={["top"]}>
-      <View style={styles.topBar}>
-        <Pressable onPress={() => router.back()} hitSlop={12} accessibilityLabel="Back">
-          <Icon name="chevron_left" size={24} mirror />
-        </Pressable>
-        <Text variant="topBarTitle">Design system</Text>
+      <View style={[styles.topBar, { paddingHorizontal: gutter }]}>
+        <TopBar title="Design system" />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { padding: gutter, maxWidth: listMaxWidth }]}>
+        <ComponentsGallery />
+
         <Section title="Colors">
           <View style={styles.wrap}>
             {Object.entries(colors).map(([name, value]) => (
@@ -125,16 +127,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    paddingHorizontal: spacing.gutter,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.divider,
-  },
-  content: { padding: spacing.gutter, gap: spacing.xxxl },
+  topBar: { borderBottomWidth: 1, borderBottomColor: colors.divider },
+  content: { gap: spacing.xxxl, width: "100%", alignSelf: "center" },
   section: { gap: spacing.md },
   wrap: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
   row: { flexDirection: "row", alignItems: "center", gap: spacing.lg },

@@ -1,8 +1,8 @@
-// اللغة — placeholder لحد ما الشاشة تتبني
-import { ScreenPlaceholder } from "@/components/molecules/screen-placeholder";
+// اللغة — لسه بتتبني (فريم 38)
+import { useTranslations } from "use-intl";
+import { ComingSoon } from "@/components/organs/coming-soon";
 
 export default function LanguageScreen() {
-  return (
-    <ScreenPlaceholder title="اللغة" frames="38" />
-  );
+  const t = useTranslations("mobile.screens");
+  return <ComingSoon title={t("language")} />;
 }

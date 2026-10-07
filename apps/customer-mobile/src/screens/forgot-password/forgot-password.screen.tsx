@@ -1,8 +1,8 @@
-// نسيت كلمة السر — placeholder لحد ما الشاشة تتبني
-import { ScreenPlaceholder } from "@/components/molecules/screen-placeholder";
+// نسيت كلمة السر — لسه بتتبني (فريم web only)
+import { useTranslations } from "use-intl";
+import { ComingSoon } from "@/components/organs/coming-soon";
 
 export default function ForgotPasswordScreen() {
-  return (
-    <ScreenPlaceholder title="نسيت كلمة السر" frames="web only" />
-  );
+  const t = useTranslations("mobile.screens");
+  return <ComingSoon title={t("forgotPassword")} />;
 }

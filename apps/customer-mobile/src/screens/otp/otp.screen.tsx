@@ -1,8 +1,160 @@
-// تأكيد رقم الموبايل — OTP — placeholder لحد ما الشاشة تتبني
-import { ScreenPlaceholder } from "@/components/molecules/screen-placeholder";
+// كود التأكيد (فريم 19 عادي، 20 كود غلط) — رحلة Flutter (otp_page.dart):
+// من غير تحدي متبعت قبلها → دخول بالموبايل. الكود بيتقري من الرسالة ويتأكد لوحده لما يكمل. بعد التأكيد → from أو الرئيسية.
+import * as Haptics from "expo-haptics";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text as RNText, View } from "react-native";
+import { useTranslations } from "use-intl";
+import { Text } from "@/components/atoms/text";
+import { Button, LinkButton } from "@/components/molecules/button";
+import { Notice } from "@/components/molecules/notice";
+import { OtpInput } from "@/components/molecules/otp-input";
+import { FieldError } from "@/components/molecules/text-field";
+import { TopBar } from "@/components/molecules/top-bar";
+import { AuthTitle, BrandTile, useAuthErrorText } from "@/components/organs/auth-parts";
+import { FormScreen } from "@/components/organs/form-screen";
+import { useOtpChallenge, useResendOtp, useVerifyOtp } from "@/lib/hooks/auth";
+import { useFormat } from "@/lib/hooks/use-format.hook";
+import { safeReturnPath } from "@/lib/utils/route-guards";
+import { colors } from "@/styles/tokens";
+import { duration } from "@/theme/motion";
+
+type Purpose = "login" | "register";
+
+/** ثواني لحد ما "ابعت تاني" تتفتح — بتعد كل ثانية */
+function useSecondsUntil(iso: string | undefined): number {
+  const [now, setNow] = useState(() => Date.now());
+  const target = iso ? Date.parse(iso) : 0;
+  useEffect(() => {
+    if (target <= Date.now()) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [target]);
+  return Math.max(0, Math.ceil((target - now) / 1000));
+}
 
 export default function OtpScreen() {
+  const t = useTranslations("mobile.auth");
+  const f = useFormat();
+  const errorText = useAuthErrorText();
+  const params = useLocalSearchParams<{ phone?: string; purpose?: string; from?: string }>();
+  const phone = params.phone ?? "";
+  const purpose: Purpose = params.purpose === "register" ? "register" : "login";
+  const from = safeReturnPath(params.from);
+
+  const challenge = useOtpChallenge(purpose, phone).data;
+  const verify = useVerifyOtp();
+  const resend = useResendOtp();
+  const [code, setCode] = useState("");
+  const resendIn = useSecondsUntil(challenge?.resendAvailableAt);
+
+  if (!challenge) return <Redirect href={{ pathname: "/login", params: { method: "phone" } }} />;
+
+  const length = challenge.codeLength;
+  const wrong = verify.error?.code === "auth.otp_invalid" || verify.error?.code === "auth.otp_locked";
+
+  const submit = (value = code) => {
+    if (value.length !== length || verify.isPending || verify.isSuccess) return;
+    // زي Flutter: اهتزاز + الخانات خضرا ٦٥٠ms قبل ما نمشي؛ الكود الغلط = اهتزاز أقوى
+    verify.mutate(
+      { phone, code: value, purpose },
+      {
+        onSuccess: () => {
+          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          setTimeout(() => router.replace((from ?? "/home") as never), duration.successHold);
+        },
+        onError: (e) => {
+          if (e.code === "auth.otp_invalid" || e.code === "auth.otp_locked") void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        },
+      },
+    );
+  };
+
+  const phoneText = (
+    <RNText>
+      {" "}
+      <Text variant="bodyLong" weight="bold" color={colors.textPrimary}>
+        {f.phone(phone)}
+      </Text>
+    </RNText>
+  );
+
   return (
-    <ScreenPlaceholder title="تأكيد رقم الموبايل — OTP" frames="19–20" />
+    // الخلية → سطر العداد (58) → زرار التأكيد (62) لازم يبانوا فوق الكيبورد حتى على 360×640.
+    // ponytail: keyboard-controller بيقيس من مؤشر الـ input المخفي (خط 1) مش من تحت الخلايا — الرقم متقاس على 360×640
+    <FormScreen header={<TopBar />} keyboardOffset={205}>
+      <View style={styles.top}>
+        <BrandTile icon={wrong ? "alert_circle" : "message"} tone={wrong ? "error" : "tint"} />
+        <AuthTitle
+          title={wrong ? t("otpWrongTitle") : t("otpTitle")}
+          subtitle={
+            <Text variant="bodyLong">
+              {wrong ? t("otpWrongSubtitle") : t("otpSentTo", { length: f.count(length) })}
+              {phoneText}
+            </Text>
+          }
+        />
+        {!wrong && (
+          <View style={styles.change}>
+            <LinkButton label={t("changeNumber")} onPress={() => router.back()} />
+          </View>
+        )}
+      </View>
+
+      <OtpInput
+        value={code}
+        onChange={(v) => {
+          setCode(v);
+          if (verify.error) verify.reset();
+        }}
+        onComplete={submit}
+        length={length}
+        error={wrong}
+        success={verify.isSuccess}
+        accessibilityLabel={t("otpCode")}
+      />
+
+      <View style={styles.below}>
+        {verify.error ? (
+          <FieldError message={errorText(verify.error)!} />
+        ) : resendIn > 0 ? (
+          <Text variant="note" style={styles.center}>
+            {t("resendIn", { time: f.countdown(resendIn) })}
+          </Text>
+        ) : resend.isSuccess ? (
+          <Text variant="note" color={colors.okDark} style={styles.center}>
+            {t("resent")}
+          </Text>
+        ) : null}
+      </View>
+
+      <View style={styles.actions}>
+        <Button label={t("confirm")} onPress={() => submit()} disabled={code.length !== length} loading={verify.isPending || verify.isSuccess} />
+        {(wrong || resendIn === 0) && (
+          <Button
+            label={t("resend")}
+            variant="secondary"
+            icon="refresh"
+            disabled={resendIn > 0 || verify.error?.code === "auth.otp_locked"}
+            loading={resend.isPending}
+            onPress={() => {
+              setCode("");
+              verify.reset();
+              resend.mutate({ phone, purpose });
+            }}
+          />
+        )}
+        {resend.error && <FieldError message={errorText(resend.error)!} />}
+        {!wrong && <Notice>{t("otpHelp")}</Notice>}
+      </View>
+    </FormScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  top: { paddingTop: 18, paddingBottom: 26 },
+  change: { flexDirection: "row", marginTop: 4 },
+  below: { minHeight: 44, justifyContent: "center", marginTop: 14 },
+  center: { textAlign: "center" },
+  actions: { gap: 12, marginTop: 8 },
+});
