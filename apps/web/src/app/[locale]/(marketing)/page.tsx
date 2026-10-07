@@ -7,6 +7,7 @@ import { AppDownload } from "./__components/app-download";
 import { AreasGrid } from "./__components/areas-grid";
 import { Hero } from "./__components/hero";
 import { HomeReviews } from "./__components/home-reviews";
+import { NearbyBranches } from "./__components/nearby-branches";
 import { ShopRail } from "./__components/shop-rail";
 
 export const metadata = METADATA_HOME;
@@ -27,6 +28,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero areaName={DEFAULT_AREA} />
+
+      <NearbyBranches />
 
       <ShopRail title={t("recentlyViewed.title")} shops={recentlyViewed} href={ROUTE_SEARCH} />
       <ShopRail

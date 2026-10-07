@@ -859,6 +859,17 @@
           "subtitle": "{count, plural, one {# salon has slots today} other {# salons have slots today}}"
         }
       },
+      "nearby": {
+        "title": "Salons near you",
+        "titleIn": "Salons near {area}",
+        "approximate": "Approximate order based on your area.",
+        "useMyLocation": "Use my exact location",
+        "locating": "Finding your location…",
+        "loadMore": "Load more",
+        "empty": "No salons near you yet.",
+        "error": "We couldn't load salons. Try again.",
+        "retry": "Try again"
+      },
       "appDownload": {
         "badge": "Available now on all devices",
         "title": "Download the <brand>{appName}</brand> app now and book your turn",
