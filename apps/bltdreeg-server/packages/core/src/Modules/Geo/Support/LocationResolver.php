@@ -50,7 +50,9 @@ class LocationResolver
     public function fromIp(?string $ip): ResolvedLocation
     {
         $coordinates = $ip === null ? null : $this->ipGeolocator->locate($ip);
-        Log::info('geo.from_ip', ['ip' => $ip, 'lat' => $coordinates?->lat, 'lng' => $coordinates?->lng]);
+        // debug مش info: ده بقى بيتنادى على كل زيارة لصفحة رئيسية لأي زائر (nearby-branches العام)،
+        // مش بس على تسجيل/تحديث موقع مسجّل الدخول. info كانت تبقى آلاف السطور يوميًا فيها IP وموقع تقريبي للزوار
+        Log::debug('geo.from_ip', ['ip' => $ip, 'lat' => $coordinates?->lat, 'lng' => $coordinates?->lng]);
 
         // VPN بيطلّع دولة تانية: منقبلش نقطة برا مصر
         if ($coordinates === null || ! EgyptBounds::contains($coordinates->lat, $coordinates->lng)) {
