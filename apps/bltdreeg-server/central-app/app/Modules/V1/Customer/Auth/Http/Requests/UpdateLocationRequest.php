@@ -24,7 +24,6 @@ class UpdateLocationRequest extends FormRequest
             'lat' => ['nullable', 'numeric'],
             'lng' => ['nullable', 'numeric'],
             'source' => ['nullable', 'in:gps,ip,manual'],
-            'area_id' => ['nullable', 'string', 'exists:geo_areas,id'],
             'city_id' => ['nullable', 'string', 'exists:geo_cities,id'],
         ];
     }

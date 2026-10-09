@@ -14,16 +14,16 @@ uses(RefreshDatabase::class);
 test('factory branches have a full location with float coordinates', function () {
     $branch = Branch::factory()->create();
 
-    expect($branch->area_id)->toBe('EG011103')
+    expect($branch->city_id)->toBe('EG0111')
         ->and($branch->city->id)->toBe('EG0111')
         ->and($branch->governorate->id)->toBe('EG01')
         ->and($branch->latitude)->toBeFloat()
         ->and($branch->location_source)->toBe(LocationSourceEnum::Manual->value);
 });
 
-test('branch area is required at the database level', function () {
-    Branch::factory()->create(['area_id' => null]);
-})->throws(QueryException::class, 'NOT NULL constraint failed: branches.area_id');
+test('branch city is required at the database level', function () {
+    Branch::factory()->create(['city_id' => null]);
+})->throws(QueryException::class, 'NOT NULL constraint failed: branches.city_id');
 
 test('branch coordinates are required at the database level', function () {
     Branch::factory()->create(['latitude' => null]);
@@ -37,7 +37,7 @@ test('demo data branches get a full location', function () {
     expect($branches)->not->toBeEmpty();
 
     $branches->each(function (Branch $branch): void {
-        expect($branch->area_id)->not->toBeNull()
+        expect($branch->city_id)->not->toBeNull()
             ->and($branch->latitude)->toBeFloat();
     });
 });
@@ -61,7 +61,7 @@ test('migration back-fills legacy branches with blank, junk and real coordinates
 
     $this->artisan('migrate', ['--no-interaction' => true])->assertSuccessful();
 
-    expect(DB::table('branches')->find($blank)->area_id)->toBe('EG011103')
-        ->and(DB::table('branches')->find($junk)->area_id)->toBe('EG011103')
-        ->and(DB::table('branches')->find($alexandria)->area_id)->toBe('EG020405');
+    expect(DB::table('branches')->find($blank)->city_id)->toBe('EG0111')
+        ->and(DB::table('branches')->find($junk)->city_id)->toBe('EG0111')
+        ->and(DB::table('branches')->find($alexandria)->city_id)->toBe('EG0204');
 });

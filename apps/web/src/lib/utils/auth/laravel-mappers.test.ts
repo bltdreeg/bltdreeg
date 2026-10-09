@@ -27,7 +27,6 @@ test("mapCustomer converts snake_case and never carries tokens", () => {
       confirmed: true,
       governorate: { id: "EG01", name: "القاهرة" },
       city: { id: "EG0111", name: "قسم قصر النيل" },
-      area: { id: "EG011103", name: "قصرالدوبارة" },
     },
     onboarding: { complete: false, missing: ["terms"], skippable: ["birth_date"] },
   };
@@ -36,7 +35,7 @@ test("mapCustomer converts snake_case and never carries tokens", () => {
   assert.equal(user.location.updatedAt, "2026-01-01T00:00:00Z");
   assert.equal(user.location.confirmed, true);
   assert.deepEqual(user.location.governorate, { id: "EG01", name: "القاهرة" });
-  assert.equal(user.location.area.id, "EG011103");
+  assert.equal(user.location.city.id, "EG0111");
   assert.deepEqual(user.onboarding.missing, ["terms"]);
 });
 
@@ -55,11 +54,10 @@ test("mapOtpChallenge fills the missing identifier with null", () => {
   assert.equal(c.attemptsLeft, 5);
 });
 
-test("mapResolvedLocation keeps the three divisions, point and source", () => {
+test("mapResolvedLocation keeps the two divisions, point and source", () => {
   const location = mapResolvedLocation({
     governorate: { id: "EG02", name: "Alexandria" },
     city: { id: "EG0204", name: "Bab Sharqi" },
-    area: { id: "EG020405", name: "Shiakhet Bab Sharqi" },
     lat: 31.2001,
     lng: 29.9187,
     source: "ip",

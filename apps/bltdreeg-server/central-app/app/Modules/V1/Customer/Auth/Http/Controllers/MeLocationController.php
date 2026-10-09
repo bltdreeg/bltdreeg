@@ -17,7 +17,7 @@ class MeLocationController extends Controller
     /**
      * Update the customer's location.
      *
-     * With `area_id` (or `city_id`, resolved to one of its areas) it is an explicit confirmation by the customer: it always wins and completes the
+     * With `city_id` it is an explicit confirmation by the customer: it always wins and completes the
      * onboarding step. Without it the update is automatic (GPS refresh, IP fallback) and never replaces
      * a more trusted location.
      */
@@ -31,10 +31,8 @@ class MeLocationController extends Controller
         $lng = $request->filled('lng') ? (float) $request->input('lng') : null;
         $source = LocationSourceEnum::tryFromLabel($request->input('source')) ?? LocationSourceEnum::Gps;
 
-        if ($request->filled('area_id') || $request->filled('city_id')) {
-            $location = $request->filled('area_id')
-                ? $resolver->forArea((string) $request->input('area_id'), $lat, $lng, $source)
-                : $resolver->forCity((string) $request->input('city_id'), $lat, $lng, $source);
+        if ($request->filled('city_id')) {
+            $location = $resolver->forCity((string) $request->input('city_id'), $lat, $lng, $source);
 
             $customer->forceFill([...$location->toCustomerColumns(), 'location_confirmed_at' => now()])->save();
         } elseif ($lat !== null && $lng !== null) {
@@ -51,7 +49,7 @@ class MeLocationController extends Controller
             }
         }
 
-        return new CustomerResource($customer->fresh(['governorate', 'city', 'area']));
+        return new CustomerResource($customer->fresh(['governorate', 'city']));
     }
 
     /**

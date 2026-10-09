@@ -2,7 +2,6 @@
 
 namespace App\Modules\V1\Branches\Http\Requests;
 
-use Bltdreeg\Core\Modules\Geo\Support\EgyptBounds;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NearbyBranchesRequest extends FormRequest
@@ -30,7 +29,7 @@ class NearbyBranchesRequest extends FormRequest
     }
 
     /**
-     * النقطة بس لو جوه مصر؛ برا مصر (VPN/سفر) بنرجع للـ IP بدل ما نرفض الطلب.
+     * الموقع الحقيقي للزائر، جوه مصر أو برا — بنرتب الفروع بالمسافة الحقيقية مهما كان مكانه.
      *
      * @return array{float, float}|null
      */
@@ -40,10 +39,7 @@ class NearbyBranchesRequest extends FormRequest
             return null;
         }
 
-        $lat = (float) $this->input('lat');
-        $lng = (float) $this->input('lng');
-
-        return EgyptBounds::contains($lat, $lng) ? [$lat, $lng] : null;
+        return [(float) $this->input('lat'), (float) $this->input('lng')];
     }
 
     public function perPage(): int

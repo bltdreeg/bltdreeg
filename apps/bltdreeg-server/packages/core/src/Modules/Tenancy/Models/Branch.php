@@ -6,7 +6,6 @@ namespace Bltdreeg\Core\Modules\Tenancy\Models;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Concerns\BelongsToBranch;
 use Bltdreeg\Core\Concerns\BelongsToTenant;
-use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Tenancy\Database\Factories\BranchFactory;
@@ -34,7 +33,6 @@ use Spatie\Translatable\HasTranslations;
     'cover_image',
     'governorate_id',
     'city_id',
-    'area_id',
     'location_source',
     'currency',
     'team_size',
@@ -76,11 +74,6 @@ class Branch extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(GeoCity::class, 'city_id');
-    }
-
-    public function area(): BelongsTo
-    {
-        return $this->belongsTo(GeoArea::class, 'area_id');
     }
 
     protected static function newFactory()

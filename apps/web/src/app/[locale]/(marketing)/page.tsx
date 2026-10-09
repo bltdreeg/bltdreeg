@@ -4,7 +4,7 @@ import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { shops } from "@/lib/data/shops.constants";
 import { isToday } from "@/lib/utils/format/date.utils";
 import { AppDownload } from "./__components/app-download";
-import { AreasGrid } from "./__components/areas-grid";
+import { CitiesGrid } from "./__components/cities-grid";
 import { Hero } from "./__components/hero";
 import { HomeReviews } from "./__components/home-reviews";
 import { NearbyBranches } from "./__components/nearby-branches";
@@ -12,7 +12,7 @@ import { ShopRail } from "./__components/shop-rail";
 
 export const metadata = METADATA_HOME;
 
-const DEFAULT_AREA = "المعادي";
+const DEFAULT_CITY = "المعادي";
 
 export default async function HomePage() {
   const t = await getTranslations("marketing.home.rails");
@@ -27,7 +27,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero areaName={DEFAULT_AREA} />
+      <Hero cityName={DEFAULT_CITY} />
 
       <NearbyBranches />
 
@@ -53,7 +53,7 @@ export default async function HomePage() {
 
       <AppDownload />
       <HomeReviews />
-      <AreasGrid />
+      <CitiesGrid />
     </>
   );
 }

@@ -6,15 +6,14 @@ use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 /**
- * Upserts OpenAdminData's Egypt payload (governorate → district → shiyakha) into geo_* tables.
- * Cities with no areas get a placeholder area "<cityId>00" so every city has at least one area.
+ * Upserts OpenAdminData's Egypt payload (governorate → district) into geo_* tables.
  */
 class GeoImporter
 {
     private const CHUNK = 500;
 
     /**
-     * @return array{governorates: int, cities: int, areas: int}
+     * @return array{governorates: int, cities: int}
      */
     public function import(string $path): array
     {
@@ -24,35 +23,12 @@ class GeoImporter
 
         $governorates = array_map(fn (array $row): array => $this->row($row), $json['data']['governorate']);
 
-        $cityGovernorate = [];
-        $cities = array_map(function (array $row) use (&$cityGovernorate): array {
-            $cityGovernorate[$row['id']] = $row['parent_id'];
-
-            return [...$this->row($row), 'governorate_id' => $row['parent_id']];
-        }, $json['data']['district']);
-
-        $areas = array_map(fn (array $row): array => [
+        $cities = array_map(fn (array $row): array => [
             ...$this->row($row),
-            'city_id' => $row['parent_id'],
-            'governorate_id' => $cityGovernorate[$row['parent_id']],
-            'is_placeholder' => false,
-        ], $json['data']['shiyakha']);
+            'governorate_id' => $row['parent_id'],
+        ], $json['data']['district']);
 
-        $citiesWithAreas = array_flip(array_column($json['data']['shiyakha'], 'parent_id'));
-
-        foreach ($json['data']['district'] as $city) {
-            if (! isset($citiesWithAreas[$city['id']])) {
-                $areas[] = [
-                    ...$this->row($city),
-                    'id' => $city['id'].'00',
-                    'city_id' => $city['id'],
-                    'governorate_id' => $city['parent_id'],
-                    'is_placeholder' => true,
-                ];
-            }
-        }
-
-        DB::transaction(function () use ($governorates, $cities, $areas): void {
+        DB::transaction(function () use ($governorates, $cities): void {
             foreach (array_chunk($governorates, self::CHUNK) as $chunk) {
                 DB::table('geo_governorates')->upsert($chunk, ['id'], ['name', 'lat', 'lng']);
             }
@@ -60,16 +36,11 @@ class GeoImporter
             foreach (array_chunk($cities, self::CHUNK) as $chunk) {
                 DB::table('geo_cities')->upsert($chunk, ['id'], ['governorate_id', 'name', 'lat', 'lng']);
             }
-
-            foreach (array_chunk($areas, self::CHUNK) as $chunk) {
-                DB::table('geo_areas')->upsert($chunk, ['id'], ['city_id', 'governorate_id', 'name', 'lat', 'lng', 'is_placeholder']);
-            }
         });
 
         return [
             'governorates' => DB::table('geo_governorates')->count(),
             'cities' => DB::table('geo_cities')->count(),
-            'areas' => DB::table('geo_areas')->count(),
         ];
     }
 
@@ -78,7 +49,7 @@ class GeoImporter
      */
     public function validate(array $json): void
     {
-        foreach (['governorate', 'district', 'shiyakha'] as $level) {
+        foreach (['governorate', 'district'] as $level) {
             $rows = $json['data'][$level] ?? null;
             $expected = $json['meta']['stats'][$level] ?? null;
 
@@ -89,7 +60,7 @@ class GeoImporter
     }
 
     /**
-     * A smaller payload holding every governorate but only the given governorates' cities and areas.
+     * A smaller payload holding every governorate but only the given governorates' cities.
      *
      * @param  array<string, mixed>  $json
      * @param  list<string>  $governorateIds
@@ -98,12 +69,9 @@ class GeoImporter
     public function fixture(array $json, array $governorateIds): array
     {
         $cities = array_values(array_filter($json['data']['district'], fn (array $c): bool => in_array($c['parent_id'], $governorateIds, true)));
-        $cityIds = array_flip(array_column($cities, 'id'));
-        $areas = array_values(array_filter($json['data']['shiyakha'], fn (array $a): bool => isset($cityIds[$a['parent_id']])));
 
         $json['data']['district'] = $cities;
-        $json['data']['shiyakha'] = $areas;
-        $json['meta']['stats'] = ['governorate' => count($json['data']['governorate']), 'district' => count($cities), 'shiyakha' => count($areas)];
+        $json['meta']['stats'] = ['governorate' => count($json['data']['governorate']), 'district' => count($cities)];
 
         return $json;
     }

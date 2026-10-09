@@ -68,7 +68,6 @@ function wizardAnswers(array $overrides = []): array
         'longitude' => '31.2357',
         'governorate_id' => 'EG01',
         'city_id' => 'EG0111',
-        'area_id' => 'EG011103',
         'location_source' => 'manual',
         'document_type' => 'national_id',
         ...$overrides,
@@ -390,9 +389,9 @@ it('does not require an address for mobile salons', function () {
     $branch = Branch::query()->withoutGlobalScopes()->where('tenant_id', $tenant->id)->sole();
 
     expect(blank($branch->getTranslation('address', 'en', false)))->toBeTrue()
-        // لا عنوان للفرع المتنقل، لكن الأعمدة NOT NULL فبياخد مركز المنطقة الافتراضية
-        ->and($branch->area_id)->toBe('EG011103')
-        ->and($branch->latitude)->toBe(30.042);
+        // لا عنوان للفرع المتنقل، لكن الأعمدة NOT NULL فبياخد مركز المدينة الافتراضية
+        ->and($branch->city_id)->toBe('EG0111')
+        ->and($branch->latitude)->toBe(30.043);
 });
 
 it('refuses a second submission while one is pending', function () {

@@ -24,27 +24,12 @@ return new class extends Migration
 
             $table->foreign('governorate_id')->references('id')->on('geo_governorates')->restrictOnDelete();
             $table->index('governorate_id');
-        });
-
-        Schema::create('geo_areas', function (Blueprint $table): void {
-            $table->char('id', 8)->primary();
-            $table->char('city_id', 6);
-            $table->char('governorate_id', 4);
-            $table->json('name');
-            $table->decimal('lat', 10, 7);
-            $table->decimal('lng', 10, 7);
-            $table->boolean('is_placeholder')->default(false);
-
-            $table->foreign('city_id')->references('id')->on('geo_cities')->restrictOnDelete();
-            $table->foreign('governorate_id')->references('id')->on('geo_governorates')->restrictOnDelete();
-            $table->index('city_id');
             $table->index(['lat', 'lng']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('geo_areas');
         Schema::dropIfExists('geo_cities');
         Schema::dropIfExists('geo_governorates');
     }

@@ -40,7 +40,7 @@ function NearbyBranches() {
     <PageContainer as="section" className="flex flex-col gap-3 pt-6 md:pt-11">
       <div className="flex flex-col gap-1">
         <h2 className="text-lg font-bold md:text-[21px]">
-          {origin ? t("titleIn", { area: origin.area.name }) : t("title")}
+          {origin ? t("titleIn", { area: origin.city.name }) : t("title")}
         </h2>
         {approximate && (
           <p className="flex flex-wrap items-center gap-2 text-[13.5px] text-muted-foreground">

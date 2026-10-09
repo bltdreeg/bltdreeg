@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\SetContentLength;
 use BezhanSalleh\LanguageSwitch\Enums\TriggerStyle;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Illuminate\Foundation\Http\Events\RequestHandled;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
 
             return null;
         });
+
+        if ($this->app->isLocal()) {
+            Event::listen(RequestHandled::class, SetContentLength::class);
+        }
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch

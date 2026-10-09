@@ -24,7 +24,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class RoleTemplateResource extends Resource
 {
@@ -36,11 +35,14 @@ class RoleTemplateResource extends Resource
 
     protected static ?string $slug = 'role-templates';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Catalog';
-
     protected static ?int $navigationSort = 10;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.catalog');
+    }
 
     public static function form(Schema $schema): Schema
     {

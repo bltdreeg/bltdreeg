@@ -26,7 +26,6 @@ class BranchFactory extends Factory
             'longitude' => 31.2357,
             'governorate_id' => 'EG01',
             'city_id' => 'EG0111',
-            'area_id' => 'EG011103',
             'location_source' => 3, // Manual
             'is_active' => true,
         ];

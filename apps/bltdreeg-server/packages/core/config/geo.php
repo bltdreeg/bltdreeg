@@ -11,8 +11,8 @@ return [
     'full_snapshot_path' => dirname(__DIR__).'/database/data/geo/eg.json',
     'testing_snapshot_path' => dirname(__DIR__).'/database/data/geo/eg.testing.json',
 
-    /** Qasr El-Doubara, Qasr Al-Nile, Cairo — used when GPS and IP both fail. */
-    'default_area_id' => env('GEO_DEFAULT_AREA_ID', 'EG011103'),
+    /** Qasr Al-Nile, Cairo — used when GPS and IP both fail. */
+    'default_city_id' => env('GEO_DEFAULT_CITY_ID', 'EG0111'),
 
     'maxmind_db_path' => env('GEOIP_DATABASE_PATH', dirname(__DIR__, 3).'/storage/geoip/GeoLite2-City.mmdb'),
 

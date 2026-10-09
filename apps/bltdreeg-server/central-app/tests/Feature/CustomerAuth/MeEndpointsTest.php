@@ -42,7 +42,7 @@ test('customer can get own profile via GET /me', function () {
             'first_name' => 'Kareem',
             'last_name' => 'Nabil',
             'phone' => '01012345678',
-            'area_name' => 'Qasr El-Doubara',
+            'area_name' => null,
         ]);
 });
 
@@ -273,7 +273,7 @@ test('location estimate returns the ip point without saving it', function () {
     expect($customer->fresh()->last_lat)->toBe(30.0444);
 });
 
-test('location estimate falls back to the default area when the ip resolves outside egypt or fails', function () {
+test('location estimate falls back to the default city when the ip resolves outside egypt or fails', function () {
     $customer = Customer::factory()->create(['phone' => '+201012345673', 'phone_verified_at' => now()]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
@@ -283,7 +283,7 @@ test('location estimate falls back to the default area when the ip resolves outs
     foreach (range(1, 2) as $attempt) {
         $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')
             ->assertOk()
-            ->assertJsonPath('estimate.area.id', 'EG011103')
+            ->assertJsonPath('estimate.city.id', 'EG0111')
             ->assertJsonPath('estimate.source', 'default');
     }
 });

@@ -53,20 +53,20 @@ function ipLocatesTo(?Coordinates $coordinates): void
 test('factory customers have a full location', function () {
     $customer = Customer::factory()->create();
 
-    expect($customer->area_id)->toBe('EG011103')
+    expect($customer->city_id)->toBe('EG0111')
         ->and($customer->city->id)->toBe('EG0111')
         ->and($customer->governorate->getTranslation('name', 'en'))->toBe('Cairo')
         ->and($customer->location_confirmed_at)->not->toBeNull();
 });
 
-test('area is required at the database level', function () {
-    Customer::factory()->create(['area_id' => null]);
-})->throws(QueryException::class, 'NOT NULL constraint failed: customers.area_id');
+test('city is required at the database level', function () {
+    Customer::factory()->create(['city_id' => null]);
+})->throws(QueryException::class, 'NOT NULL constraint failed: customers.city_id');
 
-test('unknown area violates the foreign key', function () {
+test('unknown city violates the foreign key', function () {
     DB::statement('PRAGMA foreign_keys = ON');
 
-    Customer::factory()->create(['area_id' => 'EG999999']);
+    Customer::factory()->create(['city_id' => 'EG9999']);
 })->throws(QueryException::class, 'FOREIGN KEY constraint failed');
 
 test('registration stores the ip location', function () {
@@ -74,17 +74,17 @@ test('registration stores the ip location', function () {
 
     $customer = registerCustomerThroughOtp('01011112222', '+201011112222');
 
-    expect($customer->area_id)->toBe('EG020405')
+    expect($customer->city_id)->toBe('EG0204')
         ->and($customer->location_source)->toBe(LocationSourceEnum::Ip->value)
         ->and($customer->location_confirmed_at)->toBeNull();
 });
 
-test('registration with foreign ip stores default area', function () {
+test('registration with foreign ip stores default city', function () {
     ipLocatesTo(new Coordinates(51.5074, -0.1278));
 
     $customer = registerCustomerThroughOtp('01011113333', '+201011113333');
 
-    expect($customer->area_id)->toBe('EG011103')
+    expect($customer->city_id)->toBe('EG0111')
         ->and($customer->location_source)->toBe(LocationSourceEnum::Default->value);
 });
 
@@ -111,23 +111,23 @@ test('migration back-fills legacy customers and confirms only gps and manual one
 
     $row = fn (int $id) => DB::table('customers')->find($id);
 
-    expect($row($noLocation)->area_id)->toBe('EG011103')
+    expect($row($noLocation)->city_id)->toBe('EG0111')
         ->and($row($noLocation)->location_confirmed_at)->toBeNull()
-        ->and($row($gpsAlexandria)->area_id)->toBe('EG020405')
+        ->and($row($gpsAlexandria)->city_id)->toBe('EG0204')
         ->and($row($gpsAlexandria)->location_confirmed_at)->not->toBeNull()
-        ->and($row($ipCairo)->area_id)->toBe('EG011103')
+        ->and($row($ipCairo)->city_id)->toBe('EG0111')
         ->and($row($ipCairo)->location_confirmed_at)->toBeNull();
 });
 
-test('account deletion erases the precise location back to the default area', function () {
+test('account deletion erases the precise location back to the default city', function () {
     $customer = Customer::factory()->inAlexandria()->create(['phone' => '+201012349999']);
 
     $this->actingAs($customer, 'customer')->deleteJson('/api/v1/me')->assertNoContent();
 
     $deleted = Customer::withTrashed()->findOrFail($customer->id);
 
-    expect($deleted->area_id)->toBe('EG011103')
-        ->and($deleted->last_lat)->toBe(30.042)
+    expect($deleted->city_id)->toBe('EG0111')
+        ->and($deleted->last_lat)->toBe(30.043)
         ->and($deleted->last_lng)->toBe(31.235)
         ->and($deleted->location_source)->toBe(LocationSourceEnum::Default->value)
         ->and($deleted->location_confirmed_at)->toBeNull();

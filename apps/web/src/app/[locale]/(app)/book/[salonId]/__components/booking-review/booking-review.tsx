@@ -34,7 +34,7 @@ export function BookingReview({ salon, services, barber, when, queryString, subm
         </div>
         <div className="flex flex-col gap-0.5 min-w-0">
           <span className="truncate text-[15px] font-bold text-foreground">{salon.name}</span>
-          <span className="text-xs text-muted-foreground">{salon.address || salon.areaName}</span>
+          <span className="text-xs text-muted-foreground">{salon.address || salon.cityName}</span>
           <span className="text-xs text-muted-foreground">
             {salon.distanceKm} كم — {Math.round(salon.distanceKm * 5)} دقايق بالعربية
           </span>

@@ -14,8 +14,8 @@ use Illuminate\Routing\Controller;
 class NearbyBranchesController extends Controller
 {
     /**
-     * Public list of branches, nearest first. With `lat`/`lng` (inside Egypt) the visitor's
-     * position is the origin; otherwise the request IP, then the default area.
+     * Public list of branches, nearest first. With `lat`/`lng` the visitor's real position is
+     * the origin (wherever they are); otherwise the request IP, then the default area.
      */
     public function __invoke(NearbyBranchesRequest $request, LocationResolver $resolver): AnonymousResourceCollection
     {
@@ -27,7 +27,7 @@ class NearbyBranchesController extends Controller
         $branches = Branch::query()
             ->publiclyListed()
             ->nearestTo($origin->lat, $origin->lng)
-            ->with(['tenant:id,name', 'area', 'city'])
+            ->with(['tenant:id,name', 'city'])
             ->paginate($request->perPage())
             ->withQueryString();
 

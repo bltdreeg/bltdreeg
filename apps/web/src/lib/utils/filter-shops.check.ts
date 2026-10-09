@@ -16,8 +16,8 @@ const at = (h: number, dayOffset = 0) => {
 
 const shop = (over: Partial<Shop> & Pick<Shop, "id">): Shop => ({
   name: "صالون",
-  areaId: "maadi",
-  areaName: "المعادي",
+  cityId: "maadi",
+  cityName: "المعادي",
   distanceKm: 1,
   rating: 4,
   reviewCount: 10,
@@ -33,8 +33,8 @@ const early = shop({ id: "early", nextSlotAt: at(9), priceFrom: 50, distanceKm: 
 const tomorrow = shop({
   id: "tomorrow",
   nextSlotAt: at(11, 1),
-  areaId: "dokki",
-  areaName: "الدقي",
+  cityId: "dokki",
+  cityName: "الدقي",
   distanceKm: 8,
 });
 const none = shop({ id: "none", nextSlotAt: null, distanceKm: 9 });

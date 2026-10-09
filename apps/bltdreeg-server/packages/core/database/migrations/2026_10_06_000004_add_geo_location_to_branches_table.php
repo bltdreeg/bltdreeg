@@ -15,8 +15,7 @@ return new class extends Migration
         Schema::table('branches', function (Blueprint $table): void {
             $table->char('governorate_id', 4)->nullable()->after('longitude');
             $table->char('city_id', 6)->nullable()->after('governorate_id');
-            $table->char('area_id', 8)->nullable()->after('city_id');
-            $table->unsignedTinyInteger('location_source')->nullable()->after('area_id');
+            $table->unsignedTinyInteger('location_source')->nullable()->after('city_id');
         });
 
         $resolver = app(LocationResolver::class);
@@ -40,12 +39,10 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7)->nullable(false)->change();
             $table->char('governorate_id', 4)->nullable(false)->change();
             $table->char('city_id', 6)->nullable(false)->change();
-            $table->char('area_id', 8)->nullable(false)->change();
             $table->unsignedTinyInteger('location_source')->nullable(false)->change();
 
             $table->foreign('governorate_id')->references('id')->on('geo_governorates')->restrictOnDelete();
             $table->foreign('city_id')->references('id')->on('geo_cities')->restrictOnDelete();
-            $table->foreign('area_id')->references('id')->on('geo_areas')->restrictOnDelete();
             $table->index(['governorate_id', 'city_id']);
         });
     }
@@ -55,12 +52,11 @@ return new class extends Migration
         Schema::table('branches', function (Blueprint $table): void {
             $table->dropForeign(['governorate_id']);
             $table->dropForeign(['city_id']);
-            $table->dropForeign(['area_id']);
             $table->dropIndex(['governorate_id', 'city_id']);
         });
 
         Schema::table('branches', function (Blueprint $table): void {
-            $table->dropColumn(['governorate_id', 'city_id', 'area_id', 'location_source']);
+            $table->dropColumn(['governorate_id', 'city_id', 'location_source']);
             $table->string('latitude')->nullable()->change();
             $table->string('longitude')->nullable()->change();
         });

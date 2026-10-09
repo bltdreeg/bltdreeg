@@ -24,7 +24,6 @@ class NearbyBranchResource extends JsonResource
             'name' => $branch->getTranslation('name', $locale),
             'address' => $branch->getTranslation('address', $locale) ?: null,
             'salon' => ['id' => $branch->tenant->id, 'name' => $branch->tenant->name],
-            'area' => ['id' => $branch->area->id, 'name' => $branch->area->getTranslation('name', $locale)],
             'city' => ['id' => $branch->city->id, 'name' => $branch->city->getTranslation('name', $locale)],
             'lat' => (float) $branch->latitude,
             'lng' => (float) $branch->longitude,

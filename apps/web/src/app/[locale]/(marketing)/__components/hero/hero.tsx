@@ -37,7 +37,7 @@ function SearchField({
   );
 }
 
-function Hero({ areaName }: { areaName: string }) {
+function Hero({ cityName }: { cityName: string }) {
   const t = useTranslations("marketing.home.hero");
 
   const steps = [
@@ -203,7 +203,7 @@ function Hero({ areaName }: { areaName: string }) {
 
           <p className="text-center text-[12px] text-muted-foreground">
             {t.rich("nearbyInArea", {
-              area: areaName,
+              area: cityName,
               bold: (chunks) => <span className="font-bold text-foreground">{chunks}</span>,
             })}
           </p>

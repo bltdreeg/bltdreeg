@@ -8,6 +8,8 @@ use App\Modules\V1\Services\Filament\Resources\Services\Pages\ListServices;
 use App\Modules\V1\Services\Models\Service;
 use App\Modules\V1\Services\Models\ServiceCategory;
 use BackedEnum;
+use Bltdreeg\Core\Modules\Geo\Support\CurrencyResolver;
+use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -21,15 +23,13 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class ServiceResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Service::class;
-
-    protected static ?string $navigationLabel = 'Services';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Services';
 
     protected static ?int $navigationSort = 2;
 
@@ -37,27 +37,57 @@ class ServiceResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.services');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::services.services');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('core::services.service');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('core::services.services');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
                 Select::make('category_id')
-                    ->label('Category')
+                    ->label(__('core::services.category'))
                     ->options(fn (): array => ServiceCategory::query()->pluck('name', 'id')->all())
                     ->searchable()
                     ->required(),
                 TextInput::make('name')
+                    ->label(__('core::global.name'))
                     ->required()
                     ->maxLength(255),
-                Textarea::make('description'),
+                Textarea::make('description')
+                    ->label(__('core::global.description')),
                 TextInput::make('duration')
+                    ->label(__('core::services.duration'))
                     ->numeric()
-                    ->suffix('min')
+                    ->suffix(__('core::services.minutes_suffix'))
                     ->required(),
                 TextInput::make('price')
+                    ->label(__('core::services.price'))
                     ->numeric()
                     ->required(),
+                Select::make('currency')
+                    ->label(__('core::services.currency'))
+                    ->options(CurrencyEnum::class)
+                    ->default(CurrencyResolver::DEFAULT)
+                    ->required(),
                 Toggle::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->default(true),
             ]);
     }
@@ -67,19 +97,26 @@ class ServiceResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('core::global.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('category.name')
-                    ->label('Category')
+                    ->label(__('core::services.category'))
                     ->sortable(),
                 TextColumn::make('duration')
-                    ->suffix(' min'),
+                    ->label(__('core::services.duration'))
+                    ->suffix(' '.__('core::services.minutes_suffix')),
                 TextColumn::make('price')
+                    ->label(__('core::services.price'))
                     ->sortable(),
+                TextColumn::make('currency')
+                    ->label(__('core::services.currency'))
+                    ->formatStateUsing(fn (CurrencyEnum $state): string => $state->name),
                 IconColumn::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->boolean(),
                 IconColumn::make('catalog_service_id')
-                    ->label('Catalog')
+                    ->label(__('core::services.catalog'))
                     ->boolean()
                     ->getStateUsing(fn (Service $record): bool => $record->isFromCatalog()),
             ])

@@ -17,7 +17,7 @@ function nearbyIpResolvesTo(?Coordinates $coordinates): void
 
 function cairoBranch(array $attributes = []): Branch
 {
-    return Branch::factory()->create($attributes); // الـ factory في القاهرة (EG011103)
+    return Branch::factory()->create($attributes); // الـ factory في القاهرة (EG0111)
 }
 
 function alexandriaBranch(array $attributes = []): Branch
@@ -27,7 +27,6 @@ function alexandriaBranch(array $attributes = []): Branch
         'longitude' => 29.9187,
         'governorate_id' => 'EG02',
         'city_id' => 'EG0204',
-        'area_id' => 'EG020405',
         ...$attributes,
     ]);
 }
@@ -42,7 +41,7 @@ test('orders branches by distance from the given coordinates', function () {
         ->assertJsonPath('data.0.distance_km', 0)
         ->assertJsonPath('data.1.id', $cairo->id)
         ->assertJsonPath('meta.origin.source', 'gps')
-        ->assertJsonPath('meta.origin.area.id', 'EG020405');
+        ->assertJsonPath('meta.origin.city.id', 'EG0204');
 });
 
 test('without coordinates the origin comes from the ip', function () {
@@ -56,18 +55,18 @@ test('without coordinates the origin comes from the ip', function () {
         ->assertJsonPath('meta.origin.source', 'ip');
 });
 
-test('coordinates outside egypt fall back to ip', function () {
-    nearbyIpResolvesTo(new Coordinates(lat: 31.2001, lng: 29.9187));
+test('coordinates outside egypt still use the real point, not the ip', function () {
+    nearbyIpResolvesTo(new Coordinates(lat: 30.0444, lng: 31.2357));
     cairoBranch();
     $alexandria = alexandriaBranch();
 
     $this->getJson('/api/v1/branches/nearby?lat=51.5&lng=-0.12')
         ->assertOk()
         ->assertJsonPath('data.0.id', $alexandria->id)
-        ->assertJsonPath('meta.origin.source', 'ip');
+        ->assertJsonPath('meta.origin.source', 'gps');
 });
 
-test('unknown ip falls back to the default area', function () {
+test('unknown ip falls back to the default city', function () {
     nearbyIpResolvesTo(null);
     cairoBranch();
 
@@ -106,7 +105,7 @@ test('paginates with per_page', function () {
         ->assertJsonPath('data.0.id', $farthest->id);
 });
 
-test('localizes branch, area and city names', function () {
+test('localizes branch and city names', function () {
     cairoBranch(['name' => ['en' => 'Maadi', 'ar' => 'فرع المعادي']]);
 
     $this->getJson('/api/v1/branches/nearby?lat=30.0444&lng=31.2357', ['Accept-Language' => 'ar'])

@@ -3,7 +3,7 @@ export interface User {
   id: string;
   name: string;
   phone: string;
-  areaId: string | null;
+  cityId: string | null;
   joinedDate?: string;
   completedBookingsCount?: number;
   favoriteShopIds?: string[];

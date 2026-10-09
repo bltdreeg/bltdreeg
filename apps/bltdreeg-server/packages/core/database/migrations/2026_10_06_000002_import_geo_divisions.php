@@ -14,7 +14,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::table('geo_areas')->delete();
         DB::table('geo_cities')->delete();
         DB::table('geo_governorates')->delete();
     }

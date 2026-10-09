@@ -12,6 +12,7 @@
         map: null,
         marker: null,
         error: null,
+        locating: false,
         lat: $wire.$entangle('data.latitude'),
         lng: $wire.$entangle('data.longitude'),
         init() {
@@ -27,6 +28,12 @@
             new ResizeObserver(() => this.map.invalidateSize()).observe(this.$refs.map);
             // نطلب إذن الموقع فوراً أول ما الخطوة تفتح، من غير ما المالك يضغط على الزرار
             this.useMyLocation();
+            // لو المالك سمح بالإذن بعد الرفض/الـ timeout (من إعدادات المتصفح) نعيد المحاولة تلقائياً
+            navigator.permissions?.query({ name: 'geolocation' }).then((status) => {
+                status.addEventListener('change', () => {
+                    if (status.state === 'granted') this.useMyLocation();
+                });
+            }).catch(() => {});
         },
         moved(point, source) {
             this.marker.setLatLng(point);
@@ -44,17 +51,22 @@
                 this.error = @js(__('core::onboarding.wizard.location_unavailable'));
                 return;
             }
+            this.locating = true;
             navigator.geolocation.getCurrentPosition(
-                (position) => {
+                async (position) => {
                     this.map.setZoom(17);
-                    this.moved({ lat: position.coords.latitude, lng: position.coords.longitude }, 'gps');
+                    // نسيب اللودر لحد ما السيرفر يرجّع المحافظة/المدينة للنقطة الجديدة
+                    try { await $wire.pinMoved(position.coords.latitude, position.coords.longitude, 'gps'); } finally { this.locating = false; }
+                    this.marker.setLatLng([position.coords.latitude, position.coords.longitude]);
                 },
                 (failure) => {
+                    this.locating = false;
                     this.error = failure.code === 1
                         ? @js(__('core::onboarding.wizard.location_denied'))
                         : @js(__('core::onboarding.wizard.location_unavailable'));
                 },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+                // high accuracy بيعمل timeout على اللابتوب (مفيش GPS chip) فالموقع مكانش بيتحدّث
+                { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 },
             );
         },
     }"
@@ -62,7 +74,12 @@
 >
     <div x-ref="map" class="h-80 w-full overflow-hidden rounded-xl border border-gray-200 dark:border-white/10"></div>
 
-    <x-filament::button type="button" color="gray" icon="heroicon-m-map-pin" x-on:click="useMyLocation">
+    <div x-show="locating" x-cloak role="status" class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+        <x-filament::loading-indicator class="h-5 w-5" />
+        {{ __('core::onboarding.wizard.locating') }}
+    </div>
+
+    <x-filament::button type="button" color="gray" icon="heroicon-m-map-pin" x-on:click="useMyLocation" x-bind:disabled="locating">
         {{ __('core::onboarding.wizard.use_my_location') }}
     </x-filament::button>
 

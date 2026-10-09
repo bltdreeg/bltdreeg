@@ -11,21 +11,21 @@ const TESTIMONIALS = [
     rating: 5,
     body: "كنت بكره إني أقعد مستني في الصالون ساعة على الفاضي. دلوقتي بشوف رقمي في الدور من الموبايل وأنزل قبلها بعشر دقايق وخلاص.",
     name: "محمود عبد العال",
-    area: "المعادي، القاهرة",
+    city: "المعادي، القاهرة",
   },
   {
     id: "t2",
     rating: 5,
     body: "حجزت لابني أول مرة في بربر لاونج وطلع الميعاد فاضي بالظبط. الحلاق كان مستنينا والدور ماشي بالترتيب، مفيش حد بيتخطى.",
     name: "كريم مصطفى",
-    area: "مدينة نصر، القاهرة",
+    city: "مدينة نصر، القاهرة",
   },
   {
     id: "t3",
     rating: 4,
     body: "الصالون اتأخر ربع ساعة وجالي تنبيه إن ميعادي بقى 7:15. مضايقني إنه اتأخر، بس على الأقل عرفت وأنا في البيت ومشيتش على الفاضي.",
     name: "أحمد مجدي",
-    area: "الدقي، الجيزة",
+    city: "الدقي، الجيزة",
   },
 ] as const;
 
@@ -56,7 +56,7 @@ function HomeReviews() {
               <Avatar name={t.name} />
               <span className="flex flex-col gap-1">
                 <span className="text-[13.5px] font-bold">{t.name}</span>
-                <span className="text-[12.5px] text-muted-foreground">{t.area}</span>
+                <span className="text-[12.5px] text-muted-foreground">{t.city}</span>
               </span>
             </div>
           </li>

@@ -62,13 +62,13 @@ Pressing `Ctrl+C` cleanly shuts down all 3 processes.
 
 `make` / `make start` / `make up` are the same. After editing `tenant-app/resources/css/filament/app/theme.css`, run `make tenant-assets` so the new hashed CSS is built and Octane picks it up. Without Make: build assets with `npm --prefix central-app install && npm --prefix central-app run build` (and the same for `tenant-app`), then `docker compose -f infra/local/docker-compose.yml up -d --build --wait`, then `docker compose -f infra/local/docker-compose.yml exec -T tenant-app php artisan migrate --force` and `db:seed --force`.
 
-## Geo data (governorate / city / area)
+## Geo data (governorate / city)
 
-Egypt's 27 governorates, 365 cities and 5,716 areas (OCHA COD-AB via [OpenAdminData](https://api.openadmindata.org/api/v1/countries/eg.json), CC BY-IGO) live in `geo_governorates`, `geo_cities` and `geo_areas`, keyed by the source codes (`EG01`, `EG0111`, `EG011103`). Cities with no areas get one placeholder area (`<cityId>00`). Customers and branches always reference all three.
+Egypt's 27 governorates and 365 cities (OCHA COD-AB via [OpenAdminData](https://api.openadmindata.org/api/v1/countries/eg.json), CC BY-IGO) live in `geo_governorates` and `geo_cities`, keyed by the source codes (`EG01`, `EG0111`). Customers and branches always reference both.
 
 - The snapshot `packages/core/database/data/geo/eg.json` is committed and imported by a migration, so production needs no seeder.
 - Refresh it with `php artisan geo:sync` (central-app); run `php artisan geo:sync --fixture` afterwards to rebuild the small test fixture `eg.testing.json`.
-- Env: `GEO_SNAPSHOT_PATH` (tests point at the fixture), `GEO_DEFAULT_AREA_ID` (default `EG011103`), `GEOIP_DATABASE_PATH` (MaxMind GeoLite2 City), `MAP_TILE_URL` and `MAP_ATTRIBUTION` (salon wizard map; the OSM default is for development, switch to a hosted tile provider before production traffic).
+- Env: `GEO_SNAPSHOT_PATH` (tests point at the fixture), `GEO_DEFAULT_CITY_ID` (default `EG0111`), `GEOIP_DATABASE_PATH` (MaxMind GeoLite2 City), `MAP_TILE_URL` and `MAP_ATTRIBUTION` (salon wizard map; the OSM default is for development, switch to a hosted tile provider before production traffic).
 
 ## Module layout
 

@@ -67,7 +67,7 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
           </span>
         </div>
         <span className="text-border">·</span>
-        <span>{salon.areaName}</span>
+        <span>{salon.cityName}</span>
         <span className="text-border">·</span>
         <span className="tabular">{formatDistance(salon.distanceKm, locale)}</span>
       </div>

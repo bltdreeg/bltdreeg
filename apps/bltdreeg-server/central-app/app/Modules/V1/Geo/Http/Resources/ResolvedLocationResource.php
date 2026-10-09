@@ -12,17 +12,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ResolvedLocationResource extends JsonResource
 {
     /**
-     * @return array{governorate: array{id: string, name: string}, city: array{id: string, name: string}, area: array{id: string, name: string}, lat: float, lng: float, source: string}
+     * @return array{governorate: array{id: string, name: string}, city: array{id: string, name: string}, lat: float, lng: float, source: string}
      */
     public function toArray(Request $request): array
     {
-        $area = $this->resource->area->loadMissing(['city', 'governorate']);
+        $city = $this->resource->city->loadMissing('governorate');
         $locale = app()->getLocale();
 
         return [
-            'governorate' => ['id' => $area->governorate->id, 'name' => $area->governorate->getTranslation('name', $locale)],
-            'city' => ['id' => $area->city->id, 'name' => $area->city->getTranslation('name', $locale)],
-            'area' => ['id' => $area->id, 'name' => $area->getTranslation('name', $locale)],
+            'governorate' => ['id' => $city->governorate->id, 'name' => $city->governorate->getTranslation('name', $locale)],
+            'city' => ['id' => $city->id, 'name' => $city->getTranslation('name', $locale)],
             'lat' => $this->resource->lat,
             'lng' => $this->resource->lng,
             'source' => $this->resource->source->label(),

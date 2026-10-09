@@ -2,14 +2,13 @@
 
 namespace App\Modules\V1\Geo\Http\Resources;
 
-use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property-read GeoGovernorate|GeoCity|GeoArea $resource
+ * @property-read GeoGovernorate|GeoCity $resource
  */
 class GeoDivisionResource extends JsonResource
 {

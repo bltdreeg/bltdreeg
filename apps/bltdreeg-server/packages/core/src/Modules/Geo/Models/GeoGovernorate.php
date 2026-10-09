@@ -2,6 +2,7 @@
 
 namespace Bltdreeg\Core\Modules\Geo\Models;
 
+use Bltdreeg\Core\Concerns\CachableModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\Attributes\Translatable;
@@ -10,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 #[Translatable('name')]
 class GeoGovernorate extends Model
 {
-    use HasTranslations;
+    use CachableModel, HasTranslations;
 
     public $incrementing = false;
 

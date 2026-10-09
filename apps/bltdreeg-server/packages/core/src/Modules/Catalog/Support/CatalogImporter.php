@@ -20,8 +20,8 @@ class CatalogImporter
                 'catalog_service_category_id' => $catalog->getKey(),
             ],
             [
-                'name' => $catalog->name,
-                'description' => $catalog->description,
+                'name' => $catalog->getTranslations('name'),
+                'description' => $catalog->getTranslations('description') ?: null,
                 'is_active' => true,
             ],
         );
@@ -38,8 +38,8 @@ class CatalogImporter
             ],
             [
                 'category_id' => $category->getKey(),
-                'name' => $catalog->name,
-                'description' => $catalog->description,
+                'name' => $catalog->getTranslations('name'),
+                'description' => $catalog->getTranslations('description') ?: null,
                 'duration' => $catalog->default_duration,
                 'price' => $catalog->default_price,
                 'is_active' => true,

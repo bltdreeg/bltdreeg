@@ -21,4 +21,9 @@ class EditBranch extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return BranchResource::withResolvedLocation($data, $this->getRecord());
+    }
 }

@@ -17,7 +17,6 @@ export interface RawGeoDivision {
 export interface RawResolvedLocation {
   governorate: RawNamedRef;
   city: RawNamedRef;
-  area: RawNamedRef;
   lat: number;
   lng: number;
   source: LocationSource;
@@ -82,14 +81,13 @@ export function mapCustomer(raw: RawCustomer): Customer {
       confirmed: raw.location.confirmed,
       governorate: raw.location.governorate,
       city: raw.location.city,
-      area: raw.location.area,
     },
     onboarding: raw.onboarding,
   };
 }
 
 export function mapResolvedLocation(raw: RawResolvedLocation): ResolvedLocation {
-  return { governorate: raw.governorate, city: raw.city, area: raw.area, lat: raw.lat, lng: raw.lng, source: raw.source };
+  return { governorate: raw.governorate, city: raw.city, lat: raw.lat, lng: raw.lng, source: raw.source };
 }
 
 export function mapOtpChallenge(raw: RawOtpChallenge): OtpChallenge {

@@ -18,7 +18,7 @@ import { useUser } from "@/lib/hooks/user";
 import { cn } from "@/lib/utils/cn.utils";
 
 type HeaderProps = {
-  areaName?: string;
+  cityName?: string;
   userName?: string | null;
   isAuthenticated?: boolean;
   /** شريط البحث بيتخفي في مسار الحجز */
@@ -26,7 +26,7 @@ type HeaderProps = {
 };
 
 export function Header({
-  areaName = "المعادي",
+  cityName = "المعادي",
   userName: propUserName,
   isAuthenticated: propIsAuthenticated,
   showSearchRow = true,
@@ -66,7 +66,7 @@ export function Header({
             className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-foreground/15 px-2.5 py-1.5 transition-colors hover:bg-primary-foreground/25 cursor-pointer"
           >
             <MapPin aria-hidden className="size-3.5 text-primary-foreground" />
-            <span className="text-[13px] font-bold text-primary-foreground">{areaName}</span>
+            <span className="text-[13px] font-bold text-primary-foreground">{cityName}</span>
             <ChevronDown aria-hidden className="size-3.5 text-primary-foreground" />
             <span className="sr-only">{t("changeArea")}</span>
           </button>

@@ -31,7 +31,6 @@ class CustomerFactory extends Factory
             'location_updated_at' => now(),
             'governorate_id' => 'EG01',
             'city_id' => 'EG0111',
-            'area_id' => 'EG011103',
             'location_confirmed_at' => now(),
             'terms_accepted_at' => now(),
             'terms_version' => '1.0',
@@ -53,7 +52,6 @@ class CustomerFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'governorate_id' => 'EG02',
             'city_id' => 'EG0204',
-            'area_id' => 'EG020405',
             'last_lat' => 31.2001,
             'last_lng' => 29.9187,
         ]);

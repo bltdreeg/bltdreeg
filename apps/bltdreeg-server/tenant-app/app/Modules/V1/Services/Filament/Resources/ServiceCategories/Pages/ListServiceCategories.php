@@ -12,9 +12,13 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use LaraZeus\SpatieTranslatable\Resources\Pages\ListRecords\Concerns\Translatable;
 
 class ListServiceCategories extends ListRecords
 {
+    use Translatable;
+
     protected static string $resource = ServiceCategoryResource::class;
 
     protected function getHeaderActions(): array
@@ -57,6 +61,7 @@ class ListServiceCategories extends ListRecords
                         ->send();
                 }),
             CreateAction::make(),
+            LocaleSwitcher::make(),
         ];
     }
 }

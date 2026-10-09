@@ -4,7 +4,6 @@ namespace Bltdreeg\Core\Modules\Customers\Models;
 
 use App\Modules\V1\Customer\Auth\Models\CustomerSocialAccount;
 use Bltdreeg\Core\Modules\Customers\Database\Factories\CustomerFactory;
-use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -34,7 +33,6 @@ use Laravel\Sanctum\HasApiTokens;
     'location_updated_at',
     'governorate_id',
     'city_id',
-    'area_id',
     'location_confirmed_at',
     'terms_accepted_at',
     'terms_version',
@@ -101,11 +99,6 @@ class Customer extends Authenticatable
     public function city(): BelongsTo
     {
         return $this->belongsTo(GeoCity::class, 'city_id');
-    }
-
-    public function area(): BelongsTo
-    {
-        return $this->belongsTo(GeoArea::class, 'area_id');
     }
 
     public function socialAccounts(): HasMany

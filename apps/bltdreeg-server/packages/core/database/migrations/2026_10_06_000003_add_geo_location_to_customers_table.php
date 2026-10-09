@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::table('customers', function (Blueprint $table): void {
             $table->char('governorate_id', 4)->nullable()->after('last_lng');
             $table->char('city_id', 6)->nullable()->after('governorate_id');
-            $table->char('area_id', 8)->nullable()->after('city_id');
             $table->timestamp('location_confirmed_at')->nullable()->after('location_updated_at');
         });
 
@@ -44,14 +43,12 @@ return new class extends Migration
         Schema::table('customers', function (Blueprint $table): void {
             $table->char('governorate_id', 4)->nullable(false)->change();
             $table->char('city_id', 6)->nullable(false)->change();
-            $table->char('area_id', 8)->nullable(false)->change();
             $table->decimal('last_lat', 10, 7)->nullable(false)->change();
             $table->decimal('last_lng', 10, 7)->nullable(false)->change();
             $table->unsignedTinyInteger('location_source')->nullable(false)->change();
 
             $table->foreign('governorate_id')->references('id')->on('geo_governorates')->restrictOnDelete();
             $table->foreign('city_id')->references('id')->on('geo_cities')->restrictOnDelete();
-            $table->foreign('area_id')->references('id')->on('geo_areas')->restrictOnDelete();
             $table->index(['governorate_id', 'city_id']);
         });
     }
@@ -61,12 +58,11 @@ return new class extends Migration
         Schema::table('customers', function (Blueprint $table): void {
             $table->dropForeign(['governorate_id']);
             $table->dropForeign(['city_id']);
-            $table->dropForeign(['area_id']);
             $table->dropIndex(['governorate_id', 'city_id']);
         });
 
         Schema::table('customers', function (Blueprint $table): void {
-            $table->dropColumn(['governorate_id', 'city_id', 'area_id', 'location_confirmed_at']);
+            $table->dropColumn(['governorate_id', 'city_id', 'location_confirmed_at']);
             $table->decimal('last_lat', 10, 7)->nullable()->change();
             $table->decimal('last_lng', 10, 7)->nullable()->change();
             $table->unsignedTinyInteger('location_source')->nullable()->change();

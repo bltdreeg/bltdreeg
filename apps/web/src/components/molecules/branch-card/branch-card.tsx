@@ -26,7 +26,7 @@ function BranchCard({ branch, className }: BranchCardProps) {
         <p className="flex items-center gap-1 text-[12.5px] text-muted-foreground">
           <MapPin aria-hidden className="size-3.5 shrink-0" />
           <span className="truncate">
-            {branch.area.name} · {formatDistance(branch.distanceKm, locale)}
+            {branch.city.name} · {formatDistance(branch.distanceKm, locale)}
           </span>
         </p>
       </div>

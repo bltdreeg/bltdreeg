@@ -66,7 +66,7 @@ export function BookingDetailView({
   const salonPhone = salon?.phone || "01012345678";
   const salonRating = salon?.rating ?? 4.8;
   const salonDistance = salon?.distanceKm ?? 1.2;
-  const salonArea = salon?.areaName || "المعادي";
+  const salonCity = salon?.cityName || "المعادي";
 
   const barberName = barber?.name || booking.barberName || "محمود عبد العال";
   const barberRating = barber?.rating ?? 4.7;
@@ -153,7 +153,7 @@ export function BookingDetailView({
                     {booking.shopName}
                   </h2>
                   <div className="text-[12.5px] leading-none text-[#6B7280] tabular-nums">
-                    {salonArea} · {formatDistance(salonDistance, locale)} · {salonRating}
+                    {salonCity} · {formatDistance(salonDistance, locale)} · {salonRating}
                   </div>
                 </div>
               </div>

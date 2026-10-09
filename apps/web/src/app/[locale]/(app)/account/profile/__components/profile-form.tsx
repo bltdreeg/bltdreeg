@@ -13,7 +13,7 @@ interface ProfileFormProps {
   user: User;
 }
 
-const AREAS = [
+const CITIES = [
   { id: "maadi", name: "المعادي، القاهرة" },
   { id: "nasr-city", name: "مدينة نصر، القاهرة" },
   { id: "dokki", name: "الدقي، الجيزة" },
@@ -31,7 +31,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
   const [lastName, setLastName] = useState("مصطفى");
   const [email, setEmail] = useState("karim.mustafa@gmail.com");
   const [dob, setDob] = useState("1996-03-14");
-  const [areaId, setAreaId] = useState(user.areaId || "maadi");
+  const [cityId, setCityId] = useState(user.cityId || "maadi");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // States
@@ -220,13 +220,13 @@ export function ProfileForm({ user }: ProfileFormProps) {
                 </label>
                 <div className="relative">
                   <select
-                    value={areaId}
-                    onChange={(e) => setAreaId(e.target.value)}
+                    value={cityId}
+                    onChange={(e) => setCityId(e.target.value)}
                     className="h-11 w-full appearance-none rounded-xl border border-border bg-muted/40 px-3.5 pe-8 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15 cursor-pointer"
                   >
-                    {AREAS.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.name}
+                    {CITIES.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
                       </option>
                     ))}
                   </select>

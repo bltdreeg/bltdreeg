@@ -5,7 +5,6 @@ import { mapNearbyBranchesPage } from "./branch-mapper.ts";
 const origin = {
   governorate: { id: "EG01", name: "القاهرة" },
   city: { id: "EG0111", name: "قصر النيل" },
-  area: { id: "EG011103", name: "جاردن سيتي" },
   lat: 30.044,
   lng: 31.236,
   source: "ip" as const,
@@ -19,7 +18,6 @@ test("maps a laravel page to camelCase", () => {
         name: "فرع المعادي",
         address: null,
         salon: { id: 3, name: "Salon X" },
-        area: { id: "EG011103", name: "جاردن سيتي" },
         city: { id: "EG0111", name: "قصر النيل" },
         lat: 30.0444,
         lng: 31.2357,
@@ -36,7 +34,6 @@ test("maps a laravel page to camelCase", () => {
     name: "فرع المعادي",
     address: null,
     salon: { id: "3", name: "Salon X" },
-    area: { id: "EG011103", name: "جاردن سيتي" },
     city: { id: "EG0111", name: "قصر النيل" },
     lat: 30.0444,
     lng: 31.2357,

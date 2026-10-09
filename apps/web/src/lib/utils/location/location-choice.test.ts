@@ -6,7 +6,6 @@ import { isInEgypt, toConfirmPayload } from "./location-choice.ts";
 const prefill = (source: ResolvedLocation["source"]): ResolvedLocation => ({
   governorate: { id: "EG01", name: "Cairo" },
   city: { id: "EG0111", name: "Qasr Al-Nile" },
-  area: { id: "EG011103", name: "Qasr El-Doubara" },
   lat: 30.0444,
   lng: 31.2357,
   source,
@@ -17,7 +16,7 @@ test("gps and ip prefills send their point so the server can keep it", () => {
   assert.deepEqual(toConfirmPayload("EG011103", prefill("ip")), { cityId: "EG011103", lat: 30.0444, lng: 31.2357, source: "ip" });
 });
 
-test("default prefill sends only the area (server uses its centroid)", () => {
+test("default prefill sends only the city (server uses its centroid)", () => {
   assert.deepEqual(toConfirmPayload("EG011103", prefill("default")), { cityId: "EG011103" });
 });
 

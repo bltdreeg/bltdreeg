@@ -4,6 +4,7 @@ namespace Bltdreeg\Core\Modules\Geo\Support;
 
 use Bltdreeg\Core\Modules\Geo\Data\Coordinates;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 /**
@@ -45,7 +46,9 @@ class GoogleMapsLinkResolver
                     ->timeout(self::TIMEOUT_SECONDS)
                     ->withHeaders(['User-Agent' => 'Mozilla/5.0 (compatible; Bltdreeg/1.0)'])
                     ->get($url);
-            } catch (Throwable) {
+            } catch (Throwable $e) {
+                Log::warning('geo.maps_link_expand_failed', ['url' => $url, 'error' => $e->getMessage()]);
+
                 return null;
             }
 

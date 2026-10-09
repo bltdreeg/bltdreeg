@@ -14,11 +14,10 @@ export interface CustomerLocation {
   lng: number;
   source: LocationSource;
   updatedAt: string | null;
-  /** العميل أكّد المحافظة/المدينة/المنطقة (خطوة الـ onboarding) */
+  /** العميل أكّد المحافظة/المدينة (خطوة الـ onboarding) */
   confirmed: boolean;
   governorate: NamedRef;
   city: NamedRef;
-  area: NamedRef;
 }
 
 export interface Customer {

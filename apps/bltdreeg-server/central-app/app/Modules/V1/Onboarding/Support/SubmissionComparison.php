@@ -2,7 +2,6 @@
 
 namespace App\Modules\V1\Onboarding\Support;
 
-use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Onboarding\Enums\LegalDocumentTypeEnum;
@@ -47,6 +46,11 @@ class SubmissionComparison
         return [
             'business_name' => __('core::onboarding.wizard.business_name'),
             'website' => __('core::onboarding.wizard.website'),
+            'social_facebook' => __('core::onboarding.wizard.social.facebook'),
+            'social_instagram' => __('core::onboarding.wizard.social.instagram'),
+            'social_tiktok' => __('core::onboarding.wizard.social.tiktok'),
+            'social_youtube' => __('core::onboarding.wizard.social.youtube'),
+            'social_snapchat' => __('core::onboarding.wizard.social.snapchat'),
             'team_size' => __('core::onboarding.wizard.steps.team'),
             'service_location_type' => __('core::onboarding.wizard.steps.location_type'),
             'address' => __('core::onboarding.wizard.address'),
@@ -54,7 +58,6 @@ class SubmissionComparison
             'longitude' => __('core::onboarding.wizard.longitude'),
             'governorate_id' => __('core::geo.governorate'),
             'city_id' => __('core::geo.city'),
-            'area_id' => __('core::geo.area'),
             'document_type' => __('core::onboarding.wizard.document_type'),
             'document_id' => __('core::onboarding.admin.document'),
         ];
@@ -72,7 +75,6 @@ class SubmissionComparison
             'document_type' => LegalDocumentTypeEnum::tryFrom($value)?->label() ?? (string) $value,
             'governorate_id' => GeoGovernorate::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
             'city_id' => GeoCity::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
-            'area_id' => GeoArea::query()->find($value)?->getTranslation('name', app()->getLocale()) ?? (string) $value,
             'document_id' => '#'.$value,
             default => (string) $value,
         };

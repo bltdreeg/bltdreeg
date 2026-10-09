@@ -5,7 +5,7 @@ export const currentUser: User = {
   id: "user-1",
   name: "كريم مصطفى",
   phone: "01023456789",
-  areaId: "maadi",
+  cityId: "maadi",
   joinedDate: "يونيو 2025",
   completedBookingsCount: 12,
   favoriteShopIds: ["shop-2", "shop-1", "shop-5", "shop-16"],

@@ -28,7 +28,7 @@ class GeoSyncCommand extends Command
         $this->writeJson(config('geo.full_snapshot_path'), $json);
         $counts = $importer->import(config('geo.full_snapshot_path'));
 
-        $this->table(['governorates', 'cities', 'areas'], [$counts]);
+        $this->table(['governorates', 'cities'], [$counts]);
 
         return self::SUCCESS;
     }

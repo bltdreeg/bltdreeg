@@ -42,16 +42,16 @@ const SORTERS: Record<ShopSort, (a: Shop, b: Shop) => number> = {
 };
 
 export function filterShops(shops: Shop[], filters: ShopFilters = {}): Shop[] {
-  const { q, areaId, maxPrice, maxDistanceKm, todayOnly, services, sort } = filters;
+  const { q, cityId, maxPrice, maxDistanceKm, todayOnly, services, sort } = filters;
   const trimmed = q?.trim();
   const needle = trimmed ? foldOptionalAlef(normalizeArabic(trimmed)) : undefined;
 
   const out = shops.filter((s) => {
     if (needle) {
-      const haystack = foldOptionalAlef(normalizeArabic(`${s.name} ${s.areaName}`));
+      const haystack = foldOptionalAlef(normalizeArabic(`${s.name} ${s.cityName}`));
       if (!haystack.includes(needle)) return false;
     }
-    if (areaId && s.areaId !== areaId) return false;
+    if (cityId && s.cityId !== cityId) return false;
     if (maxPrice !== undefined && s.priceFrom > maxPrice) return false;
     if (maxDistanceKm !== undefined && s.distanceKm > maxDistanceKm) return false;
     if (todayOnly && !(s.nextSlotAt && isToday(s.nextSlotAt))) return false;

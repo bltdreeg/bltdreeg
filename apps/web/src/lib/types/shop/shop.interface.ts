@@ -2,9 +2,9 @@
 export interface Shop {
   id: string;
   name: string;
-  areaId: string;
-  /** اسم المنطقة زي ما بيتعرض على الكارت: "المعادي" */
-  areaName: string;
+  cityId: string;
+  /** اسم المدينة زي ما بيتعرض على الكارت: "المعادي" */
+  cityName: string;
   /** المسافة بالكيلومتر، بتتعرض 1.2 كم */
   distanceKm: number;
   rating: number;

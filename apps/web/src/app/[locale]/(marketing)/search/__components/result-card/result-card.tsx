@@ -48,7 +48,7 @@ function ResultCard({ shop }: ResultCardProps) {
       <div className="flex flex-col gap-1.5 px-4 pt-3.5">
         <h3 className="text-[16px] font-bold leading-tight">{shop.name}</h3>
         <p className="tabular text-[12.5px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating} · {t("reviews", { count: shop.reviewCount })}
+          {shop.cityName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating} · {t("reviews", { count: shop.reviewCount })}
         </p>
         <p className="tabular text-[12.5px] text-muted-foreground">
           {shop.services[0]} {formatFrom(shop.priceFrom, locale)}

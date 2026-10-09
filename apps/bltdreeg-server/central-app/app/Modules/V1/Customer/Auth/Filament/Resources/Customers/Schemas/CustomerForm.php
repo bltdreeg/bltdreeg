@@ -57,11 +57,6 @@ class CustomerForm
                             ->afterStateHydrated(fn (TextInput $component, Customer $record) => $component->state($record->city->getTranslation('name', app()->getLocale())))
                             ->dehydrated(false)
                             ->disabled(),
-                        TextInput::make('area_name')
-                            ->label(__('core::geo.area'))
-                            ->afterStateHydrated(fn (TextInput $component, Customer $record) => $component->state($record->area->getTranslation('name', app()->getLocale())))
-                            ->dehydrated(false)
-                            ->disabled(),
                         TextInput::make('location_confirmed_at')
                             ->label('Location Confirmed At')
                             ->disabled(),

@@ -7,7 +7,6 @@ export interface NearbyBranch {
   name: string;
   address: string | null;
   salon: NamedRef;
-  area: NamedRef;
   city: NamedRef;
   lat: number;
   lng: number;

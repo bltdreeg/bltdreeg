@@ -2,16 +2,16 @@
 
 namespace Bltdreeg\Core\Modules\Geo\Models;
 
+use Bltdreeg\Core\Concerns\CachableModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\Attributes\Translatable;
 use Spatie\Translatable\HasTranslations;
 
 #[Translatable('name')]
 class GeoCity extends Model
 {
-    use HasTranslations;
+    use CachableModel, HasTranslations;
 
     public $incrementing = false;
 
@@ -24,11 +24,6 @@ class GeoCity extends Model
     public function governorate(): BelongsTo
     {
         return $this->belongsTo(GeoGovernorate::class, 'governorate_id');
-    }
-
-    public function areas(): HasMany
-    {
-        return $this->hasMany(GeoArea::class, 'city_id');
     }
 
     /**

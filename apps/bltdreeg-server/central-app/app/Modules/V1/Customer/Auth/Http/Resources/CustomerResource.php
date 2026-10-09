@@ -18,7 +18,7 @@ class CustomerResource extends JsonResource
             ? $this->resource->socialAccounts->map(fn ($acc) => $acc->provider->slug())->values()->all()
             : $this->resource->socialAccounts()->get()->map(fn ($acc) => $acc->provider->slug())->values()->all();
 
-        $this->resource->loadMissing(['governorate', 'city', 'area']);
+        $this->resource->loadMissing(['governorate', 'city']);
         $locale = app()->getLocale();
 
         $location = [
@@ -29,7 +29,6 @@ class CustomerResource extends JsonResource
             'confirmed' => $this->resource->location_confirmed_at !== null,
             'governorate' => ['id' => $this->resource->governorate->id, 'name' => $this->resource->governorate->getTranslation('name', $locale)],
             'city' => ['id' => $this->resource->city->id, 'name' => $this->resource->city->getTranslation('name', $locale)],
-            'area' => ['id' => $this->resource->area->id, 'name' => $this->resource->area->getTranslation('name', $locale)],
         ];
 
         return [
@@ -41,7 +40,8 @@ class CustomerResource extends JsonResource
             'email' => $this->resource->email,
             'email_verified' => $this->resource->email_verified_at !== null,
             'birth_date' => $this->resource->birth_date?->format('Y-m-d'),
-            'area_name' => $this->resource->area->getTranslation('name', $locale),
+            // Area was removed from the geo hierarchy; kept here as null so the old mobile parser still works.
+            'area_name' => null,
             'has_password' => ! empty($this->resource->password),
             'social_providers' => $socialProviders,
             'location' => $location,

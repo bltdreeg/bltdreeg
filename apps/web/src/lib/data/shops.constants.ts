@@ -1,4 +1,4 @@
-// بيانات تجريبية: 16 محل بتقييمات وأسعار ومناطق ومواعيد مختلفة — الأسماء والأرقام من التصميم
+// بيانات تجريبية: 16 محل بتقييمات وأسعار ومدن ومواعيد مختلفة — الأسماء والأرقام من التصميم
 import type { Shop } from "@/lib/types/shop/shop.interface";
 
 /** المواعيد بتتحسب نسبة للنهارده عشان الصفحة تفضل حيّة — مستخدمة في باقي ملفات البيانات كمان */
@@ -15,8 +15,8 @@ export const shops: Shop[] = [
   {
     id: "shop-1",
     name: "صالون الكابتن حسام",
-    areaId: "maadi",
-    areaName: "المعادي",
+    cityId: "maadi",
+    cityName: "المعادي",
     distanceKm: 1.2,
     rating: 4.8,
     reviewCount: 214,
@@ -28,8 +28,8 @@ export const shops: Shop[] = [
   {
     id: "shop-2",
     name: "بربر لاونج المعادي",
-    areaId: "maadi",
-    areaName: "المعادي",
+    cityId: "maadi",
+    cityName: "المعادي",
     distanceKm: 0.8,
     rating: 4.6,
     reviewCount: 138,
@@ -41,8 +41,8 @@ export const shops: Shop[] = [
   {
     id: "shop-3",
     name: "حلاق الزمالك",
-    areaId: "zamalek",
-    areaName: "الزمالك",
+    cityId: "zamalek",
+    cityName: "الزمالك",
     distanceKm: 2.9,
     rating: 4.9,
     reviewCount: 512,
@@ -54,8 +54,8 @@ export const shops: Shop[] = [
   {
     id: "shop-4",
     name: "صالون النجم",
-    areaId: "dokki",
-    areaName: "الدقي",
+    cityId: "dokki",
+    cityName: "الدقي",
     distanceKm: 2.1,
     rating: 4.3,
     reviewCount: 74,
@@ -67,8 +67,8 @@ export const shops: Shop[] = [
   {
     id: "shop-5",
     name: "بربر شوب المهندسين",
-    areaId: "mohandessin",
-    areaName: "المهندسين",
+    cityId: "mohandessin",
+    cityName: "المهندسين",
     distanceKm: 2.4,
     rating: 4.8,
     reviewCount: 301,
@@ -80,8 +80,8 @@ export const shops: Shop[] = [
   {
     id: "shop-6",
     name: "صالون محمود عبد العال",
-    areaId: "maadi",
-    areaName: "المعادي",
+    cityId: "maadi",
+    cityName: "المعادي",
     distanceKm: 1.5,
     rating: 4.5,
     reviewCount: 128,
@@ -93,8 +93,8 @@ export const shops: Shop[] = [
   {
     id: "shop-7",
     name: "كلاسيك كتس",
-    areaId: "dokki",
-    areaName: "الدقي",
+    cityId: "dokki",
+    cityName: "الدقي",
     distanceKm: 2.6,
     rating: 4.6,
     reviewCount: 187,
@@ -106,8 +106,8 @@ export const shops: Shop[] = [
   {
     id: "shop-8",
     name: "صالون أحمد مجدي",
-    areaId: "nasr-city",
-    areaName: "مدينة نصر",
+    cityId: "nasr-city",
+    cityName: "مدينة نصر",
     distanceKm: 3.7,
     rating: 4.4,
     reviewCount: 65,
@@ -119,8 +119,8 @@ export const shops: Shop[] = [
   {
     id: "shop-9",
     name: "باربر هاوس المعادي",
-    areaId: "maadi",
-    areaName: "المعادي",
+    cityId: "maadi",
+    cityName: "المعادي",
     distanceKm: 1.9,
     rating: 4.2,
     reviewCount: 18,
@@ -134,8 +134,8 @@ export const shops: Shop[] = [
   {
     id: "shop-10",
     name: "ذا شيف روم",
-    areaId: "mokattam",
-    areaName: "المقطم",
+    cityId: "mokattam",
+    cityName: "المقطم",
     distanceKm: 3.1,
     rating: 4.5,
     reviewCount: 31,
@@ -149,8 +149,8 @@ export const shops: Shop[] = [
   {
     id: "shop-11",
     name: "صالون الفرسان",
-    areaId: "helwan",
-    areaName: "حلوان",
+    cityId: "helwan",
+    cityName: "حلوان",
     distanceKm: 3.6,
     rating: 4.1,
     reviewCount: 12,
@@ -164,8 +164,8 @@ export const shops: Shop[] = [
   {
     id: "shop-12",
     name: "أوركيد باربر",
-    areaId: "rehab",
-    areaName: "الرحاب",
+    cityId: "rehab",
+    cityName: "الرحاب",
     distanceKm: 2.8,
     rating: 4.7,
     reviewCount: 26,
@@ -179,8 +179,8 @@ export const shops: Shop[] = [
   {
     id: "shop-13",
     name: "صالون رويال باربر",
-    areaId: "nasr-city",
-    areaName: "مدينة نصر",
+    cityId: "nasr-city",
+    cityName: "مدينة نصر",
     distanceKm: 2.2,
     rating: 4.7,
     reviewCount: 640,
@@ -192,8 +192,8 @@ export const shops: Shop[] = [
   {
     id: "shop-14",
     name: "باربر تايم الدقي",
-    areaId: "dokki",
-    areaName: "الدقي",
+    cityId: "dokki",
+    cityName: "الدقي",
     distanceKm: 1.7,
     rating: 4.6,
     reviewCount: 455,
@@ -205,8 +205,8 @@ export const shops: Shop[] = [
   {
     id: "shop-15",
     name: "ستايل مصر باربر",
-    areaId: "haram",
-    areaName: "الهرم",
+    cityId: "haram",
+    cityName: "الهرم",
     distanceKm: 3.5,
     rating: 4.3,
     reviewCount: 288,
@@ -218,8 +218,8 @@ export const shops: Shop[] = [
   {
     id: "shop-16",
     name: "جنتلمان ستايل باربر",
-    areaId: "nasr-city",
-    areaName: "مدينة نصر",
+    cityId: "nasr-city",
+    cityName: "مدينة نصر",
     distanceKm: 4.2,
     rating: 4.6,
     reviewCount: 96,
@@ -234,8 +234,8 @@ export const shops: Shop[] = [
   {
     id: "shop-17",
     name: "بربر لاونج",
-    areaId: "mohandessin",
-    areaName: "المهندسين",
+    cityId: "mohandessin",
+    cityName: "المهندسين",
     distanceKm: 1.8,
     rating: 4.4,
     reviewCount: 52,
@@ -247,8 +247,8 @@ export const shops: Shop[] = [
   {
     id: "shop-18",
     name: "بربر لاونج",
-    areaId: "zamalek",
-    areaName: "الزمالك",
+    cityId: "zamalek",
+    cityName: "الزمالك",
     distanceKm: 3.3,
     rating: 4.7,
     reviewCount: 201,
@@ -260,8 +260,8 @@ export const shops: Shop[] = [
   {
     id: "shop-19",
     name: "بربر لاونج VIP",
-    areaId: "nasr-city",
-    areaName: "مدينة نصر",
+    cityId: "nasr-city",
+    cityName: "مدينة نصر",
     distanceKm: 2.6,
     rating: 4.9,
     reviewCount: 310,
@@ -273,8 +273,8 @@ export const shops: Shop[] = [
   {
     id: "shop-20",
     name: "بربر لاونج المعادي 2",
-    areaId: "maadi",
-    areaName: "المعادي",
+    cityId: "maadi",
+    cityName: "المعادي",
     distanceKm: 1.5,
     rating: 4.2,
     reviewCount: 44,

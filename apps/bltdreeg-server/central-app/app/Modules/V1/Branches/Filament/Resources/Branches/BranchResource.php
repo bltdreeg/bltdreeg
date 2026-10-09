@@ -7,7 +7,6 @@ use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\EditBranch;
 use App\Modules\V1\Branches\Filament\Resources\Branches\Pages\ListBranches;
 use BackedEnum;
 use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
-use Bltdreeg\Core\Modules\Geo\Models\GeoArea;
 use Bltdreeg\Core\Modules\Geo\Models\GeoCity;
 use Bltdreeg\Core\Modules\Geo\Models\GeoGovernorate;
 use Bltdreeg\Core\Modules\Geo\Support\EgyptBounds;
@@ -85,27 +84,17 @@ class BranchResource extends Resource
                 TextInput::make('address')
                     ->label(__('core::global.address'))
                     ->maxLength(255),
-                Grid::make(3)->schema([
+                Grid::make(2)->schema([
                     Select::make('governorate_id')
                         ->label(__('core::geo.governorate'))
                         ->options(fn (): array => GeoGovernorate::options())
                         ->searchable()
                         ->required()
                         ->live()
-                        ->afterStateUpdated(function (Set $set): void {
-                            $set('city_id', null);
-                            $set('area_id', null);
-                        }),
+                        ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
                     Select::make('city_id')
                         ->label(__('core::geo.city'))
                         ->options(fn (Get $get): array => GeoCity::optionsFor($get('governorate_id')))
-                        ->searchable()
-                        ->required()
-                        ->live()
-                        ->afterStateUpdated(fn (Set $set) => $set('area_id', null)),
-                    Select::make('area_id')
-                        ->label(__('core::geo.area'))
-                        ->options(fn (Get $get): array => GeoArea::optionsFor($get('city_id')))
                         ->searchable()
                         ->required()
                         ->live()
@@ -116,7 +105,7 @@ class BranchResource extends Resource
 
                             $lat = is_numeric($get('latitude')) ? (float) $get('latitude') : null;
                             $lng = is_numeric($get('longitude')) ? (float) $get('longitude') : null;
-                            $location = app(LocationResolver::class)->forArea($state, $lat, $lng, LocationSourceEnum::Manual);
+                            $location = app(LocationResolver::class)->forCity($state, $lat, $lng, LocationSourceEnum::Manual);
 
                             $set('latitude', $location->lat);
                             $set('longitude', $location->lng);

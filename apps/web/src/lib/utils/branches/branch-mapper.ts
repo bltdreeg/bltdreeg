@@ -9,7 +9,6 @@ export interface RawNearbyBranch {
   name: string;
   address: string | null;
   salon: RawRef;
-  area: RawRef;
   city: RawRef;
   lat: number;
   lng: number;
@@ -31,7 +30,6 @@ export function mapNearbyBranch(raw: RawNearbyBranch): NearbyBranch {
     name: raw.name,
     address: raw.address,
     salon: ref(raw.salon),
-    area: ref(raw.area),
     city: ref(raw.city),
     lat: raw.lat,
     lng: raw.lng,

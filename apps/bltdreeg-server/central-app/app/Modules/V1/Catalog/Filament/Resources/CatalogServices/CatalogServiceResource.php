@@ -21,45 +21,66 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class CatalogServiceResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = CatalogService::class;
 
-    protected static ?string $navigationLabel = 'Service types';
-
-    protected static ?string $modelLabel = 'catalog service';
-
     protected static ?string $slug = 'catalog-services';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Catalog';
 
     protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedScissors;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.catalog');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::services.service_types');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('core::services.catalog_service');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('core::services.catalog_services');
+    }
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
                 Select::make('catalog_service_category_id')
-                    ->label('Category')
+                    ->label(__('core::services.category'))
                     ->options(fn (): array => CatalogServiceCategory::query()->pluck('name', 'id')->all())
                     ->searchable()
                     ->required(),
                 TextInput::make('name')
+                    ->label(__('core::global.name'))
                     ->required()
                     ->maxLength(255),
-                Textarea::make('description'),
+                Textarea::make('description')
+                    ->label(__('core::global.description')),
                 TextInput::make('default_duration')
+                    ->label(__('core::services.default_duration'))
                     ->numeric()
-                    ->suffix('min')
+                    ->suffix(__('core::services.minutes_suffix'))
                     ->required(),
                 TextInput::make('default_price')
+                    ->label(__('core::services.default_price'))
                     ->numeric()
                     ->required(),
                 Toggle::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->default(true),
             ]);
     }
@@ -69,15 +90,19 @@ class CatalogServiceResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('core::global.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('category.name')
-                    ->label('Category')
+                    ->label(__('core::services.category'))
                     ->sortable(),
                 TextColumn::make('default_duration')
-                    ->suffix(' min'),
-                TextColumn::make('default_price'),
+                    ->label(__('core::services.default_duration'))
+                    ->suffix(' '.__('core::services.minutes_suffix')),
+                TextColumn::make('default_price')
+                    ->label(__('core::services.default_price')),
                 IconColumn::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->boolean(),
             ])
             ->recordActions([
