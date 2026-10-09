@@ -2,6 +2,7 @@
 
 namespace Bltdreeg\Core\Modules\Tenancy\Database\Factories;
 
+use Bltdreeg\Core\Modules\Geo\Support\CurrencyResolver;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,6 +29,10 @@ class BranchFactory extends Factory
             'city_id' => 'EG0111',
             'location_source' => 3, // Manual
             'is_active' => true,
+            // The column is NOT NULL DEFAULT EGP and production resolves it from the
+            // branch's coordinates, so a factory branch that left it unset handed
+            // callers a null currency until the model was refreshed.
+            'currency' => CurrencyResolver::forCoordinates(30.0444, 31.2357),
         ];
     }
 }
