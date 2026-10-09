@@ -1,0 +1,1822 @@
+{
+  "auth": {
+    "shared": {
+      "tagline": "ميعادك ورقمك في الدور",
+      "confirmCodeHint": "هنبعتلك كود تأكيد على الرقم ده."
+    },
+    "brandPanel": {
+      "login": {
+        "title": "ميعاد ورقم في الدور — مع بعض في نفس التذكرة.",
+        "ticketLabelTime": "ميعادك",
+        "ticketLabelQueue": "رقمك في الدور",
+        "ticketAheadOf": "قدامك 2",
+        "ticketAheadOfLine2": "في الدور",
+        "footerNote": "سجّل دخول عشان تحجز، وتتابع دورك يوم الميعاد، وتلاقي صالوناتك المفضلة في مكان واحد."
+      },
+      "register": {
+        "title": "حساب واحد، وبعد كده الحجز بيبقى في لمستين.",
+        "step1": "اعرف رقمك في الدور وقت ما تحجز، مش لما توصل.",
+        "step2": "تنبيه على واتساب لما يفضل قدامك اتنين.",
+        "step3": "نفس الحجز تاني بضغطة من حجوزاتك السابقة.",
+        "footerNote": "مفيش دفع أونلاين ولا بيانات بنكية — الحساب للحجز والتنبيهات بس."
+      },
+      "otp": {
+        "title": "الرقم ده هو اللي هنبعتلك عليه تنبيهات الدور.",
+        "description": "التأكيد بيضمن إنك تستلم تنبيهات دورك في وقتها بدون أي تأخير، وتقدر تغيره لاحقاً من الإعدادات.",
+        "footerNote": "لو الرقم غلط، ارجع وغيّره قبل ما تكمّل — التنبيهات مش هتوصلك على رقم تاني."
+      },
+      "forgotPassword": {
+        "title": "هنساعدك ترجع لحسابك في ثواني.",
+        "description": "اكتب رقم موبايلك أو إيميلك المسجل وهنبعتلك كود تأكيد عشان تعيّن كلمة سر جديدة.",
+        "footerNote": "بياناتك وحجوزاتك السابقة كلها محفوظة بأمان ومش هتتأثر بتغيير كلمة السر."
+      }
+    },
+    "social": {
+      "continueGoogle": "كمّل بجوجل",
+      "continueApple": "كمّل بآبل",
+      "google": "جوجل",
+      "apple": "آبل"
+    },
+    "login": {
+      "title": "أهلاً بيك تاني",
+      "subtitle": "سجّل دخول بحسابك عشان تتابع دورك وتحجز بلمستين.",
+      "browseAsGuest": "تصفح كزائر",
+      "tabsAriaLabel": "طريقة تسجيل الدخول",
+      "tabEmail": "بريد إلكتروني",
+      "tabPhone": "رقم الموبايل",
+      "emailLabel": "البريد الإلكتروني",
+      "passwordLabel": "كلمة السر",
+      "forgotPassword": "نسيت كلمة السر؟",
+      "phoneLabel": "رقم الموبايل",
+      "showPassword": "إظهار كلمة السر",
+      "hidePassword": "إخفاء كلمة السر",
+      "submitEmail": "سجّل دخول",
+      "submitEmailPending": "جاري تسجيل الدخول...",
+      "submitPhone": "إرسال كود التأكيد",
+      "submitPhonePending": "جاري الإرسال...",
+      "or": "أو",
+      "noAccount": "لسه معندكش حساب؟",
+      "createOne": "اعمل واحد دلوقتي",
+      "errors": {
+        "emailRequired": "اكتب البريد الإلكتروني",
+        "emailInvalid": "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com).",
+        "passwordRequired": "اكتب كلمة السر للمتابعة."
+      }
+    },
+    "register": {
+      "title": "اعمل حساب",
+      "subtitle": "دقيقة واحدة وتبقى جاهز تحجز.",
+      "firstNameLabel": "الاسم الأول",
+      "firstNamePlaceholder": "كريم",
+      "lastNameLabel": "اسم العائلة",
+      "lastNamePlaceholder": "مصطفى",
+      "emailLabel": "البريد الإلكتروني",
+      "emailOptional": "(اختياري)",
+      "phoneLabel": "رقم الموبايل",
+      "passwordLabel": "كلمة السر",
+      "showPassword": "إظهار كلمة السر",
+      "hidePassword": "إخفاء كلمة السر",
+      "agreeTermsPrefix": "موافق على",
+      "termsLink": "الشروط",
+      "and": "و",
+      "privacyLink": "سياسة الخصوصية",
+      "agreeTermsSuffix": "، وإن الصالون يشوف اسمك ورقمك لما تحجز.",
+      "submit": "اعمل الحساب",
+      "submitPending": "جاري إنشاء الحساب...",
+      "haveAccount": "عندك حساب بالفعل؟",
+      "login": "سجّل دخول",
+      "errors": {
+        "firstNameRequired": "اكتب اسمك الأول.",
+        "lastNameRequired": "الصالون بيحتاج اسمك كامل عشان يناديك في الدور.",
+        "emailInvalid": "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com).",
+        "passwordInvalid": "كلمة السر مش مستوفية كل الشروط.",
+        "agreeTermsRequired": "لازم توافق على الشروط وسياسة الخصوصية."
+      },
+      "passwordRequirements": {
+        "min8": "8 حروف على الأقل",
+        "min8Remaining": "8 حروف على الأقل — لسه فاضل {count, plural, one {حرف واحد} two {حرفين} other {# حروف}}",
+        "hasNumber": "فيها رقم واحد على الأقل"
+      }
+    },
+    "forgotPassword": {
+      "title": "نسيت كلمة السر؟",
+      "description": "اكتب رقم موبايلك أو إيميلك المسجل وهنبعتلك كود تأكيد عشان تعيّن كلمة سر جديدة.",
+      "errorBanner": "ظبّط الحاجات المعلّمة بالأحمر وبعدين كمّل.",
+      "tabsAriaLabel": "طريقة استعادة كلمة السر",
+      "tabPhone": "رقم الموبايل",
+      "tabEmail": "البريد الإلكتروني",
+      "phoneLabel": "رقم الموبايل المسجل",
+      "emailLabel": "البريد الإلكتروني المسجل",
+      "submit": "ابعت كود التأكيد",
+      "submitPending": "جاري الإرسال...",
+      "backToLogin": "الرجوع لتسجيل الدخول",
+      "errors": {
+        "emailRequired": "اكتب البريد الإلكتروني المسجل به.",
+        "emailInvalid": "اكتب بريد إلكتروني صحيح (مثال: name@gmail.com)."
+      }
+    },
+    "otp": {
+      "sentToWhatsapp": "بعتنالك كود من {length} أرقام على واتساب على الرقم",
+      "sentToSms": "بعتنالك كود من {length} أرقام في رسالة على الرقم",
+      "resendSuccessWhatsapp": "تم إرسال كود تأكيد جديد على واتساب.",
+      "resendPending": "جاري الإرسال...",
+      "startOver": "ابدأ من الأول",
+      "titleDefault": "اكتب كود التأكيد",
+      "titleError": "الكود غلط",
+      "descriptionError": "اتأكد من الكود اللي جالك وحاول تاني.",
+      "sentTo": "بعتنالك كود من 4 أرقام في رسالة على الرقم",
+      "changeNumber": "غيّر الرقم",
+      "digitAriaLabel": "الرقم {index} من كود التأكيد",
+      "resendIn": "تقدر تطلب كود جديد بعد {timer}",
+      "resend": "إعادة إرسال الكود",
+      "resendSuccess": "تم إرسال كود تأكيد جديد في رسالة SMS.",
+      "submit": "تأكيد",
+      "submitPending": "جاري التأكيد...",
+      "helpText": "ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغالة.",
+      "errors": {
+        "invalidCode": "الكود غلط، حاول تاني.",
+        "attemptsLeft": "الكود غلط، فاضلك {count} {count, plural, one {محاولة} other {محاولات}}.",
+        "tooManyAttempts": "حاولت كتير. اطلب كود جديد."
+      }
+    }
+  },
+  "app": {
+    "account": {
+      "loading": "جاري التحميل",
+      "title": "حسابي",
+      "logout": "تسجيل الخروج",
+      "header": {
+        "ariaLabel": "بيانات المستخدم",
+        "joinedDate": "انضم {date}",
+        "completedCuts": "حلاقة خلصتها",
+        "favoriteSalons": "صالونات مفضلة",
+        "edit": "تعديل"
+      },
+      "menu": {
+        "ariaLabel": "خيارات الحساب",
+        "comingSoon": "قريباً في التحديث القادم",
+        "accountSection": "الحساب",
+        "profile": "الملف الشخصي",
+        "favorites": "الصالونات المفضلة",
+        "bookings": "حجوزاتي",
+        "upcomingCount": "{count, plural, one {حجز واحد قادم} two {حجزين قادمين} few {# حجوزات قادمة} many {# حجز قادم} other {# حجز قادم}}",
+        "appSection": "التطبيق",
+        "language": "لغة التطبيق",
+        "currentLanguage": "العربية",
+        "notifications": "الإشعارات",
+        "notificationsSubtitle": "واتساب والتطبيق",
+        "settings": "الإعدادات",
+        "helpSection": "المساعدة",
+        "helpAndSupport": "الدعم والمساعدة",
+        "helpSubtitle": "شكوى على حجز أو مشكلة في الدور",
+        "termsAndPrivacy": "الشروط والخصوصية",
+        "about": "عن بالتدريج"
+      },
+      "logoutDialog": {
+        "title": "تسجيل الخروج؟",
+        "notice": "عندك دور شغّال في {salonName}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.",
+        "loggingOut": "جاري الخروج...",
+        "confirm": "اخرج من الحساب",
+        "cancel": "خليني فاضل"
+      },
+      "profile": {
+        "title": "بياناتي الشخصية",
+        "subtitle": "عدّل اسمك وبريدك ومنطقتك، ورقم هاتفك الموثّق لحجوزاتك.",
+        "changePhoto": "غيّر الصورة",
+        "changePhotoAria": "تغيير الصورة الشخصية",
+        "memberSince": "عضو منذ {date} · {count, plural, one {زيارة واحدة مكتملة} two {زيارتين مكتملتين} few {# زيارات مكتملة} many {# زيارة مكتملة} other {# زيارة مكتملة}}",
+        "securityTitle": "حسابك محمي وموثّق",
+        "securityDesc": "رقم هاتفك مربوط بالحجوزات وإشعارات دورك في الصالون لضمان عدم تكرار الحجوزات أو ضياع الدور.",
+        "basicInfo": "المعلومات الأساسية",
+        "firstName": "الاسم الأول",
+        "lastName": "اسم العيلة",
+        "phone": "رقم الموبايل",
+        "verified": "متأكّد",
+        "phoneIdentity": "الرقم هو هويتك في بالتدريج",
+        "changePhone": "غيّر الرقم",
+        "email": "البريد الإلكتروني",
+        "optional": "(اختياري)",
+        "dob": "تاريخ الميلاد",
+        "dobHint": "بنستخدمه عشان نبعتلك عرض في عيد ميلادك 🎉",
+        "favoriteArea": "المنطقة المفضلة",
+        "saveChanges": "احفظ التعديلات",
+        "saving": "جاري الحفظ…",
+        "saveSuccess": "تم حفظ التعديلات بنجاح!",
+        "deleteTitle": "حذف الحساب نهائياً",
+        "deleteDesc": "سيتم حذف كافة حجوزاتك ومفضلاتك ونقاطك، ولا يمكن استرجاعها بعد ذلك.",
+        "deleteButton": "امسح حسابي",
+        "changePhoneModal": {
+          "title": "تغيير رقم الموبايل",
+          "desc": "هنبعتلك كود تأكيد OTP على الرقم الجديد لتأمينه والتأكد من ملكيتك له.",
+          "submit": "إرسال كود التأكيد",
+          "cancel": "إلغاء"
+        },
+        "deleteModal": {
+          "title": "متأكد إنك عاوز تمسح حسابك؟",
+          "desc": "هتخسر كل سجل حجوزاتك وصالوناتك المفضلة، ومش هتقدر تسترجع الحساب تاني بنفس الرقم إلا بإنشاء حساب جديد من الصفر.",
+          "confirm": "أيوه، امسح الحساب",
+          "cancel": "تراجع"
+        }
+      },
+      "help": {
+        "title": "المساعدة والدعم",
+        "subtitle": "إجابات عن مشاكل الطابور والحجوزات، وقنوات التواصل المباشر مع فريق بالتدريج.",
+        "emergencyTitle": "عندك مشكلة في دور دلوقتي؟",
+        "emergencySubtitle": "فريق الدعم بيرد خلال 5 دقائق يومياً من 10 ص حتى 12 منتصف الليل.",
+        "contactWhatsapp": "كلمنا واتساب",
+        "searchPlaceholder": "دوّر على مشكلتك أو سؤالك…",
+        "faqTitle": "أكتر أسئلة بتتسأل",
+        "noFaqResults": "مفيش نتائج مطابقة لبحثك",
+        "noFaqResultsHint": "جرب تبحث بكلمات تانية أو كلمنا مباشرة على الدعم.",
+        "contactDirect": "كلّمنا مباشرة",
+        "chatSupport": "شات مع الدعم",
+        "chatOnline": "متصل الآن عبر واتساب",
+        "callUs": "اتصل بينا",
+        "callHours": "10ص - 12ص",
+        "aboutTitle": "عن بالتدريج",
+        "termsOfUse": "شروط الاستخدام",
+        "privacyPolicy": "سياسة الخصوصية",
+        "appVersion": "نسخة التطبيق",
+        "faqs": {
+          "cancelledAtSalon": {
+            "question": "دوري اتلغى وأنا في المحل — أعمل إيه؟",
+            "answer": "لو وصلت المحل ولقيت دورك اتلغى من غير ما تطلب، اطلب من الكابتن أو الريسيبشن يثبّت ميعادك يدوي، أو اضغط على شات الدعم الفوري تحت وهنرجعلك دورك ونكلّم الصالون في دقيقتين."
+          },
+          "wrongTime": {
+            "question": "الوقت المتوقع طلع غلط والانتظار طول",
+            "answer": "وقت الطابور بيتحسب تلقائياً حسب متوسط مدة الحلاقة لكل عميل قدامك. في أوقات الذروة أو لو عميل طلب خدمة إضافية ممكن يحصل تأخير 10-15 دقيقة. بنحدث وقتك الحي تلقائياً."
+          },
+          "noNotification": {
+            "question": "ما وصلنيش إشعار «حان دورك»",
+            "answer": "اتأكد إنك مفعل إشعارات المتصفح لـ بالتدريج، ورقم موبايلك عليه واتساب نشط، لأننا بنبعت الإشعار عبر التطبيق وواتساب في نفس اللحظة لما يتبقى قدامك عميل واحد."
+          },
+          "leaveQueue": {
+            "question": "إزاي أطلع من الطابور أو ألغي الحجز؟",
+            "answer": "تقدر تلغي حجزك مجاناً لحد ساعتين قبل الميعاد من صفحة تفاصيل الحجز، أو من صفحة متابعة الطابور بالضغط على «الخروج من الطابور»."
+          },
+          "priceDifference": {
+            "question": "الصالون حاسبني بسعر غير المكتوب في التطبيق",
+            "answer": "الأسعار في بالتدريج ملزمة للصالون. لو اتحاسبت بأكتر من المعروض، احتفظ بالفاتورة وكلمنا فوراً في الشات، وبنردلك فرق السعر رصيد في حسابك بعد التأكد مع الإدارة."
+          },
+          "changePhone": {
+            "question": "إزاي أغيّر رقم موبايلي المسجل؟",
+            "answer": "تقدر تغيّر رقمك من صفحة «بياناتي الشخصية» بالضغط على «غيّر الرقم»، وهنبعتلك كود تأكيد OTP على الرقم الجديد لتأمينه."
+          }
+        }
+      },
+      "language": {
+        "title": "لغة التطبيق",
+        "subtitle": "اختر لغة الواجهة المفضلة لك، سيتم تطبيق اتجاه الكتابة المناسب تلقائياً.",
+        "currentBadge": "اللغة الحالية",
+        "arDir": "من اليمين إلى اليسار (RTL)",
+        "arDesc": "اللغة الافتراضية للتطبيق وكافة تفاصيل المواعيد والصالونات",
+        "enDir": "Left to right (LTR)",
+        "enDesc": "App interface in English. Salon & service names remain in their original Arabic text.",
+        "modal": {
+          "titleEn": "تحوّل التطبيق لـ English؟",
+          "titleAr": "تحويل التطبيق إلى العربية؟",
+          "descEn": "الواجهة هتتقلب من اليمين للشمال (LTR). أسماء الصالونات والخدمات هتفضل زي ما صاحب الصالون كتبها بالعربي.",
+          "descAr": "سيتم تحويل الواجهة لتبدأ من اليمين إلى اليسار (RTL) باللغة العربية بالكامل.",
+          "confirmEn": "حوّل لـ English",
+          "confirmAr": "حوّل للعربية",
+          "cancelKeepAr": "خليها عربي",
+          "cancelKeepEn": "Keep English"
+        }
+      }
+    },
+    "bookings": {
+      "title": "حجوزاتي",
+      "onSchedule": "الصالون في ميعاده",
+      "tabs": {
+        "upcoming": "الحالية",
+        "past": "السابقة"
+      },
+      "status": {
+        "waiting": "مستني تأكيد الصالون",
+        "confirmed": "حجز مؤكد",
+        "completed": "خدمة تمّت",
+        "cancelled": "اتلغى — ما حضرتش"
+      },
+      "activeQueue": {
+        "liveStatus": "دورك شغّال دلوقتي",
+        "queueNumberLabel": "رقمك",
+        "aheadLabel": "فاضلك",
+        "peopleAhead": "{count, plural, one {شخص واحد} two {شخصين} few {# أشخاص} many {# شخص} other {# شخص}}",
+        "minutesEstimated": "~ {count} دقيقة",
+        "trackQueue": "تابع دورك"
+      },
+      "withBarber": "مع {name}",
+      "bookingDetails": "تفاصيل الحجز",
+      "cancel": "إلغاء",
+      "notificationHint": "هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.",
+      "yourRating": "تقييمك",
+      "ratePrompt": "قيّم {barberName} والصالون",
+      "rateNow": "قيّم دلوقتي",
+      "rebookSame": "احجز تاني بنفس الاختيارات",
+      "empty": {
+        "upcomingAria": "لا توجد حجوزات قادمة",
+        "upcomingTitle": "لسه ما حجزتش أي حاجة",
+        "upcomingDesc": "أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.",
+        "pastAria": "لا توجد حجوزات سابقة",
+        "pastTitle": "لسه ما خلصتش أي حجز",
+        "pastDesc": "حجوزاتك اللي خلصت هتظهر هنا، وتقدر تعيد حجزها بضغطة واحدة.",
+        "findSalon": "دوّر على صالون قريب منك"
+      },
+      "cancelDialog": {
+        "title": "إلغاء الحجز؟",
+        "description": "لو لغيت الحجز دلوقتي، الميعاد مش هيتحجز تاني لحد تاني على طول.",
+        "errorDefault": "حدث خطأ أثناء إلغاء الحجز",
+        "errorNetwork": "تعذر الاتصال بالخادم",
+        "cancelling": "جاري الإلغاء...",
+        "confirm": "إلغاء الحجز",
+        "keep": "خليني أفكر"
+      },
+      "rebookDialog": {
+        "title": "نعيد نفس الحجز؟",
+        "description": "هنفتحلك صفحة الحجز وكل اختياراتك السابقة جاهزة — بس هتختار الميعاد من الأوقات المتاحة.",
+        "chooseSlot": "اختار الميعاد",
+        "notNow": "مش دلوقتي"
+      }
+    },
+    "bookingDetail": {
+      "breadcrumb": {
+        "account": "حسابي",
+        "bookings": "حجوزاتي",
+        "bookingDetails": "تفاصيل الحجز"
+      },
+      "bookingCode": "كود الحجز {code}",
+      "callSalon": "اتصل بالصالون",
+      "copyAddress": "انسخ العنوان",
+      "copied": "اتنسخ!",
+      "rescheduleTitle": "تعديل الحجز",
+      "rescheduleTime": "عدّل الميعاد",
+      "cancelBooking": "إلغاء الحجز",
+      "bookingCancelled": "تم إلغاء هذا الحجز",
+      "freeCancellationHint": "مجاني لحد ساعتين قبل الميعاد",
+      "yourBookingAt": "حجزك في {salon}",
+      "status": {
+        "cancelled": "ملغي",
+        "completed": "تمت الزيارة",
+        "confirmed": "مؤكد"
+      },
+      "rateVisitTitle": "قيّم زيارتك للصالون",
+      "rateVisitSubtitle": "رأيك بيساعد زباين تانية تختار صح وبيكشف دقة الطابور",
+      "rateNow": "قيّم دلوقتي",
+      "yourRatingStars": "تقييمك لهذه الزيارة: {rating} من 5 نجوم",
+      "ticket": {
+        "yourTime": "ميعادك",
+        "yourQueueNumber": "رقمك في الدور",
+        "outOfTotal": "من {total} في دور {day}",
+        "liveOnDay": "الرقم بيبقى حيّ يوم الميعاد",
+        "dayExplanation": "يوم الميعاد الصفحة دي بتتحول لحالة حيّة: قدامك كام واحد، والصالون ماشي في ميعاده ولا متأخر."
+      },
+      "table": {
+        "title": "تفاصيل الحجز",
+        "services": "الخدمات",
+        "minutes": "{count} دقيقة",
+        "barber": "الحلاق",
+        "totalDuration": "المدة الكلية",
+        "totalPrice": "الإجمالي",
+        "payAtSalon": "تدفع في الصالون · كاش أو فيزا"
+      },
+      "policy": {
+        "title": "سياسة الإلغاء",
+        "freeRule": "إلغاء أو تأجيل مجاني لحد ساعتين قبل {time}.",
+        "lateRule": "بعد كده الصالون ممكن يحسبها إلغاء متأخر.",
+        "noShowRule": "لو مجيتش من غير إلغاء، بتتسجل غياب — 3 غيابات بتوقف الحجز عندهم أسبوع."
+      }
+    },
+    "liveTracking": {
+      "todayAppointment": "ميعادك النهارده",
+      "queueNumber": "رقمك في الدور",
+      "salonDelayed": "الصالون متأخر ~{delay} دقايق",
+      "salonOnTime": "الصالون في ميعاده",
+      "salonOnTimeAlt": "الصالون ماشي في ميعاده",
+      "withBarberMinutes": "مع {barber} · {duration} دقيقة",
+      "callSalon": "اتصل بالصالون",
+      "copyAddress": "انسخ العنوان",
+      "copied": "اتنسخ!",
+      "alertsTitle": "هنبعتلك تنبيه",
+      "alertTwoAhead": "لما يفضل قدامك اتنين.",
+      "alertYourTurn": "وبعدين لما يجي دورك.",
+      "alertDelay": "ولو الصالون اتأخر، هنقولك الميعاد الجديد.",
+      "alertsChannels": "على واتساب والتطبيق",
+      "reschedule": "عدّل الميعاد",
+      "cancelBooking": "إلغاء الحجز",
+      "bookingCancelled": "تم إلغاء هذا الحجز",
+      "inServiceSidebarNotice": "الخدمة جارية الآن داخل الصالون — نعيماً مقدماً!",
+      "completedSidebarNotice": "تمت الزيارة بنجاح",
+      "rateVisitNow": "قيّم زيارتك الآن",
+      "todayQueueActive": "النهارده {date} · الدور شغال",
+      "lastUpdate": "آخر تحديث {time}",
+      "yourTime": "ميعادك",
+      "yourQueueNumber": "رقمك في الدور",
+      "outOfToday": "من {total} في دور النهارده",
+      "peopleAheadInQueue": "قدامك في الدور",
+      "estimatedTurn": "دورك تقريبًا {time} · متبقي {remaining} دقيقة",
+      "avgDelayToday": "متوسط تأخير الصالون النهارده 4 دقايق",
+      "autoDelayAdjustment": "ميعادك المتوقع اتعدّل تلقائياً لـ {time} عشان متستناش على الفاضي.",
+      "queueRegular": "الدور منتظم",
+      "queueRegularHint": "لو حصل أي تأخير أو زبون خلص بدري، الصفحة هتحدّث الوقت فوراً.",
+      "moveAtTime": "تقدر تتحرك الساعة {time}",
+      "distanceSummary": "1.2 كم من مكانك · حوالي 12 دقيقة بالعربية و 18 مشي",
+      "remind10MinBefore": "فكّرني قبلها بـ 10 دقايق",
+      "remind10MinSet": "هنفكرك قبلها بـ 10 دقايق",
+      "howQueueWorks": "الدور ماشي إزاي",
+      "stepBookingConfirmed": "الحجز مؤكد",
+      "stepApproaching": "قرب ميعادك",
+      "stepOneAhead": "قدامك واحد كمان",
+      "stepNowBadge": "دلوقتي",
+      "stepWaitingPredecessor": "قدامك {ahead} · بنستنى اللي قبلك يخلّص",
+      "stepYourTurn": "دورك دلوقتي",
+      "stepExpected": "متوقع {time}",
+      "stepServiceDone": "تمت الخدمة",
+      "stepsHint": "هنبعتلك تنبيه لما يفضل قدامك اتنين، وبعدين لما يجي دورك، ولو الصالون اتأخر.",
+      "approaching": {
+        "moveNow": "اتحرّك دلوقتي",
+        "travelSummary": "المشوار {travel} دقايق — دورك بعد {estimated} دقايق",
+        "queueNumberLabel": "رقم دورك",
+        "onlyAhead": "{count, plural, one {فاضلك واحد بس} two {فاضلك اتنين بس} few {فاضلك # بس} other {فاضلك # بس}}",
+        "stageJoined": "دخلت الطابور",
+        "stageApproaching": "قرّب دورك",
+        "stageYourTurn": "دورك دلوقتي",
+        "expectedTime": "الوقت المتوقع",
+        "minutesShort": "~ {count} د",
+        "distance": "المسافة",
+        "openDirections": "افتح الاتجاهات للصالون",
+        "leaveQueue": "اطلع من الطابور"
+      },
+      "yourTurnCard": {
+        "title": "حان دورك",
+        "takeChair": "ادخل على الكرسي — {barberName} مستنيك",
+        "yourNumber": "رقمك",
+        "timeLeft": "فاضلك",
+        "warning": "لو ما حضرتش خلال 5 دقايق، دورك هيتأخر مركز واحد",
+        "iamAtShop": "أنا في المحل",
+        "postponeOne": "أنا جاي — أجّلني واحد",
+        "leaveQueue": "اطلع من الطابور"
+      },
+      "inServiceCard": {
+        "title": "انت على الكرسي",
+        "subtitle": "نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.",
+        "directions": "الاتجاهات",
+        "call": "اتصل",
+        "finishHaircut": "خلصت الحلاقة (إنهاء الخدمة)"
+      },
+      "completedCard": {
+        "title": "نعيماً! تم انتهاء الحلاقة",
+        "subtitle": "شكراً لزيارتك {shopName}. رأيك بيساعد غيرك ويطوّر الخدمة في الصالون.",
+        "openRateModal": "فتح نافذة تقييم الزيارة"
+      },
+      "visitCompletedDialog": {
+        "close": "إغلاق",
+        "title": "نعيماً!",
+        "description": "خلصت حلاقتك في {shopName}. رأيك بيساعد غيرك يختار صح وبيطوّر الخدمة في الصالون.",
+        "rateNow": "قيّم تجربتك دلوقتي",
+        "later": "لاحقاً"
+      },
+      "leaveQueueDialog": {
+        "title": "تطلع من الطابور؟",
+        "description": "دورك رقم {queueNumber} هيروح لحد تاني ومش هينفع ترجعه. لو دخلت تاني هتبدأ من آخر الطابور.",
+        "warningNote": "الخروج المتكرر من الطوابير بيقلّل تقييم الالتزام بتاعك.",
+        "confirm": "أيوه، اطلعني",
+        "cancel": "خليني في الطابور"
+      },
+      "simulation": {
+        "title": "محاكاة تحديث الطابور (WebSocket Simulation)",
+        "subtitle": "تتحول الصفحة تلقائياً مع الوقت بمحاكاة تحديثات السيرفر",
+        "nextInSeconds": "التالي خلال {seconds}ث",
+        "paused": "متوقف مؤقتاً",
+        "pause": "إيقاف",
+        "play": "تشغيل",
+        "stageWaiting": "في الطابور",
+        "stageApproaching": "دورك قرّب",
+        "stageYourTurn": "دورك جه",
+        "stageInService": "على الكرسي",
+        "stageCompleted": "نعيماً!"
+      },
+      "yourTurnState": {
+        "backToLive": "رجوع للمتابعة",
+        "salonCalledYou": "الصالون نداك دلوقتي",
+        "yourTurnNow": "دورك دلوقتي",
+        "takeChairOf": "اتفضل على كرسي {barberName}",
+        "turnSummary": "ميعادك كان {time} · دخلت في وقتك تقريبًا. {services} · {price} تدفعها في الصالون.",
+        "inShopButton": "أنا جوه الصالون",
+        "inShopConfirmed": "تم تأكيد تواجدك في الصالون",
+        "callSalon": "وصّلني بالصالون",
+        "fiveMinuteRule": "لو مش في الصالون، الدور بيستناك 5 دقايق وبعدها اللي وراك يتقدّم قبلك."
+      },
+      "stepConfirmedTimeDemo": "امبارح 9:12 م",
+      "stepApproachingTimeDemo": "النهارده 5:30 م"
+    },
+    "rate": {
+      "breadcrumb": {
+        "bookings": "حجوزاتي",
+        "bookingDetails": "تفاصيل الحجز",
+        "rateVisit": "تقييم الزيارة",
+        "rated": "تم التقييم"
+      },
+      "cancelAria": "إلغاء التقييم والرجوع",
+      "title": "قيّم زيارتك",
+      "later": "بعدين",
+      "sideNotice": "⭐ رأيك بيساعد زباين تانية تختار صح، وبيكشف دقة وقت الطابور للجميع.",
+      "overallQuestion": "إيه رأيك في الخدمة؟",
+      "starsAria": "{star} من 5 نجوم",
+      "ratingLabels": {
+        "1": "سيء",
+        "2": "مقبول",
+        "3": "كويس",
+        "4": "حلو جداً",
+        "5": "ممتاز"
+      },
+      "detailsSection": "قيّم التفاصيل",
+      "haircutQuality": "جودة القصة",
+      "cleanliness": "نظافة المكان",
+      "punctuality": "دقة الوقت المتوقع",
+      "punctualityHint": "التطبيق قال 20 د واستنيت 25 د تقريباً",
+      "whatLiked": "إيه اللي عجبك؟",
+      "optional": "(اختياري)",
+      "tags": {
+        "lightHand": "ايده خفيفة",
+        "cleanPlace": "المكان نضيف",
+        "respectful": "معاملة محترمة",
+        "fairPrice": "السعر مناسب",
+        "accurateQueue": "الدور كان دقيق"
+      },
+      "addComment": "تحب تضيف كلمة؟",
+      "commentPlaceholder": "اكتب رأيك عشان تساعد اللي بعدك…",
+      "addPhoto": "ضيف صورة للقصة",
+      "changePhoto": "تغيير صورة القصة",
+      "photoAlt": "صورة القصة",
+      "anonymousLabel": "انشر التقييم باسم مستعار",
+      "submit": "ابعت التقييم",
+      "submitting": "جاري الإرسال…",
+      "sent": {
+        "thanksTitle": "شكراً — تقييمك اتبعت",
+        "thanksSubtitle": "رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.",
+        "yourRating": "تقييمك:",
+        "favoritePrompt": "تضيفه للمفضلة؟",
+        "favoriteHint": "هنقولك لما يبقى فاضي في وقتك المعتاد.",
+        "favorited": "مُضاف لمفضلاتك",
+        "addToFavorites": "ضيفه للمفضلة",
+        "backToHome": "تمام، ارجعني للرئيسية",
+        "backToPastBookings": "الرجوع لحجوزاتي السابقة"
+      }
+    },
+    "book": {
+      "shell": {
+        "fallbackSalon": "الصالون",
+        "exitBooking": "اخرج من الحجز",
+        "profileAria": "الملف الشخصي"
+      },
+      "stepper": {
+        "service": "الخدمة",
+        "slot": "الميعاد",
+        "barber": "الحلاق",
+        "selectingNow": "بتختار دلوقتي",
+        "slotSelected": "تم تحديد الميعاد"
+      },
+      "summary": {
+        "time": "المعاد",
+        "now": "دلوقتي",
+        "minutes": "{count} دقيقة",
+        "servicesCount": "{count, plural, one {خدمة واحدة} two {خدمتين} few {# خدمات} other {# خدمة}}",
+        "totalDuration": "المدة الكلية",
+        "totalPrice": "الإجمالي"
+      },
+      "slot": {
+        "title": "اختار الميعاد",
+        "subtitle": "المواعيد المعروضة بتكفي مدة خدمتك ({minutes} دقيقة).",
+        "nowEnterQueue": "دلوقتي — ادخل الطابور",
+        "live": "لايف",
+        "salonClosed": "الصالون مقفول دلوقتي — احجز معاد",
+        "noQueueEnterImmediately": "مفيش دور — هتدخل على طول",
+        "queueWaitInfo": "قدامك {count} · ~{min} د",
+        "scheduleAppointment": "احجز معاد",
+        "chooseDayAndTime": "اختار اليوم والساعة اللي تناسبك",
+        "continueChooseBarber": "كمّل — اختار الحلاق",
+        "chooseSlotFirst": "اختار ميعاد الأول",
+        "picker": {
+          "availableSlots": "المواعيد الفاضية",
+          "durationNotice": "المدة اللي اخترتها {minutes} دقيقة · المعروض مواعيد تكفيها",
+          "today": "اليوم",
+          "tomorrow": "غداً",
+          "anotherDate": "تاريخ تاني",
+          "period": {
+            "morning": "الصبح",
+            "afternoon": "الظهر والعصر",
+            "evening": "بليل"
+          },
+          "legend": {
+            "available": "فاضي",
+            "booked": "محجوز",
+            "selected": "اللي اخترته"
+          },
+          "onSchedule": "الصالون في ميعاده",
+          "punctualityStats": "آخر {count} ميعاد بمتوسط تأخير {delay} دقايق"
+        }
+      },
+      "barber": {
+        "title": "اختار الحلاق",
+        "subtitle": "اختار الحلاق اللي تفضله أو أي حلاق متاح.",
+        "anyBarber": "أي حلاق متاح",
+        "fastest": "الأسرع",
+        "firstAvailable": "أول واحد يخلّص هيستلمك",
+        "immediately": "فوراً",
+        "noQueue": "مفيش دور",
+        "orChooseBarber": "أو اختار حلاق بالاسم",
+        "offToday": "مش موجود النهارده",
+        "empty": "فاضي",
+        "minShort": "+{minutes} د",
+        "ahead": "قدامه {count}",
+        "continueReview": "كمّل — راجع الحجز"
+      },
+      "review": {
+        "title": "راجع الحجز قبل ما تأكّد",
+        "services": "الخدمات",
+        "minutes": "{count} دقيقة",
+        "barber": "الحلاق",
+        "anyBarber": "أي حلاق متاح",
+        "time": "المعاد",
+        "change": "غيّر",
+        "enterImmediately": "هتدخل على طول",
+        "turnWithinRange": "دورك خلال {min} لـ {max} دقيقة",
+        "nobodyAhead": "محدش قدامك",
+        "onlyAhead": "قدامك {count} بس",
+        "serviceDuration": "مدة خدمتك {minutes} دقيقة",
+        "timeEstimatedLive": "الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.",
+        "appointmentTime": "معادك {day} الساعة {time}",
+        "comeFiveMinEarly": "تعالى قبل معادك بـ 5 دقايق عشان تلحق دورك.",
+        "fiveMinRule": "لما يجي دورك عندك ٥ دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.",
+        "subtotal": "مجموع الخدمات",
+        "totalPrice": "الإجمالي",
+        "payCashInBranch": "الدفع كاش في الفرع بعد الخدمة",
+        "confirmAndJoinQueue": "أكّد ودخّلني الطابور",
+        "agreeCancellationPolicy": "بتأكيدك أنت موافق على سياسة الإلغاء"
+      },
+      "confirmation": {
+        "header": {
+          "yourAppointmentToday": "ميعادك النهارده",
+          "yourAppointmentDay": "ميعادك {day}",
+          "queueNumber": "رقمك في الدور",
+          "onSchedule": "الصالون في ميعاده"
+        },
+        "bookingConfirmedAt": "تم الحجز في {salon}",
+        "withBarberMinutes": "مع {barber} · {minutes} دقيقة",
+        "payAtSalon": "تدفع في الصالون",
+        "yourTime": "ميعادك",
+        "yourQueueNumber": "رقمك في الدور",
+        "outOfTodayQueue": "من {count} في دور النهارده",
+        "aheadNowHint": "قدامك {count} في الدور دلوقتي · هنعدّلها لو حد ألغى أو الصالون اتأخر",
+        "bookingCode": "كود الحجز {code}",
+        "bookingDetails": "تفاصيل الحجز",
+        "whatWeSend": {
+          "title": "هنبعتلك إيه؟",
+          "morning": "تنبيه الصبح بميعادك ورقمك في الدور.",
+          "oneAhead": "تنبيه لما يبقى فاضل واحد قبلك — وقتها تكون في السكة.",
+          "delay": "لو الصالون اتأخر، هنقولك الميعاد الجديد بالدقيقة.",
+          "channels": "التنبيهات على واتساب والتطبيق · تقدر تقفلها من الإعدادات"
+        },
+        "calendar": {
+          "addToCalendar": "أضف للتقويم",
+          "googleCalendar": "تقويم Google",
+          "appleOutlook": "تحميل لـ Apple / Outlook (.ics)",
+          "eventTitle": "ميعاد حلاقة - {salon}"
+        },
+        "dateToday": "النهارده {date}",
+        "dateTomorrow": "بكرة {date}",
+        "defaultServices": "قص شعر بالمقص + تحديد دقن"
+      }
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل",
+    "close": "إغلاق",
+    "errorPage": {
+      "title": "حصلت مشكلة عندنا",
+      "description": "مش مشكلة في النت بتاعك — الخدمة عندنا مش ردّت. حجوزاتك المؤكدة ورقمك في الدور مأمّنين.",
+      "retry": "جرّب تاني",
+      "contactSupport": "كلّم الدعم"
+    },
+    "notFoundPage": {
+      "title": "الصفحة دي مش موجودة",
+      "description": "يمكن الصالون شال صفحته، أو اللينك اتغيّر. تعالى ندوّر على صالون تاني قريب منك.",
+      "salonsInMaadi": "صالونات في المعادي",
+      "home": "الرئيسية"
+    },
+    "toast": {
+      "close": "إغلاق التنبيه",
+      "ariaLabel": "التنبيهات"
+    },
+    "header": {
+      "changeArea": "تغيير المنطقة",
+      "searchPlaceholder": "ابحث باسم الصالون أو المنطقة",
+      "joinSalon": "انضم كصالون",
+      "myBookings": "حجوزاتي",
+      "myAccount": "حسابي — {name}",
+      "defaultUser": "المستخدم",
+      "signIn": "تسجيل الدخول",
+      "switchLanguage": "التبديل لـ {language}"
+    },
+    "footer": {
+      "tagline": "احجز ميعادك في أقرب صالون، واعرف رقمك في الدور من قبل ما تخرج من البيت.",
+      "location": "القاهرة، مصر",
+      "aboutTitle": "عن {appName}",
+      "whoWeAre": "مين إحنا",
+      "howItWorks": "إزاي بيشتغل",
+      "careers": "وظايف",
+      "contactTitle": "تواصل معانا",
+      "help": "مساعدة",
+      "complaint": "شكوى على حجز",
+      "whatsapp": "واتساب الدعم",
+      "termsTitle": "الشروط والخصوصية",
+      "terms": "شروط الاستخدام",
+      "privacy": "سياسة الخصوصية",
+      "refund": "سياسة الإلغاء",
+      "salonsTitle": "للصالونات",
+      "addSalon": "ضيف صالونك",
+      "pricing": "الأسعار",
+      "salonLogin": "تسجيل دخول الصالون"
+    },
+    "bottomNav": {
+      "ariaLabel": "التنقل الرئيسي",
+      "home": "الرئيسية",
+      "bookings": "حجوزاتي",
+      "search": "البحث",
+      "account": "حسابي"
+    },
+    "offlineBanner": {
+      "message": "مفيش نت — المواعيد دي آخر تحديث الساعة {time}",
+      "retry": "جرّب تاني"
+    },
+    "offlinePage": {
+      "ariaLabel": "صفحة انقطاع الاتصال بالإنترنت",
+      "defaultTitle": "النت فاصل",
+      "defaultDescription": "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
+      "retry": "جرّب تاني",
+      "browseCached": "افتح آخر حجز شوفته",
+      "tipsTitle": "جرّب الحاجات دي:",
+      "tip1": "اتأكد إن بيانات الموبايل أو الواي فاي شغّالين",
+      "tip2": "قفل وضع الطيران لو مفتوح"
+    },
+    "appointmentStrip": {
+      "yourAppointmentToday": "ميعادك النهارده",
+      "queueNumber": "رقمك في الدور",
+      "onSchedule": "الصالون في ميعاده",
+      "trackingAria": "متابعة الحجز المباشر"
+    },
+    "shopCard": {
+      "newBadge": "جديد",
+      "bookAppointment": "احجز ميعاد"
+    },
+    "rating": {
+      "outOf": "{rating} من 5",
+      "outOfWithCount": "{rating} من 5، {count, plural, one {تقييم واحد} two {تقييمين} few {# تقييمات} many {# تقييم} other {# تقييم}}",
+      "reviewsCount": "{count, plural, one {تقييم واحد} two {تقييمين} few {# تقييمات} many {# تقييم} other {# تقييم}}"
+    },
+    "nextSlot": {
+      "noSlots": "مفيش مواعيد",
+      "leftToday": "خلاص النهارده",
+      "nearestSlot": "أقرب ميعاد"
+    },
+    "queuePosition": {
+      "appointment": "ميعادك",
+      "queueNumber": "رقمك في الدور",
+      "ahead": "{count, plural, one {قدامك واحد} two {قدامك اتنين} few {قدامك #} many {قدامك #} other {قدامك #}}"
+    },
+    "profileBreadcrumb": {
+      "navAria": "مسار التنقل",
+      "account": "حسابي"
+    },
+    "legalDocument": {
+      "version": "إصدار {version}"
+    },
+    "dateTime": {
+      "appointmentWindow": "{duration} دقيقة · من {start} لحد {end}"
+    }
+  },
+  "marketing": {
+    "home": {
+      "hero": {
+        "headline": "احجز حلاقتك واعرف دورك في الطابور",
+        "headlineAccent": "لحظة بلحظة",
+        "proofCount": "أكثر من <bold>50,000</bold> حلاقة هذا الشهر",
+        "serviceLabel": "الخدمة",
+        "serviceValue": "الخدمة أو الصالون",
+        "areaLabel": "المنطقة",
+        "areaValue": "المنطقة أو العنوان",
+        "timeLabel": "الموعد",
+        "timeValue": "متاح فوراً / اليوم",
+        "searchButton": "بحث",
+        "ticketTitle": "تذكرتك الحالية",
+        "inQueueBadge": "في الطابور",
+        "yourNumber": "رقم دورك",
+        "waitEstimate": "~15 دقيقة انتظار",
+        "steps": {
+          "booked": "تم الحجز",
+          "waiting": "في الانتظار",
+          "move": "تحرك للصالون",
+          "yourTurn": "جاء دورك"
+        },
+        "trackOnMap": "تتبع مكانك على الخريطة",
+        "nearbyInArea": "الصالونات القريبة منك في <bold>{area}</bold>"
+      },
+      "rails": {
+        "viewAll": "عرض الكل",
+        "recentlyViewed": {
+          "title": "آخر ما شفته"
+        },
+        "recommended": {
+          "title": "مقترح لك",
+          "subtitle": "حسب تقييمك وزياراتك"
+        },
+        "newInArea": {
+          "title": "جديد في منطقتك",
+          "subtitle": "صالونات فتحت من شهرين"
+        },
+        "mostBooked": {
+          "title": "الأكثر طلباً",
+          "subtitle": "{count, plural, one {صالون واحد فيه ميعاد النهارده} two {صالونين فيهم ميعاد النهارده} few {# صالونات فيهم ميعاد النهارده} many {# صالون فيهم ميعاد النهارده} other {# صالون فيهم ميعاد النهارده}}"
+        }
+      },
+      "appDownload": {
+        "badge": "متوفّر الآن لجميع الأجهزة",
+        "title": "حمّل تطبيق <brand>{appName}</brand> الآن واحجز دورك",
+        "description": "استنّى دورك وأنت في مكانك. ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة، وهنبعتلك إشعار لما يقرب دورك.",
+        "scanCode": "امسح الكود للتحميل",
+        "availableOn": "متاح لنظام iOS و Android",
+        "qrAria": "QR Code للتحميل السريع",
+        "screensAria": "شاشات تطبيق بالتدريج للموبايل",
+        "mockup": {
+          "front": {
+            "headerTitle": "دورك",
+            "live": "لايف",
+            "queueNumberLabel": "رقم دورك",
+            "peopleAhead": "قدامك {count} أنفار",
+            "stepJoined": "دخلت الطابور",
+            "stepApproaching": "قرّب دورك",
+            "stepNow": "دورك دلوقتي",
+            "estimatedTimeLabel": "الوقت المتوقع",
+            "estimatedTimeValue": "~ {minutes} د",
+            "leaveAtLabel": "تتحرك الساعة",
+            "serviceLine": "قصة شعر + دقن",
+            "directions": "الاتجاهات",
+            "call": "اتصل",
+            "leaveQueue": "اطلع من الطابور"
+          },
+          "back": {
+            "nearYou": "بنعرضلك اللي قريب من",
+            "demoArea": "المحلة الكبرى، شكري القوتلي",
+            "searchPlaceholder": "دوّر باسم الصالون أو الخدمة",
+            "filterShortestWait": "أقل انتظار دلوقتي",
+            "filterNearest": "الأقرب ليك",
+            "sectionTitle": "تقدر تدخل دلوقتي",
+            "viewAll": "شوف الكل",
+            "availableNow": "فاضي دلوقتي",
+            "demoAreaShort": "شكري القوتلي"
+          },
+          "demoSalonName": "صالون الكابتن حسام"
+        }
+      },
+      "reviews": {
+        "title": "آراء العملاء",
+        "allReviews": "كل التقييمات"
+      },
+      "areas": {
+        "title": "استكشف حسب المنطقة",
+        "subtitle": "القاهرة والجيزة",
+        "shopCount": "{count, plural, one {صالون واحد} two {صالونين} few {# صالونات} many {# صالون} other {# صالون}}"
+      }
+    },
+    "favorites": {
+      "title": "الصالونات المفضلة",
+      "back": "الرجوع",
+      "mobileSubtitle": "{count, plural, one {صالون واحد · مرتّب بأقل انتظار} two {صالونين · مرتّبين بأقل انتظار} few {# صالونات · مرتّبة بأقل انتظار} many {# صالون · مرتّب بأقل انتظار} other {# صالون · مرتّب بأقل انتظار}}",
+      "desktopSubtitle": "{count, plural, one {صالون واحد · المواعيد المعروضة النهارده} two {صالونين · المواعيد المعروضة النهارده} few {# صالونات · المواعيد المعروضة النهارده} many {# صالون · المواعيد المعروضة النهارده} other {# صالون · المواعيد المعروضة النهارده}}",
+      "sortAria": "ترتيب الصالونات",
+      "sortOptions": {
+        "slot": "الأقرب ميعاد",
+        "rating": "الأعلى تقييماً",
+        "distance": "الأقرب مسافة"
+      },
+      "card": {
+        "nearestSlotToday": "أقرب ميعاد · النهارده",
+        "noSlotsToday": "مفيش مواعيد النهارده",
+        "bookAppointment": "احجز ميعاد",
+        "seeTomorrowSlots": "شوف مواعيد بكرة",
+        "removeAria": "إزالة {name} من المفضلة"
+      },
+      "mobileCard": {
+        "closed": "مقفول",
+        "opensAt": "بيفتح الساعة 12 م",
+        "remindWhenOpen": "فكّرني لما يفتح",
+        "freeNow": "فاضي دلوقتي — ادخل على طول",
+        "joinQueue": "ادخل الطابور",
+        "waitingFew": "فاضل 2 أنفار — استنى ~15 د",
+        "removeAria": "إزالة {name} من المفضلة"
+      },
+      "empty": {
+        "aria": "لا توجد صالونات مفضلة",
+        "title": "مفيش صالونات مفضّلة",
+        "description": "دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة من غير بحث كل مرة.",
+        "discoverNearby": "اكتشف صالونات قريبة",
+        "visitedBefore": "صالونات زرتها قبل كده"
+      },
+      "tipBox": {
+        "aria": "تنبيه المفضلة الذكي",
+        "tip": "بنبعتلك إشعار لما صالون مفضّل عندك يبقى فاضي في وقت بتروح فيه عادةً."
+      }
+    },
+    "search": {
+      "viewTickets": "تذاكر",
+      "viewList": "قائمة",
+      "maxPriceLabel": "حتى {price}",
+      "maxDistanceLabel": "لحد {distance}",
+      "todayOnlyLabel": "فيه ميعاد النهارده",
+      "editFilters": "تعديل الفلاتر والترتيب",
+      "filtersActive": "{count} مفعّلة",
+      "filtersAndSort": "الفلاتر والترتيب",
+      "resultsTitle": "{count, plural, one {صالون واحد فيه «{query}»} two {صالونين فيهم «{query}»} few {# صالونات فيها «{query}»} many {# صالون فيه «{query}»} other {# صالون فيه «{query}»}}",
+      "resultsSubtitle": "في {area} وحواليها · لحد {distance}",
+      "expandDistanceBanner": "دي كل النتايج على الفلاتر الحالية. لو وسّعت المسافة لـ {distance} هتلاقي صالونات زيادة.",
+      "expandDistanceButton": "وسّع لـ {distance}",
+      "searchBar": {
+        "placeholder": "ابحث باسم الصالون أو المنطقة",
+        "clear": "مسح البحث"
+      },
+      "activeFilters": {
+        "clearAll": "مسح الكل"
+      },
+      "dateStrip": {
+        "slotsFor": "المواعيد في",
+        "today": "النهارده",
+        "tomorrow": "بكرة",
+        "anotherDate": "تاريخ تاني",
+        "allSlotsToday": "المواعيد المعروضة كلها النهارده {date}"
+      },
+      "filterRail": {
+        "filters": "الفلاتر",
+        "active": "{count} مفعّلة",
+        "clearAll": "مسح الكل",
+        "sortResults": "ترتيب النتايج",
+        "service": "الخدمة",
+        "price": "السعر",
+        "upToPrice": "حتى {price}",
+        "distance": "المسافة",
+        "upToDistance": "لحد {km} كم",
+        "km": "{km} كم",
+        "openTodayOnly": "مفتوح النهارده بس",
+        "showResults": "{count, plural, one {اعرض نتيجة واحدة} two {اعرض نتيجتين} few {اعرض # نتايج} many {اعرض # نتيجة} other {اعرض # نتيجة}}"
+      },
+      "filterSheet": {
+        "filters": "الفلاتر",
+        "title": "فلترة وترتيب",
+        "active": "{count} مفعّلة",
+        "close": "إغلاق",
+        "sortBy": "رتّب النتايج بـ",
+        "serviceWanted": "الخدمة اللي عايزها",
+        "price": "السعر",
+        "upToPrice": "حتى {price}",
+        "distance": "المسافة",
+        "upToDistance": "لحد {distance} كم",
+        "km": "{km} كم",
+        "openNowOnly": "مفتوح دلوقتي بس",
+        "hideClosed": "اخفي الصالونات المقفولة",
+        "resetAll": "امسح الكل",
+        "noResults": "مفيش نتايج",
+        "showResults": "{count, plural, one {اعرض صالون واحد} two {اعرض صالونين} few {اعرض # صالونات} many {اعرض # نتيجة} other {اعرض # نتيجة}}"
+      },
+      "sortOptions": {
+        "nextSlot": "أقرب ميعاد متاح",
+        "nextSlotSheet": "أقل انتظار دلوقتي",
+        "nearest": "الأقرب ليك",
+        "rating": "الأعلى تقييماً",
+        "price": "الأقل سعراً",
+        "priceSheet": "أرخص سعر",
+        "newest": "الأحدث",
+        "newestSheet": "أحدث الصالونات"
+      },
+      "quickSearch": {
+        "title": "بحث سريع",
+        "services": {
+          "haircut": "قص شعر",
+          "beardTrim": "تحديد دقن",
+          "razorShave": "حلاقة بالموس",
+          "hairDye": "صبغة",
+          "kidsHaircut": "قص شعر أطفال"
+        },
+        "nearbyAreas": "مناطق قريبة منك",
+        "shopCount": "{count, plural, one {صالون واحد} other {# صالون}}",
+        "availableToday": "{count, plural, one {فيها ميعاد واحد النهارده} other {# فيها ميعاد النهارده}}"
+      },
+      "recentSearches": {
+        "title": "آخر ما بحثت عنه",
+        "clearAll": "مسح الكل",
+        "clearItem": "مسح {query}"
+      },
+      "nearbyNow": {
+        "title": "قريب منك دلوقتي",
+        "subtitle": "فيها مواعيد فاضية في الساعتين الجايين",
+        "viewAll": "عرض الكل"
+      },
+      "noResults": {
+        "title": "مفيش صالون بالاسم ده",
+        "description": "ما لقيناش «{query}» {reason}. جرّب تشيل الفلاتر أو تدوّر باسم تاني.",
+        "clearFiltersShowAll": "امسح الفلاتر واعرض كل الصالونات",
+        "expandRange10Km": "وسّع نطاق البحث لـ 10 كم"
+      },
+      "resultCard": {
+        "newBadge": "جديد",
+        "reviews": "{count, plural, one {تقييم واحد} other {# تقييم}}"
+      },
+      "resultRow": {
+        "reviews": "{count, plural, one {تقييم واحد} other {# تقييم}}",
+        "delayed": "متأخر {minutes} د",
+        "onSchedule": "الصالون في ميعاده",
+        "book": "احجز",
+        "yourQueueWillBe": "رقمك هيكون {number}"
+      },
+      "slotChips": {
+        "slotsToday": "مواعيد {period} النهارده",
+        "periods": {
+          "morning": "الصبح",
+          "afternoon": "بعد الضهر",
+          "evening": "بالليل"
+        }
+      },
+      "suggestions": {
+        "didYouMean": "يمكن تكون بتقصد…"
+      }
+    },
+    "salon": {
+      "metaDescription": "اعرف خدمات {name} ومواعيده المتاحة واحجز أونلاين",
+      "notFound": {
+        "title": "الصالون ده مش موجود",
+        "description": "ممكن الرابط يكون غلط أو الصالون اتشال",
+        "backHome": "ارجع للرئيسية"
+      },
+      "tabs": {
+        "navAria": "أقسام الصفحة",
+        "services": "الخدمات",
+        "barbers": "الحلاقين",
+        "offers": "العروض",
+        "reviews": "التقييمات",
+        "hours": "المواعيد"
+      },
+      "info": {
+        "inFavorites": "في المفضلة",
+        "addToFavorites": "الصالونات المفضلة",
+        "removeAria": "إزالة من الصالونات المفضلة",
+        "addAria": "إضافة إلى الصالونات المفضلة",
+        "directions": "الاتجاهات",
+        "call": "اتصل",
+        "toasts": {
+          "addedTitle": "تمت الإضافة للمفضلة",
+          "addedDesc": "تقدر تلاقي {name} في الصالونات المفضلة وتتابع مواعيده",
+          "viewFavorites": "شوف المفضلة",
+          "removedTitle": "اتمسح من المفضلة",
+          "removedDesc": "تمت إزالة {name} من قائمة الصالونات المفضلة"
+        }
+      },
+      "gallery": {
+        "viewPhotos": "عرض صور {name}",
+        "allPhotos": "كل الصور",
+        "close": "إغلاق",
+        "prevPhoto": "الصورة السابقة",
+        "nextPhoto": "الصورة التالية"
+      },
+      "services": {
+        "title": "الخدمات",
+        "durationMinutes": "{count} دقيقة",
+        "selectService": "اختيار {name}",
+        "deselectService": "إلغاء اختيار {name}"
+      },
+      "barbers": {
+        "title": "طاقم الحلاقين",
+        "availableNow": "فاضي دلوقتي",
+        "tomorrow": "بكرة"
+      },
+      "offers": {
+        "title": "عروض شغّالة دلوقتي"
+      },
+      "reviews": {
+        "title": "التقييمات وآراء العملاء",
+        "viewAllReviews": "عرض كل الـ {count} تقييم",
+        "verifiedReviews": "{count} تقييم حقيقي",
+        "criteria": {
+          "cutQuality": "جودة القصة",
+          "cleanliness": "النظافة",
+          "punctuality": "دقة الوقت"
+        },
+        "withBarber": "مع {name}"
+      },
+      "hours": {
+        "title": "مواعيد العمل",
+        "openNow": "مفتوح دلوقتي",
+        "closedNow": "مقفول دلوقتي",
+        "today": "اليوم",
+        "dayOff": "إجازة",
+        "locationAndAddress": "الموقع والعنوان",
+        "copyAddress": "انسخ العنوان",
+        "copied": "اتنسخ!"
+      },
+      "punctuality": {
+        "onTime": "الصالون غالباً ماشي في ميعاده",
+        "runningLate": "الصالون متأخر شوية النهارده"
+      },
+      "bookingSidebar": {
+        "title": "ملخص الحجز",
+        "servicesCount": "{count, plural, one {خدمة واحدة} other {# خدمات}}",
+        "empty": "لم تقم باختيار أي خدمة بعد. اختر من القائمة لتأكيد حجزك.",
+        "durationMinutes": "{count} دقيقة",
+        "removeService": "إزالة {name}",
+        "estimatedDuration": "الوقت المقدر للخدمات:",
+        "total": "الإجمالي",
+        "joinQueue": "ادخل الطابور"
+      },
+      "bookingBar": {
+        "joinQueue": "ادخل الطابور"
+      }
+    }
+  },
+  "mobile": {
+    "a11y": {
+      "back": "رجوع",
+      "close": "قفل",
+      "optional": "(اختياري)",
+      "showPassword": "اظهر كلمة السر",
+      "hidePassword": "اخفي كلمة السر",
+      "clearSearch": "امسح البحث",
+      "remove": "شيل {label}",
+      "rating": "تقييم {value} من 5، {count} تقييم",
+      "stars": "{count, plural, one {نجمة واحدة} two {نجمتين} few {# نجوم} other {# نجمة}}",
+      "notifications": "الإشعارات",
+      "share": "شارك الصالون",
+      "addFavorite": "ضيف للمفضلة",
+      "removeFavorite": "شيل من المفضلة",
+      "addService": "ضيف {service}",
+      "removeService": "شيل {service}"
+    },
+    "common": {
+      "live": "لايف",
+      "stepOf": "الخطوة {step} من {total}",
+      "dot": "{a} · {b}",
+      "timeAgo": {
+        "minutes": "{count, plural, =0 {دلوقتي} =1 {من دقيقة} =2 {من دقيقتين} few {من {n} دقايق} other {من {n} دقيقة}}",
+        "hours": "{count, plural, =1 {من ساعة} =2 {من ساعتين} few {من {n} ساعات} other {من {n} ساعة}}",
+        "days": "{count, plural, =1 {من يوم} =2 {من يومين} few {من {n} أيام} other {من {n} يوم}}",
+        "weeks": "{count, plural, =1 {من أسبوع} =2 {من أسبوعين} other {من {n} أسابيع}}",
+        "months": "{count, plural, =1 {من شهر} =2 {من شهرين} few {من {n} شهور} other {من {n} شهر}}"
+      },
+      "days": {
+        "d0": "الأحد",
+        "d1": "الاتنين",
+        "d2": "التلات",
+        "d3": "الأربع",
+        "d4": "الخميس",
+        "d5": "الجمعة",
+        "d6": "السبت",
+        "tomorrow": "بكرة"
+      },
+      "cantOpenApp": "مش قادرين نفتح التطبيق ده على موبايلك",
+      "sessionExpired": "جلستك انتهت. سجّل دخولك تاني."
+    },
+    "offline": {
+      "bar": "مفيش نت — الأرقام دي مش متحدّثة",
+      "barWithTime": "مفيش نت — الأرقام دي آخر تحديث الساعة {time}",
+      "retry": "جرّب تاني",
+      "searchDisabled": "البحث محتاج نت",
+      "waitStale": "الانتظار مش متحدّث",
+      "queueBlocked": "مش هينفع تدخل الطابور وانت من غير نت — استنى ما الشبكة ترجع.",
+      "title": "النت فاصل",
+      "body": "مش قادرين نجيب الصالونات وأرقام الانتظار دلوقتي. اطمن — لو انت داخل طابور، دورك متسجّل عند الصالون وما اتغيرش.",
+      "openLastBooking": "افتح آخر حجز شوفته",
+      "tipsTitle": "جرّب الحاجات دي:",
+      "tipData": "اتأكد إن بيانات الموبايل أو الواي فاي شغّالين",
+      "tipAirplane": "قفل وضع الطيران لو مفتوح"
+    },
+    "queue": {
+      "progress": {
+        "joined": "دخلت الطابور",
+        "almost": "قرّب دورك",
+        "yourTurn": "دورك دلوقتي"
+      },
+      "ahead": "{count, plural, =0 {محدش قدامك} =1 {فاضلك واحد بس} =2 {قدامك {n}} other {قدامك {n} أنفار}}",
+      "expected": "الوقت المتوقع",
+      "approxShort": "~ {n} د",
+      "leaveAt": "تتحرك الساعة",
+      "leaveAtNow": "دلوقتي",
+      "distance": "المسافة",
+      "liveNow": "اللي شغّال دلوقتي",
+      "onShift": "{names} في الشيفت",
+      "listTwo": "{a} و{b}",
+      "listSeparator": "، ",
+      "servicesJoiner": " + ",
+      "moveNowTitle": "اتحرّك دلوقتي",
+      "moveNowBody": "المشوار {travel} دقايق — دورك بعد {wait} دقايق",
+      "openDirections": "افتح الاتجاهات للصالون",
+      "leave": "اطلع من الطابور",
+      "leaveDialog": {
+        "title": "تطلع من الطابور؟",
+        "body": "دورك رقم {n} هيروح لحد تاني ومش هينفع ترجعه. لو دخلت تاني هتبدأ من آخر الطابور.",
+        "note": "الخروج المتكرر من الطوابير بيقلّل تقييم الالتزام بتاعك.",
+        "confirm": "أيوه، اطلعني",
+        "stay": "خليني في الطابور"
+      },
+      "yourTurn": {
+        "title": "حان دورك",
+        "barberWaiting": "ادخل على الكرسي — {barber} مستنيك",
+        "anyBarber": "ادخل على الكرسي — الحلاق مستنيك",
+        "number": "رقمك",
+        "timeLeft": "فاضلك",
+        "graceNote": "لو ما حضرتش خلال {n} دقايق، دورك هيتأخر مركز واحد",
+        "graceNoteFinal": "لو ما حضرتش خلال {n} دقايق، الحجز هيتلغي",
+        "atSalon": "أنا في المحل",
+        "postpone": "أنا جاي — أجّلني واحد",
+        "postponeUsed": "استخدمت التأجيل قبل كده"
+      },
+      "postponedToast": "أجّلناك مركز واحد — فاضلك واحد",
+      "inServiceTitle": "انت على الكرسي",
+      "inServiceBody": "نعيماً مقدماً! أول ما تخلص هنطلب منك تقيّم زيارتك.",
+      "completedTitle": "نعيماً!",
+      "completedBody": "خلصت في {salon}. رأيك بيساعد غيرك يختار صح.",
+      "rate": "قيّم زيارتك",
+      "cancelledTitle": "خرجت من الطابور",
+      "cancelledBody": "دورك راح لحد تاني. تقدر تحجز تاني في أي وقت.",
+      "missedTitle": "دورك فاتك",
+      "missedBody": "ما حضرتش في الوقت فالحجز اتلغى. تقدر تدخل الطابور تاني.",
+      "bookAgain": "احجز تاني",
+      "errors": {
+        "offline": "محتاج نت عشان تعمل ده.",
+        "notYourTurn": "لسه مجاش دورك.",
+        "postponeUsed": "استخدمت التأجيل مرة قبل كده.",
+        "finished": "الحجز ده خلص خلاص."
+      },
+      "cancel": "الغي الحجز",
+      "cancelDialog": {
+        "title": "تلغي الحجز؟",
+        "body": "معادك {time} هيتفتح لغيرك.",
+        "confirm": "أيوه، الغيه",
+        "keep": "خليه"
+      },
+      "bookingCancelledTitle": "الحجز اتلغى",
+      "bookingCancelledBody": "المعاد اتفتح لغيرك. تقدر تحجز معاد تاني في أي وقت.",
+      "durationLabel": "مدة الخدمة"
+    },
+    "screens": {
+      "home": "الرئيسية",
+      "bookings": "حجوزاتي",
+      "search": "البحث",
+      "bookingSlot": "امتى تحب تيجي؟",
+      "bookingBarber": "اختار الحلاق",
+      "bookingReview": "راجع الحجز",
+      "bookingConfirmed": "تمام — انت في الطابور",
+      "queue": "دورك",
+      "rateVisit": "قيّم زيارتك",
+      "ratingSent": "شكراً — تقييمك اتبعت",
+      "notifications": "الإشعارات",
+      "favorites": "الصالونات المفضّلة",
+      "profile": "بياناتي الشخصية",
+      "notificationSettings": "الإشعارات",
+      "language": "اللغة",
+      "help": "المساعدة والدعم",
+      "salon": "صفحة الصالون",
+      "salonGallery": "صور الصالون",
+      "salonPhoto": "الصورة",
+      "login": "تسجيل الدخول",
+      "register": "اعمل حسابك في دقيقة",
+      "otp": "اكتب كود التأكيد",
+      "forgotPassword": "نسيت كلمة السر",
+      "account": "حسابي"
+    },
+    "comingSoon": {
+      "title": "الشاشة دي لسه بتتبني"
+    },
+    "onboarding": {
+      "skip": "تخطّي",
+      "brand": "بالتدريج",
+      "s1Title": "الحلاقين اللي جنبك\nكلهم في مكان واحد",
+      "s1Body": "دوّر على أقرب صالون لبيتك أو لشغلك، وشوف أسعاره وخدماته وتقييم الزباين قبل ما تتحرك.",
+      "s1Cta": "يلا نبدأ",
+      "s2Title": "استنى دورك\nوانت في مكانك",
+      "s2Body": "ادخل الطابور من موبايلك، وشوف فاضلك كام واحد والوقت المتوقع لحظة بلحظة. هنبعتلك إشعار وانت لسه فاضلك اتنين.",
+      "s2Cta": "كمّل",
+      "s3Title": "اختار الصنايعي\nواعرف الحساب من الأول",
+      "s3Body": "كل خدمة سعرها ومدتها واضحين، وتقدر تختار الحلاق اللي بتحبه بالاسم. من غير مفاجآت آخر الحلاقة.",
+      "s3Cta": "ادخل على الصالونات",
+      "s3Login": "عندي حساب — تسجيل الدخول",
+      "page": "صفحة {page} من {total}",
+      "art": {
+        "queueNumber": "دورك رقم",
+        "peopleLeft": "{count, plural, =0 {مفيش حد قدامك} =1 {فاضلك واحد بس} other {فاضلك {n} أنفار}}"
+      }
+    },
+    "auth": {
+      "browseAsGuest": "تصفّح من غير حساب",
+      "loginTitle": "أهلاً بيك تاني",
+      "loginSubtitle": "سجّل دخولك عشان تتابع دورك وحجوزاتك.",
+      "tabEmail": "بالبريد الإلكتروني",
+      "tabPhone": "برقم الموبايل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة السر",
+      "phone": "رقم الموبايل",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العيلة",
+      "emailPlaceholder": "karim@example.com",
+      "forgotPassword": "نسيت كلمة السر؟",
+      "loginSubmit": "دخول",
+      "or": "أو",
+      "continueGoogle": "المتابعة بحساب Google",
+      "continueApple": "المتابعة بحساب Apple",
+      "noAccount": "لسه معندكش حساب؟",
+      "createOne": "اعمل واحد دلوقتي",
+      "otpNotice": "هنبعتلك كود تأكيد في رسالة على نفس الرقم.",
+      "sendOtp": "ابعت كود التأكيد",
+      "phoneError": "الرقم لازم يكون ١١ رقم ويبدأ بـ ٠١٠ أو ٠١١ أو ٠١٢ أو ٠١٥",
+      "emailError": "اكتب بريد إلكتروني صحيح",
+      "required": "الحقل ده مطلوب",
+      "registerTitle": "اعمل حسابك في دقيقة",
+      "registerSubtitle": "الحساب بيخليك تدخل الطابور وتتابع دورك وتقيّم الخدمة.",
+      "ruleLength": "{count} حروف على الأقل",
+      "ruleDigit": "رقم واحد على الأقل",
+      "termsPrefix": "موافق على ",
+      "terms": "شروط الاستخدام",
+      "and": " و ",
+      "privacy": "سياسة الخصوصية",
+      "termsSuffix": " بتاعة بالتدريج.",
+      "termsRequired": "لازم توافق على الشروط عشان تكمل",
+      "registerSubmit": "اعمل الحساب",
+      "orSignUpWith": "أو سجّل بـ",
+      "haveAccount": "عندك حساب قبل كده؟",
+      "signIn": "سجّل دخولك",
+      "otpTitle": "اكتب كود التأكيد",
+      "otpSentTo": "بعتنالك كود من {length} أرقام في رسالة على الرقم",
+      "changeNumber": "غيّر الرقم",
+      "resendIn": "تقدر تطلب كود جديد بعد {time}",
+      "confirm": "تأكيد",
+      "otpHelp": "ما وصلكش الكود؟ اتأكد إن الرقم مظبوط وإن الشبكة شغّالة.",
+      "otpWrongTitle": "الكود مش مظبوط",
+      "otpWrongSubtitle": "راجع الأرقام تاني، أو اطلب كود جديد على",
+      "attemptsLeft": "{count, plural, =1 {فاضلك محاولة واحدة قبل ما نقفل الطلب مؤقتاً} =2 {فاضلك محاولتين قبل ما نقفل الطلب مؤقتاً} other {فاضلك {n} محاولات قبل ما نقفل الطلب مؤقتاً}}",
+      "otpLocked": "وقفنا المحاولات مؤقتاً. جرّب تاني بعد {minutes} دقايق.",
+      "resend": "ابعتلي كود جديد",
+      "resent": "بعتنالك كود جديد",
+      "otpCode": "كود التأكيد",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة السر مش مظبوطين",
+      "phoneNotRegistered": "الرقم ده مش متسجّل. اعمل حساب جديد في دقيقة.",
+      "phoneTaken": "الرقم ده عليه حساب بالفعل. سجّل دخولك بيه.",
+      "network": "مفيش اتصال بالنت.",
+      "generic": "حصلت مشكلة. جرّب تاني بعد شوية.",
+      "nameShort": "الاسم قصير أوي",
+      "passwordShort": "كلمة السر لازم تكون {n} حروف على الأقل",
+      "passwordDigit": "كلمة السر لازم يكون فيها رقم واحد على الأقل",
+      "forgotSubtitle": "اكتب رقم موبايلك وهنبعتلك كود تعمل بيه كلمة سر جديدة.",
+      "newPasswordTitle": "اعمل كلمة سر جديدة",
+      "newPasswordSubtitle": "هتدخل بيها من هنا ورايح، والأجهزة التانية هتخرج من حسابك.",
+      "newPassword": "كلمة السر الجديدة",
+      "savePassword": "احفظ كلمة السر",
+      "passwordChanged": "غيّرنا كلمة السر ودخّلناك"
+    },
+    "home": {
+      "nearCaption": "بنعرضلك اللي قريب من",
+      "areaWithCity": "{area}، {city}",
+      "searchHint": "دوّر باسم الصالون أو الخدمة",
+      "availableNow": "تقدر تدخل دلوقتي",
+      "recommended": "مرشّح ليك",
+      "newInArea": "جديد في منطقتك",
+      "lastSeen": "آخر صالونات شوفتها",
+      "seeAll": "شوف الكل",
+      "areaEmptyTitle": "لسه مفيش صالونات هنا",
+      "areaEmptyBody": "بنضيف صالونات جديدة في {area} قريب. جرّب منطقة قريبة منك.",
+      "changeArea": "غيّر المنطقة",
+      "loadErrorTitle": "مش قادرين نحمّل الصالونات"
+    },
+    "sort": {
+      "leastWait": "أقل انتظار دلوقتي",
+      "nearest": "الأقرب ليك",
+      "topRated": "الأعلى تقييماً",
+      "cheapest": "أرخص سعر",
+      "newest": "أحدث الصالونات"
+    },
+    "salonLabels": {
+      "freeNow": "فاضي دلوقتي",
+      "freeWalkIn": "فاضي دلوقتي — ادخل على طول",
+      "pinLeft": "{count, plural, =1 {فاضل {n} بس} other {فاضل {n}}}",
+      "peopleMinutes": "{count, plural, =1 {فاضل {n} — استنى ~{min} د} other {فاضل {n} أنفار — استنى ~{min} د}}",
+      "peopleHour": "{count, plural, =1 {فاضل {n} — استنى ~ساعة} other {فاضل {n} أنفار — استنى ~ساعة}}",
+      "opensToday": "بيفتح الساعة {time}",
+      "opensTomorrow": "بيفتح بكرة {time}",
+      "opensOn": "بيفتح {day} {time}",
+      "openedDays": "{count, plural, =0 {فتح النهارده} =1 {فتح امبارح} =2 {فتح من يومين} other {فتح من {n} أيام}}",
+      "openedWeeks": "{count, plural, =1 {فتح من أسبوع} =2 {فتح من أسبوعين} other {فتح من {n} أسابيع}}",
+      "from": "من"
+    },
+    "area": {
+      "title": "اختار المنطقة",
+      "searchHint": "دوّر على منطقة",
+      "useLocation": "استخدم موقعي الحالي",
+      "useLocationHint": "هنطلب إذن الموقع مرة واحدة",
+      "nearby": "مناطق قريبة منك",
+      "others": "مناطق تانية في {city}",
+      "salonsCount": "{count, plural, =1 {صالون واحد} =2 {صالونين} few {{n} صالونات} other {{n} صالون}}",
+      "confirm": "أكّد المنطقة",
+      "located": "حددنا منطقتك: {area}"
+    },
+    "salon": {
+      "tabServices": "الخدمات",
+      "tabBarbers": "الحلاقين",
+      "tabOffers": "العروض",
+      "tabReviews": "التقييمات",
+      "tabHours": "المواعيد",
+      "photosCount": "{count, plural, =1 {صورة واحدة} =2 {صورتين} few {{n} صور} other {{n} صورة}}",
+      "video": "فيديو",
+      "reviewsWithCount": "{count, plural, =1 {(تقييم واحد)} other {({n} تقييم)}}",
+      "freeNoQueue": "فاضي دلوقتي — مفيش دور",
+      "closedNow": "مقفول دلوقتي",
+      "chairs": "{count, plural, =1 {كرسي واحد شغّال} =2 {كرسيين شغّالين} other {{n} كراسي شغّالة}}",
+      "barbersOnShift": "{count, plural, =0 {مفيش حلاقين في الشيفت} =1 {حلاق واحد في الشيفت} other {{n} حلاقين في الشيفت}}",
+      "directions": "الاتجاهات",
+      "call": "اتصل",
+      "duration": "{n} دقيقة",
+      "barberAhead": "قدامه {n} — ~{min} د",
+      "barberOff": "إجازة النهارده — بيرجع {day}",
+      "years": "{count, plural, =1 {سنة خبرة} =2 {سنتين خبرة} few {{n} سنين خبرة} other {{n} سنة خبرة}}",
+      "barberNamedNote": "لو اخترت حلاق بالاسم هتستنى في طابوره لوحده. أسرع حاجة إنك تسيبها \"أي حلاق متاح\".",
+      "offersHeader": "عروض شغّالة دلوقتي",
+      "offerExpires": "{count, plural, =0 {ينتهي النهارده} =1 {ينتهي بكرة} =2 {ينتهي بعد يومين} other {ينتهي بعد {n} أيام}}",
+      "bundleSaving": "بدل <s>{original}</s> — توفّر {saving}",
+      "loyaltyProgress": "عندك {done} من {target} زيارات",
+      "reviewsTotal": "{count, plural, =1 {تقييم واحد} =2 {تقييمين} few {{n} تقييمات} other {{n} تقييم}}",
+      "quality": "جودة القصة",
+      "cleanliness": "النظافة",
+      "timeAccuracy": "دقة الوقت",
+      "filterAll": "الكل",
+      "filterFive": "{n} نجوم",
+      "filterPhotos": "فيه صور",
+      "reviewsEmpty": "لسه مفيش تقييمات على الصالون ده.",
+      "reviewsFilterEmpty": "مفيش تقييمات بالفلتر ده.",
+      "salonReply": "رد الصالون",
+      "hoursHeader": "مواعيد العمل",
+      "openNow": "مفتوح دلوقتي",
+      "today": "النهارده — {day}",
+      "dayOff": "إجازة",
+      "hoursRange": "{from} — {to}",
+      "selection": "{count, plural, =0 {اختار خدمة} =1 {خدمة واحدة} =2 {خدمتين} few {{n} خدمات} other {{n} خدمة}}",
+      "joinQueue": "ادخل الطابور",
+      "notFoundTitle": "الصالون ده مش موجود",
+      "notFoundBody": "ممكن يكون اتقفل أو الرابط مش مظبوط.",
+      "backHome": "ارجع للرئيسية",
+      "shareText": "شوف {salon} على بالتدريج: {link}"
+    },
+    "gallery": {
+      "title": "صور {salon}",
+      "videosCount": "{count, plural, =1 {فيديو واحد} =2 {فيديوهين} other {{n} فيديو}}",
+      "filterAll": "الكل {n}",
+      "filterWork": "شغل الحلاقين {n}",
+      "filterPlace": "المكان {n}",
+      "filterVideo": "فيديو {n}",
+      "reviewPhotos": "صور من تقييمات الزباين",
+      "more": "+{n}",
+      "counter": "{index} / {total}"
+    },
+    "booking": {
+      "barber": {
+        "anyTitle": "أي حلاق متاح",
+        "fastest": "الأسرع",
+        "anySubtitle": "أول واحد يخلّص هيستلمك",
+        "immediate": "فوراً",
+        "noQueue": "مفيش دور",
+        "free": "فاضي",
+        "approx": "{n} د",
+        "extra": "{n} د",
+        "aheadOfYou": "قدامك {n}",
+        "aheadOfBarber": "قدامه {n}",
+        "offToday": "مش موجود النهارده",
+        "byName": "أو اختار حلاق بالاسم",
+        "continue": "كمّل — راجع الحجز",
+        "anySlotSubtitle": "هنختارلك حلاق فاضي في المعاد ده",
+        "busyAtSlot": "مش فاضي في المعاد ده"
+      },
+      "incompleteTitle": "الحجز لسه مش كامل",
+      "incompleteBody": "اختار خدماتك ومعادك من صفحة الصالون الأول.",
+      "backToSalon": "ارجع للصالون",
+      "review": {
+        "services": "الخدمات",
+        "barber": "الحلاق",
+        "change": "غيّر",
+        "drive": "{km} — {minutes} دقايق بالعربية",
+        "waitRange": "دورك خلال {min} لـ {max} دقيقة",
+        "waitRightIn": "هتدخل على طول",
+        "aheadAndDuration": "{count, plural, =0 {محدش قدامك} =1 {قدامك {n} بس} other {قدامك {n}}} · مدة خدمتك {minutes} دقيقة",
+        "liveNote": "الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة.",
+        "policy": "لما يجي دورك عندك {n} دقايق تحضر. لو ما حضرتش، دورك بيتأخر مركز واحد وبعدها بيتلغى.",
+        "subtotal": "مجموع الخدمات",
+        "bundle": "خصم الباقة",
+        "total": "الإجمالي",
+        "cash": "الدفع كاش في الفرع بعد الخدمة",
+        "confirm": "أكّد ودخّلني الطابور",
+        "time": "المعاد",
+        "timingNow": "دلوقتي — في الطابور",
+        "slotDateTime": "{day} الساعة {time}",
+        "slotTitle": "معادك {day} الساعة {time}",
+        "arriveNote": "تعالى قبل معادك بـ {n} دقايق عشان تلحق دورك.",
+        "policySlot": "لو اتأخرت أكتر من {n} دقايق عن معادك، الحجز بيتلغى.",
+        "confirmSlot": "أكّد الحجز"
+      },
+      "errors": {
+        "barberUnavailable": "الحلاق ده مش متاح — اختار حلاق تاني.",
+        "salonClosed": "الصالون قفل — احجز معاد بدل الطابور.",
+        "alreadyInQueue": "انت في طابور دلوقتي. تابع دورك الأول.",
+        "generic": "حصلت مشكلة. جرّب تاني بعد شوية.",
+        "loadFailed": "معرفناش نجيب الحجز.",
+        "slotTaken": "المعاد ده لسه اتحجز — اختار معاد تاني."
+      },
+      "pickBarber": "اختار حلاق",
+      "trackTurn": "تابع دورك",
+      "retry": "جرّب تاني",
+      "backHome": "ارجع للرئيسية",
+      "confirmed": {
+        "ticket": "رقم دورك",
+        "ahead": "قدامك",
+        "aheadCount": "{count, plural, =0 {محدش} =1 {{n} واحد} other {{n} أنفار}}",
+        "expected": "الوقت المتوقع",
+        "approx": "~ {n} دقيقة",
+        "note": "هنبعتلك إشعار لما يفضل قدامك واحد، وبعدين لما يجي دورك.",
+        "slotTitle": "تمام — حجزك اتأكد",
+        "appointment": "معادك",
+        "slotNote": "هنفكّرك قبل معادك بساعة."
+      },
+      "slot": {
+        "nowTitle": "دلوقتي — ادخل الطابور",
+        "nowWait": "{count, plural, =0 {مفيش دور — هتدخل على طول} =1 {قدامك {n} بس · {min} د} other {قدامك {n} · {min} د}}",
+        "nowClosed": "الصالون مقفول دلوقتي — احجز معاد",
+        "scheduleTitle": "احجز معاد",
+        "scheduleSubtitle": "اختار اليوم والساعة اللي تناسبك",
+        "today": "النهارده",
+        "tomorrow": "بكرة",
+        "dayClosed": "الصالون أجازة اليوم ده — اختار يوم تاني.",
+        "dayFull": "مفيش مواعيد فاضية اليوم ده — جرّب يوم تاني.",
+        "loadFailed": "معرفناش نجيب المواعيد.",
+        "morning": "الصبح",
+        "afternoon": "بعد الضهر",
+        "evening": "بالليل",
+        "taken": "{time}، محجوز",
+        "duration": "مدة خدماتك {n} دقيقة",
+        "continue": "كمّل — اختار الحلاق"
+      },
+      "pickTime": "اختار معاد"
+    },
+    "bookings": {
+      "tabCurrent": "الحالية",
+      "tabPast": "السابقة",
+      "activeNow": "دورك شغّال دلوقتي",
+      "yourNumber": "رقمك",
+      "left": "فاضلك",
+      "aheadWait": "{count, plural, =0 {محدش} =1 {{n} واحد} other {{n} أنفار}}",
+      "approx": "~ {n} دقيقة",
+      "withBarber": "مع {barber}",
+      "upcomingBadge": "معاد محجوز",
+      "details": "تفاصيل الحجز",
+      "cancel": "إلغاء",
+      "notifyNote": "هنبعتلك إشعار لما يفضل قدامك اتنين، وبعدين واحد، وبعدين لما يجي دورك.",
+      "done": "خدمة تمّت",
+      "missedBadge": "اتلغى — ما حضرتش",
+      "cancelledBadge": "اتلغى",
+      "missedReason": "عدّى وقت الاستدعاء بـ {n} دقايق",
+      "rateBarberAndSalon": "قيّم {barber} والصالون",
+      "rateSalon": "قيّم زيارتك",
+      "rateNow": "قيّم دلوقتي",
+      "yourRating": "تقييمك",
+      "rebook": "احجز تاني بنفس الاختيارات",
+      "emptyTitle": "لسه ما حجزتش أي حاجة",
+      "emptyBody": "أول ما تدخل طابور صالون، هتلاقي دورك ورقمك والوقت المتوقع هنا على طول.",
+      "emptyCta": "دوّر على صالون قريب منك",
+      "pastEmptyTitle": "مفيش زيارات سابقة",
+      "pastEmptyBody": "زياراتك اللي خلصت هتظهر هنا، وتقدر تقيّمها أو تحجز تاني بضغطة.",
+      "loadFailed": "معرفناش نجيب حجوزاتك.",
+      "pastDate": "{date} — {time}"
+    },
+    "search": {
+      "hint": "دوّر باسم الصالون",
+      "filter": "فلترة وترتيب",
+      "recent": "آخر ما دوّرت عليه",
+      "clearAll": "امسح الكل",
+      "nearbyNow": "قريب منك دلوقتي",
+      "resultsCount": "{count, plural, =1 {صالون واحد} other {{n} صالونات}}",
+      "resultsForQuery": "{count, plural, =1 {صالون واحد فيه \"{query}\"} other {{n} صالونات فيها \"{query}\"}}",
+      "withinKm": "داخل {n} كم",
+      "noResultsTitle": "مفيش صالون بالاسم ده",
+      "noResultsBody": "ما لقيناش \"{query}\" في {area}. جرّب تشيل الفلاتر أو تدوّر باسم تاني.",
+      "noFilterResultsTitle": "مفيش صالونات بالفلاتر دي",
+      "noFilterResultsBody": "جرّب تشيل فلتر أو توسّع نطاق البحث.",
+      "clearFiltersShowAll": "امسح الفلاتر واعرض كل الصالونات",
+      "expandRadius": "وسّع نطاق البحث لـ {n} كم",
+      "didYouMean": "يمكن تكون بتقصد",
+      "sortBy": "رتّب النتايج بـ",
+      "service": "الخدمة اللي عايزها",
+      "availableOn": "متاح في يوم",
+      "price": "السعر",
+      "openNow": "مفتوح دلوقتي بس",
+      "openNowHint": "اخفي الصالونات المقفولة",
+      "showResults": "{count, plural, =0 {مفيش نتايج} =1 {اعرض نتيجة واحدة} other {اعرض {n} نتايج}}",
+      "dayChip": "{day} {date}",
+      "priceRange": "{min} – {max}",
+      "services": {
+        "haircut": "قصة شعر",
+        "beard": "حلاقة دقن",
+        "kids": "حلاقة أطفال",
+        "color": "صبغة",
+        "skincare": "عناية بالبشرة"
+      },
+      "priceFor": "{service} {price}"
+    },
+    "account": {
+      "edit": "عدّل",
+      "statCuts": "حلاقة خلصتها",
+      "statFavorites": "صالونات مفضّلة",
+      "groupAccount": "حسابي",
+      "groupApp": "التطبيق",
+      "groupHelp": "مساعدة",
+      "rowProfile": "بياناتي الشخصية",
+      "rowBookings": "حجوزاتي",
+      "rowFavorites": "الصالونات المفضّلة",
+      "rowNotifications": "الإشعارات",
+      "rowHelp": "المساعدة والدعم",
+      "activeValue": "{count, plural, =1 {{n} نشط} other {{n} نشطين}}",
+      "signOut": "تسجيل الخروج",
+      "version": "بالتدريج — نسخة {version}",
+      "signOutDialog": {
+        "title": "تسجيل الخروج؟",
+        "bodyInQueue": "عندك دور شغّال في {salon}. لو خرجت مش هتوصلك إشعارات الدور، بس الدور نفسه هيفضل محجوز باسمك.",
+        "body": "هتحتاج تسجّل دخول تاني عشان تدخل طابور أو تشوف حجوزاتك.",
+        "confirm": "اخرج من الحساب",
+        "cancel": "خليني فاضل"
+      },
+      "guest": {
+        "title": "انت بتتصفّح كضيف",
+        "body": "سجّل دخولك عشان تدخل الطوابير وتتابع دورك",
+        "cta": "سجّل دخول أو اعمل حساب",
+        "lockedHeader": "اللي محتاج حساب",
+        "availableHeader": "متاح من غير حساب",
+        "locked": "مقفول",
+        "lockedQueue": "دخول الطابور ومتابعة دورك",
+        "lockedBookings": "سجل حجوزاتك",
+        "lockedFavorites": "الصالونات المفضّلة",
+        "lockedRating": "تقييم الصالونات",
+        "allowedBrowse": "تصفّح الصالونات والأسعار",
+        "allowedWait": "شوف طول الطابور الحالي"
+      }
+    },
+    "rate": {
+      "later": "بعدين",
+      "overallQuestion": "إيه رأيك في الخدمة؟",
+      "labels": {
+        "l1": "وحش",
+        "l2": "مش أحسن حاجة",
+        "l3": "كويس",
+        "l4": "حلو جداً",
+        "l5": "ممتاز"
+      },
+      "detailsHeader": "قيّم التفاصيل",
+      "quality": "جودة القصة",
+      "cleanliness": "نظافة المكان",
+      "timeAccuracy": "دقة الوقت المتوقع",
+      "timeAccuracyNote": "التطبيق قال {quoted} د واستنيت {actual} د",
+      "tagsHeader": "إيه اللي عجبك؟",
+      "tags": {
+        "lightHand": "ايده خفيفة",
+        "cleanPlace": "المكان نضيف",
+        "respectful": "معاملة محترمة",
+        "fairPrice": "السعر مناسب",
+        "accurateQueue": "الدور كان دقيق"
+      },
+      "commentLabel": "تحب تضيف كلمة؟",
+      "commentHint": "اكتب رأيك عشان تساعد اللي بعدك…",
+      "addPhoto": "ضيف صورة للقصة",
+      "addAnotherPhoto": "ضيف صورة تانية",
+      "fromCamera": "صوّر دلوقتي",
+      "fromGallery": "اختار من الصور",
+      "photoFailed": "معرفناش نفتح الكاميرا أو الصور.",
+      "anonymous": "انشر التقييم باسم مستعار",
+      "submit": "ابعت التقييم",
+      "notAvailableTitle": "التقييم لسه مش متاح",
+      "notAvailableBody": "تقدر تقيّم الزيارة بعد ما الخدمة تخلص.",
+      "sent": {
+        "title": "شكراً — تقييمك اتبعت",
+        "body": "رأيك هيساعد ناس تانية تختار صح، وهيظهر على صفحة الصالون خلال ساعة.",
+        "yourRating": "تقييمك",
+        "favoriteTitle": "تضيفه للمفضلة؟",
+        "favoriteBody": "هنقولك لما يبقى فاضي في وقتك المعتاد",
+        "favoriteCta": "ضيفه للمفضلة",
+        "favoriteAdded": "اتضاف للمفضلة",
+        "home": "تمام، ارجعني للرئيسية"
+      }
+    },
+    "notifications": {
+      "markAllRead": "علّم الكل كمقروء",
+      "groups": {
+        "today": "النهارده",
+        "thisWeek": "الأسبوع ده",
+        "earlier": "أقدم"
+      },
+      "unread": "غير مقروء",
+      "emptyTitle": "مفيش إشعارات لسه",
+      "emptyBody": "أول ما تدخل طابور، هنبعتلك هنا كل تحديث لدورك وأي عروض من الصالونات اللي بتحبها.",
+      "emptyCta": "دوّر على صالون",
+      "loadFailed": "معرفناش نجيب الإشعارات."
+    },
+    "favorites": {
+      "subtitle": "{count, plural, =1 {صالون واحد} =2 {صالونين} other {{n} صالونات}} · مرتّبة بأقل انتظار",
+      "joinQueue": "ادخل الطابور",
+      "viewSalon": "شوف الصالون",
+      "notifyNote": "بنبعتلك إشعار لما صالون مفضّل عندك يبقى فاضي في وقت بتروح فيه عادةً.",
+      "emptyTitle": "مفيش صالونات مفضّلة",
+      "emptyBody": "دوس على القلب في أي صالون عشان يتحفظ هنا، وتقدر تشوف دوره وتدخل بضغطة واحدة.",
+      "emptyCta": "اكتشف صالونات قريبة",
+      "loadFailed": "معرفناش نجيب المفضلة."
+    },
+    "profile": {
+      "changePhoto": "غيّر الصورة",
+      "photoNotSupported": "الصورة بتتغيّر من التقييمات دلوقتي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العيلة",
+      "nameRequired": "اكتب اسمك",
+      "phone": "رقم الموبايل",
+      "verified": "متأكّد",
+      "phoneIsIdentity": "الرقم هو هويتك في بالتدريج",
+      "changePhone": "غيّر الرقم",
+      "email": "البريد الإلكتروني",
+      "birthDate": "تاريخ الميلاد",
+      "birthDateNote": "بنستخدمه عشان نبعتلك عرض في عيد ميلادك",
+      "area": "المنطقة",
+      "save": "احفظ التعديلات",
+      "saved": "اتحفظت التعديلات",
+      "delete": "امسح حسابي",
+      "deleteDialog": {
+        "title": "تمسح حسابك؟",
+        "body": "هنمسح بياناتك وحجوزاتك وتقييماتك، ومش هينفع نرجّعها. لو عندك دور شغّال هيتلغى.",
+        "confirm": "أيوه، امسح حسابي",
+        "cancel": "خليه"
+      }
+    },
+    "notificationSettings": {
+      "groupQueue": "إشعارات الدور",
+      "queueUpdates": "تحديثات الطابور",
+      "queueUpdatesBody": "فاضلك اتنين · فاضلك واحد · حان دورك",
+      "alwaysOn": "دايماً شغّالة",
+      "queueLockedNote": "مش هينفع تقفلها — من غيرها مش هتعرف إمتى جه دورك وهتخسره.",
+      "groupOffers": "العروض والتذكيرات",
+      "favoriteOffers": "عروض الصالونات المفضّلة",
+      "favoriteOffersBody": "خصومات وباقات جديدة",
+      "favoriteFree": "صالون مفضّل بقى فاضي",
+      "favoriteFreeBody": "في الأوقات اللي بتروح فيها عادةً",
+      "rateReminder": "ذكّرني أقيّم الزيارة",
+      "newSalons": "عروض صالونات جديدة قريبة مني",
+      "groupChannels": "قنوات الإرسال",
+      "push": "إشعارات التطبيق",
+      "pushBody": "الأسرع والأدق",
+      "sms": "رسايل نصية",
+      "smsBody": "احتياطي لو التطبيق مقفول"
+    },
+    "help": {
+      "searchHint": "دوّر على مشكلتك",
+      "liveTitle": "عندك مشكلة في دور دلوقتي؟",
+      "liveBody": "بنرد خلال {mins} دقايق من {from} ص لـ {to} ص",
+      "faqHeader": "أكتر أسئلة بتتسأل",
+      "contactHeader": "كلّمنا",
+      "aboutHeader": "عن التطبيق",
+      "callUs": "اتصل بينا",
+      "callUsValue": "{number} · من {from} ص لـ {to} ص",
+      "terms": "شروط الاستخدام",
+      "privacy": "سياسة الخصوصية",
+      "version": "نسخة التطبيق",
+      "noResults": "مفيش نتيجة للي دوّرت عليه. كلّمنا وهنساعدك.",
+      "faq": {
+        "cancelledWhileThere": {
+          "q": "دوري اتلغى وأنا في المحل — أعمل إيه؟",
+          "a": "قول للريسيبشن يدوس \"حاضر\" من شاشة الصالون. لو الدور اتلغى فعلاً، كلّمنا من هنا وهندخّلك تاني في نفس المكان لو الصالون أكّد إنك كنت موجود."
+        },
+        "wrongEstimate": {
+          "q": "الوقت المتوقع طلع غلط",
+          "a": "الوقت تقديري وبيتحدّث لحظياً حسب الكراسي الشغّالة. قيّم \"دقة الوقت المتوقع\" بعد الزيارة — ده اللي بيأثر على ترتيب الصالونات."
+        },
+        "noTurnAlert": {
+          "q": "ما وصلنيش إشعار \"حان دورك\"",
+          "a": "اتأكد إن إشعارات التطبيق مفتوحة من إعدادات الموبايل، وإن شاشة الدور مفتوحة وقت ما تكون قريب. الرسايل النصية احتياطي لو التطبيق مقفول."
+        },
+        "leaveQueue": {
+          "q": "إزاي أطلع من الطابور؟",
+          "a": "من شاشة \"دورك\" دوس \"اطلع من الطابور\". دورك هيروح لحد تاني ومش هينفع ترجعه، ولو دخلت تاني هتبدأ من آخر الطابور."
+        },
+        "priceMismatch": {
+          "q": "الصالون حاسبني غير السعر المكتوب",
+          "a": "الأسعار اللي في التطبيق هي اللي الصالون كاتبها. لو حاسبك غير كده، ابعتلنا من هنا بصورة الفاتورة وإحنا بنراجع مع الصالون."
+        },
+        "changePhone": {
+          "q": "إزاي أغيّر رقم موبايلي؟",
+          "a": "الرقم هو هويتك في بالتدريج، فتغييره بيحتاج تأكيد برقم جديد. كلّمنا وهنعمله معاك، وحجوزاتك وتقييماتك هتنتقل زي ما هي."
+        }
+      }
+    }
+  }
+}
