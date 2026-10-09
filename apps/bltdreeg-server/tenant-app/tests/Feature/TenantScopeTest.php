@@ -2,6 +2,7 @@
 
 use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Tenancy\Support\TenantContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,8 +19,11 @@ test('service queries are scoped to the current tenant', function () {
         'is_active' => true,
     ]);
 
+    $branchA = Branch::factory()->create(['tenant_id' => $tenantA->id]);
+
     $inA = Service::withoutGlobalScopes()->create([
         'tenant_id' => $tenantA->id,
+        'branch_id' => $branchA->id,
         'category_id' => $categoryA->id,
         'name' => 'Cut',
         'duration' => 30,
@@ -33,8 +37,11 @@ test('service queries are scoped to the current tenant', function () {
         'is_active' => true,
     ]);
 
+    $branchB = Branch::factory()->create(['tenant_id' => $tenantB->id]);
+
     Service::withoutGlobalScopes()->create([
         'tenant_id' => $tenantB->id,
+        'branch_id' => $branchB->id,
         'category_id' => $categoryB->id,
         'name' => 'Manicure',
         'duration' => 40,

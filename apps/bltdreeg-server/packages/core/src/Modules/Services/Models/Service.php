@@ -2,11 +2,13 @@
 
 namespace Bltdreeg\Core\Modules\Services\Models;
 
+use Bltdreeg\Core\Concerns\BelongsToBranch;
 use Bltdreeg\Core\Concerns\BelongsToTenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
 use Bltdreeg\Core\Modules\Services\Database\Factories\ServiceFactory;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,10 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\Attributes\Translatable;
 use Spatie\Translatable\HasTranslations;
 
-#[Fillable(['tenant_id', 'category_id', 'catalog_service_id', 'name', 'description', 'duration', 'price', 'currency', 'is_active'])]
+#[Fillable(['tenant_id', 'branch_id', 'category_id', 'catalog_service_id', 'name', 'description', 'duration', 'price', 'currency', 'is_active'])]
 #[Translatable('name', 'description')]
 class Service extends Model
 {
+    use BelongsToBranch;
     use BelongsToTenant;
     use HasFactory;
     use HasTranslations;
@@ -38,6 +41,11 @@ class Service extends Model
             'currency' => CurrencyEnum::class,
             'duration' => 'integer',
         ];
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
     }
 
     public function category(): BelongsTo

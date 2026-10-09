@@ -4,6 +4,7 @@ namespace Bltdreeg\Core\Modules\Services\Database\Factories;
 
 use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,9 @@ class ServiceFactory extends Factory
     {
         return [
             'tenant_id' => Tenant::factory(),
+            'branch_id' => fn (array $attributes) => Branch::factory()->create([
+                'tenant_id' => $attributes['tenant_id'],
+            ])->getKey(),
             'category_id' => ServiceCategory::factory(),
             'name' => fake()->words(2, true),
             'description' => fake()->sentence(),
