@@ -83,7 +83,7 @@ function ShopCard({ shop, notchColor = "var(--background)", className }: ShopCar
           {shop.name}
         </h3>
         <p className="tabular text-xs sm:text-[13px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm, locale)}
+          {shop.cityName} · {formatDistance(shop.distanceKm, locale)}
         </p>
         <Rating value={shop.rating} count={shop.reviewCount} />
       </div>

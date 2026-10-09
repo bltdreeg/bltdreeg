@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
   const filters: ShopFilters = {
     q: p.get("q") ?? undefined,
-    areaId: p.get("area") ?? undefined,
+    cityId: p.get("city") ?? undefined,
     maxPrice: num(p.get("maxPrice")),
     maxDistanceKm: num(p.get("maxDistance")),
     todayOnly: p.get("today") === "true",

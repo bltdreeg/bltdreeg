@@ -25,6 +25,6 @@ class CreateBranch extends CreateRecord
     {
         $data['tenant_id'] = Filament::getTenant()?->getKey();
 
-        return $data;
+        return BranchResource::withResolvedLocation($data);
     }
 }

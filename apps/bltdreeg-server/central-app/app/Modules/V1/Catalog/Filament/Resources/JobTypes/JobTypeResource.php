@@ -19,7 +19,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class JobTypeResource extends Resource
 {
@@ -31,11 +30,14 @@ class JobTypeResource extends Resource
 
     protected static ?string $slug = 'catalog-job-types';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Catalog';
-
     protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.catalog');
+    }
 
     public static function form(Schema $schema): Schema
     {

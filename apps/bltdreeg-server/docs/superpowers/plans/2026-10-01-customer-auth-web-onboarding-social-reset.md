@@ -1,5 +1,7 @@
 # Customer Auth — Onboarding, Location, Reset Password, Social Login — Implementation Plan
 
+> **Superseded in part by `bltdreeg-plan/plan/geo-location/` (decision D10):** customers now confirm governorate / city / area through pre-filled dropdowns. There is **no customer map**, so Task 7b (map picker, `location-picker-map`, `initialPin`, `locationToSave`) is not built, and location is **required**, not skippable. The location step lives at `/onboarding` (`LocationStep`).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Finish customer auth on the web. That means onboarding (with location permission, so the customer's lat/lng is saved for "closest salons" queries), the reset-password page, and Google/Apple sign-in. It also includes the backend fixes these flows need.

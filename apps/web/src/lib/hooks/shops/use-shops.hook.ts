@@ -8,7 +8,7 @@ import { fetcher } from "@/lib/utils/api/fetcher";
 
 const PARAMS: Record<keyof ShopFilters, string> = {
   q: "q",
-  areaId: "area",
+  cityId: "city",
   maxPrice: "maxPrice",
   maxDistanceKm: "maxDistance",
   todayOnly: "today",

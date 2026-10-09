@@ -12,7 +12,6 @@ use App\Modules\V1\Customer\Auth\Otp\OtpService;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
 class MeEmailController extends Controller
 {
@@ -21,29 +20,19 @@ class MeEmailController extends Controller
     ) {}
 
     /**
-     * Resend verification code to the customer's pending email.
+     * Resend the verification code to the customer's (unverified) email.
      */
     public function resend(Request $request): OtpChallengeResource
     {
         /** @var Customer $customer */
         $customer = $request->user();
 
-        if (empty($customer->pending_email)) {
+        if (empty($customer->email) || $customer->email_verified_at !== null) {
             throw new CustomerAuthException('auth.account_not_found', 422);
         }
 
-        $emailTaken = Customer::query()
-            ->where('email', $customer->pending_email)
-            ->where('id', '!=', $customer->id)
-            ->whereNotNull('email_verified_at')
-            ->exists();
-
-        if ($emailTaken) {
-            throw new CustomerAuthException('auth.email_taken', 422);
-        }
-
         $challenge = $this->otpService->issue(
-            identifier: $customer->pending_email,
+            identifier: $customer->email,
             purpose: OtpPurposeEnum::VerifyEmail,
             channel: OtpChannelEnum::Email,
             customer: $customer,
@@ -54,37 +43,22 @@ class MeEmailController extends Controller
     }
 
     /**
-     * Verify OTP code and promote pending email to verified primary email.
+     * Verify the OTP code sent to the customer's email and mark it verified.
      */
     public function verify(EmailVerifyRequest $request): CustomerResource
     {
         /** @var Customer $customer */
         $customer = $request->user();
 
-        if (empty($customer->pending_email)) {
+        if (empty($customer->email) || $customer->email_verified_at !== null) {
             throw new CustomerAuthException('auth.otp_invalid', 422, ['attemptsLeft' => 0]);
         }
 
         $code = (string) $request->input('code');
-        $this->otpService->verify($customer->pending_email, OtpPurposeEnum::VerifyEmail, $code);
+        $this->otpService->verify($customer->email, OtpPurposeEnum::VerifyEmail, $code);
 
-        DB::transaction(function () use ($customer) {
-            $emailTaken = Customer::query()
-                ->where('email', $customer->pending_email)
-                ->where('id', '!=', $customer->id)
-                ->whereNotNull('email_verified_at')
-                ->lockForUpdate()
-                ->exists();
-
-            if ($emailTaken) {
-                throw new CustomerAuthException('auth.email_taken', 422);
-            }
-
-            $customer->email = $customer->pending_email;
-            $customer->email_verified_at = now();
-            $customer->pending_email = null;
-            $customer->save();
-        });
+        $customer->email_verified_at = now();
+        $customer->save();
 
         return new CustomerResource($customer->fresh());
     }

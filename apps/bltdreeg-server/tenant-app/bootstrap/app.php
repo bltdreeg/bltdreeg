@@ -12,7 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Dev tunnels terminate TLS and forward plain HTTP; without this Livewire posts to http:// URLs.
+        if (env('APP_ENV') === 'local') {
+            $middleware->trustProxies(at: '*');
+        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

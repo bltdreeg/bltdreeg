@@ -2,10 +2,10 @@
 
 namespace App\Modules\V1\Auth\Filament\Pages;
 
-use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Onboarding\Support\LegalTerms;
 use Bltdreeg\Core\Modules\Onboarding\Support\SalonRegistrationService;
+use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Auth\Pages\Register as BaseRegister;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
@@ -14,6 +14,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use SensitiveParameter;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class Register extends BaseRegister
 {
@@ -32,11 +33,18 @@ class Register extends BaseRegister
                     ->maxLength(255),
                 $this->getEmailFormComponent()
                     ->unique(Tenant::class, 'email'),
-                TextInput::make('phone')
+                PhoneInput::make('phone')
                     ->label(__('core::onboarding.register.phone'))
-                    ->tel()
+                    ->initialCountry('eg')
+                    ->defaultCountry('EG')
+                    ->disableLookup()
+                    ->separateDialCode()
+                    ->countrySearch()
+                    ->locale(app()->getLocale())
+                    ->extraAttributes(['dir' => 'ltr'])
+                    ->validateFor(lenient: true)
+                    ->validationMessages(['phone' => __('core::onboarding.register.phone_invalid')])
                     ->required()
-                    ->maxLength(30)
                     ->unique(User::class, 'phone'),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),

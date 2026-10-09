@@ -84,7 +84,7 @@ export function FavoriteCard({
           {shop.name}
         </h3>
         <p className="tabular text-[13px] text-muted-foreground">
-          {shop.areaName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating}
+          {shop.cityName} · {formatDistance(shop.distanceKm, locale)} · {shop.rating}
         </p>
       </div>
 

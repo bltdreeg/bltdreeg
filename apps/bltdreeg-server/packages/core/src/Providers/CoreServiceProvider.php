@@ -2,6 +2,8 @@
 
 namespace Bltdreeg\Core\Providers;
 
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Support\MaxMindIpGeolocator;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogJobType;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
@@ -30,10 +32,15 @@ class CoreServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->mergeConfigFrom(__DIR__.'/../../config/geo.php', 'geo');
+
+        $this->app->singleton(IpGeolocator::class, MaxMindIpGeolocator::class);
+
         $this->app->scoped(TenantContext::class);
         $this->app->scoped(BranchContext::class);
 
         $this->registerIdentityDocumentsDisk();
+        $this->registerBranchImagesDisk();
     }
 
     /**
@@ -53,6 +60,29 @@ class CoreServiceProvider extends ServiceProvider
             'root' => env('IDENTITY_DOCUMENTS_ROOT', base_path('../storage/identity-documents')),
             'visibility' => 'private',
             'serve' => false,
+            'throw' => true,
+            'report' => false,
+        ]]);
+    }
+
+    /**
+     * Branch images live outside both apps' storage/ so tenant-app (where they're uploaded)
+     * and central-app (which serves them to the marketing site) see the same files. Each app
+     * exposes them at its own APP_URL via the "storage-shared" link (see config/filesystems.php).
+     */
+    private function registerBranchImagesDisk(): void
+    {
+        $key = 'filesystems.disks.'.Branch::IMAGES_DISK;
+
+        if (config()->has($key)) {
+            return;
+        }
+
+        config([$key => [
+            'driver' => 'local',
+            'root' => env('BRANCH_IMAGES_ROOT', base_path('../storage/public')),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage-shared',
+            'visibility' => 'public',
             'throw' => true,
             'report' => false,
         ]]);

@@ -15,6 +15,7 @@ use App\Modules\V1\Customer\Auth\Otp\OtpService;
 use App\Modules\V1\Customer\Auth\Support\CustomerTokenIssuer;
 use App\Modules\V1\Customer\Auth\Support\PhoneNumber;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -24,6 +25,7 @@ class OtpController extends Controller
     public function __construct(
         protected readonly OtpService $otpService,
         protected readonly CustomerTokenIssuer $tokenIssuer,
+        protected readonly LocationResolver $locationResolver,
     ) {}
 
     /**
@@ -118,8 +120,10 @@ class OtpController extends Controller
             return new AuthSessionResource($customer, $token);
         }
 
-        // Register purpose
-        $customer = DB::transaction(function () use ($challenge, $normalizedPhone) {
+        // Register purpose — الموقع بيتحدد من الـ IP قبل الـ transaction عشان منمسكش قفل أثناء lookup
+        $location = $this->locationResolver->fromIp($request->ip());
+
+        $customer = DB::transaction(function () use ($challenge, $normalizedPhone, $location) {
             $payload = $challenge->payload ?? [];
 
             if (empty($payload)) {
@@ -136,18 +140,19 @@ class OtpController extends Controller
                 'phone' => $normalizedPhone,
                 'phone_verified_at' => now(),
                 'password' => $payload['password'] ?? null,
-                'pending_email' => $payload['email'] ?? null,
+                'email' => $payload['email'] ?? null,
                 'terms_accepted_at' => ! empty($payload['accepted_terms']) ? now() : null,
                 'terms_version' => ! empty($payload['accepted_terms']) ? config('customer_auth.terms_version') : null,
                 'is_active' => true,
                 'locale' => app()->getLocale(),
+                ...$location->toCustomerColumns(),
             ]);
         });
 
-        if ($customer->pending_email) {
+        if ($customer->email) {
             try {
                 $this->otpService->issue(
-                    identifier: $customer->pending_email,
+                    identifier: $customer->email,
                     purpose: OtpPurposeEnum::VerifyEmail,
                     channel: OtpChannelEnum::Email,
                     customer: $customer,

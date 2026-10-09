@@ -7,8 +7,8 @@ import { daySlotsForShop } from "./availability.utils.ts";
 const MOCK_SHOP: Shop = {
   id: "shop-test",
   name: "صالون الاختبار",
-  areaId: "test",
-  areaName: "تست",
+  cityId: "test",
+  cityName: "تست",
   distanceKm: 1,
   rating: 4.5,
   reviewCount: 10,

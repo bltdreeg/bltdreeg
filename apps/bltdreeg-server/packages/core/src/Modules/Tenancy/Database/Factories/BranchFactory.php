@@ -22,8 +22,11 @@ class BranchFactory extends Factory
             'name' => ['en' => $city, 'ar' => 'فرع '.$city],
             'phone' => $this->faker->phoneNumber(),
             'address' => ['en' => $this->faker->address(), 'ar' => $this->faker->address()],
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
+            'latitude' => 30.0444,
+            'longitude' => 31.2357,
+            'governorate_id' => 'EG01',
+            'city_id' => 'EG0111',
+            'location_source' => 3, // Manual
             'is_active' => true,
         ];
     }

@@ -48,7 +48,7 @@ function ResultRow({ shop, status }: ResultRowProps) {
 
         {/* المنطقة · المسافة · التقييم · عدد التقييمات — سطر واحد */}
         <p className="tabular flex flex-wrap items-center gap-x-1.5 text-[13px] text-muted-foreground">
-          <span>{shop.areaName}</span>
+          <span>{shop.cityName}</span>
           <span aria-hidden>·</span>
           <span>{formatDistance(shop.distanceKm, locale)}</span>
           <span aria-hidden>·</span>

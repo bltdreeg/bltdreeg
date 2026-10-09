@@ -53,6 +53,8 @@
       "submitEmail": "Sign in",
       "submitEmailPending": "Signing in...",
       "submitPhone": "Send confirmation code",
+      "submitPhoneWithPassword": "Log in",
+      "phonePasswordHint": "Enter your password to log in, or leave it empty to get a confirmation code.",
       "submitPhonePending": "Sending...",
       "or": "or",
       "noAccount": "Don't have an account yet?",
@@ -137,6 +139,24 @@
         "invalidCode": "Wrong code, try again.",
         "attemptsLeft": "Wrong code, {count} {count, plural, one {attempt} other {attempts}} left.",
         "tooManyAttempts": "Too many attempts. Request a new code."
+      }
+    },
+    "onboarding": {
+      "location": {
+        "title": "Confirm your location",
+        "subtitle": "We filled this in for you. Change anything that's wrong.",
+        "approximate": "This is approximate, based on your connection.",
+        "denied": "Location access is off, so we used your connection instead.",
+        "unavailable": "We couldn't get your device location, so we used your connection instead.",
+        "retryGps": "Use my current location",
+        "deniedHelp": "Location is still blocked. Enable it in your browser's site settings (the lock icon next to the address), then tap the button again.",
+        "governorate": "Governorate",
+        "city": "City",
+        "area": "Area",
+        "choose": "Choose…",
+        "continue": "Continue",
+        "error": "Couldn't save your location. Try again.",
+        "loading": "Finding your location…"
       }
     }
   },
@@ -838,6 +858,17 @@
           "title": "Most popular",
           "subtitle": "{count, plural, one {# salon has slots today} other {# salons have slots today}}"
         }
+      },
+      "nearby": {
+        "title": "Salons near you",
+        "titleIn": "Salons near {area}",
+        "approximate": "Approximate order based on your area.",
+        "useMyLocation": "Use my exact location",
+        "locating": "Finding your location…",
+        "loadMore": "Load more",
+        "empty": "No salons near you yet.",
+        "error": "We couldn't load salons. Try again.",
+        "retry": "Try again"
       },
       "appDownload": {
         "badge": "Available now on all devices",

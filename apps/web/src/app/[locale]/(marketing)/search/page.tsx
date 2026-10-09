@@ -2,7 +2,7 @@ import { SlidersHorizontal } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/atoms/page-container";
 import { Link } from "@/i18n/navigation";
-import { areas } from "@/lib/data/areas.constants";
+import { cities } from "@/lib/data/cities.constants";
 import { METADATA_SEARCH } from "@/lib/data/constants/metadata.constants";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { shops } from "@/lib/data/shops.constants";
@@ -27,7 +27,7 @@ import { chipVariants } from "@/components/atoms/chip";
 
 export const metadata = METADATA_SEARCH;
 
-const DEFAULT_AREA = "المعادي";
+const DEFAULT_CITY = "المعادي";
 
 /** آخر ما بحثت عنه — لسه محلي لحد ما يبقى في حساب */
 const RECENT: RecentSearch[] = [
@@ -144,10 +144,10 @@ export default async function SearchPage({
       : []),
   ];
 
-  // عدد الصالونات اللي فيها ميعاد النهارده لكل منطقة — بيتعرض على كارت المنطقة
+  // عدد الصالونات اللي فيها ميعاد النهارده لكل مدينة — بيتعرض على كارت المدينة
   const availableToday = shops.reduce<Record<string, number>>((acc, shop) => {
     if (shop.nextSlotAt && isToday(shop.nextSlotAt)) {
-      acc[shop.areaId] = (acc[shop.areaId] ?? 0) + 1;
+      acc[shop.cityId] = (acc[shop.cityId] ?? 0) + 1;
     }
     return acc;
   }, {});
@@ -251,7 +251,7 @@ export default async function SearchPage({
                 </div>
                 <NoResults
                   query={query}
-                  areaName={DEFAULT_AREA}
+                  cityName={DEFAULT_CITY}
                   maxDistanceKm={params.maxDistanceKm ? maxDistanceKm : undefined}
                   maxPrice={params.maxPrice ? maxPrice : undefined}
                   hasFilters={activeFilters.length > 0}
@@ -284,7 +284,7 @@ export default async function SearchPage({
                       {t("resultsTitle", { count: results.length, query })}
                     </h1>
                     <p className="text-[13px] text-muted-foreground">
-                      {t("resultsSubtitle", { area: DEFAULT_AREA, distance: formatDistance(maxDistanceKm, locale) })}
+                      {t("resultsSubtitle", { area: DEFAULT_CITY, distance: formatDistance(maxDistanceKm, locale) })}
                     </p>
                   </div>
                   <div className="lg:hidden">
@@ -347,7 +347,7 @@ export default async function SearchPage({
         ) : (
           <>
             <RecentSearches items={RECENT} />
-            <QuickSearch areas={areas.slice(0, 4)} availableToday={availableToday} />
+            <QuickSearch cities={cities.slice(0, 4)} availableToday={availableToday} />
             <NearbyNow shops={nearbyNow} />
           </>
         )}

@@ -19,33 +19,52 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class CatalogServiceCategoryResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = CatalogServiceCategory::class;
 
-    protected static ?string $navigationLabel = 'Service categories';
-
-    protected static ?string $modelLabel = 'catalog category';
-
     protected static ?string $slug = 'catalog-categories';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Catalog';
 
     protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.catalog');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::services.service_categories');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('core::services.catalog_category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('core::services.catalog_categories');
+    }
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
                 TextInput::make('name')
+                    ->label(__('core::global.name'))
                     ->required()
                     ->maxLength(255),
-                Textarea::make('description'),
+                Textarea::make('description')
+                    ->label(__('core::global.description')),
                 Toggle::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->default(true),
             ]);
     }
@@ -55,11 +74,14 @@ class CatalogServiceCategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('core::global.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('description')
+                    ->label(__('core::global.description'))
                     ->limit(40),
                 IconColumn::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->boolean(),
             ])
             ->recordActions([

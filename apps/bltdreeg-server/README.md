@@ -34,7 +34,7 @@ Both apps include `laravel/octane` (`config/octane.php`). `TenantContext` is flu
 
 ## Setup
 
-From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6382** (Redis), **8010** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
+From this directory, one Compose stack starts MySQL, Redis, and both apps (FrankenPHP). Host ports are **3308** (MySQL), **6385** (Redis), **8010** (tenant), and **8011** (central) so they do not clash with `apps/server` on 8001/8002.
 
 ```bash
 make start         # build frontend assets, start stack, migrate (same as make up)
@@ -61,6 +61,14 @@ This concurrently starts:
 Pressing `Ctrl+C` cleanly shuts down all 3 processes.
 
 `make` / `make start` / `make up` are the same. After editing `tenant-app/resources/css/filament/app/theme.css`, run `make tenant-assets` so the new hashed CSS is built and Octane picks it up. Without Make: build assets with `npm --prefix central-app install && npm --prefix central-app run build` (and the same for `tenant-app`), then `docker compose -f infra/local/docker-compose.yml up -d --build --wait`, then `docker compose -f infra/local/docker-compose.yml exec -T tenant-app php artisan migrate --force` and `db:seed --force`.
+
+## Geo data (governorate / city)
+
+Egypt's 27 governorates and 365 cities (OCHA COD-AB via [OpenAdminData](https://api.openadmindata.org/api/v1/countries/eg.json), CC BY-IGO) live in `geo_governorates` and `geo_cities`, keyed by the source codes (`EG01`, `EG0111`). Customers and branches always reference both.
+
+- The snapshot `packages/core/database/data/geo/eg.json` is committed and imported by a migration, so production needs no seeder.
+- Refresh it with `php artisan geo:sync` (central-app); run `php artisan geo:sync --fixture` afterwards to rebuild the small test fixture `eg.testing.json`.
+- Env: `GEO_SNAPSHOT_PATH` (tests point at the fixture), `GEO_DEFAULT_CITY_ID` (default `EG0111`), `GEOIP_DATABASE_PATH` (MaxMind GeoLite2 City), `MAP_TILE_URL` and `MAP_ATTRIBUTION` (salon wizard map; the OSM default is for development, switch to a hosted tile provider before production traffic).
 
 ## Module layout
 

@@ -1,14 +1,14 @@
 // مخطط التحقق والأنواع لنموذج كود التأكيد — بدون JSX
+import { z } from "zod";
+import { isValidOtp } from "@/lib/utils/auth-validation.utils";
+
 export interface OtpFormValues {
   code: string;
-  phone: string;
 }
 
-export interface OtpFormState {
-  digits: string[];
-  error?: string;
-  isSubmitting: boolean;
-  secondsRemaining: number;
-  resendSuccess: boolean;
-  callRequested: boolean;
+// طول الكود بييجي من السيرفر (challenge) فالمخطط بيتبني بيه
+export function createOtpSchema(codeLength: number, invalidMessage: string) {
+  return z.object({
+    code: z.string().refine((value) => isValidOtp(value, codeLength), invalidMessage),
+  });
 }

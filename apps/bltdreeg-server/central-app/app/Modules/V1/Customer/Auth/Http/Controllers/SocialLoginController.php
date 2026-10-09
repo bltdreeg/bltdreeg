@@ -31,6 +31,7 @@ class SocialLoginController extends Controller
             nonce: $request->input('nonce'),
             firstName: $request->input('first_name'),
             lastName: $request->input('last_name'),
+            ipAddress: $request->ip(),
         );
 
         if (! $customer->is_active) {

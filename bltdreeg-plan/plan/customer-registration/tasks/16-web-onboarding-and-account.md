@@ -6,7 +6,7 @@
 - [ ] Route group `src/app/[locale]/(onboarding)/onboarding`; show only the missing steps:
   1. [ ] Phone + verify. On a merge the action stores the new token from the response.
   2. [ ] Name + terms.
-  3. [ ] Location: browser geolocation; denied → call the action without coordinates. Skippable.
+  3. [ ] Location: render `<LocationStep>` from `plan/geo-location` task 09 (already built at `/onboarding`). It is required: dropdowns pre-filled from GPS or the IP, confirmed by the customer. No map.
   4. [ ] Birth date. Skippable.
   - [ ] After the last step: clear the onboarding cookie, go to `callbackUrl`.
 - [ ] `src/proxy.ts` (extend the existing `isProtectedPath` check):

@@ -36,27 +36,27 @@ export function NoResultsIllustration({ className }: { className?: string }) {
 type NoResultsProps = {
   /** النص اللي مالقاش نتايج */
   query: string;
-  areaName: string;
+  cityName: string;
   /** الفلاتر المفعّلة — بتتضاف لجملة السبب لو موجودة */
   maxDistanceKm?: number;
   maxPrice?: number;
   hasFilters: boolean;
 };
 
-function NoResults({ query, areaName, maxDistanceKm, maxPrice, hasFilters }: NoResultsProps) {
+function NoResults({ query, cityName, maxDistanceKm, maxPrice, hasFilters }: NoResultsProps) {
   const t = useTranslations("marketing.search.noResults");
   const locale = useLocale();
 
   const reason = locale === "ar"
     ? [
-        `في ${areaName}`,
+        `في ${cityName}`,
         maxDistanceKm !== undefined ? `لحد ${formatDistance(maxDistanceKm, locale)}` : null,
         maxPrice !== undefined ? `وبسعر لحد ${formatPrice(maxPrice, locale)}` : null,
       ]
         .filter(Boolean)
         .join(" ")
     : [
-        `in ${areaName}`,
+        `in ${cityName}`,
         maxDistanceKm !== undefined ? `within ${formatDistance(maxDistanceKm, locale)}` : null,
         maxPrice !== undefined ? `and price up to ${formatPrice(maxPrice, locale)}` : null,
       ]

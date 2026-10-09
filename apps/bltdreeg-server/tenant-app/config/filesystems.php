@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -75,6 +75,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        // Branch images, shared with central-app — see CoreServiceProvider::registerBranchImagesDisk()
+        public_path('storage-shared') => base_path('../storage/public'),
     ],
 
 ];

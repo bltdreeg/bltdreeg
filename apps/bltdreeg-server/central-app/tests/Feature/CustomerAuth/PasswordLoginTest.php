@@ -63,7 +63,7 @@ test('customer can log in using verified email and password', function () {
         ]);
 });
 
-test('unverified email cannot log in with password', function () {
+test('unverified email can log in with password', function () {
     Customer::factory()->create([
         'email' => 'unverified@example.com',
         'email_verified_at' => null,
@@ -75,10 +75,8 @@ test('unverified email cannot log in with password', function () {
         'password' => 'Secret123',
     ]);
 
-    $response->assertStatus(422)
-        ->assertJson([
-            'code' => 'auth.invalid_credentials',
-        ]);
+    $response->assertOk()
+        ->assertJson(['user' => ['email' => 'unverified@example.com', 'email_verified' => false]]);
 });
 
 test('social-only account cannot log in with password', function () {

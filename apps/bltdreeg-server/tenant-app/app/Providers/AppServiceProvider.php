@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\SetContentLength;
 use BezhanSalleh\LanguageSwitch\Enums\TriggerStyle;
 use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Illuminate\Foundation\Http\Events\RequestHandled;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,10 +28,16 @@ class AppServiceProvider extends ServiceProvider
             return null;
         });
 
+        if ($this->app->isLocal()) {
+            Event::listen(RequestHandled::class, SetContentLength::class);
+        }
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
                 ->locales(['ar', 'en'])
                 ->displayLocale('ar')
+                // Arabic unless the user switched manually; otherwise the browser's Accept-Language wins.
+                ->userPreferredLocale(fn (): string => config('app.locale'))
                 // Floating switch on auth only; onboarding pages use the navbar LocaleToggle.
                 ->visible(insidePanels: true, outsidePanels: true)
                 ->outsidePanelRoutes([

@@ -14,7 +14,7 @@ export const GUEST_COOKIE = "beltadreeg_guest";
 export const ONBOARDING_COOKIE = "beltadreeg_onboarding";
 export const CALLBACK_PARAM = "callbackUrl";
 
-export const AREA_STORAGE_KEY = "beltadreeg.area";
+export const CITY_STORAGE_KEY = "beltadreeg.city";
 
 /** ارتفاع الهيدر الثابت أعلى الصفحة — مستخدم لحساب sticky offsets تانية */
 export const HEADER_HEIGHT_PX = 60;

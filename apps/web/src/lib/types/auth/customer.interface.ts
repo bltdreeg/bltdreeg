@@ -1,4 +1,6 @@
 // العميل زي ما بيرجع من Laravel (بعد التحويل لـ camelCase) — مفيش توكن هنا أبداً
+import type { LocationSource, NamedRef } from "../geo/geo.interface.ts";
+
 export type OnboardingStep = "phone" | "name" | "terms" | "location" | "birth_date";
 
 export interface CustomerOnboarding {
@@ -10,8 +12,12 @@ export interface CustomerOnboarding {
 export interface CustomerLocation {
   lat: number;
   lng: number;
-  source: "gps" | "ip";
+  source: LocationSource;
   updatedAt: string | null;
+  /** العميل أكّد المحافظة/المدينة (خطوة الـ onboarding) */
+  confirmed: boolean;
+  governorate: NamedRef;
+  city: NamedRef;
 }
 
 export interface Customer {
@@ -23,10 +29,9 @@ export interface Customer {
   phoneVerified: boolean;
   email: string | null;
   emailVerified: boolean;
-  pendingEmail: string | null;
   birthDate: string | null;
   hasPassword: boolean;
   socialProviders: string[];
-  location: CustomerLocation | null;
+  location: CustomerLocation;
   onboarding: CustomerOnboarding;
 }

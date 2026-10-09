@@ -19,19 +19,13 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use UnitEnum;
+use LaraZeus\SpatieTranslatable\Resources\Concerns\Translatable;
 
 class ServiceCategoryResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = ServiceCategory::class;
-
-    protected static ?string $navigationLabel = 'Categories';
-
-    protected static ?string $modelLabel = 'category';
-
-    protected static ?string $pluralModelLabel = 'categories';
-
-    protected static UnitEnum|string|null $navigationGroup = 'Services';
 
     protected static ?int $navigationSort = 1;
 
@@ -39,15 +33,38 @@ class ServiceCategoryResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    public static function getNavigationGroup(): string
+    {
+        return __('core::services.services');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('core::services.categories');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('core::services.category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('core::services.categories');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
                 TextInput::make('name')
+                    ->label(__('core::global.name'))
                     ->required()
                     ->maxLength(255),
-                Textarea::make('description'),
+                Textarea::make('description')
+                    ->label(__('core::global.description')),
                 Toggle::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->default(true),
             ]);
     }
@@ -57,14 +74,17 @@ class ServiceCategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('core::global.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('description')
+                    ->label(__('core::global.description'))
                     ->limit(40),
                 IconColumn::make('is_active')
+                    ->label(__('core::global.is_active'))
                     ->boolean(),
                 IconColumn::make('catalog_service_category_id')
-                    ->label('Catalog')
+                    ->label(__('core::services.catalog'))
                     ->boolean()
                     ->getStateUsing(fn (ServiceCategory $record): bool => $record->isFromCatalog()),
             ])

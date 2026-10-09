@@ -94,8 +94,8 @@ function generateFallback(shopId: string): SalonDetails {
       `/dummy_salon/${extraIdx}.png`,
       `/dummy_salon/${extraIdx2}.png`,
     ],
-    address: `${n + 1} شارع ${shop.areaName}، ${shop.areaName}، القاهرة`,
-    landmark: `بالقرب من ميدان ${shop.areaName}`,
+    address: `${n + 1} شارع ${shop.cityName}، ${shop.cityName}، القاهرة`,
+    landmark: `بالقرب من ميدان ${shop.cityName}`,
     phone: `010${String(n).padStart(8, "0")}`,
     hours: HOURS_DEFAULT,
     ratingCounts: {

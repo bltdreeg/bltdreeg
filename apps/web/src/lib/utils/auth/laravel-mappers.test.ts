@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { identifierField, mapCustomer, mapOtpChallenge, type RawCustomer } from "./laravel-mappers.ts";
+import { identifierField, mapCustomer, mapOtpChallenge, mapResolvedLocation, type RawCustomer } from "./laravel-mappers.ts";
 
 test("identifierField maps emails and phones", () => {
   assert.deepEqual(identifierField(" A@X.com "), { email: "a@x.com" });
@@ -16,19 +16,27 @@ test("mapCustomer converts snake_case and never carries tokens", () => {
     phone_verified: true,
     email: null,
     email_verified: false,
-    pending_email: "p@x.com",
     birth_date: null,
     has_password: true,
     social_providers: ["google"],
-    location: { lat: 30.04, lng: 31.23, source: "gps", updated_at: "2026-01-01T00:00:00Z" },
+    location: {
+      lat: 30.04,
+      lng: 31.23,
+      source: "gps",
+      updated_at: "2026-01-01T00:00:00Z",
+      confirmed: true,
+      governorate: { id: "EG01", name: "القاهرة" },
+      city: { id: "EG0111", name: "قسم قصر النيل" },
+    },
     onboarding: { complete: false, missing: ["terms"], skippable: ["birth_date"] },
   };
   const user = mapCustomer(raw);
   assert.equal(user.firstName, "أحمد");
-  assert.equal(user.pendingEmail, "p@x.com");
-  assert.equal(user.location?.updatedAt, "2026-01-01T00:00:00Z");
+  assert.equal(user.location.updatedAt, "2026-01-01T00:00:00Z");
+  assert.equal(user.location.confirmed, true);
+  assert.deepEqual(user.location.governorate, { id: "EG01", name: "القاهرة" });
+  assert.equal(user.location.city.id, "EG0111");
   assert.deepEqual(user.onboarding.missing, ["terms"]);
-  assert.equal(mapCustomer({ ...raw, location: null }).location, null);
 });
 
 test("mapOtpChallenge fills the missing identifier with null", () => {
@@ -44,4 +52,17 @@ test("mapOtpChallenge fills the missing identifier with null", () => {
   assert.equal(c.email, null);
   assert.equal(c.codeLength, 6);
   assert.equal(c.attemptsLeft, 5);
+});
+
+test("mapResolvedLocation keeps the two divisions, point and source", () => {
+  const location = mapResolvedLocation({
+    governorate: { id: "EG02", name: "Alexandria" },
+    city: { id: "EG0204", name: "Bab Sharqi" },
+    lat: 31.2001,
+    lng: 29.9187,
+    source: "ip",
+  });
+  assert.equal(location.city.id, "EG0204");
+  assert.equal(location.source, "ip");
+  assert.equal(location.lat, 31.2001);
 });

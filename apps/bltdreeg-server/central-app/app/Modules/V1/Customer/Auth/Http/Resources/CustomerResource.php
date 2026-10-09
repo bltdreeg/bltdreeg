@@ -2,9 +2,9 @@
 
 namespace App\Modules\V1\Customer\Auth\Http\Resources;
 
-use App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum;
 use App\Modules\V1\Customer\Auth\Support\OnboardingStatus;
 use App\Modules\V1\Customer\Auth\Support\PhoneNumber;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,15 +18,18 @@ class CustomerResource extends JsonResource
             ? $this->resource->socialAccounts->map(fn ($acc) => $acc->provider->slug())->values()->all()
             : $this->resource->socialAccounts()->get()->map(fn ($acc) => $acc->provider->slug())->values()->all();
 
-        $location = null;
-        if ($this->resource->last_lat !== null && $this->resource->last_lng !== null) {
-            $location = [
-                'lat' => (float) $this->resource->last_lat,
-                'lng' => (float) $this->resource->last_lng,
-                'source' => LocationSourceEnum::tryFrom((int) $this->resource->location_source)?->label(),
-                'updated_at' => $this->resource->location_updated_at?->toISOString(),
-            ];
-        }
+        $this->resource->loadMissing(['governorate', 'city']);
+        $locale = app()->getLocale();
+
+        $location = [
+            'lat' => (float) $this->resource->last_lat,
+            'lng' => (float) $this->resource->last_lng,
+            'source' => LocationSourceEnum::tryFrom((int) $this->resource->location_source)?->label(),
+            'updated_at' => $this->resource->location_updated_at?->toISOString(),
+            'confirmed' => $this->resource->location_confirmed_at !== null,
+            'governorate' => ['id' => $this->resource->governorate->id, 'name' => $this->resource->governorate->getTranslation('name', $locale)],
+            'city' => ['id' => $this->resource->city->id, 'name' => $this->resource->city->getTranslation('name', $locale)],
+        ];
 
         return [
             'id' => $this->resource->ulid,
@@ -36,8 +39,8 @@ class CustomerResource extends JsonResource
             'phone_verified' => $this->resource->phone_verified_at !== null,
             'email' => $this->resource->email,
             'email_verified' => $this->resource->email_verified_at !== null,
-            'pending_email' => $this->resource->pending_email,
             'birth_date' => $this->resource->birth_date?->format('Y-m-d'),
+            // Area was removed from the geo hierarchy; kept here as null so the old mobile parser still works.
             'area_name' => null,
             'has_password' => ! empty($this->resource->password),
             'social_providers' => $socialProviders,

@@ -4,6 +4,7 @@ namespace App\Modules\V1\Customer\Auth\Support;
 
 use App\Modules\V1\Customer\Auth\Models\CustomerSocialAccount;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
 use Illuminate\Support\Facades\DB;
 
 class CustomerDeletion
@@ -29,15 +30,13 @@ class CustomerDeletion
                 'phone_verified_at' => null,
                 'email' => null,
                 'email_verified_at' => null,
-                'pending_email' => null,
                 'first_name' => 'Deleted',
                 'last_name' => 'customer',
                 'password' => null,
                 'birth_date' => null,
-                'last_lat' => null,
-                'last_lng' => null,
-                'location_source' => null,
-                'location_updated_at' => null,
+                // الموقع الدقيق بيتمسح؛ الأعمدة NOT NULL فبنرجعها لمنطقة القاهرة الافتراضية
+                ...app(LocationResolver::class)->fallback()->toCustomerColumns(),
+                'location_confirmed_at' => null,
                 'phone_tombstone_hash' => $tombstoneHash,
             ])->save();
 

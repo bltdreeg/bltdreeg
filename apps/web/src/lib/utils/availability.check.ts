@@ -15,8 +15,8 @@ const at = (h: number, dayOffset = 0) => {
 
 const shop = (over: Partial<Shop> & Pick<Shop, "id">): Shop => ({
   name: "صالون",
-  areaId: "maadi",
-  areaName: "المعادي",
+  cityId: "maadi",
+  cityName: "المعادي",
   distanceKm: 1,
   rating: 4,
   reviewCount: 10,

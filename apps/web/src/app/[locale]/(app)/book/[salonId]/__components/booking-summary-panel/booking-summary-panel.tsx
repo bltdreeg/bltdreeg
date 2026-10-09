@@ -28,7 +28,7 @@ export function BookingSummaryPanel({ salon, services, children, cta }: BookingS
         </div>
         <div className="flex flex-col gap-0.5">
           <span className="text-[14.5px] font-bold text-foreground">{salon.name}</span>
-          <span className="text-xs text-muted-foreground">{salon.areaName}</span>
+          <span className="text-xs text-muted-foreground">{salon.cityName}</span>
         </div>
       </div>
 

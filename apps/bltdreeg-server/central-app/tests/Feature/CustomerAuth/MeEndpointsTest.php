@@ -1,9 +1,10 @@
 <?php
 
-use App\Modules\V1\Customer\Auth\Location\Contracts\IpGeolocator;
-use App\Modules\V1\Customer\Auth\Location\Data\Coordinates;
 use App\Modules\V1\Customer\Auth\Models\OtpChannelSetting;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Geo\Contracts\IpGeolocator;
+use Bltdreeg\Core\Modules\Geo\Data\Coordinates;
+use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -70,15 +71,14 @@ test('customer can update profile and pending email flow works end to end', func
             'first_name' => 'Kareem Updated',
             'last_name' => 'Nabil Updated',
             'birth_date' => '1995-05-15',
-            'email' => null,
+            'email' => 'kareem.new@example.com',
             'email_verified' => false,
-            'pending_email' => 'kareem.new@example.com',
         ]);
 
     $customer->refresh();
     expect($customer->terms_accepted_at)->not->toBeNull()
-        ->and($customer->pending_email)->toBe('kareem.new@example.com')
-        ->and($customer->email)->toBeNull();
+        ->and($customer->email)->toBe('kareem.new@example.com')
+        ->and($customer->email_verified_at)->toBeNull();
 
     // 2. Verify email code
     $verifyEmailResponse = $this->postJson('/api/v1/me/email/verify', [
@@ -89,13 +89,11 @@ test('customer can update profile and pending email flow works end to end', func
         ->assertJson([
             'email' => 'kareem.new@example.com',
             'email_verified' => true,
-            'pending_email' => null,
         ]);
 
     $customer->refresh();
     expect($customer->email)->toBe('kareem.new@example.com')
-        ->and($customer->email_verified_at)->not->toBeNull()
-        ->and($customer->pending_email)->toBeNull();
+        ->and($customer->email_verified_at)->not->toBeNull();
 });
 
 test('customer can change password and other active tokens are revoked', function () {
@@ -163,7 +161,7 @@ test('customer can update location with egypt coordinates and IP fallback', func
 
     // 3. Fallback to IP geolocation when coordinates are omitted
     // (الـ fallback مبيستبدلش GPS، فنرجّع المصدر لـ ip الأول عشان نختبر التحديث)
-    $customer->forceFill(['location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value])->save();
+    $customer->forceFill(['location_source' => LocationSourceEnum::Ip->value])->save();
     $fakeGeolocator = Mockery::mock(IpGeolocator::class);
     $fakeGeolocator->shouldReceive('locate')->once()->andReturn(
         new Coordinates(lat: 31.2001, lng: 29.9187)
@@ -224,7 +222,7 @@ test('ip fallback does not overwrite a gps location', function () {
         'phone_verified_at' => now(),
         'last_lat' => 30.0444,
         'last_lng' => 31.2357,
-        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Gps->value,
+        'location_source' => LocationSourceEnum::Gps->value,
         'location_updated_at' => now()->subDays(3),
     ]);
 
@@ -245,7 +243,7 @@ test('ip fallback refreshes an existing ip location', function () {
         'phone_verified_at' => now(),
         'last_lat' => 31.2,
         'last_lng' => 29.9,
-        'location_source' => \App\Modules\V1\Customer\Auth\Enums\LocationSourceEnum::Ip->value,
+        'location_source' => LocationSourceEnum::Ip->value,
     ]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
@@ -260,7 +258,7 @@ test('ip fallback refreshes an existing ip location', function () {
 });
 
 test('location estimate returns the ip point without saving it', function () {
-    $customer = Customer::factory()->create(['phone' => '+201012345672', 'phone_verified_at' => now(), 'last_lat' => null, 'last_lng' => null, 'location_source' => null]);
+    $customer = Customer::factory()->create(['phone' => '+201012345672', 'phone_verified_at' => now()]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
     $geolocator->shouldReceive('locate')->once()->andReturn(new Coordinates(30.05, 31.24));
@@ -272,18 +270,22 @@ test('location estimate returns the ip point without saving it', function () {
         ->assertJsonPath('estimate.lat', 30.05)
         ->assertJsonPath('estimate.lng', 31.24);
 
-    expect($customer->fresh()->last_lat)->toBeNull();
+    expect($customer->fresh()->last_lat)->toBe(30.0444);
 });
 
-test('location estimate is null when the ip resolves outside egypt or fails', function () {
+test('location estimate falls back to the default city when the ip resolves outside egypt or fails', function () {
     $customer = Customer::factory()->create(['phone' => '+201012345673', 'phone_verified_at' => now()]);
 
     $geolocator = Mockery::mock(IpGeolocator::class);
     $geolocator->shouldReceive('locate')->andReturn(new Coordinates(52.37, 4.90), null); // أمستردام (VPN) ثم فشل
     app()->instance(IpGeolocator::class, $geolocator);
 
-    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
-    $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')->assertOk()->assertJsonPath('estimate', null);
+    foreach (range(1, 2) as $attempt) {
+        $this->actingAs($customer, 'customer')->getJson('/api/v1/me/location/estimate')
+            ->assertOk()
+            ->assertJsonPath('estimate.city.id', 'EG0111')
+            ->assertJsonPath('estimate.source', 'default');
+    }
 });
 
 test('a manual pin is saved as manual and survives the ip fallback', function () {
@@ -304,11 +306,11 @@ test('a manual pin is saved as manual and survives the ip fallback', function ()
         ->assertJsonPath('location.source', 'manual');
 });
 
-test('location source only accepts gps or manual', function () {
+test('location source only accepts gps, ip or manual', function () {
     $customer = Customer::factory()->create(['phone' => '+201012345675', 'phone_verified_at' => now()]);
 
     $this->actingAs($customer, 'customer')
-        ->putJson('/api/v1/me/location', ['lat' => 30.05, 'lng' => 31.24, 'source' => 'ip'])
+        ->putJson('/api/v1/me/location', ['lat' => 30.05, 'lng' => 31.24, 'source' => 'satellite'])
         ->assertStatus(422)
         ->assertJsonValidationErrors(['source']);
 });

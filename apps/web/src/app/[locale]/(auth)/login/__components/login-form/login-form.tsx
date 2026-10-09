@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useId } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Eye, EyeOff } from "lucide-react";
@@ -13,14 +15,11 @@ import {
 import { CALLBACK_PARAM } from "@/lib/data/constants/app.constants";
 import { useLogin, useSendLoginOtp } from "@/lib/hooks/auth";
 import { apiFieldErrors, authErrorMessage } from "@/lib/utils/auth/auth-error-message";
+import { afterAuthPath } from "@/lib/utils/auth/post-auth-redirect";
 import { enterGuestMode } from "@/lib/utils/auth/guest-mode";
-import {
-  isValidEmail,
-  normalizeEgyptianPhone,
-  validateEgyptianPhone,
-} from "@/lib/utils/auth-validation.utils";
+import { normalizeEgyptianPhone } from "@/lib/utils/auth-validation.utils";
 import { SocialAuthButtons } from "../../../__components/social-auth-buttons";
-import type { LoginTab, LoginFormErrors } from "./login-form.schema";
+import { createLoginSchema, type LoginFormValues, type LoginTab } from "./login-form.schema";
 
 interface LoginFormProps {
   callbackUrl: string;
@@ -32,54 +31,51 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
   const router = useRouter();
   const login = useLogin();
   const sendOtp = useSendLoginOtp();
-  const [tab, setTab] = useState<LoginTab>("email");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(createLoginSchema((key) => t(`errors.${key}`))),
+    defaultValues: { tab: "email", email: "", phone: "", password: "" },
+  });
+  const tab = watch("tab");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<LoginFormErrors>({});
-  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  // بيانات غلط / حساب موقوف / كتر المحاولات: رسالة عامة فوق الزرار
+  const [generalError, setGeneralError] = useState<string>();
   const isPending = login.isPending || sendOtp.isPending;
 
   const emailInputId = useId();
   const phoneInputId = useId();
   const passwordInputId = useId();
 
-  function validate(): LoginFormErrors {
-    const errs: LoginFormErrors = {};
-
-    if (tab === "email") {
-      if (!email.trim()) {
-        errs.identifier = t("errors.emailRequired");
-      } else if (!isValidEmail(email)) {
-        errs.identifier = t("errors.emailInvalid");
-      }
-      if (!password) {
-        errs.password = t("errors.passwordRequired");
-      }
-    } else {
-      const phoneValidation = validateEgyptianPhone(phone);
-      if (!phoneValidation.isValid) {
-        errs.identifier = phoneValidation.errorMessage;
-      }
-    }
-
-    return errs;
+  function switchTab(next: LoginTab) {
+    setValue("tab", next);
+    clearErrors();
+    setGeneralError(undefined);
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setHasAttemptedSubmit(true);
+  function onValid(values: LoginFormValues) {
+    setGeneralError(undefined);
 
-    const validationErrors = validate();
-    setErrors(validationErrors);
+    if (values.tab === "phone") {
+      const normalizedPhone = normalizeEgyptianPhone(values.phone) ?? values.phone;
 
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
-    if (tab === "phone") {
-      const normalizedPhone = normalizeEgyptianPhone(phone) ?? phone;
+      // لو كلمة السر مكتوبة بندخل بيها، وإلا بنبعت كود التأكيد
+      if (values.password) {
+        login.mutate(
+          { identifier: normalizedPhone, password: values.password },
+          {
+            onSuccess: (session) => router.replace(afterAuthPath(session.user, callbackUrl)),
+            onError: (err) => setGeneralError(authErrorMessage(err)),
+          },
+        );
+        return;
+      }
 
       sendOtp.mutate(
         { phone: normalizedPhone },
@@ -91,18 +87,17 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
             router.push(`${ROUTE_VERIFY_OTP}?${params.toString()}`);
           },
           // phone_not_registered وغيرها بتظهر تحت حقل الموبايل
-          onError: (err) => setErrors({ identifier: apiFieldErrors(err).phone ?? authErrorMessage(err) }),
+          onError: (err) => setError("phone", { message: apiFieldErrors(err).phone ?? authErrorMessage(err) }),
         },
       );
       return;
     }
 
     login.mutate(
-      { identifier: email, password },
+      { identifier: values.email, password: values.password },
       {
-        onSuccess: () => router.replace(callbackUrl || ROUTE_HOME),
-        // بيانات غلط / حساب موقوف / كتر المحاولات: رسالة عامة فوق الزرار
-        onError: (err) => setErrors({ general: authErrorMessage(err) }),
+        onSuccess: (session) => router.replace(afterAuthPath(session.user, callbackUrl)),
+        onError: (err) => setGeneralError(authErrorMessage(err)),
       },
     );
   }
@@ -143,12 +138,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           type="button"
           role="tab"
           aria-selected={tab === "email"}
-          onClick={() => {
-            setTab("email");
-            if (hasAttemptedSubmit) {
-              setErrors((prev) => ({ ...prev, identifier: undefined }));
-            }
-          }}
+          onClick={() => switchTab("email")}
           className={`flex-1 h-9.5 rounded-lg text-[13.5px] transition-all flex items-center justify-center cursor-pointer ${
             tab === "email"
               ? "bg-white border border-[#E5E7EB] font-bold text-[#0E0F11] shadow-xs"
@@ -161,12 +151,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           type="button"
           role="tab"
           aria-selected={tab === "phone"}
-          onClick={() => {
-            setTab("phone");
-            if (hasAttemptedSubmit) {
-              setErrors((prev) => ({ ...prev, identifier: undefined }));
-            }
-          }}
+          onClick={() => switchTab("phone")}
           className={`flex-1 h-9.5 rounded-lg text-[13.5px] transition-all flex items-center justify-center cursor-pointer ${
             tab === "phone"
               ? "bg-white border border-[#E5E7EB] font-bold text-[#0E0F11] shadow-xs"
@@ -178,7 +163,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       </div>
 
       {/* 4. النموذج الفعلي */}
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onValid)} noValidate className="flex flex-col gap-4">
         {/* حقل الإيميل أو الموبايل */}
         {tab === "email" ? (
           <>
@@ -191,27 +176,20 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               </label>
               <input
                 id={emailInputId}
-                name="email"
                 type="email"
                 dir="ltr"
                 autoComplete="email"
                 placeholder="karim.mostafa@gmail.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (errors.identifier) {
-                    setErrors((prev) => ({ ...prev, identifier: undefined }));
-                  }
-                }}
+                {...register("email")}
                 className={`h-13 w-full rounded-xl bg-white px-3.5 text-[15px] text-[#0E0F11] transition-all placeholder:text-[#A5ABB3] focus:outline-none ${
-                  errors.identifier
+                  errors.email
                     ? "border-[1.5px] border-[#EF4444] focus:ring-2 focus:ring-[#FEF2F2]"
                     : "border border-[#E5E7EB] focus:border-[#0F766E] focus:ring-2 focus:ring-[#F0FAF8]"
                 }`}
               />
-              {errors.identifier && (
+              {errors.email && (
                 <span className="text-[12px] font-medium text-[#B91C1C]">
-                  {errors.identifier}
+                  {errors.email?.message}
                 </span>
               )}
             </div>
@@ -241,17 +219,10 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               >
                 <input
                   id={passwordInputId}
-                  name="password"
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (errors.password) {
-                      setErrors((prev) => ({ ...prev, password: undefined }));
-                    }
-                  }}
+                  {...register("password")}
                   className="w-full bg-transparent text-[15px] text-[#0E0F11] placeholder:text-[#A5ABB3] focus:outline-none"
                 />
                 <button
@@ -265,7 +236,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               </div>
               {errors.password && (
                 <span className="text-[12px] font-medium text-[#B91C1C]">
-                  {errors.password}
+                  {errors.password?.message}
                 </span>
               )}
             </div>
@@ -281,7 +252,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
             <div
               dir="ltr"
               className={`flex h-13 w-full items-center rounded-xl bg-white px-3.5 transition-all focus-within:ring-2 ${
-                errors.identifier
+                errors.phone
                   ? "border-[1.5px] border-[#EF4444] focus-within:ring-[#FEF2F2]"
                   : "border border-[#E5E7EB] focus-within:border-[#0F766E] focus-within:ring-[#F0FAF8]"
               }`}
@@ -292,25 +263,32 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
               </span>
               <input
                 id={phoneInputId}
-                name="phone"
                 type="tel"
                 autoComplete="tel"
                 placeholder="1xxxxxxxxx"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                  if (errors.identifier) {
-                    setErrors((prev) => ({ ...prev, identifier: undefined }));
-                  }
-                }}
+                {...register("phone")}
                 className="w-full bg-transparent ps-2.5 text-[15px] tabular-nums text-[#0E0F11] placeholder:text-[#A5ABB3] focus:outline-none"
               />
             </div>
-            {errors.identifier && (
+            {errors.phone && (
               <span className="text-[12px] font-medium text-[#B91C1C]">
-                {errors.identifier}
+                {errors.phone?.message}
               </span>
             )}
+            <div className="mt-2 flex flex-col gap-1.5">
+              <label htmlFor={passwordInputId} className="text-[13px] font-semibold text-[#0E0F11]">
+                {t("passwordLabel")}
+              </label>
+              <input
+                id={passwordInputId}
+                type="password"
+                autoComplete="current-password"
+                placeholder="••••••••"
+                {...register("password")}
+                className="h-13 w-full rounded-xl border border-[#E5E7EB] bg-white px-3.5 text-[15px] text-[#0E0F11] transition-all placeholder:text-[#A5ABB3] focus:border-[#0F766E] focus:outline-none focus:ring-2 focus:ring-[#F0FAF8]"
+              />
+              <span className="text-[12px] text-[#6B7280]">{t("phonePasswordHint")}</span>
+            </div>
             <span className="text-[12px] text-[#0F766E] mt-1 font-medium flex items-center gap-1.5">
                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle-2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                {tShared("confirmCodeHint")}
@@ -318,9 +296,9 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           </div>
         )}
 
-        {errors.general && (
+        {generalError && (
           <div role="alert" className="rounded-xl border border-[#FECACA] bg-[#FEF2F2] px-3.5 py-2.5 text-[13px] font-medium text-[#B91C1C]">
-            {errors.general}
+            {generalError}
           </div>
         )}
 
@@ -332,7 +310,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
         >
           {isPending 
             ? (tab === "email" ? t("submitEmailPending") : t("submitPhonePending")) 
-            : (tab === "email" ? t("submitEmail") : t("submitPhone"))}
+            : (tab === "email" ? t("submitEmail") : watch("password") ? t("submitPhoneWithPassword") : t("submitPhone"))}
         </button>
       </form>
 

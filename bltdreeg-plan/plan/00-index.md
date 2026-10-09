@@ -30,6 +30,7 @@ customer surface is a separate (mobile/web) app whose **API and domain live in
 | `tenant-dashboard.md` | Salon/branch panel (`tenant-app`, panel `app`) | see file |
 | `central-dashboard.md` | Platform panel (`central-app`, panel `admin`) | see file |
 | `customer-app.md` | Customer mobile app (separate surface) | see file |
+| `geo-location/README.md` | Governorate/city/area data + customer & first-branch location (onboarding) | pending |
 
 Why these five: the codebase already has exactly the tenant+central panel split,
 so the plan mirrors it (`tenant-dashboard.md` / `central-dashboard.md`). The

@@ -1,8 +1,8 @@
 // فلاتر البحث عن المحلات
 export interface ShopFilters {
-  /** نص البحث: اسم صالون أو منطقة */
+  /** نص البحث: اسم صالون أو مدينة */
   q?: string;
-  areaId?: string;
+  cityId?: string;
   /** أقصى سعر بالجنيه */
   maxPrice?: number;
   /** أقصى مسافة بالكيلومتر */

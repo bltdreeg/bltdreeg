@@ -31,9 +31,9 @@ class OnboardingStatus
             $missing[] = 'terms';
         }
 
-        // 4. Location (Skippable)
-        if ($customer->last_lat === null || $customer->last_lng === null) {
-            $skippable[] = 'location';
+        // 4. Location (Required) — دايماً متعبّي مسبقاً؛ العميل بيأكّده بس
+        if ($customer->location_confirmed_at === null) {
+            $missing[] = 'location';
         }
 
         // 5. Birth Date (Skippable)
