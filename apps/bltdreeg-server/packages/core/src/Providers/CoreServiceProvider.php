@@ -33,6 +33,7 @@ class CoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../../config/geo.php', 'geo');
+        $this->mergeConfigFrom(__DIR__.'/../../config/booking.php', 'booking');
 
         $this->app->singleton(IpGeolocator::class, MaxMindIpGeolocator::class);
 
