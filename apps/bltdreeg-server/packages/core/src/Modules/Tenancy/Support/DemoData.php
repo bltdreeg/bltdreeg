@@ -40,9 +40,11 @@ class DemoData
             );
 
             $provisioner->provision($tenant);
-            $importer->importCatalog($tenant);
             $ownerUser = self::ensureOwner($tenant, $owner, $provisioner);
             self::seedTenantBranches($tenant);
+            // Services are branch-owned, so the branches must exist before the import:
+            // importCatalog() fans out over the branches that exist when it runs.
+            $importer->importCatalog($tenant);
             // Owners stay branch-free so they can switch among all tenant branches.
             $ownerUser->forceFill(['branch_id' => null])->save();
 

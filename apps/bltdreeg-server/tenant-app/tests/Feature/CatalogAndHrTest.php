@@ -22,7 +22,9 @@ test('importing a catalog service copies defaults onto the tenant', function () 
         'default_price' => 40,
     ]);
 
-    $service = app(CatalogImporter::class)->importService($catalog, $tenant);
+    $branch = Branch::factory()->create(['tenant_id' => $tenant->id]);
+
+    $service = app(CatalogImporter::class)->importService($catalog, $tenant, $branch);
 
     expect($service->tenant_id)->toBe($tenant->id)
         ->and($service->name)->toBe('Haircut')

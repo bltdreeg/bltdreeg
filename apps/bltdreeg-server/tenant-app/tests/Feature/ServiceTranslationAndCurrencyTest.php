@@ -6,6 +6,7 @@ use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
 use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
 use Bltdreeg\Core\Modules\Geo\Support\CurrencyResolver;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -31,7 +32,9 @@ test('importing a catalog service keeps every translation', function () {
         'description' => ['en' => 'Classic cut', 'ar' => 'قصة كلاسيكية'],
     ]);
 
-    $service = app(CatalogImporter::class)->importService($catalog, $tenant)->fresh();
+    $branch = Branch::factory()->create(['tenant_id' => $tenant->id]);
+
+    $service = app(CatalogImporter::class)->importService($catalog, $tenant, $branch)->fresh();
 
     expect($service->getTranslations('name'))->toBe(['en' => 'Haircut', 'ar' => 'قص الشعر'])
         ->and($service->category->getTranslations('name'))->toBe($catalog->category->getTranslations('name'));

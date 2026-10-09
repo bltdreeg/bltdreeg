@@ -8,6 +8,7 @@ use Bltdreeg\Core\Modules\Catalog\Models\CatalogServiceCategory;
 use Bltdreeg\Core\Modules\Hr\Models\JobType;
 use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 
 class CatalogImporter
@@ -27,13 +28,14 @@ class CatalogImporter
         );
     }
 
-    public function importService(CatalogService $catalog, Tenant $tenant): Service
+    public function importService(CatalogService $catalog, Tenant $tenant, Branch $branch): Service
     {
         $category = $this->importCategory($catalog->category, $tenant);
 
-        return Service::query()->firstOrCreate(
+        return Service::query()->withoutGlobalScopes()->firstOrCreate(
             [
                 'tenant_id' => $tenant->getKey(),
+                'branch_id' => $branch->getKey(),
                 'catalog_service_id' => $catalog->getKey(),
             ],
             [
@@ -62,12 +64,24 @@ class CatalogImporter
         );
     }
 
-    public function importCatalog(Tenant $tenant): void
+    /**
+     * A null branch imports into every branch of the tenant — what seeding and demo
+     * data want. Job types stay tenant-level, so they are imported once either way.
+     */
+    public function importCatalog(Tenant $tenant, ?Branch $branch = null): void
     {
+        $branches = $branch !== null
+            ? collect([$branch])
+            : Branch::query()->withoutGlobalScopes()->where('tenant_id', $tenant->getKey())->get();
+
         CatalogService::query()
             ->where('is_active', true)
             ->with('category')
-            ->each(fn (CatalogService $service) => $this->importService($service, $tenant));
+            ->each(function (CatalogService $service) use ($tenant, $branches): void {
+                foreach ($branches as $target) {
+                    $this->importService($service, $tenant, $target);
+                }
+            });
 
         CatalogJobType::query()
             ->where('is_active', true)

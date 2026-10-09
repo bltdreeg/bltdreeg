@@ -6,6 +6,7 @@ use App\Modules\V1\Services\Filament\Resources\Services\ServiceResource;
 use App\Modules\V1\Services\Models\Service;
 use App\Support\CatalogImporter;
 use Bltdreeg\Core\Modules\Catalog\Models\CatalogService;
+use Bltdreeg\Core\Modules\Tenancy\Support\BranchContext;
 use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Facades\Filament;
@@ -46,12 +47,22 @@ class ListServices extends ListRecords
                 ])
                 ->action(function (array $data, CatalogImporter $importer): void {
                     $tenant = Filament::getTenant();
+                    $branch = app(BranchContext::class)->branch;
+
+                    if ($branch === null) {
+                        Notification::make()
+                            ->title('Select a branch first')
+                            ->danger()
+                            ->send();
+
+                        return;
+                    }
 
                     foreach ($data['catalog_service_ids'] as $id) {
                         $catalog = CatalogService::query()->find($id);
 
                         if ($catalog) {
-                            $importer->importService($catalog, $tenant);
+                            $importer->importService($catalog, $tenant, $branch);
                         }
                     }
 
