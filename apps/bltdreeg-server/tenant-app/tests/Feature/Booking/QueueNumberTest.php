@@ -119,3 +119,24 @@ test('the footprint extends past the appointment by its own stored gap', functio
 
     expect($booking->fresh()->footprintEndsAt()->format('H:i'))->toBe('17:40');
 });
+
+test('a branch-local start time is stored and read back as the same UTC instant', function () {
+    $branch = Branch::factory()->create();
+    $barber = User::factory()->create(['branch_id' => $branch->id]);
+
+    // Cairo is UTC+2 on this date (no DST in early November). 10:30 local must be
+    // stored as 08:30 UTC, not as the literal clock digits "10:30".
+    $localStart = CarbonImmutable::parse('2026-11-02 10:30:00', 'Africa/Cairo');
+
+    $booking = Booking::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'barber_user_id' => $barber->id,
+        'starts_at' => $localStart,
+        'ends_at' => $localStart->addMinutes(30),
+        'duration_minutes' => 30,
+    ]);
+
+    expect($booking->fresh()->starts_at->utc()->format('H:i'))->toBe('08:30')
+        ->and($booking->fresh()->starts_at->getTimestamp())->toBe($localStart->getTimestamp());
+});

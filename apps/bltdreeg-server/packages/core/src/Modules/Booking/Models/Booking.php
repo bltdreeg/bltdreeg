@@ -12,8 +12,10 @@ use Bltdreeg\Core\Modules\Customers\Models\Customer;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,9 +41,6 @@ class Booking extends Model
     protected function casts(): array
     {
         return [
-            'starts_at' => 'immutable_datetime',
-            'ends_at' => 'immutable_datetime',
-            'cancelled_at' => 'immutable_datetime',
             'duration_minutes' => 'integer',
             'gap_minutes' => 'integer',
             'total_price' => 'decimal:2',
@@ -51,6 +50,40 @@ class Booking extends Model
             'is_forced' => 'boolean',
             'cancelled_by_customer' => 'boolean',
         ];
+    }
+
+    /**
+     * Times are stored UTC (Global Constraints), but a caller naturally has a
+     * branch-local CarbonImmutable in hand — the selected slot, "now" for a
+     * cancellation. The native `immutable_datetime` cast does not convert on write;
+     * it formats whatever offset the instance already carries, so a Cairo 10:30
+     * (+02:00) would be stored as the literal string "10:30" and read back as UTC
+     * 10:30, two hours off. These accessors normalize to UTC on the way in and
+     * resolve back to UTC on the way out, so every caller gets this for free.
+     */
+    protected function startsAt(): Attribute
+    {
+        return self::utcDateTime();
+    }
+
+    protected function endsAt(): Attribute
+    {
+        return self::utcDateTime();
+    }
+
+    protected function cancelledAt(): Attribute
+    {
+        return self::utcDateTime();
+    }
+
+    private static function utcDateTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value): ?CarbonImmutable => $value === null ? null : CarbonImmutable::parse($value, 'UTC'),
+            set: fn (CarbonInterface|string|null $value): ?string => $value === null
+                ? null
+                : CarbonImmutable::parse($value)->utc()->format('Y-m-d H:i:s'),
+        );
     }
 
     public function branch(): BelongsTo
