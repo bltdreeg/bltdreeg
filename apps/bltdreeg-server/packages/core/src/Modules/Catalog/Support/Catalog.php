@@ -59,17 +59,24 @@ class Catalog
             );
         }
 
+        // is_bookable marks the job types a customer can book a appointment with.
+        // Only the hair-cutting roles are bookable out of the box; a tenant can flag
+        // any other job type from the dashboard.
         foreach ([
-            ['name' => 'Hair stylist', 'description' => 'Cuts and styles hair'],
-            ['name' => TenantSeeder::BARBER_JOB_TYPE, 'description' => 'Cuts hair and trims beards'],
-            ['name' => 'Nail technician', 'description' => 'Manicures and pedicures'],
-            ['name' => 'Esthetician', 'description' => 'Skin treatments'],
-            ['name' => 'Receptionist', 'description' => 'Front desk'],
-            ['name' => 'Salon manager', 'description' => 'Runs the salon floor'],
+            ['name' => 'Hair stylist', 'description' => 'Cuts and styles hair', 'is_bookable' => true],
+            ['name' => TenantSeeder::BARBER_JOB_TYPE, 'description' => 'Cuts hair and trims beards', 'is_bookable' => true],
+            ['name' => 'Nail technician', 'description' => 'Manicures and pedicures', 'is_bookable' => false],
+            ['name' => 'Esthetician', 'description' => 'Skin treatments', 'is_bookable' => false],
+            ['name' => 'Receptionist', 'description' => 'Front desk', 'is_bookable' => false],
+            ['name' => 'Salon manager', 'description' => 'Runs the salon floor', 'is_bookable' => false],
         ] as $jobType) {
             CatalogJobType::query()->firstOrCreate(
                 ['name' => $jobType['name']],
-                ['description' => $jobType['description'], 'is_active' => true],
+                [
+                    'description' => $jobType['description'],
+                    'is_active' => true,
+                    'is_bookable' => $jobType['is_bookable'],
+                ],
             );
         }
     }

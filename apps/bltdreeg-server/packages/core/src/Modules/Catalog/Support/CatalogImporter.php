@@ -60,6 +60,7 @@ class CatalogImporter
                 'name' => $catalog->name,
                 'description' => $catalog->description,
                 'is_active' => true,
+                'is_bookable' => (bool) $catalog->is_bookable,
             ],
         );
     }

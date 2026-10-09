@@ -38,6 +38,11 @@ use Spatie\Translatable\HasTranslations;
     'team_size',
     'service_location_type',
     'is_active',
+    'booking_days_ahead',
+    'booking_min_notice_minutes',
+    'booking_cancel_cutoff_minutes',
+    'booking_slot_step_minutes',
+    'booking_gap_minutes',
 ])]
 #[Translatable('name', 'address')]
 class Branch extends Model
@@ -94,6 +99,11 @@ class Branch extends Model
             'team_size' => TeamSizeEnum::class,
             'service_location_type' => 'array',
             'images' => 'array',
+            'booking_days_ahead' => 'integer',
+            'booking_min_notice_minutes' => 'integer',
+            'booking_cancel_cutoff_minutes' => 'integer',
+            'booking_slot_step_minutes' => 'integer',
+            'booking_gap_minutes' => 'integer',
         ];
     }
 

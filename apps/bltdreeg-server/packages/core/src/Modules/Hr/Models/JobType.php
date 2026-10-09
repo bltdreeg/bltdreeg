@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['tenant_id', 'catalog_job_type_id', 'name', 'description', 'is_active'])]
+#[Fillable(['tenant_id', 'catalog_job_type_id', 'name', 'description', 'is_active', 'is_bookable'])]
 class JobType extends Model
 {
     use BelongsToTenant;
@@ -25,6 +25,7 @@ class JobType extends Model
     {
         return [
             'is_active' => 'boolean',
+            'is_bookable' => 'boolean',
         ];
     }
 
