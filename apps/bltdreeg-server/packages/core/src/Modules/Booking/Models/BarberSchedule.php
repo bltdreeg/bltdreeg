@@ -5,6 +5,7 @@ namespace Bltdreeg\Core\Modules\Booking\Models;
 use Bltdreeg\Core\Concerns\BelongsToBranch;
 use Bltdreeg\Core\Concerns\BelongsToTenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Booking\Concerns\InvalidatesOccupancy;
 use Bltdreeg\Core\Modules\Booking\Database\Factories\BarberScheduleFactory;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -20,6 +21,7 @@ class BarberSchedule extends Model
     use BelongsToBranch;
     use BelongsToTenant;
     use HasFactory;
+    use InvalidatesOccupancy;
 
     protected static function newFactory()
     {

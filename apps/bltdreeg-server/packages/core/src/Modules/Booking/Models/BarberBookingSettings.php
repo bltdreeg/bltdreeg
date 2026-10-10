@@ -5,6 +5,7 @@ namespace Bltdreeg\Core\Modules\Booking\Models;
 use Bltdreeg\Core\Concerns\BelongsToBranch;
 use Bltdreeg\Core\Concerns\BelongsToTenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Booking\Concerns\InvalidatesOccupancy;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class BarberBookingSettings extends Model
 {
     use BelongsToBranch;
     use BelongsToTenant;
+    use InvalidatesOccupancy;
 
     protected $table = 'barber_booking_settings';
 

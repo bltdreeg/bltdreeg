@@ -5,6 +5,7 @@ namespace Bltdreeg\Core\Modules\Booking\Models;
 use Bltdreeg\Core\Concerns\BelongsToBranch;
 use Bltdreeg\Core\Concerns\BelongsToTenant;
 use Bltdreeg\Core\Modules\Auth\Models\User;
+use Bltdreeg\Core\Modules\Booking\Concerns\InvalidatesOccupancy;
 use Bltdreeg\Core\Modules\Booking\Database\Factories\BookingFactory;
 use Bltdreeg\Core\Modules\Booking\Enums\BookingSourceEnum;
 use Bltdreeg\Core\Modules\Booking\Enums\BookingStatusEnum;
@@ -32,6 +33,7 @@ class Booking extends Model
     use BelongsToBranch;
     use BelongsToTenant;
     use HasFactory;
+    use InvalidatesOccupancy;
 
     protected static function newFactory()
     {

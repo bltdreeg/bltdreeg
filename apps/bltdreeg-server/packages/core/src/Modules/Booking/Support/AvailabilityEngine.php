@@ -73,7 +73,7 @@ final class AvailabilityEngine
                     continue;
                 }
 
-                if (self::overlapsAny($cursor, $footprintEnd, $busy)) {
+                if (OverlapGuard::overlaps($cursor, $footprintEnd, $busy)) {
                     continue;
                 }
 
@@ -124,17 +124,5 @@ final class AvailabilityEngine
         }
 
         return $ranges;
-    }
-
-    /** @param  array<int, array{0: CarbonImmutable, 1: CarbonImmutable}>  $ranges */
-    private static function overlapsAny(CarbonImmutable $start, CarbonImmutable $end, array $ranges): bool
-    {
-        foreach ($ranges as [$busyStart, $busyEnd]) {
-            if ($start->lt($busyEnd) && $busyStart->lt($end)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

@@ -7,6 +7,7 @@ use Bltdreeg\Core\Modules\Booking\Models\BarberTimeBlock;
 use Bltdreeg\Core\Modules\Booking\Support\BookingSettings;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -146,4 +147,24 @@ test('a time block records a range and a full-day flag', function () {
     expect($block->is_full_day)->toBeTrue()
         ->and($block->starts_at->toDateString())->toBe('2026-11-10')
         ->and($block->reason)->toBe('Leave');
+});
+
+test('a branch-local time block is stored and read back as the same UTC instant', function () {
+    $branch = Branch::factory()->create();
+    $barber = barberIn($branch);
+
+    // Cairo is UTC+2 on this date. 10:30 local must be stored as 08:30 UTC.
+    $localStart = CarbonImmutable::parse('2026-11-02 10:30:00', 'Africa/Cairo');
+
+    $block = BarberTimeBlock::query()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'user_id' => $barber->id,
+        'starts_at' => $localStart,
+        'ends_at' => $localStart->addHour(),
+        'is_full_day' => false,
+    ]);
+
+    expect($block->fresh()->starts_at->utc()->format('H:i'))->toBe('08:30')
+        ->and($block->fresh()->starts_at->getTimestamp())->toBe($localStart->getTimestamp());
 });
