@@ -8,6 +8,7 @@ use Bltdreeg\Core\Modules\Auth\Models\User;
 use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Services\Models\ServiceCategory;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
+use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Filament\Facades\Filament;
 use Filament\Panel;
@@ -108,6 +109,8 @@ test('the catalog categories list page renders for a super admin', function () {
 test('central can query salon services across tenants', function () {
     $tenantA = Tenant::factory()->create();
     $tenantB = Tenant::factory()->create();
+    $branchA = Branch::factory()->create(['tenant_id' => $tenantA->id]);
+    $branchB = Branch::factory()->create(['tenant_id' => $tenantB->id]);
 
     $categoryA = ServiceCategory::query()->create([
         'tenant_id' => $tenantA->id,
@@ -122,6 +125,7 @@ test('central can query salon services across tenants', function () {
 
     $serviceA = Service::query()->create([
         'tenant_id' => $tenantA->id,
+        'branch_id' => $branchA->id,
         'category_id' => $categoryA->id,
         'name' => 'Unique Cut Alpha',
         'duration' => 30,
@@ -130,6 +134,7 @@ test('central can query salon services across tenants', function () {
     ]);
     Service::query()->create([
         'tenant_id' => $tenantB->id,
+        'branch_id' => $branchB->id,
         'category_id' => $categoryB->id,
         'name' => 'Unique Manicure Bravo',
         'duration' => 40,
