@@ -76,8 +76,11 @@ trait InvalidatesOccupancy
             }
         }
 
-        // Also clear the previous day: a booking's gap can bleed across midnight.
-        $span[] = $first->subDay();
+        // Also clear the NEXT day: OccupancyCache::build() looks one day BACKWARD
+        // when gathering a day's bookings (to catch a footprint bleeding in from
+        // the day before), so a change on this day can affect the next day's
+        // cached occupancy, never the previous day's.
+        $span[] = $last->addDay();
 
         return $span;
     }

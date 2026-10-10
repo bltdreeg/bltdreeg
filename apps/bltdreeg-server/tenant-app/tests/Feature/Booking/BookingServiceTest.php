@@ -9,15 +9,18 @@ use Bltdreeg\Core\Modules\Booking\Events\BookingRescheduled;
 use Bltdreeg\Core\Modules\Booking\Exceptions\BookingException;
 use Bltdreeg\Core\Modules\Booking\Models\BarberSchedule;
 use Bltdreeg\Core\Modules\Booking\Models\BarberTimeBlock;
+use Bltdreeg\Core\Modules\Booking\Models\Booking;
 use Bltdreeg\Core\Modules\Booking\Support\AvailabilityEngine;
 use Bltdreeg\Core\Modules\Booking\Support\BasketResolver;
 use Bltdreeg\Core\Modules\Booking\Support\BookingService;
 use Bltdreeg\Core\Modules\Booking\Support\BookingTime;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
+use Bltdreeg\Core\Modules\Hr\Models\JobType;
 use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 
 uses(RefreshDatabase::class);
@@ -41,6 +44,8 @@ function bookingFixture(array $branchAttributes = []): array
         ...$branchAttributes,
     ]);
     $barber = User::factory()->create(['branch_id' => $branch->id]);
+    $jobType = JobType::factory()->create(['tenant_id' => $branch->tenant_id, 'is_bookable' => true]);
+    $barber->tenants()->attach($branch->tenant_id, ['job_type_id' => $jobType->getKey()]);
     $day = BookingTime::day('2026-11-02');
 
     BarberSchedule::query()->create([
@@ -294,6 +299,38 @@ test('a failed reschedule does not leave the occupancy cache believing the origi
         ->and(AvailabilityEngine::isBookable($branch, $barber, $day->setTime(10, 0), 30))->toBeFalse();
 });
 
+test('the write-path check ignores a stale occupancy cache', function () {
+    [$branch, $barber, $day, $basket] = bookingFixture();
+
+    Booking::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'barber_user_id' => $barber->id,
+        'starts_at' => $day->setTime(10, 0)->utc(),
+        'ends_at' => $day->setTime(10, 30)->utc(),
+        'duration_minutes' => 30,
+    ]);
+
+    // Simulates the production race (spec §4.11): a concurrent availability read
+    // rebuilt and cached this day's occupancy from a view of the database that
+    // predates the booking above becoming visible -- e.g. a reader that ran
+    // inside the writer's still-open transaction, before commit. By whatever
+    // mechanism, the cache now says "nothing is booked" even though a real,
+    // committed booking occupies 10:00-10:30.
+    Cache::put(
+        'booking:occupancy:'.$branch->id.':'.$barber->id.':'.$day->format('Y-m-d'),
+        ['windows' => [['start_time' => '10:00:00', 'end_time' => '14:00:00']], 'bookings' => [], 'blocks' => []],
+        60
+    );
+
+    // A read through the cache would still see the stale "free" value -- but a
+    // WRITE through BookingService must not: the write path's re-check reads the
+    // database directly (useCache: false), never this cache entry.
+    expect(fn () => app(BookingService::class)
+        ->book($branch, $barber, $basket, $day->setTime(10, 0), Customer::factory()->create()))
+        ->toThrow(BookingException::class);
+});
+
 test('two writers cannot take the same slot', function () {
     if (app('db')->connection()->getDriverName() === 'sqlite') {
         $this->markTestSkipped('SQLite ignores lockForUpdate; run this against MySQL to exercise the row lock.');
@@ -305,5 +342,52 @@ test('two writers cannot take the same slot', function () {
     $service->book($branch, $barber, $basket, $day->setTime(10, 0), Customer::factory()->create());
 
     expect(fn () => $service->book($branch, $barber, $basket, $day->setTime(10, 0), Customer::factory()->create()))
+        ->toThrow(BookingException::class);
+});
+
+test('booking a non-bookable employee is refused, even when forced', function () {
+    [$branch, , $day, $basket] = bookingFixture();
+    $plainEmployee = User::factory()->create(['branch_id' => $branch->id]); // no bookable job type
+
+    BarberSchedule::query()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'user_id' => $plainEmployee->id,
+        'weekday' => (int) $day->dayOfWeek,
+        'start_time' => '10:00',
+        'end_time' => '14:00',
+        'is_active' => true,
+    ]);
+
+    $service = app(BookingService::class);
+
+    expect(fn () => $service->book($branch, $plainEmployee, $basket, $day->setTime(10, 0), Customer::factory()->create()))
+        ->toThrow(BookingException::class);
+
+    expect(fn () => $service->createManual(
+        $branch, $plainEmployee, $basket, $day->setTime(10, 0), 'أحمد', '+201000000001', null, override: true
+    ))->toThrow(BookingException::class);
+});
+
+test('rescheduling onto a non-bookable barber is refused', function () {
+    [$branch, $barber, $day, $basket] = bookingFixture();
+    $plainEmployee = User::factory()->create(['branch_id' => $branch->id]); // no bookable job type
+
+    // Same schedule as the fixture's real barber, so the ONLY thing that can
+    // refuse this move is the identity check -- not a missing window.
+    BarberSchedule::query()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'user_id' => $plainEmployee->id,
+        'weekday' => (int) $day->dayOfWeek,
+        'start_time' => '10:00',
+        'end_time' => '14:00',
+        'is_active' => true,
+    ]);
+
+    $service = app(BookingService::class);
+    $booking = $service->book($branch, $barber, $basket, $day->setTime(10, 0), Customer::factory()->create());
+
+    expect(fn () => $service->reschedule($booking, $day->setTime(11, 0), $plainEmployee))
         ->toThrow(BookingException::class);
 });

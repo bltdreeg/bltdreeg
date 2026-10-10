@@ -24,4 +24,25 @@ final class BookingTime
             ? $date->setTimezone(self::zone())->startOfDay()
             : CarbonImmutable::parse($date, self::zone())->startOfDay();
     }
+
+    /**
+     * The half-open [start, end) range of one branch-local calendar day, as UTC
+     * instants. The end is computed by stepping forward one day from midnight,
+     * never by parsing or asking for "23:59:59" directly.
+     *
+     * On Egypt's DST fall-back day the local wall clock repeats 23:00-23:59
+     * twice: `endOfDay()` resolves to the FIRST occurrence of 23:59:59, but a
+     * booking actually taken in the SECOND occurrence of that hour is a real,
+     * later UTC instant that an `endOfDay()`-bounded range would miss entirely —
+     * making it invisible to occupancy, the overlap check and the write lock.
+     * Walking forward from the unambiguous midnight start has no such gap.
+     *
+     * @return array{0: CarbonImmutable, 1: CarbonImmutable}
+     */
+    public static function dayRangeUtc(CarbonImmutable $localDay): array
+    {
+        $start = $localDay->setTimezone(self::zone())->startOfDay();
+
+        return [$start->utc(), $start->addDay()->utc()];
+    }
 }

@@ -15,8 +15,15 @@ use Carbon\CarbonImmutable;
  */
 final class AvailabilityEngine
 {
-    /** @return array<int, AvailableSlot> */
-    public static function day(Branch $branch, User $barber, CarbonImmutable $date, int $basketDuration): array
+    /**
+     * $useCache is false only for the write path's re-check under the barber's
+     * lock (see BookingService), which must read the live database — never a
+     * value that can be stale relative to a concurrent commit, or built from this
+     * same request's own temporary, possibly-rolled-back state (spec §4.11).
+     *
+     * @return array<int, AvailableSlot>
+     */
+    public static function day(Branch $branch, User $barber, CarbonImmutable $date, int $basketDuration, bool $useCache = true): array
     {
         if ($basketDuration <= 0) {
             return [];
@@ -28,6 +35,13 @@ final class AvailabilityEngine
             return [];
         }
 
+        if ($settings->slotStepMinutes <= 0) {
+            // A zero (or negative) step never advances the loop's cursor past the
+            // window end, hanging the request indefinitely. Treat it as nothing
+            // configured rather than looping forever.
+            return [];
+        }
+
         $zone = BookingTime::zone();
         $day = $date->setTimezone($zone)->startOfDay();
         $today = BookingTime::now()->startOfDay();
@@ -36,7 +50,9 @@ final class AvailabilityEngine
             return [];
         }
 
-        $occupancy = OccupancyCache::for($branch, $barber, $day);
+        $occupancy = $useCache
+            ? OccupancyCache::for($branch, $barber, $day)
+            : OccupancyCache::buildFresh($branch, $barber, $day);
 
         if ($occupancy['windows'] === []) {
             return [];
@@ -93,11 +109,11 @@ final class AvailabilityEngine
     }
 
     /** Whether one exact start is offered for that basket — the check a write makes. */
-    public static function isBookable(Branch $branch, User $barber, CarbonImmutable $startsAt, int $basketDuration): bool
+    public static function isBookable(Branch $branch, User $barber, CarbonImmutable $startsAt, int $basketDuration, bool $useCache = true): bool
     {
         $target = $startsAt->setTimezone(BookingTime::zone());
 
-        foreach (self::day($branch, $barber, $target, $basketDuration) as $slot) {
+        foreach (self::day($branch, $barber, $target, $basketDuration, $useCache) as $slot) {
             if ($slot->startsAt->equalTo($target)) {
                 return true;
             }

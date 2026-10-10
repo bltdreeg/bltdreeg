@@ -7,6 +7,7 @@ use Bltdreeg\Core\Modules\Services\Models\Service;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Bltdreeg\Core\Modules\Tenancy\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
@@ -121,4 +122,49 @@ test('lines carry snapshots ready for booking items', function () {
         ->and($attributes['package_id'])->toBeNull()
         ->and($attributes['duration_snapshot'])->toBe(30)
         ->and((float) $attributes['price_snapshot'])->toBe(120.0);
+});
+
+test('a package with a member service from another branch is rejected', function () {
+    $branch = Branch::factory()->create();
+    $package = Package::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'duration' => null,
+    ]);
+
+    $otherTenant = Tenant::factory()->create();
+    $otherBranch = Branch::factory()->create(['tenant_id' => $otherTenant->id]);
+    $foreign = serviceIn($otherBranch, 30, 100);
+
+    // Attached directly through the pivot, bypassing attachService()'s own
+    // branch guard -- exactly what a Filament relation field (plan 2) would do.
+    DB::table('package_service')->insert([
+        'package_id' => $package->id,
+        'service_id' => $foreign->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    expect(fn () => BasketResolver::resolve($branch, [], [$package->id]))
+        ->toThrow(BookingException::class);
+});
+
+test('a package with an inactive member service is rejected', function () {
+    $branch = Branch::factory()->create();
+    $package = Package::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'duration' => null,
+    ]);
+    $inactive = serviceIn($branch, 30, 100, active: false);
+
+    DB::table('package_service')->insert([
+        'package_id' => $package->id,
+        'service_id' => $inactive->id,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    expect(fn () => BasketResolver::resolve($branch, [], [$package->id]))
+        ->toThrow(BookingException::class);
 });

@@ -12,6 +12,7 @@ use Bltdreeg\Core\Modules\Booking\Support\BookingTime;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 
 uses(RefreshDatabase::class);
 
@@ -256,4 +257,65 @@ test('isBookable agrees with the day grid', function () {
     expect(AvailabilityEngine::isBookable($branch, $barber, bookingDay()->setTime(10, 0), 60))->toBeTrue()
         ->and(AvailabilityEngine::isBookable($branch, $barber, bookingDay()->setTime(10, 30), 60))->toBeFalse()
         ->and(AvailabilityEngine::isBookable($branch, $barber, bookingDay()->setTime(15, 0), 60))->toBeFalse();
+});
+
+test('a booking in the repeated DST fall-back hour is still visible to the day query', function () {
+    // Egypt's 2026 fall-back (verified against PHP's own tzdata transitions) is at
+    // 2026-10-29 21:00 UTC: local 23:00-23:59 occurs twice that day, once at
+    // +03:00 (DST) and once at +02:00 (standard time). A plain parse of the naive
+    // string "23:00:00" resolves to the SECOND, later occurrence (21:00 UTC) --
+    // which the OLD endOfDay()-bounded range (20:59:59 UTC) would have excluded
+    // entirely, making a booking there invisible to occupancy and the lock.
+    [$branch, $barber] = branchWithBarber();
+    $fallBackDay = BookingTime::day('2026-10-29');
+    $secondOccurrence = CarbonImmutable::parse('2026-10-29 23:00:00', BookingTime::zone());
+
+    expect($secondOccurrence->utc()->format('H:i'))->toBe('21:00'); // sanity-check the premise
+
+    Booking::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'barber_user_id' => $barber->id,
+        'starts_at' => $secondOccurrence,
+        'ends_at' => $secondOccurrence->addMinutes(30),
+        'duration_minutes' => 30,
+    ]);
+
+    expect(Booking::query()->withoutGlobalScopes()->forBarberOn($barber->id, $fallBackDay)->count())->toBe(1);
+});
+
+test('a zero slot step yields no slots instead of hanging', function () {
+    [$branch, $barber] = branchWithBarber(['booking_slot_step_minutes' => 0]);
+    window($branch, $barber, '10:00', '14:00');
+
+    expect(AvailabilityEngine::day($branch, $barber, bookingDay(), 30))->toBe([]);
+});
+
+test('creating a booking invalidates the next day\'s cache, not the previous day\'s', function () {
+    [$branch, $barber] = branchWithBarber();
+    $day1 = bookingDay();
+    $day0 = $day1->subDay();
+    $day2 = $day1->addDay();
+
+    $key = fn (CarbonImmutable $d): string => "booking:occupancy:{$branch->id}:{$barber->id}:".$d->format('Y-m-d');
+
+    foreach ([$day0, $day1, $day2] as $d) {
+        Cache::put($key($d), ['windows' => [], 'bookings' => [], 'blocks' => []], 60);
+    }
+
+    // OccupancyCache::build() looks one day BACKWARD when gathering a day's
+    // bookings, to catch a footprint bleeding in from the day before. So a
+    // booking saved on day1 can affect day2's cached occupancy -- never day0's.
+    Booking::factory()->create([
+        'tenant_id' => $branch->tenant_id,
+        'branch_id' => $branch->id,
+        'barber_user_id' => $barber->id,
+        'starts_at' => $day1->setTime(10, 0),
+        'ends_at' => $day1->setTime(10, 30),
+        'duration_minutes' => 30,
+    ]);
+
+    expect(Cache::has($key($day0)))->toBeTrue()
+        ->and(Cache::has($key($day1)))->toBeFalse()
+        ->and(Cache::has($key($day2)))->toBeFalse();
 });

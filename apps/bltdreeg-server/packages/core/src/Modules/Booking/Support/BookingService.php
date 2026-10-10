@@ -16,12 +16,16 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Every write to a booking goes through here (spec §6). Each one takes the barber's
- * day lock, re-validates against the engine, persists, and fires its event.
+ * Every write to a booking goes through here (spec §6). Each one locks the barber,
+ * re-validates against the engine, persists, and fires its event.
  *
  * MySQL cannot express an overlap constraint, so the lock plus the re-check is the
- * guard. SQLite ignores the lock, which is why the overlap rule itself is pure and
- * separately tested (OverlapGuard).
+ * guard — and the re-check reads the database directly, never the occupancy cache
+ * (spec §4.11: "re-run the overlap check against the locked set"). A cached value
+ * can be stale relative to a concurrent writer's not-yet-committed insert, or built
+ * from this same request's own temporary, possibly-rolled-back state. SQLite
+ * ignores the lock, which is why the overlap rule itself is pure and separately
+ * tested (OverlapGuard).
  */
 class BookingService
 {
@@ -85,8 +89,10 @@ class BookingService
         $target = $barber ?? $booking->barber;
         $previous = $booking;
 
+        $this->assertBarberIsBookable($branch, $target);
+
         $moved = DB::transaction(function () use ($booking, $branch, $target, $startsAt): Booking {
-            $this->lockDay($target, $startsAt);
+            $this->lockBarber($target);
             $this->assertBookable($branch, $target, $startsAt, (int) $booking->duration_minutes, exceptBookingId: $booking->getKey());
 
             $fresh = Booking::query()->withoutGlobalScopes()->create([
@@ -199,13 +205,15 @@ class BookingService
             throw BookingException::invalidBasket('A booking needs either a customer or a name and phone.');
         }
 
+        $this->assertBarberIsBookable($branch, $barber);
+
         $settings = BookingSettings::resolve($branch, $barber);
 
         $booking = DB::transaction(function () use (
             $branch, $barber, $basket, $startsAt, $source, $customer,
             $guestName, $guestPhone, $notes, $override, $createdBy, $settings
         ): Booking {
-            $this->lockDay($barber, $startsAt);
+            $this->lockBarber($barber);
 
             if (! $override) {
                 $this->assertBookable($branch, $barber, $startsAt, $basket->totalDuration);
@@ -245,25 +253,38 @@ class BookingService
     }
 
     /**
-     * Serialize writers touching the same barber and day. A no-op on SQLite, which
-     * is why the test suite's race test skips rather than pretending to pass.
+     * A barber must be a real, active, bookable employee of this branch (spec
+     * §4.4) — not merely "has a schedule row". Checked unconditionally, even when
+     * the caller is overriding scheduling rules: override lets a tenant force a
+     * booking outside business hours, never onto an id that isn't a legitimate
+     * barber here, including one from another tenant.
      */
-    private function lockDay(User $barber, CarbonImmutable $startsAt): void
+    private function assertBarberIsBookable(Branch $branch, User $barber): void
     {
-        $day = BookingTime::day($startsAt);
-
-        Booking::query()
-            ->withoutGlobalScopes()
-            ->where('barber_user_id', $barber->getKey())
-            ->whereBetween('starts_at', [$day->startOfDay()->utc(), $day->endOfDay()->utc()])
-            ->lockForUpdate()
-            ->get(['id']);
+        if (! BookableBarbers::includes($branch, $barber)) {
+            throw BookingException::barberPaused();
+        }
     }
 
     /**
-     * Re-ask the engine inside the lock. Availability is computed, so this is the
-     * same question the customer's slot picker asked — just answered again now that
-     * nobody else can write.
+     * Serializes writers for one barber for the life of this transaction, by
+     * locking the barber's own row rather than the day's booking rows: `SELECT …
+     * FOR UPDATE` over zero matching rows locks nothing, so a day with no
+     * bookings yet had no mutex at all for its very first write (spec §4.11
+     * needs the first booking of the day serialized too). A no-op on SQLite,
+     * which is why the test suite's race test skips rather than pretending to
+     * pass.
+     */
+    private function lockBarber(User $barber): void
+    {
+        DB::table('users')->where('id', $barber->getKey())->lockForUpdate()->first(['id']);
+    }
+
+    /**
+     * Re-ask the engine inside the lock, reading the database directly rather
+     * than the occupancy cache (spec §4.11) — this is the same question the
+     * customer's slot picker asked, just answered again now that nobody else can
+     * write, against data the cache's TTL cannot make stale.
      */
     private function assertBookable(
         Branch $branch,
@@ -278,33 +299,18 @@ class BookingService
             throw BookingException::barberPaused();
         }
 
-        // The booking being moved must not block its own new time. The status flip
-        // below is a mass update through the query builder, so no model event fires
-        // to invalidate the cache on our behalf; it is cleared by hand before AND
-        // after the check (see the finally block) so no reader can ever see an
-        // occupancy entry built from this transient, possibly-rolled-back state.
+        // The booking being moved must not block its own new time. This mutation
+        // is visible only inside this transaction — and only to the check below,
+        // which reads the database directly and touches no cache — so the
+        // caller's transaction can roll it back on refusal with nothing left over
+        // anywhere for another reader to see.
         if ($exceptBookingId !== null) {
             Booking::query()->withoutGlobalScopes()->whereKey($exceptBookingId)->update([
                 'status' => BookingStatusEnum::Cancelled->value,
             ]);
-            OccupancyCache::forget((int) $branch->getKey(), (int) $barber->getKey(), BookingTime::day($startsAt));
         }
 
-        try {
-            $bookable = AvailabilityEngine::isBookable($branch, $barber, $startsAt, $duration);
-        } finally {
-            // AvailabilityEngine::isBookable() just repopulated the occupancy cache
-            // from the temporarily-altered row above. If this check throws (or even
-            // if it doesn't — a concurrent reader could still have read the stale
-            // entry), that cached value was built from data the caller's transaction
-            // may roll back. Evict it immediately: the next reader rebuilds fresh
-            // from whatever the final, committed state turns out to be.
-            if ($exceptBookingId !== null) {
-                OccupancyCache::forget((int) $branch->getKey(), (int) $barber->getKey(), BookingTime::day($startsAt));
-            }
-        }
-
-        if (! $bookable) {
+        if (! AvailabilityEngine::isBookable($branch, $barber, $startsAt, $duration, useCache: false)) {
             throw BookingException::slotTaken();
         }
     }

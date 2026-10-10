@@ -9,6 +9,7 @@ use Bltdreeg\Core\Modules\Booking\Concerns\InvalidatesOccupancy;
 use Bltdreeg\Core\Modules\Booking\Database\Factories\BookingFactory;
 use Bltdreeg\Core\Modules\Booking\Enums\BookingSourceEnum;
 use Bltdreeg\Core\Modules\Booking\Enums\BookingStatusEnum;
+use Bltdreeg\Core\Modules\Booking\Support\BookingTime;
 use Bltdreeg\Core\Modules\Customers\Models\Customer;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
@@ -133,11 +134,11 @@ class Booking extends Model
 
     public function scopeForBarberOn(Builder $query, int $barberId, CarbonImmutable $localDate): Builder
     {
+        [$start, $end] = BookingTime::dayRangeUtc($localDate);
+
         return $query
             ->where('barber_user_id', $barberId)
-            ->whereBetween('starts_at', [
-                $localDate->startOfDay()->utc(),
-                $localDate->endOfDay()->utc(),
-            ]);
+            ->where('starts_at', '>=', $start)
+            ->where('starts_at', '<', $end);
     }
 }

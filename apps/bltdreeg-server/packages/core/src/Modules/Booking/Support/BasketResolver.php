@@ -111,13 +111,29 @@ final class BasketResolver
 
         $packages = Package::query()
             ->withoutGlobalScopes()
-            ->with('services')
+            // withoutGlobalScopes() on the eager load too: a member service from
+            // another branch must be REJECTED, never silently filtered out of
+            // $package->services by ambient BranchContext (which would make the
+            // package look fine from inside the panel but wrong from a context
+            // with no branch, such as central-app) or silently counted when no
+            // context is set.
+            ->with(['services' => fn ($query) => $query->withoutGlobalScopes()])
             ->where('branch_id', $branch->getKey())
             ->where('is_active', true)
             ->whereKey($ids)
             ->get();
 
         self::assertAllFound($packages->modelKeys(), $ids, 'package');
+
+        foreach ($packages as $package) {
+            foreach ($package->services as $service) {
+                if ((int) $service->branch_id !== (int) $branch->getKey() || ! $service->is_active) {
+                    throw BookingException::invalidBasket(
+                        "Package {$package->getKey()} has a member service that is not an active service of this branch."
+                    );
+                }
+            }
+        }
 
         return $packages;
     }

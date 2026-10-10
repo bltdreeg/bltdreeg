@@ -39,6 +39,20 @@ final class OccupancyCache
     }
 
     /**
+     * Bypasses the cache entirely, reading the live database. Used by the write
+     * path's re-check under the barber's lock (spec §4.11: "re-run the overlap
+     * check against the locked set"), never by a read-only availability request.
+     * A cached value can be stale relative to a concurrent writer's not-yet-visible
+     * commit, or built from this same request's own temporary, possibly-rolled-back
+     * state (reschedule's self-exclusion) — the one check that must never be wrong
+     * cannot be allowed to trust either.
+     */
+    public static function buildFresh(Branch $branch, User $barber, CarbonImmutable $localDay): array
+    {
+        return self::build($branch, $barber, $localDay);
+    }
+
+    /**
      * Used when a schedule or settings row changes, which affects every day rather
      * than one. The horizon is bounded, so clearing it day by day is cheap and needs
      * no tag support from the cache driver.
@@ -60,8 +74,7 @@ final class OccupancyCache
     /** @return array<string, mixed> */
     private static function build(Branch $branch, User $barber, CarbonImmutable $localDay): array
     {
-        $dayStart = $localDay->startOfDay()->utc();
-        $dayEnd = $localDay->endOfDay()->utc();
+        [$dayStart, $dayEnd] = BookingTime::dayRangeUtc($localDay);
 
         $windows = BarberSchedule::query()
             ->withoutGlobalScopes()
@@ -82,7 +95,8 @@ final class OccupancyCache
             ->withoutGlobalScopes()
             ->occupying()
             ->where('barber_user_id', $barber->getKey())
-            ->whereBetween('starts_at', [$dayStart->subDay(), $dayEnd])
+            ->where('starts_at', '>=', $dayStart->subDay())
+            ->where('starts_at', '<', $dayEnd)
             ->get(['starts_at', 'ends_at', 'gap_minutes'])
             ->map(fn (Booking $booking): array => [
                 'starts_at' => $booking->starts_at->utc()->toIso8601String(),
