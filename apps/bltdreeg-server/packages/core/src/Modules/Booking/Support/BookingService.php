@@ -278,7 +278,11 @@ class BookingService
             throw BookingException::barberPaused();
         }
 
-        // The booking being moved must not block its own new time.
+        // The booking being moved must not block its own new time. The status flip
+        // below is a mass update through the query builder, so no model event fires
+        // to invalidate the cache on our behalf; it is cleared by hand before AND
+        // after the check (see the finally block) so no reader can ever see an
+        // occupancy entry built from this transient, possibly-rolled-back state.
         if ($exceptBookingId !== null) {
             Booking::query()->withoutGlobalScopes()->whereKey($exceptBookingId)->update([
                 'status' => BookingStatusEnum::Cancelled->value,
@@ -286,7 +290,21 @@ class BookingService
             OccupancyCache::forget((int) $branch->getKey(), (int) $barber->getKey(), BookingTime::day($startsAt));
         }
 
-        if (! AvailabilityEngine::isBookable($branch, $barber, $startsAt, $duration)) {
+        try {
+            $bookable = AvailabilityEngine::isBookable($branch, $barber, $startsAt, $duration);
+        } finally {
+            // AvailabilityEngine::isBookable() just repopulated the occupancy cache
+            // from the temporarily-altered row above. If this check throws (or even
+            // if it doesn't — a concurrent reader could still have read the stale
+            // entry), that cached value was built from data the caller's transaction
+            // may roll back. Evict it immediately: the next reader rebuilds fresh
+            // from whatever the final, committed state turns out to be.
+            if ($exceptBookingId !== null) {
+                OccupancyCache::forget((int) $branch->getKey(), (int) $barber->getKey(), BookingTime::day($startsAt));
+            }
+        }
+
+        if (! $bookable) {
             throw BookingException::slotTaken();
         }
     }

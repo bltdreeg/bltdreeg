@@ -9,6 +9,7 @@ use Bltdreeg\Core\Modules\Booking\Events\BookingRescheduled;
 use Bltdreeg\Core\Modules\Booking\Exceptions\BookingException;
 use Bltdreeg\Core\Modules\Booking\Models\BarberSchedule;
 use Bltdreeg\Core\Modules\Booking\Models\BarberTimeBlock;
+use Bltdreeg\Core\Modules\Booking\Support\AvailabilityEngine;
 use Bltdreeg\Core\Modules\Booking\Support\BasketResolver;
 use Bltdreeg\Core\Modules\Booking\Support\BookingService;
 use Bltdreeg\Core\Modules\Booking\Support\BookingTime;
@@ -270,6 +271,27 @@ test('the lifecycle fires its domain events', function () {
 
     Event::assertDispatched(BookingCreated::class);
     Event::assertDispatched(BookingRescheduled::class);
+});
+
+test('a failed reschedule does not leave the occupancy cache believing the original slot is free', function () {
+    [$branch, $barber, $day, $basket] = bookingFixture();
+    $service = app(BookingService::class);
+
+    // "mine" holds 10:00-10:30. "theirs" holds 11:00-11:30, so moving mine onto
+    // 11:00 must fail.
+    $mine = $service->book($branch, $barber, $basket, $day->setTime(10, 0), Customer::factory()->create());
+    $service->book($branch, $barber, $basket, $day->setTime(11, 0), Customer::factory()->create());
+
+    expect(fn () => $service->reschedule($mine, $day->setTime(11, 0)))
+        ->toThrow(BookingException::class);
+
+    // assertBookable() temporarily marks "mine" Cancelled to check whether it would
+    // block its own new time, then rebuilds the occupancy cache from that
+    // mid-transaction state before the failure rolls the status change back. If
+    // that rebuilt cache entry survives the rollback, mine's OWN original slot
+    // reads back as available even though mine is still Confirmed in the database.
+    expect($mine->fresh()->status)->toBe(BookingStatusEnum::Confirmed)
+        ->and(AvailabilityEngine::isBookable($branch, $barber, $day->setTime(10, 0), 30))->toBeFalse();
 });
 
 test('two writers cannot take the same slot', function () {
