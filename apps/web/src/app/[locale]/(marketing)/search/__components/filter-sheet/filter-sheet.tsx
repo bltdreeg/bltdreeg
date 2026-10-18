@@ -4,7 +4,7 @@
 import { Dialog } from "@base-ui/react/dialog";
 import { Check, SlidersHorizontal, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { shops } from "@/lib/data/shops.constants";
@@ -64,15 +64,16 @@ export function FilterSheet({
   const [selectedTodayOnly, setSelectedTodayOnly] = useState<boolean>(todayOnly);
 
   // مزامنة الفلاتر مع الـ URL عند فتح الشيت
-  useEffect(() => {
-    if (open) {
+  const handleOpenChange = (next: boolean) => {
+    if (next) {
       setSelectedSort(sort);
       setSelectedServices(services);
       setSelectedPrice(maxPrice);
       setSelectedDistance(maxDistanceKm);
       setSelectedTodayOnly(todayOnly);
     }
-  }, [open, sort, services, maxPrice, maxDistanceKm, todayOnly]);
+    setOpen(next);
+  };
 
   // حساب عدد الفلاتر المفعّلة المؤقتة داخل الشيت
   const draftActiveCount =
@@ -116,7 +117,7 @@ export function FilterSheet({
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger
         className={cn(
           !trigger &&

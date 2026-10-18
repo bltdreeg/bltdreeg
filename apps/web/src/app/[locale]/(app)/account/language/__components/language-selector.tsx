@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, Check, AlertCircle } from "lucide-react";
+import { Globe, Check } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { Dialog } from "@base-ui/react/dialog";
@@ -27,7 +27,6 @@ export function LanguageSelector() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [selectedLang, setSelectedLang] = useState(currentLocale);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [targetLocale, setTargetLocale] = useState<string | null>(null);
 
@@ -40,7 +39,6 @@ export function LanguageSelector() {
   const handleConfirmSwitch = () => {
     if (!targetLocale) return;
     setConfirmModalOpen(false);
-    setSelectedLang(targetLocale);
     router.replace(pathname, { locale: targetLocale as "ar" | "en" });
   };
 

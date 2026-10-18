@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { getAppName } from "@/lib/data/constants/app.constants";
+
+function formatTimestamp(now: Date): string {
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
 
 export default function LocaleError({
   error,
@@ -13,17 +18,8 @@ export default function LocaleError({
 }) {
   const t = useTranslations("common.errorPage");
   const locale = useLocale();
-  const [timestamp, setTimestamp] = useState("17/09/2026 21:14");
-
-  useEffect(() => {
-    const now = new Date();
-    const day = now.getDate().toString().padStart(2, "0");
-    const month = (now.getMonth() + 1).toString().padStart(2, "0");
-    const year = now.getFullYear();
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    setTimestamp(`${day}/${month}/${year} ${hours}:${minutes}`);
-  }, []);
+  // الوقت لحظة ظهور الخطأ — بيتحسب مرة واحدة، وممكن يختلف عن السيرفر بدقيقة (suppressHydrationWarning)
+  const [timestamp] = useState(() => formatTimestamp(new Date()));
 
   const errorCode = error?.digest ? `ERR-${error.digest.slice(0, 5)}` : "ERR-5031";
 
@@ -82,7 +78,10 @@ export default function LocaleError({
             </a>
           </div>
 
-          <span className="mt-2 text-[12px] font-normal leading-none text-[#6B7280] font-mono tabular-nums ltr [direction:ltr]">
+          <span
+            suppressHydrationWarning
+            className="mt-2 text-[12px] font-normal leading-none text-[#6B7280] font-mono tabular-nums ltr [direction:ltr]"
+          >
             {errorCode} · {timestamp}
           </span>
         </div>

@@ -11,7 +11,6 @@ import { BookingStatus, type Booking } from "@/lib/types/booking";
 import { cn } from "@/lib/utils/cn.utils";
 import { formatTime, isToday } from "@/lib/utils/format/date.utils";
 import {
-  ROUTE_BOOKINGS,
   ROUTE_BOOKING_RATE,
 } from "@/lib/data/constants/routes.constants";
 import { CancelBookingDialog } from "../cancel-booking-dialog";

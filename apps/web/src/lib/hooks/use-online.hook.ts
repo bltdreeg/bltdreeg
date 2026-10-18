@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+// حالة الاتصال من navigator.onLine — useSyncExternalStore بدل قراءتها في effect
+import { useCallback, useState, useSyncExternalStore } from "react";
 
 export interface UseOnlineReturn {
   isOnline: boolean;
@@ -17,55 +18,33 @@ function getFormattedTime(): string {
   return `${hours}:${minutes} ${period}`;
 }
 
-export function useOnline(initialLastTime = "9:32 م"): UseOnlineReturn {
-  const [isOnline, setIsOnline] = useState<boolean>(true);
-  const [lastOnlineTime, setLastOnlineTime] = useState<string>(initialLastTime);
-  const [, startTransition] = useTransition();
+function subscribe(callback: () => void) {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}
 
-  useEffect(() => {
-    // Check initial online status in browser
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-      setIsOnline(navigator.onLine);
-      if (navigator.onLine) {
-        setLastOnlineTime(getFormattedTime());
-      }
-    }
+const getSnapshot = () => navigator.onLine;
+// السيرفر بيفترض إن فيه اتصال عشان البانر ميظهرش في الـ HTML
+const getServerSnapshot = () => true;
 
-    const handleOnline = () => {
-      startTransition(() => {
-        setIsOnline(true);
-        setLastOnlineTime(getFormattedTime());
-      });
-    };
+export function useOnline(initialLastTime = ""): UseOnlineReturn {
+  const isOnline = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // آخر وقت كان فيه اتصال = لحظة ما الاتصال وقع. بيتحدّث في الريندر لما الحالة تتغير
+  // (نمط "تخزين القيمة السابقة" من React docs) بدل effect
+  const [lastOnlineTime, setLastOnlineTime] = useState(initialLastTime);
+  const [wasOnline, setWasOnline] = useState(isOnline);
+  if (wasOnline !== isOnline) {
+    setWasOnline(isOnline);
+    if (!isOnline) setLastOnlineTime(getFormattedTime());
+  }
 
-    const handleOffline = () => {
-      startTransition(() => {
-        setIsOnline(false);
-      });
-    };
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
+  const checkOnline = useCallback(() => {
+    if (navigator.onLine) setLastOnlineTime(getFormattedTime());
   }, []);
 
-  const checkOnline = () => {
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
-      const current = navigator.onLine;
-      setIsOnline(current);
-      if (current) {
-        setLastOnlineTime(getFormattedTime());
-      }
-    }
-  };
-
-  return {
-    isOnline,
-    lastOnlineTime,
-    checkOnline,
-  };
+  return { isOnline, lastOnlineTime, checkOnline };
 }

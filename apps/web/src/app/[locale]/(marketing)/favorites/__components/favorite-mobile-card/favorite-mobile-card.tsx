@@ -71,7 +71,7 @@ export function FavoriteMobileCard({
 }: FavoriteMobileCardProps) {
   const t = useTranslations("marketing.favorites.mobileCard");
   const locale = useLocale();
-  const wait = getShopWaitStatus(shop, t as any);
+  const wait = getShopWaitStatus(shop, (key) => t(key));
   const WaitIcon = wait.icon;
 
   return (

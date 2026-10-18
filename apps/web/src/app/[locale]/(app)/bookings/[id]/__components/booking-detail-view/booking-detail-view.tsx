@@ -3,7 +3,7 @@
 // تفاصيل الحجز — قبل يوم الميعاد (مطابق لتصميم FRAME 11A في web app design.html)
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, Copy, Check, Phone, ArrowLeft, CalendarSync, Star } from "lucide-react";
+import { ChevronLeft, Copy, Check, Phone, CalendarSync, Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { ROUTE_ACCOUNT, ROUTE_BOOKINGS, ROUTE_BOOK_SLOT, ROUTE_BOOKING_RATE } from "@/lib/data/constants/routes.constants";
@@ -336,7 +336,7 @@ export function BookingDetailView({
                 </span>
                 <div className="flex-1 text-[14.5px] font-semibold leading-[1.8] text-[#0E0F11]">
                   {services && services.length > 0 ? (
-                    services.map((svc, i) => (
+                    services.map((svc) => (
                       <div key={svc.id}>
                         {svc.name} — {t("table.minutes", { count: svc.durationMinutes })} — {formatPrice(svc.price, locale)}
                       </div>
