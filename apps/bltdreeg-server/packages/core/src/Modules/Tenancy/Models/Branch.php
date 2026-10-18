@@ -131,6 +131,21 @@ class Branch extends Model
         return $disk->url($this->cover_image);
     }
 
+    /**
+     * صور الفرع كلها كـ URLs — الغلاف الأول، وبعده باقي المعرض من غير تكرار.
+     *
+     * @return list<string>
+     */
+    public function galleryUrls(): array
+    {
+        /** @var \Illuminate\Contracts\Filesystem\Cloud $disk */
+        $disk = Storage::disk(self::IMAGES_DISK);
+
+        $paths = array_values(array_unique(array_filter([$this->cover_image, ...($this->images ?? [])])));
+
+        return array_map(fn (string $path): string => $disk->url($path), $paths);
+    }
+
     public function getLocale(): string
     {
         return $this->translationLocale ?? 'ar';
