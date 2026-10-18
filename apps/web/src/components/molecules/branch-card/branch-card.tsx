@@ -14,8 +14,13 @@ function BranchCard({ branch, className }: BranchCardProps) {
     <article className={cn("flex min-w-0 flex-col overflow-hidden rounded-[14px] border border-border bg-card", className)}>
       <div className="relative aspect-[4/3] bg-muted">
         {branch.coverImageUrl ? (
-          // unoptimized: الصور من storage الـ Laravel ومش متعرّفة في remotePatterns
-          <Image src={branch.coverImageUrl} alt={branch.name} fill unoptimized className="object-cover" />
+          <Image
+            src={branch.coverImageUrl}
+            alt={branch.name}
+            fill
+            sizes="(min-width: 768px) 25vw, 50vw"
+            className="object-cover"
+          />
         ) : (
           <Scissors aria-hidden className="absolute inset-0 m-auto size-8 text-muted-foreground" />
         )}
