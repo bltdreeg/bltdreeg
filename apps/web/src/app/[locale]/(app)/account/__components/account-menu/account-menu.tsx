@@ -23,17 +23,14 @@ import {
   ROUTE_ACCOUNT_LANGUAGE,
   ROUTE_ACCOUNT_HELP,
 } from "@/lib/data/constants/routes.constants";
-import { cn } from "@/lib/utils/cn.utils";
 
 type AccountMenuProps = {
   favoriteCount?: number;
   upcomingBookingsCount?: number;
 };
 
-export function AccountMenu({
-  favoriteCount = 4,
-  upcomingBookingsCount = 2,
-}: AccountMenuProps) {
+/** العدادات بتظهر بس لما تتبعت — لسه مفيش API للمفضلة والحجوزات */
+export function AccountMenu({ favoriteCount, upcomingBookingsCount }: AccountMenuProps = {}) {
   const t = useTranslations("app.account.menu");
   const locale = useLocale();
 
@@ -79,9 +76,11 @@ export function AccountMenu({
               <span className="text-[14.5px] font-semibold text-foreground">
                 {t("favorites")}
               </span>
-              <span className="flex h-5.5 items-center justify-center rounded-md border border-tint-border bg-tint px-2 text-[11.5px] font-bold text-primary-pressed">
-                {favoriteCount}
-              </span>
+              {favoriteCount !== undefined && (
+                <span className="flex h-5.5 items-center justify-center rounded-md border border-tint-border bg-tint px-2 text-[11.5px] font-bold text-primary-pressed">
+                  {favoriteCount}
+                </span>
+              )}
             </div>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           </Link>
@@ -98,9 +97,11 @@ export function AccountMenu({
               <span className="text-[14.5px] font-semibold text-foreground">
                 {t("bookings")}
               </span>
-              <span className="text-[12.5px] text-muted-foreground">
-                {t("upcomingCount", { count: upcomingBookingsCount })}
-              </span>
+              {upcomingBookingsCount !== undefined && (
+                <span className="text-[12.5px] text-muted-foreground">
+                  {t("upcomingCount", { count: upcomingBookingsCount })}
+                </span>
+              )}
             </div>
             <ChevronLeft className="size-4 text-[#CFD4DA] rtl:rotate-0 ltr:rotate-180" />
           </Link>

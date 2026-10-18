@@ -1,17 +1,19 @@
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/atoms/button";
-import type { User } from "@/lib/types/user/user.interface";
+import { Link } from "@/i18n/navigation";
+import { ROUTE_ACCOUNT_PROFILE } from "@/lib/data/constants/routes.constants";
+import type { Customer } from "@/lib/types/auth";
+import { formatLocalEgyptianPhone } from "@/lib/utils/auth-validation.utils";
+import { customerFullName, customerInitials } from "@/lib/utils/user/customer-display";
 
 type AccountHeaderProps = {
-  user: User;
-  favoriteCount?: number;
-  onEdit?: () => void;
+  user: Customer;
 };
 
-export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProps) {
+export function AccountHeader({ user }: AccountHeaderProps) {
   const t = useTranslations("app.account.header");
-  const completedCuts = user.completedBookingsCount ?? 12;
-  const favCount = favoriteCount ?? user.favoriteShopIds?.length ?? 4;
+  const name = customerFullName(user) || t("noName");
+  const initials = customerInitials(user);
+  const contact = user.phone ? formatLocalEgyptianPhone(user.phone) : user.email;
 
   return (
     <section
@@ -24,51 +26,29 @@ export function AccountHeader({ user, favoriteCount, onEdit }: AccountHeaderProp
         aria-hidden
       >
         <span className="text-[26px] font-extrabold text-primary-pressed">
-          ك م
+          {initials}
         </span>
       </div>
 
-      {/* اسم المستخدم والموبايل */}
+      {/* اسم المستخدم ووسيلة التواصل */}
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <h2 className="text-[22px] font-extrabold leading-tight text-foreground md:text-2xl">
-          {user.name}
+        <h2 className="truncate text-[22px] font-extrabold leading-tight text-foreground md:text-2xl">
+          {name}
         </h2>
-        <p className="tabular text-sm text-muted-foreground">
-          {user.phone ? "01xxxxxxxxx" : "01xxxxxxxxx"} · {t("joinedDate", { date: user.joinedDate ?? "يونيو 2025" })}
-        </p>
-      </div>
-
-      {/* الإحصائيات: حلاقة خلصتها وصالونات مفضلة */}
-      <div className="flex shrink-0 items-center divide-x divide-x-reverse divide-border self-stretch sm:self-auto">
-        <div className="flex flex-1 flex-col items-center gap-1.5 px-5 sm:flex-none sm:px-6.5">
-          <span className="tabular text-[26px] font-extrabold text-foreground md:text-[28px]">
-            {completedCuts}
-          </span>
-          <span className="whitespace-nowrap text-[12.5px] text-muted-foreground">
-            {t("completedCuts")}
-          </span>
-        </div>
-
-        <div className="flex flex-1 flex-col items-center gap-1.5 px-5 sm:flex-none sm:px-6.5">
-          <span className="tabular text-[26px] font-extrabold text-foreground md:text-[28px]">
-            {favCount}
-          </span>
-          <span className="whitespace-nowrap text-[12.5px] text-muted-foreground">
-            {t("favoriteSalons")}
-          </span>
-        </div>
+        {contact && (
+          <p dir="ltr" className="tabular truncate text-start text-sm text-muted-foreground">
+            {contact}
+          </p>
+        )}
       </div>
 
       {/* زر التعديل */}
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onEdit}
-        className="h-11 w-full shrink-0 rounded-xl px-5 text-sm font-bold text-foreground hover:bg-muted sm:w-auto"
+      <Link
+        href={ROUTE_ACCOUNT_PROFILE}
+        className="inline-flex h-11 w-full shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-bold text-foreground transition-colors hover:bg-muted sm:w-auto"
       >
         {t("edit")}
-      </Button>
+      </Link>
     </section>
   );
 }
-

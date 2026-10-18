@@ -11,7 +11,10 @@
         "ticketLabelQueue": "Your queue number",
         "ticketAheadOf": "2 ahead",
         "ticketAheadOfLine2": "of you",
-        "footerNote": "Sign in to book, track your queue on the day, and find your favorite salons in one place."
+        "footerNote": "Sign in to book, track your queue on the day, and find your favorite salons in one place.",
+        "sampleSalon": "Barber Lounge Maadi",
+        "sampleServices": "Haircut + beard trim · with Karim Mostafa",
+        "sampleTime": "6:30 PM"
       },
       "register": {
         "title": "One account, and booking becomes two taps.",
@@ -167,10 +170,8 @@
       "logout": "Log Out",
       "header": {
         "ariaLabel": "User details",
-        "joinedDate": "Joined {date}",
-        "completedCuts": "Completed haircuts",
-        "favoriteSalons": "Favorite salons",
-        "edit": "Edit"
+        "edit": "Edit",
+        "noName": "Your account"
       },
       "menu": {
         "ariaLabel": "Account options",
@@ -194,17 +195,14 @@
       },
       "logoutDialog": {
         "title": "Log Out?",
-        "notice": "You have an active spot in {salonName}. If you log out, you won't receive queue notifications, but your spot remains reserved.",
+        "notice": "You'll need to log in again to book or track your queue number.",
         "loggingOut": "Logging out...",
         "confirm": "Log out",
         "cancel": "Stay logged in"
       },
       "profile": {
         "title": "Personal Information",
-        "subtitle": "Edit your name, email, preferred area, and verified phone number.",
-        "changePhoto": "Change photo",
-        "changePhotoAria": "Change profile picture",
-        "memberSince": "Member since {date} · {count, plural, one {# completed visit} other {# completed visits}}",
+        "subtitle": "Edit your name, email, birth date, and verified phone number.",
         "securityTitle": "Your account is secure and verified",
         "securityDesc": "Your phone number is linked to bookings and live queue alerts to prevent duplicate bookings or lost spots.",
         "basicInfo": "Basic Information",
@@ -229,13 +227,66 @@
           "title": "Change phone number",
           "desc": "We'll send an OTP confirmation code to your new number to verify ownership.",
           "submit": "Send confirmation code",
-          "cancel": "Cancel"
+          "cancel": "Cancel",
+          "sending": "Sending…",
+          "codeTitle": "Enter the code",
+          "codeDesc": "We sent a {length}-digit code to {phone}.",
+          "codeLabel": "Verification code",
+          "verify": "Verify number",
+          "verifying": "Verifying…",
+          "resend": "Resend code",
+          "back": "Change number",
+          "successTitle": "Phone number updated"
         },
         "deleteModal": {
           "title": "Are you sure you want to delete your account?",
           "desc": "You will lose all your booking history and favorite salons. You won't be able to recover this account with the same number.",
           "confirm": "Yes, delete account",
-          "cancel": "Cancel"
+          "cancel": "Cancel",
+          "deleting": "Deleting…"
+        },
+        "unverified": "Not verified",
+        "notAdded": "Not added",
+        "addPhone": "Add number",
+        "emailHint": "If you change your email, we'll send a verification code to it.",
+        "verifyEmail": "Verify email",
+        "areaHint": "Changing your area here is coming soon.",
+        "passwordTitle": "Password",
+        "passwordDesc": "Changing it logs you out of all other devices.",
+        "passwordMissingDesc": "Your account has no password — add one to log in with email or phone.",
+        "changePassword": "Change password",
+        "setPassword": "Add password",
+        "errors": {
+          "firstNameRequired": "Enter your first name",
+          "lastNameRequired": "Enter your last name",
+          "emailInvalid": "Email address is not valid",
+          "birthDateInvalid": "Birth date must be before today"
+        },
+        "emailModal": {
+          "title": "Verify your email",
+          "desc": "Enter the code we sent to {email}.",
+          "codeLabel": "Verification code",
+          "resend": "Send a new code",
+          "resent": "We sent you a new code.",
+          "verify": "Verify email",
+          "verifying": "Verifying…",
+          "successTitle": "Email verified"
+        },
+        "passwordModal": {
+          "titleChange": "Change password",
+          "titleSet": "Add a password",
+          "desc": "We'll log you out of all other devices after the change.",
+          "current": "Current password",
+          "new": "New password",
+          "hint": "At least 8 characters, with letters and numbers.",
+          "confirm": "Confirm new password",
+          "invalid": "Password must be at least 8 characters and include a number.",
+          "mismatch": "Passwords don't match.",
+          "submit": "Save password",
+          "saving": "Saving…",
+          "cancel": "Cancel",
+          "successTitle": "Password saved",
+          "successDesc": "We logged you out of all other devices."
         }
       },
       "help": {
@@ -736,7 +787,8 @@
       "myAccount": "My Account — {name}",
       "defaultUser": "User",
       "signIn": "Sign In",
-      "switchLanguage": "Switch to {language}"
+      "switchLanguage": "Switch to {language}",
+      "chooseArea": "Choose area"
     },
     "footer": {
       "tagline": "Book your appointment at the nearest salon, and know your queue number before leaving home.",
@@ -1054,7 +1106,10 @@
         "title": "No salon with that name",
         "description": "We couldn't find \"{query}\" {reason}. Try clearing filters or searching for another name.",
         "clearFiltersShowAll": "Clear filters and show all salons",
-        "expandRange10Km": "Expand search radius to 10 km"
+        "expandRange10Km": "Expand search radius to 10 km",
+        "reasonCity": "in {city}",
+        "reasonDistance": "within {distance}",
+        "reasonPrice": "and price up to {price}"
       },
       "resultCard": {
         "newBadge": "New",

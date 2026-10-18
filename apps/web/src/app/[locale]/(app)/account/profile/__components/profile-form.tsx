@@ -1,108 +1,97 @@
 "use client";
 
 import { useState } from "react";
-import { Camera, Check, AlertTriangle, Trash2, Calendar, MapPin, ShieldCheck, ChevronDown, Phone } from "lucide-react";
-import { Button } from "@/components/atoms/button";
-import { Dialog } from "@base-ui/react/dialog";
-import { useRouter } from "@/i18n/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, KeyRound, MapPin, ShieldCheck, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { ROUTE_ACCOUNT } from "@/lib/data/constants/routes.constants";
-import type { User } from "@/lib/types/user/user.interface";
+import { Button } from "@/components/atoms/button";
+import { useUpdateProfile } from "@/lib/hooks/user";
+import type { Customer } from "@/lib/types/auth";
+import { apiFieldErrors, authErrorMessage } from "@/lib/utils/auth/auth-error-message";
+import { formatLocalEgyptianPhone } from "@/lib/utils/auth-validation.utils";
+import { customerFullName, customerInitials } from "@/lib/utils/user/customer-display";
+import { toProfileValues, toUpdateProfileDto, type ProfileFormValues } from "@/lib/utils/user/profile-update";
+import { ChangePasswordDialog } from "./change-password-dialog";
+import { ChangePhoneDialog } from "./change-phone-dialog";
+import { DeleteAccountDialog } from "./delete-account-dialog";
+import { createProfileSchema } from "./profile-form.schema";
+import { VerifyEmailDialog } from "./verify-email-dialog";
 
 interface ProfileFormProps {
-  user: User;
+  user: Customer;
 }
 
-const CITIES = [
-  { id: "maadi", name: "المعادي، القاهرة" },
-  { id: "nasr-city", name: "مدينة نصر، القاهرة" },
-  { id: "dokki", name: "الدقي، الجيزة" },
-  { id: "mohandessin", name: "المهندسين، الجيزة" },
-  { id: "tagamoa", name: "التجمع الخامس، القاهرة الجديدة" },
-  { id: "heliopolis", name: "مصر الجديدة، القاهرة" },
-  { id: "sheikh-zayed", name: "الشيخ زايد، الجيزة" },
-];
+// أسماء حقول Laravel ← أسماء حقول الفورم
+const SERVER_FIELDS: Record<string, keyof ProfileFormValues> = {
+  first_name: "firstName",
+  last_name: "lastName",
+  email: "email",
+  birth_date: "birthDate",
+};
+
+const INPUT_CLASS =
+  "h-11 rounded-xl border border-border bg-muted/40 px-3.5 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15 aria-invalid:border-destructive";
 
 export function ProfileForm({ user }: ProfileFormProps) {
-  const router = useRouter();
   const t = useTranslations("app.account.profile");
-
-  const [firstName, setFirstName] = useState("كريم");
-  const [lastName, setLastName] = useState("مصطفى");
-  const [email, setEmail] = useState("karim.mustafa@gmail.com");
-  const [dob, setDob] = useState("1996-03-14");
-  const [cityId, setCityId] = useState(user.cityId || "maadi");
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
-  // States
+  const update = useUpdateProfile();
   const [isSaved, setIsSaved] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [changePhoneModalOpen, setChangePhoneModalOpen] = useState(false);
-  const [newPhone, setNewPhone] = useState("");
+  const [phoneModalOpen, setPhoneModalOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setAvatarUrl(URL.createObjectURL(file));
-    }
-  };
+  const initial = toProfileValues(user);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors, isDirty },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(createProfileSchema((key) => t(`errors.${key}`))),
+    // values بيعمل reset لما المستخدم يتحدّث في الكاش (بعد الحفظ أو تأكيد البريد)
+    values: initial,
+  });
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
-    }, 500);
-  };
+  function onValid(values: ProfileFormValues) {
+    const dto = toUpdateProfileDto(values, initial);
+    if (Object.keys(dto).length === 0) return;
+    setIsSaved(false);
+    update.mutate(dto, {
+      onSuccess: (saved) => {
+        reset(toProfileValues(saved));
+        setIsSaved(true);
+        // البريد الجديد بيوصله كود تلقائياً، فبنفتح التأكيد على طول
+        if (dto.email && saved.email && !saved.emailVerified) setEmailModalOpen(true);
+      },
+      onError: (error) => {
+        for (const [field, message] of Object.entries(apiFieldErrors(error))) {
+          const name = SERVER_FIELDS[field];
+          if (name) setError(name, { message });
+        }
+      },
+    });
+  }
+
+  const fullName = customerFullName(user);
+  const formError =
+    update.error && Object.keys(apiFieldErrors(update.error)).length === 0 ? authErrorMessage(update.error) : null;
 
   return (
-    <form onSubmit={handleSave} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit(onValid)} noValidate className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* العمود الجانبي: صورة الحساب وبطاقة الأمان */}
+        {/* العمود الجانبي: الحروف الأولى وبطاقة الأمان */}
         <aside className="flex flex-col gap-5 lg:col-span-4">
           <div className="flex flex-col items-center justify-center rounded-[14px] border border-border bg-card p-6 text-center shadow-xs">
-            {/* الصورة الشخصية */}
-            <div className="relative mb-3">
-              <div className="flex size-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-tint text-2xl font-black text-primary-pressed shadow-inner">
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt={user.name} className="size-full object-cover" />
-                ) : (
-                  <span>{firstName[0]} {lastName[0]}</span>
-                )}
-              </div>
-              <label
-                htmlFor="avatar-upload"
-                className="absolute -bottom-1 -start-1 flex size-8 cursor-pointer items-center justify-center rounded-full border-2 border-card bg-primary text-white shadow-sm hover:bg-primary-hover transition-colors"
-                aria-label={t("changePhotoAria")}
-              >
-                <Camera className="size-4" />
-                <input
-                  id="avatar-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="sr-only"
-                />
-              </label>
-            </div>
-            <label
-              htmlFor="avatar-upload"
-              className="text-xs font-bold text-primary hover:underline cursor-pointer"
+            <div
+              aria-hidden
+              className="mb-3 flex size-24 items-center justify-center overflow-hidden rounded-full border-2 border-border bg-tint text-2xl font-black text-primary-pressed shadow-inner"
             >
-              {t("changePhoto")}
-            </label>
-            <h2 className="mt-3 text-base font-extrabold text-foreground">
-              {firstName} {lastName}
-            </h2>
-            <span className="text-xs text-muted-foreground">
-              {t("memberSince", {
-                date: user.joinedDate || "يونيو 2025",
-                count: user.completedBookingsCount || 12,
-              })}
-            </span>
+              {customerInitials(user)}
+            </div>
+            {fullName && <h2 className="text-base font-extrabold text-foreground">{fullName}</h2>}
           </div>
 
           {/* بطاقة توثيق الهوية */}
@@ -111,9 +100,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
               <ShieldCheck className="size-4.5" />
               <span className="text-xs font-bold">{t("securityTitle")}</span>
             </div>
-            <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-              {t("securityDesc")}
-            </p>
+            <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{t("securityDesc")}</p>
           </div>
         </aside>
 
@@ -126,126 +113,119 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
             {/* الاسم الأول واسم العائلة */}
             <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-foreground">
-                  {t("firstName")}
-                </label>
+              <Field label={t("firstName")} error={errors.firstName?.message}>
                 <input
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  required
-                  className="h-11 rounded-xl border border-border bg-muted/40 px-3.5 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15"
+                  autoComplete="given-name"
+                  aria-invalid={!!errors.firstName}
+                  {...register("firstName")}
+                  className={INPUT_CLASS}
                 />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-foreground">
-                  {t("lastName")}
-                </label>
+              </Field>
+              <Field label={t("lastName")} error={errors.lastName?.message}>
                 <input
                   type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  required
-                  className="h-11 rounded-xl border border-border bg-muted/40 px-3.5 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15"
+                  autoComplete="family-name"
+                  aria-invalid={!!errors.lastName}
+                  {...register("lastName")}
+                  className={INPUT_CLASS}
                 />
-              </div>
+              </Field>
             </div>
 
-            {/* رقم الموبايل (مقفل + تحقق OTP) */}
+            {/* رقم الموبايل (بيتغير بكود تأكيد بس) */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-foreground">
-                {t("phone")}
-              </label>
+              <span className="text-xs font-bold text-foreground">{t("phone")}</span>
               <div className="flex h-11 items-center justify-between rounded-xl border border-border bg-muted/70 px-3.5">
-                <div className="flex items-center gap-2 direction-ltr font-mono font-bold text-sm text-foreground">
-                  <span className="text-xs text-muted-foreground border-r border-border pr-2">
-                    +20 🇪🇬
-                  </span>
-                  <span>0102 345 6789</span>
-                </div>
-                <div className="flex items-center gap-1 rounded-md bg-[#E7F4EA] px-2 py-1 text-[11px] font-bold text-[#15803D]">
-                  <Check className="size-3 stroke-[2.5]" />
-                  <span>{t("verified")}</span>
-                </div>
+                <span dir="ltr" className="font-mono text-sm font-bold text-foreground">
+                  {user.phone ? formatLocalEgyptianPhone(user.phone) : t("notAdded")}
+                </span>
+                {user.phone && <StatusBadge verified={user.phoneVerified} label={user.phoneVerified ? t("verified") : t("unverified")} />}
               </div>
               <div className="flex items-center justify-between pt-0.5 text-xs">
                 <span className="text-muted-foreground">{t("phoneIdentity")}</span>
                 <button
                   type="button"
-                  onClick={() => setChangePhoneModalOpen(true)}
+                  onClick={() => setPhoneModalOpen(true)}
                   className="font-bold text-primary hover:underline cursor-pointer"
                 >
-                  {t("changePhone")}
+                  {user.phone ? t("changePhone") : t("addPhone")}
                 </button>
               </div>
             </div>
 
             {/* البريد الإلكتروني */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-foreground">
-                {t("email")} <span className="font-normal text-muted-foreground">{t("optional")}</span>
-              </label>
+            <Field
+              label={t("email")}
+              optional={t("optional")}
+              error={errors.email?.message}
+              hint={t("emailHint")}
+              badge={
+                user.email && !isDirty ? (
+                  <StatusBadge verified={user.emailVerified} label={user.emailVerified ? t("verified") : t("unverified")} />
+                ) : null
+              }
+            >
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                dir="ltr"
+                autoComplete="email"
                 placeholder="name@example.com"
-                className="h-11 rounded-xl border border-border bg-muted/40 px-3.5 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15"
+                aria-invalid={!!errors.email}
+                {...register("email")}
+                className={`${INPUT_CLASS} text-start`}
               />
-            </div>
+            </Field>
+            {user.email && !user.emailVerified && (
+              <button
+                type="button"
+                onClick={() => setEmailModalOpen(true)}
+                className="-mt-2 self-start text-xs font-bold text-primary hover:underline cursor-pointer"
+              >
+                {t("verifyEmail")}
+              </button>
+            )}
 
             {/* تاريخ الميلاد والمنطقة */}
             <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-foreground">
-                  {t("dob")} <span className="font-normal text-muted-foreground">{t("optional")}</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
-                    className="h-11 w-full rounded-xl border border-border bg-muted/40 px-3.5 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15"
-                  />
-                </div>
-                <span className="text-[11px] text-muted-foreground">
-                  {t("dobHint")}
-                </span>
-              </div>
+              <Field label={t("dob")} optional={t("optional")} error={errors.birthDate?.message} hint={t("dobHint")}>
+                <input
+                  type="date"
+                  aria-invalid={!!errors.birthDate}
+                  {...register("birthDate")}
+                  className={`${INPUT_CLASS} w-full`}
+                />
+              </Field>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-foreground">
-                  {t("favoriteArea")}
-                </label>
-                <div className="relative">
-                  <select
-                    value={cityId}
-                    onChange={(e) => setCityId(e.target.value)}
-                    className="h-11 w-full appearance-none rounded-xl border border-border bg-muted/40 px-3.5 pe-8 text-sm font-semibold text-foreground focus:border-primary focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/15 cursor-pointer"
-                  >
-                    {CITIES.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                <span className="text-xs font-bold text-foreground">{t("favoriteArea")}</span>
+                <div className="flex h-11 items-center gap-2 rounded-xl border border-border bg-muted/70 px-3.5 text-sm font-semibold text-foreground">
+                  <MapPin aria-hidden className="size-4 shrink-0 text-muted-foreground" />
+                  <span className="truncate">
+                    {user.location.city.name}، {user.location.governorate.name}
+                  </span>
                 </div>
+                <span className="text-[11px] text-muted-foreground">{t("areaHint")}</span>
               </div>
             </div>
+
+            {formError && (
+              <p role="alert" className="text-xs text-destructive">
+                {formError}
+              </p>
+            )}
 
             {/* زر الحفظ */}
             <div className="pt-3 flex items-center justify-between gap-4">
               <Button
                 type="submit"
-                disabled={isSaving}
+                disabled={update.isPending || !isDirty}
                 className="h-11 px-8 rounded-xl font-extrabold text-sm shadow-xs cursor-pointer"
               >
-                {isSaving ? t("saving") : t("saveChanges")}
+                {update.isPending ? t("saving") : t("saveChanges")}
               </Button>
-              {isSaved && (
-                <span className="text-xs font-bold text-[#15803D] flex items-center gap-1">
+              {isSaved && !isDirty && (
+                <span role="status" className="text-xs font-bold text-[#15803D] flex items-center gap-1">
                   <Check className="size-4" />
                   <span>{t("saveSuccess")}</span>
                 </span>
@@ -253,15 +233,32 @@ export function ProfileForm({ user }: ProfileFormProps) {
             </div>
           </div>
 
+          {/* كلمة السر */}
+          <div className="rounded-[14px] border border-border bg-card p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-xs">
+            <div className="flex flex-col gap-0.5">
+              <span className="flex items-center gap-2 text-sm font-bold text-foreground">
+                <KeyRound aria-hidden className="size-4 text-muted-foreground" />
+                {t("passwordTitle")}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {user.hasPassword ? t("passwordDesc") : t("passwordMissingDesc")}
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPasswordModalOpen(true)}
+              className="h-10 shrink-0 text-xs font-bold cursor-pointer"
+            >
+              {user.hasPassword ? t("changePassword") : t("setPassword")}
+            </Button>
+          </div>
+
           {/* كارت منطقة الخطر: حذف الحساب */}
           <div className="rounded-[14px] border border-red-200/70 bg-red-50/40 p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-bold text-destructive">
-                {t("deleteTitle")}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {t("deleteDesc")}
-              </span>
+              <span className="text-sm font-bold text-destructive">{t("deleteTitle")}</span>
+              <span className="text-xs text-muted-foreground">{t("deleteDesc")}</span>
             </div>
             <Button
               type="button"
@@ -276,89 +273,57 @@ export function ProfileForm({ user }: ProfileFormProps) {
         </main>
       </div>
 
-      {/* حوار تغيير رقم الهاتف (OTP Flow) */}
-      <Dialog.Root open={changePhoneModalOpen} onOpenChange={setChangePhoneModalOpen}>
-        <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" />
-          <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-xl text-start">
-            <Dialog.Title className="text-lg font-extrabold text-foreground">
-              {t("changePhoneModal.title")}
-            </Dialog.Title>
-            <Dialog.Description className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {t("changePhoneModal.desc")}
-            </Dialog.Description>
-            <div className="mt-4 flex flex-col gap-3">
-              <div className="flex h-11 items-center rounded-xl border border-border bg-muted/40 px-3.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15">
-                <span className="text-xs font-mono text-muted-foreground border-e border-border pe-2">
-                  +20 🇪🇬
-                </span>
-                <input
-                  type="tel"
-                  placeholder="010xxxxxxxx"
-                  value={newPhone}
-                  onChange={(e) => setNewPhone(e.target.value)}
-                  className="w-full bg-transparent ps-2.5 font-mono text-sm font-bold text-foreground focus:outline-none"
-                />
-              </div>
-              <div className="flex gap-2 pt-2">
-                <Button
-                  type="button"
-                  onClick={() => setChangePhoneModalOpen(false)}
-                  className="flex-1 h-10 text-xs font-bold"
-                >
-                  {t("changePhoneModal.submit")}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setChangePhoneModalOpen(false)}
-                  className="h-10 text-xs font-bold"
-                >
-                  {t("changePhoneModal.cancel")}
-                </Button>
-              </div>
-            </div>
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
-
-      {/* حوار تأكيد حذف الحساب */}
-      <Dialog.Root open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" />
-          <Dialog.Popup className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-card p-6 shadow-xl text-start">
-            <div className="flex size-11 items-center justify-center rounded-xl bg-destructive/10 text-destructive mb-3">
-              <AlertTriangle className="size-6" />
-            </div>
-            <Dialog.Title className="text-lg font-extrabold text-foreground">
-              {t("deleteModal.title")}
-            </Dialog.Title>
-            <Dialog.Description className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              {t("deleteModal.desc")}
-            </Dialog.Description>
-            <div className="mt-5 flex gap-2.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setDeleteModalOpen(false);
-                  router.push(ROUTE_ACCOUNT);
-                }}
-                className="flex-1 h-10 rounded-xl bg-destructive text-destructive-foreground text-xs font-bold hover:bg-destructive/90 transition-colors"
-              >
-                {t("deleteModal.confirm")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setDeleteModalOpen(false)}
-                className="h-10 px-4 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-colors"
-              >
-                {t("deleteModal.cancel")}
-              </button>
-            </div>
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
+      <ChangePhoneDialog open={phoneModalOpen} onOpenChange={setPhoneModalOpen} />
+      {user.email && (
+        <VerifyEmailDialog email={user.email} open={emailModalOpen} onOpenChange={setEmailModalOpen} />
+      )}
+      <ChangePasswordDialog hasPassword={user.hasPassword} open={passwordModalOpen} onOpenChange={setPasswordModalOpen} />
+      <DeleteAccountDialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen} />
     </form>
   );
 }
 
+type FieldProps = {
+  label: string;
+  optional?: string;
+  error?: string;
+  hint?: string;
+  badge?: React.ReactNode;
+  children: React.ReactNode;
+};
+
+function Field({ label, optional, error, hint, badge, children }: FieldProps) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="flex items-center justify-between gap-2 text-xs font-bold text-foreground">
+        <span>
+          {label} {optional && <span className="font-normal text-muted-foreground">{optional}</span>}
+        </span>
+        {badge}
+      </span>
+      {children}
+      {error ? (
+        <span role="alert" className="text-[11px] text-destructive">
+          {error}
+        </span>
+      ) : (
+        hint && <span className="text-[11px] text-muted-foreground">{hint}</span>
+      )}
+    </label>
+  );
+}
+
+function StatusBadge({ verified, label }: { verified: boolean; label: string }) {
+  return (
+    <span
+      className={
+        verified
+          ? "flex items-center gap-1 rounded-md bg-[#E7F4EA] px-2 py-1 text-[11px] font-bold text-[#15803D]"
+          : "flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[11px] font-bold text-amber-700"
+      }
+    >
+      {verified && <Check className="size-3 stroke-[2.5]" />}
+      <span>{label}</span>
+    </span>
+  );
+}

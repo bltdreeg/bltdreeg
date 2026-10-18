@@ -4,13 +4,11 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Modal, ModalContent } from "@/components/atoms/modal";
 import { useRouter } from "@/i18n/navigation";
-import { logout } from "@/lib/actions/auth/auth.action";
-import { SESSION_COOKIE } from "@/lib/data/constants/app.constants";
 import { ROUTE_HOME } from "@/lib/data/constants/routes.constants";
+import { useLogout } from "@/lib/hooks/auth";
 
 type LogoutDialogProps = {
-  userName?: string;
-  salonName?: string;
+  /** تحذير لما يكون عند العميل دور شغّال — لسه مفيش API للدور، فالافتراضي رسالة عامة */
   activeBookingNotice?: string;
   trigger?: React.ReactNode;
   open?: boolean;
@@ -18,7 +16,6 @@ type LogoutDialogProps = {
 };
 
 export function LogoutDialog({
-  salonName = "صالون الكابتن حسام",
   activeBookingNotice,
   trigger,
   open: controlledOpen,
@@ -26,8 +23,8 @@ export function LogoutDialog({
 }: LogoutDialogProps) {
   const t = useTranslations("app.account.logoutDialog");
   const router = useRouter();
+  const logout = useLogout();
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
-  const [isPending, setIsPending] = useState(false);
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : uncontrolledOpen;
@@ -39,24 +36,19 @@ export function LogoutDialog({
     }
   };
 
-  const handleLogout = async () => {
-    setIsPending(true);
-    try {
-      await logout();
-    } catch {
-      // ignore
-    }
-    if (typeof document !== "undefined") {
-      document.cookie = `${SESSION_COOKIE}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
-    }
-    setOpen(false);
-    setIsPending(false);
-    router.push(ROUTE_HOME);
-    router.refresh();
+  // logout() بيمسح الجلسة محلياً حتى لو الطلب فشل، فبنخرج في الحالتين
+  const handleLogout = () => {
+    logout.mutate(undefined, {
+      onSettled: () => {
+        setOpen(false);
+        router.push(ROUTE_HOME);
+        router.refresh();
+      },
+    });
   };
 
-  const noticeText =
-    activeBookingNotice || t("notice", { salonName });
+  const isPending = logout.isPending;
+  const noticeText = activeBookingNotice ?? t("notice");
 
   return (
     <>

@@ -1,3 +1,4 @@
+export * from "./account-security.dto";
 export * from "./auth-session.interface";
 export * from "./customer.interface";
 export * from "./forgot-password.dto";
