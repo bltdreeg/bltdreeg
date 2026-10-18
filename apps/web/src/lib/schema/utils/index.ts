@@ -1,2 +1,0 @@
-// TODO: index.ts
-export {};

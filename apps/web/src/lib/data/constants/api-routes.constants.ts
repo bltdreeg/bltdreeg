@@ -13,4 +13,3 @@ export const API_BOOKING_QUEUE_STATUS = (id: string) => `/api/bookings/${id}/que
 export const API_FAVORITES = "/api/favorites";
 export const API_FAVORITE = (shopId: string) => `/api/favorites/${shopId}`;
 
-export const API_CITIES = "/api/cities";
