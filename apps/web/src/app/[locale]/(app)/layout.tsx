@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils/cn.utils";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const inBookingFlow = pathname.startsWith(ROUTE_BOOK_ROOT) && !pathname.includes("/confirmation/");
+  // "/book/…" بس — "/bookings" بيبدأ بنفس الحروف ومحتاج الهيدر
+  const inBookingFlow = pathname === ROUTE_BOOK_ROOT || pathname.startsWith(`${ROUTE_BOOK_ROOT}/`);
 
   return (
     <div className="flex min-h-screen flex-col">

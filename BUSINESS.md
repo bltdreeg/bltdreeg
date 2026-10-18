@@ -3,20 +3,28 @@
 ## What it is
 
 Beltadreeg is a marketplace web app for customers in Egypt to discover barber
-salons and book appointments — similar in booking model to Fresha.
+salons and take a place in a barber's queue — without waiting at the salon.
 
 ## Booking model
 
-The customer picks a specific time slot (not a live walk-in queue). After
-booking, they get two things:
+> Updated 2026-10-18: aligned with the decided spec
+> `bltdreeg-plan/docs/features/01-customer-booking-and-live-queue.md` (live queue
+> per chair). The earlier "book an appointment and get a predicted queue number"
+> model is retired.
 
-- **الميعاد (Appointment)** — the actual reserved time.
-- **رقمك في الدور (Queue number)** — their position in line on appointment day.
+Each barber's chair has its own **live queue**, ordered by join time. The
+customer picks the services, then a barber, then either:
 
-The queue number is a core product promise, not a side feature. While
-choosing a slot, the customer sees: "لو حجزت 6:30 م هيكون رقمك في الدور 3"
-("If you book 6:30 PM, you'll be #3 in line") — this is the product's
-differentiating moment.
+- **ادخل الطابور دلوقتي (Join now)** — enters that barber's queue immediately
+  (only while the salon is open).
+- **احجز ميعاد دخول (Reserve a join time)** — a slot is the moment the customer
+  *enters* the queue, not a service time: at that time they join behind whoever
+  is already queued. Up to two future slots, never two at the same start time.
+
+While in the queue the customer always sees **قدامك كام (people ahead)** and the
+**expected wait** (durations of everyone ahead + the barber's remaining time on
+the current customer), refreshed live. One live queue at a time; cancelling or
+leaving is free until the service starts.
 
 ## Target users
 
@@ -46,11 +54,12 @@ Egypt — pricing in EGP (ج.م), Egyptian names, Cairo and Giza areas.
 3. **صفحة الصالون (Salon page)** — gallery, tabs: خدمات (services) / حلاقين
    (barbers) / تقييمات (reviews) / معلومات (info).
 4. **المفضلة (Favorites)**.
-5. **مسار الحجز (Booking flow)** — 3 steps: service → barber → appointment,
+5. **مسار الحجز (Booking flow)** — services (on the salon page) → barber (with
+   live queue length) → join now / reserve a join time → review,
    with queue preview.
-6. **تأكيد الحجز (Booking confirmation)** — appointment + queue number.
+6. **تأكيد الحجز (Booking confirmation)** — lands on the booking details (8).
 7. **حجوزاتي (My bookings)** — upcoming / past / empty states.
-8. **تفاصيل / متابعة حية (Details / live tracking)** — on appointment day:
+8. **تفاصيل / متابعة حية (Details / live tracking)** — while queued:
    your number, how many ahead of you, running late/on time.
 9. **حسابي (My account)**.
 10. **Auth** — login, sign-up, OTP, forgot password.
@@ -68,6 +77,8 @@ Egypt — pricing in EGP (ج.م), Egyptian names, Cairo and Giza areas.
 | Salon | الصالون |
 | Barber | الحلاق |
 | Service | الخدمة |
-| Appointment | الميعاد |
+| Join time (slot) — not an appointment | ميعاد دخول |
+| Join the queue now | ادخل الطابور دلوقتي |
+| People ahead | قدامك |
 | Queue number | رقمك في الدور |
-| Book | احجز ميعاد |
+| Book | احجز |

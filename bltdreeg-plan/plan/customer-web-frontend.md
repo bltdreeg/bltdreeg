@@ -145,21 +145,35 @@ prices are salon-wide until `branch_services` (SB-B2) lands.
 - [ ] SSR/SEO for salon pages (server-fetched metadata, OpenGraph image).
 - [ ] Page titles repeat the app name (`page()` helper + layout template) — every page.
 
-### Phase 2 — Booking (needs CA-C2 backend: slots + reservations)
-- [ ] Slot list with the queue-number preview ("لو حجزت 6:30 م هيكون رقمك في الدور 3")
-      — the product's differentiating moment; get this exactly right.
-- [ ] `createBooking` mutation replacing the `"use server"` action; handle
-      slot-taken / capacity conflicts with clear UI.
-- [ ] Confirmation, my bookings (upcoming/past), cancel, rebook → real API.
-- [ ] Delete `/api/bookings*`, `bookings.constants`, `slots.constants`,
-      `fetcher.ts`, `api-routes.constants.ts`.
+### Phase 2 — Booking ✅ (2026-10-18, live-queue model)
+Decision: follow feature 01 (live queue per chair; a slot is a reserved *join
+time*, not an appointment). BUSINESS.md updated. The old appointment-style flow
+and its "#3 if you book 6:30" preview were removed — the number can't be known
+at booking time under this model.
 
-### Phase 3 — Live tracking (needs CA-C1/C3 backend: queue position, events)
-- [ ] `useQueueStatus` → real endpoint; start with the existing 30 s polling,
-      upgrade to Reverb / Pusher websockets when the backend broadcasts.
-- [ ] Running late / on time, "your turn", leave queue, postpone once,
-      service change — map each to its backend action.
-- [ ] Remove the simulation entirely.
+Backend (booking slice of SB-A3 + SB-C1/C3/C4, see `plan/shared-backend.md`):
+`GET /branches/{id}/barbers`, `GET /branches/{id}/chairs/{chair}/slots`,
+`GET|POST /reservations`, `GET /reservations/{id}`, `POST /reservations/{id}/cancel`.
+
+- [x] `/book/[branchId]`: services from the salon page → barber (live queue
+      length + wait) → join now / reserve a join time → review → confirm.
+      State in the URL; conflicts (`already_in_queue`, `slot_full`,
+      `branch_closed`) shown with a way out.
+- [x] `/bookings`: active (live queue + upcoming join times) / past, from the API.
+- [x] `/bookings/[id]`: people ahead + expected wait (polls every 15 s), your
+      turn, in service, booked join time, finished; leave queue / cancel slot.
+- [x] Removed the mock booking flow, `/api/bookings*`, `use-create-booking`,
+      `use-queue-status`, the live-tracking simulation, rebook dialog.
+- [ ] Rating pages (`/bookings/[id]/rate`) still run on `bookings.constants` —
+      Phase 4 with the ratings API.
+
+### Phase 3 — Live tracking (rest)
+- [x] Real position + expected wait (polling).
+- [ ] Websockets (Reverb/Pusher) instead of polling once the backend broadcasts.
+- [ ] Skip / postpone (two-strike, SB-C2), service change, slot-conflict prompt
+      before slot start — need backend + notifications.
+- [ ] Barber/staff side (start/finish service, mark absent) lives in the tenant
+      dashboard; until then the queue only advances via `QueueEngine` calls.
 
 ### Phase 4 — Engagement
 - [ ] Favorites (needs endpoint) — optimistic toggle with React Query.

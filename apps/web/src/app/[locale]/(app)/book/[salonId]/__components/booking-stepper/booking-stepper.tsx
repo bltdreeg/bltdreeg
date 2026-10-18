@@ -1,132 +1,95 @@
 "use client";
 
-// شريط الخطوات لمسار الحجز مطابق لتصميم FRAME 07
+// شريط خطوات الحجز (FRAME 07): الخدمات (اتختارت في صفحة الصالون) ← الحلاق ← وقت الدخول ← المراجعة
 import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
+import type { BookingStep } from "@/lib/utils/reservations/booking-flow-params";
 import { cn } from "@/lib/utils/cn.utils";
 
+const ORDER: BookingStep[] = ["barber", "when", "review"];
+
 export type BookingStepperProps = {
-  step: 1 | 2 | 3 | 4;
+  step: BookingStep;
   serviceSummary?: string;
   barberSummary?: string;
-  slotSummary?: string;
+  whenSummary?: string;
 };
 
-export function BookingStepper({
-  step,
-  serviceSummary,
-  barberSummary,
-  slotSummary,
-}: BookingStepperProps) {
-  const t = useTranslations("app.book.stepper");
-  const isStep1Done = step > 1;
-  const isStep1Current = step === 1;
-
-  const isStep2Done = step > 2;
-  const isStep2Current = step === 2;
-
-  const isStep3Done = step > 3;
-  const isStep3Current = step === 3;
+export function BookingStepper({ step, serviceSummary, barberSummary, whenSummary }: BookingStepperProps) {
+  const t = useTranslations("app.bookFlow.stepper");
+  const current = ORDER.indexOf(step) + 1; // الخدمات = 0 ودايماً خلصت
 
   const steps = [
-    {
-      number: 1,
-      title: t("service"),
-      isDone: isStep1Done,
-      isCurrent: isStep1Current,
-      subtitle: isStep1Done
-        ? (serviceSummary ?? "خدمتين · 180 ج.م")
-        : isStep1Current
-          ? t("selectingNow")
-          : undefined,
-    },
-    {
-      number: 2,
-      title: t("slot"),
-      isDone: isStep2Done,
-      isCurrent: isStep2Current,
-      subtitle: isStep2Done
-        ? (slotSummary ?? t("slotSelected"))
-        : isStep2Current
-          ? t("selectingNow")
-          : undefined,
-    },
-    {
-      number: 3,
-      title: t("barber"),
-      isDone: isStep3Done,
-      isCurrent: isStep3Current,
-      subtitle: isStep3Done
-        ? (barberSummary ?? "كريم مصطفى")
-        : isStep3Current
-          ? t("selectingNow")
-          : undefined,
-    },
-  ];
+    { title: t("services"), summary: serviceSummary },
+    { title: t("barber"), summary: barberSummary },
+    { title: t("when"), summary: whenSummary },
+    { title: t("review"), summary: undefined },
+  ].map((s, index) => ({
+    ...s,
+    number: index + 1,
+    isDone: index < current,
+    isCurrent: index === current,
+  }));
 
   return (
-    <div className="flex w-full items-center">
+    <ol className="flex w-full items-center">
       {steps.map((s, index) => {
         const isLast = index === steps.length - 1;
-        const lineActive = index === 0 ? isStep1Done : index === 1 ? isStep2Done : false;
 
         return (
-          <div key={s.number} className={cn("flex items-center", !isLast && "flex-1")}>
+          <li
+            key={s.number}
+            aria-current={s.isCurrent ? "step" : undefined}
+            className={cn("flex items-center", !isLast && "flex-1")}
+          >
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              {/* الدائرة 30px */}
               {s.isDone ? (
                 <div className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-primary text-white">
                   <Check className="size-4 stroke-[2.5]" />
                 </div>
-              ) : s.isCurrent ? (
-                <div className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-primary text-sm font-extrabold text-white tabular-nums">
-                  {s.number}
-                </div>
               ) : (
-                <div className="flex size-[30px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-border bg-white text-sm font-bold text-disabled-fg tabular-nums">
+                <div
+                  className={cn(
+                    "flex size-[30px] shrink-0 items-center justify-center rounded-full text-sm tabular-nums",
+                    s.isCurrent
+                      ? "bg-primary font-extrabold text-white"
+                      : "border-[1.5px] border-border bg-white font-bold text-disabled-fg",
+                  )}
+                >
                   {s.number}
                 </div>
               )}
 
-              {/* النصوص (العنوان + التفاصيل) */}
               <div className="flex flex-col gap-0.5">
                 <span
                   className={cn(
                     "text-[13.5px] leading-tight sm:text-[14.5px]",
-                    s.isCurrent
-                      ? "font-bold text-foreground"
-                      : s.isDone
-                        ? "font-semibold text-foreground"
-                        : "font-semibold text-disabled-fg",
+                    // على الموبايل عنوان الخطوة الحالية بس — الأربعة مع بعض مبيكفوش العرض
+                    !s.isCurrent && "hidden sm:inline",
+                    s.isCurrent ? "font-bold text-foreground" : s.isDone ? "font-semibold text-foreground" : "font-semibold text-disabled-fg",
                   )}
                 >
                   {s.title}
                 </span>
-                {s.subtitle && (
+                {(s.isDone ? s.summary : s.isCurrent ? t("selectingNow") : undefined) && (
                   <span
                     className={cn(
-                      "hidden text-[11.5px] leading-tight sm:inline-block",
+                      "hidden max-w-[160px] truncate text-[11.5px] leading-tight sm:inline-block",
                       s.isCurrent ? "font-medium text-primary-pressed" : "text-muted-foreground",
                     )}
                   >
-                    {s.subtitle}
+                    {s.isDone ? s.summary : t("selectingNow")}
                   </span>
                 )}
               </div>
             </div>
 
-            {/* الخط الواصل بين الخطوات */}
             {!isLast && (
-              <div
-                className={cn(
-                  "mx-2 h-[1.5px] flex-1 sm:mx-4.5",
-                  lineActive ? "bg-primary" : "bg-border",
-                )}
-              />
+              <div className={cn("mx-2 h-[1.5px] flex-1 sm:mx-4.5", s.isDone ? "bg-primary" : "bg-border")} />
             )}
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }

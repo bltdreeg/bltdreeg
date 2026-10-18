@@ -1,17 +1,17 @@
 "use client";
-// شريط الحجز السفلي (موبايل) — الحجز أونلاين قريباً، فالزرار الأساسي اتصال بالصالون لو رقمه موجود
-import { Phone } from "lucide-react";
+// شريط الحجز السفلي (موبايل) — الإجمالي وزرار "احجز" لمسار الحجز
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 import { selectionCount } from "@/lib/utils/format/queue-labels.utils";
 import type { BranchService } from "@/lib/types/branch";
 
 type SalonBookingBarProps = {
-  phone: string | null;
+  bookHref: string | null;
   selectedServices: BranchService[];
 };
 
-export function SalonBookingBar({ phone, selectedServices }: SalonBookingBarProps) {
+export function SalonBookingBar({ bookHref, selectedServices }: SalonBookingBarProps) {
   const t = useTranslations("marketing.salon.bookingBar");
   const locale = useLocale();
   const count = selectedServices.length;
@@ -26,21 +26,20 @@ export function SalonBookingBar({ phone, selectedServices }: SalonBookingBarProp
         </span>
       </div>
 
-      {phone ? (
-        <a
-          href={`tel:${phone}`}
-          className="flex h-13 flex-1 items-center justify-center gap-2 rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed"
+      {bookHref ? (
+        <Link
+          href={bookHref}
+          className="flex h-13 flex-1 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed"
         >
-          <Phone className="size-4" />
-          <span>{t("callToBook")}</span>
-        </a>
+          {t("book")}
+        </Link>
       ) : (
         <button
           type="button"
           disabled
           className="flex h-13 flex-1 items-center justify-center rounded-xl bg-disabled-bg font-bold text-disabled-fg"
         >
-          {t("bookingSoon")}
+          {t("book")}
         </button>
       )}
     </div>

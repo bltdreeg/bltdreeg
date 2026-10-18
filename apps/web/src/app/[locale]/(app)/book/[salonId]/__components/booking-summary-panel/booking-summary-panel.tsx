@@ -1,76 +1,83 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useTranslations } from "next-intl";
-import { Store, Clock } from "lucide-react";
-import type { SalonDetails } from "@/lib/types/salon";
-import type { Service } from "@/lib/types/service/service.interface";
+// ملخص الحجز الجانبي: الصالون والخدمات (بسعر الفرع) والحلاق ووقت الدخول
+import { Clock, Scissors, User } from "lucide-react";
+import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import type { BranchDetail, BranchService } from "@/lib/types/branch";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 
 type BookingSummaryPanelProps = {
-  salon: SalonDetails;
-  services: Service[];
-  /** محتوى إضافي بيتضاف تحت الخدمات (صف الحلاق أو المعاد) */
-  children?: ReactNode;
-  cta: ReactNode;
+  branch: BranchDetail;
+  services: BranchService[];
+  barberName?: string;
+  whenLabel?: string;
 };
 
-export function BookingSummaryPanel({ salon, services, children, cta }: BookingSummaryPanelProps) {
-  const t = useTranslations("app.book.summary");
-  const totalMinutes = services.reduce((n, s) => n + s.durationMinutes, 0);
-  const totalPrice = services.reduce((n, s) => n + s.price, 0);
+export function BookingSummaryPanel({ branch, services, barberName, whenLabel }: BookingSummaryPanelProps) {
+  const t = useTranslations("app.bookFlow.summary");
+  const locale = useLocale();
+  const totalPrice = services.reduce((sum, s) => sum + s.price, 0);
+  const totalMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0);
 
   return (
-    <div className="flex flex-col rounded-[14px] border border-border bg-white overflow-hidden lg:sticky lg:top-5">
-      <div className="flex items-center gap-3 border-b border-border p-4">
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-[10px] bg-secondary text-muted-foreground">
-          <Store className="size-5" />
+    <div className="overflow-hidden rounded-[14px] border border-border bg-card shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+      <div className="flex items-center gap-3 border-b border-border p-4.5">
+        <div className="relative size-12 shrink-0 overflow-hidden rounded-xl bg-muted">
+          {branch.coverImageUrl ? (
+            <Image src={branch.coverImageUrl} alt={branch.salon.name} fill sizes="48px" className="object-cover" />
+          ) : (
+            <Scissors aria-hidden className="absolute inset-0 m-auto size-5 text-muted-foreground" />
+          )}
         </div>
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[14.5px] font-bold text-foreground">{salon.name}</span>
-          <span className="text-xs text-muted-foreground">{salon.cityName}</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col px-4.5 pt-1.5">
-        {services.map((svc) => (
-          <div key={svc.id} className="flex items-start justify-between gap-3 border-b border-border py-3 last:border-b-0">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[14.5px] font-semibold text-foreground">{svc.name}</span>
-              <span className="tabular text-xs text-muted-foreground">
-                {t("minutes", { count: svc.durationMinutes })}
-              </span>
-            </div>
-            <span className="tabular shrink-0 text-sm font-bold text-foreground">{formatPrice(svc.price)}</span>
-          </div>
-        ))}
-      </div>
-
-      {children}
-
-      {/* خط التقطيع + الخرمين — التوقيع البصري للتذكرة (FRAME 01 & FRAME 07/08) */}
-      <div className="relative mt-2">
-        <div className="border-t border-dashed border-perforation" />
-        <div className="absolute -top-2 -right-2.25 size-4 rounded-full border border-border bg-white" />
-        <div className="absolute -top-2 -left-2.25 size-4 rounded-full border border-border bg-white" />
-      </div>
-
-      <div className="flex flex-col gap-2.5 p-4.5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-[13.5px] font-semibold text-muted-foreground">
-            <Clock className="size-3.5 text-muted-foreground" />
-            <span>{t("totalDuration")}</span>
-          </div>
-          <span className="tabular text-sm font-bold text-foreground">
-            {t("minutes", { count: totalMinutes })}
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate text-[15px] font-bold text-foreground">{branch.salon.name}</span>
+          <span className="truncate text-[12.5px] text-muted-foreground">
+            {branch.name} · {branch.city.name}
           </span>
         </div>
-        <div className="flex items-baseline justify-between">
-          <span className="text-[15px] font-bold text-foreground">{t("totalPrice")}</span>
-          <span className="tabular text-[26px] font-extrabold text-foreground">{formatPrice(totalPrice)}</span>
-        </div>
-        {cta && <div className="mt-1">{cta}</div>}
       </div>
+
+      <ul className="divide-y divide-border/80 px-4.5">
+        {services.map((service) => (
+          <li key={service.id} className="flex items-center justify-between gap-3 py-3">
+            <div className="flex min-w-0 flex-col">
+              <span className="truncate text-sm font-semibold text-foreground">{service.name}</span>
+              <span className="text-[11.5px] text-muted-foreground">{t("minutes", { count: service.durationMinutes })}</span>
+            </div>
+            <span className="tabular shrink-0 text-sm font-bold">{formatPrice(service.price, locale)}</span>
+          </li>
+        ))}
+      </ul>
+
+      <dl className="flex flex-col gap-2.5 border-t border-border p-4.5 text-[13.5px]">
+        {barberName && (
+          <div className="flex items-center justify-between gap-3">
+            <dt className="flex items-center gap-1.5 text-muted-foreground">
+              <User aria-hidden className="size-3.5" />
+              {t("barber")}
+            </dt>
+            <dd className="font-bold text-foreground">{barberName}</dd>
+          </div>
+        )}
+        {whenLabel && (
+          <div className="flex items-center justify-between gap-3">
+            <dt className="flex items-center gap-1.5 text-muted-foreground">
+              <Clock aria-hidden className="size-3.5" />
+              {t("when")}
+            </dt>
+            <dd className="text-end font-bold text-foreground">{whenLabel}</dd>
+          </div>
+        )}
+        <div className="flex items-center justify-between gap-3">
+          <dt className="text-muted-foreground">{t("duration")}</dt>
+          <dd className="tabular font-bold text-foreground">{t("minutes", { count: totalMinutes })}</dd>
+        </div>
+        <div className="mt-1 flex items-baseline justify-between gap-3 border-t border-border pt-3">
+          <dt className="font-bold text-muted-foreground">{t("total")}</dt>
+          <dd className="tabular text-2xl font-black text-foreground">{formatPrice(totalPrice, locale)}</dd>
+        </div>
+      </dl>
     </div>
   );
 }

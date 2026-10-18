@@ -1,124 +1,81 @@
-'use client';
-// خطوة الحلاق: أي حلاق متاح (افتراضي) أو اختيار بالاسم — فريم ٢٤ (mobile)
-import { useState } from "react";
+"use client";
+
+// خطوة اختيار الحلاق: كل كرسي شغال النهارده بطابوره دلوقتي — "قدامك كام" والانتظار المتوقع لو دخلت دلوقتي
+import { Check, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Users, Star } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { ROUTE_BOOK_REVIEW } from "@/lib/data/constants/routes.constants";
-import type { Barber } from "@/lib/types/barber/barber.interface";
+import { Avatar } from "@/components/atoms/avatar";
+import { Skeleton } from "@/components/atoms/skeleton";
+import type { BranchBarber } from "@/lib/types/reservation";
+import { cn } from "@/lib/utils/cn.utils";
 
 type StepBarberProps = {
-  salonId: string;
-  barbers: Barber[];
-  queryString: string;
+  barbers: BranchBarber[] | undefined;
+  isLoading: boolean;
+  selectedChairId: string | null;
+  onSelect: (chairId: string) => void;
 };
 
-export function StepBarber({ salonId, barbers, queryString }: StepBarberProps) {
-  const t = useTranslations("app.book.barber");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+export function StepBarber({ barbers, isLoading, selectedChairId, onSelect }: StepBarberProps) {
+  const t = useTranslations("app.bookFlow.barber");
 
-  const p = new URLSearchParams(queryString);
-  p.set("barber", selectedId ?? "any");
-  const nextUrl = `${ROUTE_BOOK_REVIEW(salonId)}?${p.toString()}`;
+  if (isLoading) {
+    return (
+      <div role="status" className="grid gap-3 sm:grid-cols-2">
+        {Array.from({ length: 4 }, (_, i) => (
+          <Skeleton key={i} className="h-[92px] rounded-[14px]" />
+        ))}
+      </div>
+    );
+  }
+
+  if (!barbers || barbers.length === 0) {
+    return (
+      <p className="rounded-[14px] border border-dashed border-border bg-muted px-4 py-10 text-center text-sm text-muted-foreground">
+        {t("none")}
+      </p>
+    );
+  }
 
   return (
-    <div className="flex flex-col gap-4">
-      <button
-        type="button"
-        onClick={() => setSelectedId(null)}
-        className={`flex items-center gap-4 rounded-[14px] border-2 p-4 text-start transition-colors cursor-pointer ${
-          selectedId === null ? "border-primary bg-accent" : "border-border"
-        }`}
-      >
-        <span className="flex size-14 shrink-0 items-center justify-center rounded-full border border-dashed border-tint-border bg-background text-primary">
-          <Users className="size-6 text-primary" />
-        </span>
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <span className="text-[15px] font-extrabold text-primary-pressed">{t("anyBarber")}</span>
-            <span className="rounded-md bg-primary px-1.5 py-0.5 text-[10.5px] font-extrabold text-primary-foreground">
-              {t("fastest")}
-            </span>
-          </div>
-          <p className="mt-1 text-[13px] text-foreground">{t("firstAvailable")}</p>
-        </div>
-        <div className="shrink-0 text-end">
-          <div className="text-[14px] font-extrabold text-success-strong">{t("immediately")}</div>
-          <div className="text-xs text-success">{t("noQueue")}</div>
-        </div>
-      </button>
+    <div role="radiogroup" aria-label={t("title")} className="grid gap-3 sm:grid-cols-2">
+      {barbers.map((row) => {
+        const selected = row.chairId === selectedChairId;
+        const { peopleInQueue, expectedWaitMinutes } = row.queue;
 
-      <span className="text-[13px] font-bold text-muted-foreground">{t("orChooseBarber")}</span>
-
-      {barbers.map((barber) => {
-        const off = barber.queue === null;
-        const selected = selectedId === barber.id;
         return (
           <button
-            key={barber.id}
+            key={row.chairId}
             type="button"
-            disabled={off}
-            onClick={() => setSelectedId(barber.id)}
-            className={`flex items-center gap-3 rounded-[14px] border p-3.5 text-start transition-colors ${
-              selected ? "border-2 border-primary bg-accent" : "border-border"
-            } ${off ? "cursor-not-allowed opacity-55" : "cursor-pointer"}`}
-          >
-            <span
-              className={`size-5 shrink-0 rounded-full border-[1.8px] ${
-                off ? "border-disabled-bg bg-disabled-bg" : selected ? "border-primary" : "border-border"
-              }`}
-            />
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-tint-border bg-accent text-sm font-bold text-accent-foreground">
-              {barber.name.split(" ").slice(0, 2).map((w) => w[0]).join(" ")}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <span className="truncate text-[14.5px] font-bold text-foreground">{barber.name}</span>
-                {!off && (
-                  <span className="flex shrink-0 items-center gap-1 text-xs">
-                    <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                    <span className="tabular font-bold text-foreground">{barber.rating}</span>
-                  </span>
-                )}
-              </div>
-              <div className="mt-0.5 text-xs text-muted-foreground">
-                {off ? t("offToday") : barber.specialty}
-              </div>
-            </div>
-            {!off && barber.queue && (
-              <div className="shrink-0 text-end">
-                {barber.queue.peopleAhead === 0 ? (
-                  <>
-                    <div className="text-[13.5px] font-extrabold text-success-strong">{t("immediately")}</div>
-                    <div className="text-xs text-muted-foreground">{t("empty")}</div>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-[13.5px] font-extrabold text-warning-fg">
-                      {t("minShort", { minutes: barber.queue.waitMinutes })}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {t("ahead", { count: barber.queue.peopleAhead })}
-                    </div>
-                  </>
-                )}
-              </div>
+            role="radio"
+            aria-checked={selected}
+            onClick={() => onSelect(row.chairId)}
+            className={cn(
+              "flex items-center gap-3.5 rounded-[14px] border bg-card p-4 text-start transition-colors cursor-pointer",
+              selected ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/50",
             )}
+          >
+            <Avatar name={row.barber.name} size={48} className="shrink-0" />
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <span className="truncate text-[15px] font-bold text-foreground">{row.barber.name}</span>
+              <span className="flex items-center gap-1.5 text-[12.5px] text-muted-foreground">
+                <Users aria-hidden className="size-3.5 shrink-0" />
+                {peopleInQueue === 0
+                  ? t("queueEmpty")
+                  : t("queueSize", { count: peopleInQueue, minutes: expectedWaitMinutes })}
+              </span>
+            </div>
+            <span
+              aria-hidden
+              className={cn(
+                "flex size-6 shrink-0 items-center justify-center rounded-full border-[1.5px]",
+                selected ? "border-primary bg-primary text-white" : "border-border",
+              )}
+            >
+              {selected && <Check className="size-3.5 stroke-[3]" />}
+            </span>
           </button>
         );
       })}
-
-      {/* شريط الإجراء: ثابت بالأسفل على الموبايل والتابلت، ومكانه الطبيعي على الويب (الديسكتوب) */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card px-5 pt-3 pb-[max(1.375rem,env(safe-area-inset-bottom))] shadow-[0_-6px_24px_rgba(14,15,17,0.07)] lg:static lg:z-auto lg:border-t-0 lg:bg-transparent lg:p-0 lg:shadow-none">
-        <div className="mx-auto w-full max-w-lg lg:max-w-none">
-          <Link
-            href={nextUrl}
-            className="flex h-[52px] lg:h-[44px] w-full items-center justify-center rounded-[10px] bg-primary text-base lg:text-[15px] font-bold text-white shadow-sm lg:shadow-none transition-colors hover:bg-primary-pressed cursor-pointer"
-          >
-            {t("continueReview")}
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,18 +1,20 @@
 "use client";
-// الشريط الجانبي للحجز (ديسكتوب فقط) — ملخص الخدمات المختارة.
-// الحجز أونلاين لسه مالوش API، فالزرار بيقول "قريباً" وبيعرض الاتصال بالصالون بداله
+// الشريط الجانبي للحجز (ديسكتوب فقط) — ملخص الخدمات المختارة وزرار "احجز" لمسار الحجز
 import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/utils/format/price.utils";
-import { X, Clock, Phone } from "lucide-react";
+import { X, Clock } from "lucide-react";
 import type { BranchService } from "@/lib/types/branch";
+import { selectionCount } from "@/lib/utils/format/queue-labels.utils";
 
 type BookingSidebarProps = {
-  phone: string | null;
+  /** رابط مسار الحجز بالخدمات المختارة، أو null لو لسه مفيش خدمة */
+  bookHref: string | null;
   selectedServices: BranchService[];
   onRemoveService: (id: string) => void;
 };
 
-export function BookingSidebar({ phone, selectedServices, onRemoveService }: BookingSidebarProps) {
+export function BookingSidebar({ bookHref, selectedServices, onRemoveService }: BookingSidebarProps) {
   const t = useTranslations("marketing.salon.bookingSidebar");
   const locale = useLocale();
 
@@ -81,21 +83,21 @@ export function BookingSidebar({ phone, selectedServices, onRemoveService }: Boo
         <span className="tabular text-2xl font-black text-foreground">{formatPrice(totalPrice, locale)}</span>
       </div>
 
-      <button
-        type="button"
-        disabled
-        className="flex h-12 w-full items-center justify-center rounded-xl bg-disabled-bg text-sm font-bold text-disabled-fg cursor-not-allowed select-none"
-      >
-        {t("bookingSoon")}
-      </button>
-      {phone && (
-        <a
-          href={`tel:${phone}`}
-          className="mt-2 flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-sm font-bold text-foreground transition-colors hover:bg-muted"
+      {bookHref ? (
+        <Link
+          href={bookHref}
+          className="flex h-12 w-full items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary-pressed hover:shadow-md"
         >
-          <Phone className="size-4 text-primary" />
-          <span>{t("callToBook")}</span>
-        </a>
+          {t("book")}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className="flex h-12 w-full items-center justify-center rounded-xl bg-disabled-bg text-xs font-bold text-disabled-fg cursor-not-allowed select-none"
+        >
+          {selectionCount(0, locale)}
+        </button>
       )}
     </div>
   );

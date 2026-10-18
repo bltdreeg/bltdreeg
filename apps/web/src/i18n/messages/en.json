@@ -357,228 +357,32 @@
     },
     "bookings": {
       "title": "My Bookings",
-      "onSchedule": "Salon is on schedule",
       "tabs": {
         "upcoming": "Upcoming",
         "past": "Past"
       },
-      "status": {
-        "waiting": "Waiting for salon confirmation",
-        "confirmed": "Confirmed booking",
-        "completed": "Completed",
-        "cancelled": "Cancelled — Did not attend"
-      },
-      "activeQueue": {
-        "liveStatus": "Your queue is live now",
-        "queueNumberLabel": "Your spot",
-        "aheadLabel": "Ahead of you",
-        "peopleAhead": "{count, plural, one {# person} other {# people}}",
-        "minutesEstimated": "~ {count} min",
-        "trackQueue": "Track your turn"
-      },
-      "withBarber": "with {name}",
-      "bookingDetails": "Booking details",
-      "cancel": "Cancel",
-      "notificationHint": "We'll notify you when 2 people are ahead, then 1, and when it's your turn.",
-      "yourRating": "Your rating",
-      "ratePrompt": "Rate {barberName} & salon",
-      "rateNow": "Rate now",
-      "rebookSame": "Rebook with same selections",
       "empty": {
         "upcomingAria": "No upcoming bookings",
         "upcomingTitle": "No bookings yet",
         "upcomingDesc": "As soon as you join a salon queue, your spot, number, and estimated time will appear here.",
         "pastAria": "No past bookings",
         "pastTitle": "No completed bookings yet",
-        "pastDesc": "Your completed visits will appear here, and you can rebook them with a single click.",
+        "pastDesc": "Your finished and cancelled bookings will show up here.",
         "findSalon": "Find a salon near you"
       },
       "cancelDialog": {
         "title": "Cancel booking?",
-        "description": "If you cancel now, your appointment slot will be released immediately.",
-        "errorDefault": "An error occurred while cancelling the booking",
-        "errorNetwork": "Could not connect to the server",
         "cancelling": "Cancelling...",
         "confirm": "Cancel booking",
-        "keep": "Keep booking"
+        "keep": "Keep booking",
+        "leaveTitle": "Leave the queue?",
+        "leaveDescription": "You'll lose your place and the people behind you move up. You can join again any time, at the back.",
+        "slotDescription": "Your join time will be cancelled and freed for someone else.",
+        "leaveConfirm": "Leave the queue"
       },
-      "rebookDialog": {
-        "title": "Rebook the same visit?",
-        "description": "We'll open the booking page with all your previous selections ready — just pick your time.",
-        "chooseSlot": "Choose time slot",
-        "notNow": "Not now"
-      }
-    },
-    "bookingDetail": {
-      "breadcrumb": {
-        "account": "My Account",
-        "bookings": "My Bookings",
-        "bookingDetails": "Booking Details"
-      },
-      "bookingCode": "Booking code {code}",
-      "callSalon": "Call salon",
-      "copyAddress": "Copy address",
-      "copied": "Copied!",
-      "rescheduleTitle": "Modify booking",
-      "rescheduleTime": "Reschedule time",
-      "cancelBooking": "Cancel booking",
-      "bookingCancelled": "This booking was cancelled",
-      "freeCancellationHint": "Free up to 2 hours before appointment",
-      "yourBookingAt": "Your booking at {salon}",
-      "status": {
-        "cancelled": "Cancelled",
-        "completed": "Completed",
-        "confirmed": "Confirmed"
-      },
-      "rateVisitTitle": "Rate your salon visit",
-      "rateVisitSubtitle": "Your feedback helps others choose right and reveals queue accuracy",
-      "rateNow": "Rate now",
-      "yourRatingStars": "Your rating: {rating} out of 5 stars",
-      "ticket": {
-        "yourTime": "Your appointment",
-        "yourQueueNumber": "Your queue number",
-        "outOfTotal": "out of {total} in {day}'s queue",
-        "liveOnDay": "Number becomes live on appointment day",
-        "dayExplanation": "On the day of your appointment, this page turns live: how many are ahead, and whether the salon is on time."
-      },
-      "table": {
-        "title": "Booking details",
-        "services": "Services",
-        "minutes": "{count} min",
-        "barber": "Barber",
-        "totalDuration": "Total duration",
-        "totalPrice": "Total",
-        "payAtSalon": "Pay at salon · Cash or card"
-      },
-      "policy": {
-        "title": "Cancellation policy",
-        "freeRule": "Free cancellation or rescheduling up to 2 hours before {time}.",
-        "lateRule": "After that, the salon may count it as a late cancellation.",
-        "noShowRule": "If you don't show up without cancelling, it's recorded as a no-show — 3 no-shows temporarily suspend booking at this salon for a week."
-      }
-    },
-    "liveTracking": {
-      "todayAppointment": "Your appointment today",
-      "queueNumber": "Your queue number",
-      "salonDelayed": "Salon delayed ~{delay} min",
-      "salonOnTime": "Salon is on schedule",
-      "salonOnTimeAlt": "Salon is running on time",
-      "withBarberMinutes": "with {barber} · {duration} min",
-      "callSalon": "Call salon",
-      "copyAddress": "Copy address",
-      "copied": "Copied!",
-      "alertsTitle": "We'll send you an alert",
-      "alertTwoAhead": "When 2 people are ahead of you.",
-      "alertYourTurn": "Then when it's your turn.",
-      "alertDelay": "And if the salon is delayed, we'll give you the updated time.",
-      "alertsChannels": "Via WhatsApp and the app",
-      "reschedule": "Reschedule time",
-      "cancelBooking": "Cancel booking",
-      "bookingCancelled": "This booking was cancelled",
-      "inServiceSidebarNotice": "Service is in progress inside the salon — enjoy!",
-      "completedSidebarNotice": "Visit completed successfully",
-      "rateVisitNow": "Rate your visit now",
-      "todayQueueActive": "Today {date} · Queue is running",
-      "lastUpdate": "Last updated {time}",
-      "yourTime": "Your appointment",
-      "yourQueueNumber": "Your queue number",
-      "outOfToday": "out of {total} in today's queue",
-      "peopleAheadInQueue": "ahead of you in queue",
-      "estimatedTurn": "Your turn around {time} · {remaining} min remaining",
-      "avgDelayToday": "Salon average delay today: 4 min",
-      "autoDelayAdjustment": "Your estimated time was updated to {time} so you don't wait unnecessarily.",
-      "queueRegular": "Queue is steady",
-      "queueRegularHint": "If any delay occurs or a client finishes early, the page will update immediately.",
-      "moveAtTime": "You can head out at {time}",
-      "distanceSummary": "1.2 km away · ~12 min drive, ~18 min walk",
-      "remind10MinBefore": "Remind me 10 min before",
-      "remind10MinSet": "We'll remind you 10 min before",
-      "howQueueWorks": "How the queue works",
-      "stepBookingConfirmed": "Booking confirmed",
-      "stepApproaching": "Turn approaching",
-      "stepOneAhead": "1 person ahead",
-      "stepNowBadge": "Now",
-      "stepWaitingPredecessor": "{ahead} ahead · waiting for current client to finish",
-      "stepYourTurn": "Your turn now",
-      "stepExpected": "Expected {time}",
-      "stepServiceDone": "Service completed",
-      "stepsHint": "We'll alert you when 2 people are ahead, then when it's your turn, and if there's any delay.",
-      "approaching": {
-        "moveNow": "Head out now",
-        "travelSummary": "Travel: {travel} min — Your turn in {estimated} min",
-        "queueNumberLabel": "Your queue number",
-        "onlyAhead": "{count, plural, one {Only 1 person ahead} other {Only # people ahead}}",
-        "stageJoined": "Joined queue",
-        "stageApproaching": "Almost your turn",
-        "stageYourTurn": "Your turn now",
-        "expectedTime": "Estimated time",
-        "minutesShort": "~ {count}m",
-        "distance": "Distance",
-        "openDirections": "Open directions to salon",
-        "leaveQueue": "Leave queue"
-      },
-      "yourTurnCard": {
-        "title": "It's your turn",
-        "takeChair": "Take your chair — {barberName} is waiting for you",
-        "yourNumber": "Your number",
-        "timeLeft": "Time left",
-        "warning": "If you don't arrive within 5 minutes, your spot moves back one position",
-        "iamAtShop": "I'm at the salon",
-        "postponeOne": "On my way — postpone one spot",
-        "leaveQueue": "Leave queue"
-      },
-      "inServiceCard": {
-        "title": "You're in the chair",
-        "subtitle": "Enjoy your cut! Once finished, we'll ask you to rate your experience.",
-        "directions": "Directions",
-        "call": "Call",
-        "finishHaircut": "Haircut finished (End service)"
-      },
-      "completedCard": {
-        "title": "Looking sharp! Haircut completed",
-        "subtitle": "Thanks for visiting {shopName}. Your feedback helps others and improves salon quality.",
-        "openRateModal": "Open review dialog"
-      },
-      "visitCompletedDialog": {
-        "close": "Close",
-        "title": "Looking sharp!",
-        "description": "Your haircut at {shopName} is complete. Your review helps others choose right and improves salon quality.",
-        "rateNow": "Rate your experience now",
-        "later": "Later"
-      },
-      "leaveQueueDialog": {
-        "title": "Leave the queue?",
-        "description": "Your spot #{queueNumber} will be given to someone else and cannot be recovered. If you rejoin, you'll start at the end.",
-        "warningNote": "Repeatedly leaving queues lowers your reliability score.",
-        "confirm": "Yes, leave queue",
-        "cancel": "Stay in queue"
-      },
-      "simulation": {
-        "title": "Queue Update Simulation (WebSocket)",
-        "subtitle": "Page automatically progresses simulating real-time server updates",
-        "nextInSeconds": "Next in {seconds}s",
-        "paused": "Paused",
-        "pause": "Pause",
-        "play": "Play",
-        "stageWaiting": "In queue",
-        "stageApproaching": "Approaching",
-        "stageYourTurn": "Your turn",
-        "stageInService": "In chair",
-        "stageCompleted": "Finished!"
-      },
-      "yourTurnState": {
-        "backToLive": "Back to tracking",
-        "salonCalledYou": "The salon just called you",
-        "yourTurnNow": "Your turn now",
-        "takeChairOf": "Please take {barberName}'s chair",
-        "turnSummary": "Your appointment was at {time} · You started right on time. {services} · {price} to pay at the salon.",
-        "inShopButton": "I'm inside the salon",
-        "inShopConfirmed": "Your presence in the salon is confirmed",
-        "callSalon": "Connect me to salon",
-        "fiveMinuteRule": "If you're not in the salon, your spot is held for 5 minutes before the person behind you moves ahead."
-      },
-      "stepConfirmedTimeDemo": "Yesterday 9:12 PM",
-      "stepApproachingTimeDemo": "Today 5:30 PM"
+      "loadError": "We couldn't load your bookings.",
+      "retry": "Try again",
+      "loading": "Loading"
     },
     "rate": {
       "breadcrumb": {
@@ -634,130 +438,123 @@
         "backToPastBookings": "Back to past bookings"
       }
     },
-    "book": {
+    "bookFlow": {
+      "loading": "Loading",
+      "salonMissing": "This salon isn't available for booking.",
+      "loadError": "We couldn't load the booking details.",
+      "backToSalon": "Back to the salon",
+      "noServices": "Pick your services on the salon page first.",
+      "chooseServices": "Choose services",
+      "chairGone": "This barber isn't available right now — pick another one.",
+      "slotGone": "This time isn't available anymore — pick another one.",
+      "back": "Back",
+      "stepper": {
+        "services": "Services",
+        "barber": "Barber",
+        "when": "Time",
+        "review": "Confirm",
+        "selectingNow": "Choosing now"
+      },
       "shell": {
-        "fallbackSalon": "The Salon",
         "exitBooking": "Exit booking",
         "profileAria": "Profile"
       },
-      "stepper": {
-        "service": "Service",
-        "slot": "Time",
-        "barber": "Barber",
-        "selectingNow": "Selecting now",
-        "slotSelected": "Time selected"
-      },
       "summary": {
-        "time": "Time",
-        "now": "Now",
         "minutes": "{count} min",
-        "servicesCount": "{count, plural, one {# service} other {# services}}",
-        "totalDuration": "Total duration",
-        "totalPrice": "Total"
+        "barber": "Barber",
+        "when": "Time",
+        "duration": "Services duration",
+        "total": "Total",
+        "now": "Now",
+        "servicesCount": "{count, plural, one {# service} other {# services}}"
       },
-      "slot": {
-        "title": "Choose appointment time",
-        "subtitle": "Available slots accommodate your service duration ({minutes} min).",
-        "nowEnterQueue": "Now — Join the queue",
-        "live": "Live",
-        "salonClosed": "Salon is currently closed — book a future slot",
-        "noQueueEnterImmediately": "No queue — enter immediately",
-        "queueWaitInfo": "{count} ahead · ~{min} min",
-        "scheduleAppointment": "Schedule a time",
-        "chooseDayAndTime": "Choose the day and time that suits you",
-        "continueChooseBarber": "Continue — Choose barber",
-        "chooseSlotFirst": "Choose a time slot first",
-        "picker": {
-          "availableSlots": "Available slots",
-          "durationNotice": "Selected duration: {minutes} min · Available slots match this duration",
-          "today": "Today",
-          "tomorrow": "Tomorrow",
-          "anotherDate": "Other date",
-          "period": {
-            "morning": "Morning",
-            "afternoon": "Afternoon",
-            "evening": "Evening"
-          },
-          "legend": {
-            "available": "Available",
-            "booked": "Booked",
-            "selected": "Selected"
-          },
-          "onSchedule": "Salon is on schedule",
-          "punctualityStats": "Last {count} appointments averaged {delay} min delay"
-        }
+      "titles": {
+        "barber": "Choose your barber",
+        "when": "When do you join the queue?",
+        "review": "Review and confirm"
+      },
+      "subtitles": {
+        "barber": "Each barber has their own queue. See how many are waiting before you pick.",
+        "when": "Join the queue now, or reserve a time to join it.",
+        "review": "Check the details before confirming."
       },
       "barber": {
-        "title": "Choose your barber",
-        "subtitle": "Pick your preferred barber or any available barber.",
-        "anyBarber": "Any available barber",
-        "fastest": "Fastest",
-        "firstAvailable": "First available barber will take you",
-        "immediately": "Immediate",
-        "noQueue": "No queue",
-        "orChooseBarber": "Or pick a barber by name",
-        "offToday": "Off today",
-        "empty": "Available",
-        "minShort": "+{minutes}m",
-        "ahead": "{count} ahead",
-        "continueReview": "Continue — Review booking"
+        "title": "Barbers",
+        "none": "No barbers are working at this branch today.",
+        "queueEmpty": "Nobody waiting — you're next",
+        "queueSize": "{count, plural, one {# waiting} other {# waiting}} · about {minutes} min"
+      },
+      "when": {
+        "joinNow": "Join the queue now",
+        "closedNow": "The salon is closed right now — you can reserve a join time.",
+        "joinNowEmpty": "Nobody ahead of you — it's your turn as soon as you arrive.",
+        "joinNowQueue": "{count, plural, one {# person} other {# people}} ahead of you · about {minutes} min wait",
+        "reserve": "Reserve a join time",
+        "reserveDesc": "Pick when you enter the queue.",
+        "slotExplainer": "This is when you join the queue, not your haircut time: you'll be behind whoever is queued then.",
+        "slotsError": "We couldn't load the times. Try again.",
+        "noSlots": "No times available in the coming days.",
+        "today": "Today",
+        "tomorrow": "Tomorrow"
       },
       "review": {
-        "title": "Review your booking before confirming",
-        "services": "Services",
-        "minutes": "{count} min",
-        "barber": "Barber",
-        "anyBarber": "Any available barber",
-        "time": "Time",
-        "change": "Change",
-        "enterImmediately": "You'll be seated right away",
-        "turnWithinRange": "Your turn in {min} to {max} min",
-        "nobodyAhead": "No one ahead of you",
-        "onlyAhead": "Only {count} ahead of you",
-        "serviceDuration": "Service duration: {minutes} min",
-        "timeEstimatedLive": "Time is estimated and updates live based on active chairs.",
-        "appointmentTime": "Appointment {day} at {time}",
-        "comeFiveMinEarly": "Please arrive 5 minutes early to keep your spot.",
-        "fiveMinRule": "When it's your turn, you have 5 minutes to arrive. If not present, your spot drops one position and is then cancelled.",
-        "subtotal": "Services subtotal",
-        "totalPrice": "Total",
-        "payCashInBranch": "Pay in branch after service",
-        "confirmAndJoinQueue": "Confirm & join queue",
-        "agreeCancellationPolicy": "By confirming, you agree to the cancellation policy"
-      },
-      "confirmation": {
-        "header": {
-          "yourAppointmentToday": "Your appointment today",
-          "yourAppointmentDay": "Your appointment {day}",
-          "queueNumber": "Your queue number",
-          "onSchedule": "Salon is on schedule"
-        },
-        "bookingConfirmedAt": "Booking confirmed at {salon}",
-        "withBarberMinutes": "with {barber} · {minutes} min",
-        "payAtSalon": "Pay at salon",
-        "yourTime": "Your appointment",
-        "yourQueueNumber": "Your queue number",
-        "outOfTodayQueue": "out of {count} in today's queue",
-        "aheadNowHint": "{count} ahead in queue now · We'll update if someone cancels or salon runs late",
-        "bookingCode": "Booking code {code}",
-        "bookingDetails": "Booking details",
-        "whatWeSend": {
-          "title": "What we'll send you",
-          "morning": "Morning reminder with your time and queue number.",
-          "oneAhead": "Alert when 1 person is ahead — time to be on your way.",
-          "delay": "If the salon is delayed, we'll give you the exact updated time.",
-          "channels": "Alerts on WhatsApp & app · Can be toggled in settings"
-        },
-        "calendar": {
-          "addToCalendar": "Add to calendar",
-          "googleCalendar": "Google Calendar",
-          "appleOutlook": "Download for Apple / Outlook (.ics)",
-          "eventTitle": "Haircut appointment - {salon}"
-        },
-        "dateToday": "Today, {date}",
-        "dateTomorrow": "Tomorrow, {date}",
-        "defaultServices": "Haircut + Beard trim"
+        "slotTitle": "You'll join {barber}'s queue {when}",
+        "nowTitle": "You'll join {barber}'s queue now",
+        "slotExplainer": "At that time you join the queue automatically, behind whoever is there, and you'll see how many are ahead and the expected wait.",
+        "nowEmpty": "Nobody ahead of you — head to the salon.",
+        "nowQueue": "{count, plural, one {# person} other {# people}} ahead of you now · about {minutes} min wait.",
+        "cancelAnytime": "You can cancel any time before your service starts, free of charge.",
+        "viewCurrent": "See the queue you're in",
+        "pickAnother": "Pick another time",
+        "confirming": "Confirming…",
+        "confirmSlot": "Confirm time",
+        "confirmNow": "Join the queue"
       }
+    },
+    "reservations": {
+      "listTitle": "My bookings",
+      "withBarber": "with {name}",
+      "status": {
+        "booked": "Join time",
+        "queued": "In queue",
+        "in_service": "In service",
+        "served": "Done",
+        "cancelled": "Cancelled",
+        "removed": "Removed from queue"
+      },
+      "inService": "You're being served now",
+      "yourTurn": "It's your turn!",
+      "yourTurnDesc": "{barber} is ready for you — head to the chair.",
+      "peopleAhead": "{count, plural, =0 {Nobody ahead of you} one {# person ahead} other {# people ahead}}",
+      "joinsAt": "Joins the queue: {when}",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "notFound": "This booking doesn't exist.",
+      "loadError": "We couldn't load this booking.",
+      "backToList": "Back to my bookings",
+      "leaveQueue": "Leave the queue",
+      "cancelSlot": "Cancel join time",
+      "theBarber": "the barber",
+      "aheadLabel": "Ahead of you",
+      "waitLabel": "Expected wait",
+      "minutesShort": "{count} min",
+      "liveHint": "Updates automatically every 15 seconds",
+      "startedAt": "Started at {time}",
+      "joinTimeLabel": "Queue join time",
+      "slotExplainer": "At this time you'll join {barber}'s queue automatically, behind whoever is there. If you're in another queue then, this time is cancelled.",
+      "finished": {
+        "booked": "Join time",
+        "queued": "In queue",
+        "in_service": "In service",
+        "served": "All done. Thanks for visiting!",
+        "cancelled": "This booking was cancelled.",
+        "removed": "You were removed from the queue."
+      },
+      "servedAt": "Finished at {time}",
+      "services": "Services",
+      "removedService": "Removed service",
+      "total": "Total",
+      "directions": "Directions"
     }
   },
   "common": {
@@ -1237,12 +1034,10 @@
         "removeService": "Remove {name}",
         "estimatedDuration": "Estimated service time:",
         "total": "Total",
-        "bookingSoon": "Online booking coming soon",
-        "callToBook": "Call the salon to book"
+        "book": "Book"
       },
       "bookingBar": {
-        "bookingSoon": "Online booking coming soon",
-        "callToBook": "Call to book"
+        "book": "Book"
       },
       "loadError": "We couldn't load this salon.",
       "retry": "Try again",
