@@ -5,7 +5,7 @@ import { barbersByShop } from "@/lib/data/barbers.constants";
 import { METADATA_BOOKING_DETAILS } from "@/lib/data/constants/metadata.constants";
 import { salonDetailsById } from "@/lib/data/salon-details.constants";
 import { servicesByShop } from "@/lib/data/services.constants";
-import { BookingStatus, type Booking } from "@/lib/types/booking";
+import { BookingStatus } from "@/lib/types/booking";
 import { isToday } from "@/lib/utils/format/date.utils";
 import { buildQueueStatus } from "@/lib/utils/queue.utils";
 import { BookingDetailView } from "./__components/booking-detail-view";
@@ -26,6 +26,8 @@ export default async function BookingDetailPage({
   const { id } = await params;
   const search = (await searchParams) || {};
   const viewOverride = typeof search.view === "string" ? search.view.toLowerCase() : null;
+  // محاكاة الطابور للتطوير والمراجعة بس — في الإنتاج لازم ?demo=1
+  const demo = process.env.NODE_ENV !== "production" || search.demo === "1";
 
   let booking = await getBookingById(id);
 
@@ -114,6 +116,7 @@ export default async function BookingDetailPage({
         barber={barber}
         services={services}
         queueStatus={queueStatus}
+        demo={demo}
       />
     );
   }

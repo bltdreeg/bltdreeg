@@ -2,7 +2,7 @@
 
 // شريط تحكم المحاكاة المباشر (Simulation Control Bar) لتجربة تحديث الطابور Real-Time
 import { useTranslations } from "next-intl";
-import { Play, Pause, Sparkles, FastForward } from "lucide-react";
+import { Play, Pause, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn.utils";
 
 export type LiveQueueSimStage =

@@ -26,7 +26,7 @@ type HeaderProps = {
 };
 
 export function Header({
-  cityName = "المعادي",
+  cityName: propCityName,
   userName: propUserName,
   isAuthenticated: propIsAuthenticated,
   showSearchRow = true,
@@ -45,8 +45,10 @@ export function Header({
     propUserName !== undefined
       ? propUserName
       : isAuth
-        ? hookUser?.firstName || "كريم"
+        ? hookUser?.firstName || t("defaultUser")
         : null;
+  // منطقة العميل المسجّل من /me؛ الزائر لسه مفيش منطقة محفوظة ليه
+  const cityName = propCityName ?? hookUser?.location.city.name ?? t("chooseArea");
 
   const firstName = activeUserName ? activeUserName.split(" ")[0] : "";
 
@@ -145,7 +147,7 @@ export function Header({
                 aria-label={t("myAccount", { name: activeUserName || t("defaultUser") })}
               >
                 <Avatar
-                  name={activeUserName || "كريم"}
+                  name={activeUserName || t("defaultUser")}
                   size={28}
                   className="border-0 bg-primary-foreground/20 text-xs font-bold text-primary-foreground"
                 />

@@ -1,4 +1,5 @@
-// خطأ عام على مستوى التطبيق — لازم يرسم html/body بنفسه
+// خطأ عام على مستوى التطبيق — لازم يرسم html/body بنفسه.
+// بيتعرض بره NextIntlClientProvider، فالرسالة باللغتين بدل الترجمة
 "use client";
 
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -8,8 +9,11 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
         <section role="alert" style={{ textAlign: "center" }}>
           <h1>حصلت مشكلة</h1>
           <p>مش قادرين نحمّل التطبيق دلوقتي.</p>
+          <p lang="en" dir="ltr" style={{ color: "#6B7280" }}>
+            Something went wrong. We couldn&apos;t load the app right now.
+          </p>
           <button type="button" onClick={reset}>
-            إعادة المحاولة
+            إعادة المحاولة · Try again
           </button>
         </section>
       </body>

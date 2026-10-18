@@ -1,7 +1,6 @@
 // مفيش نتايج: الرسمة الفيكتورية المخصصة مطابقة للفريم ١٥ في mobile.html والسبب بالظبط بالفلاتر
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { buttonVariants } from "@/components/atoms/button";
 import { ROUTE_SEARCH } from "@/lib/data/constants/routes.constants";
 import { cn } from "@/lib/utils/cn.utils";
 import { formatDistance, formatPrice } from "@/lib/utils/format/price.utils";
@@ -47,21 +46,13 @@ function NoResults({ query, cityName, maxDistanceKm, maxPrice, hasFilters }: NoR
   const t = useTranslations("marketing.search.noResults");
   const locale = useLocale();
 
-  const reason = locale === "ar"
-    ? [
-        `في ${cityName}`,
-        maxDistanceKm !== undefined ? `لحد ${formatDistance(maxDistanceKm, locale)}` : null,
-        maxPrice !== undefined ? `وبسعر لحد ${formatPrice(maxPrice, locale)}` : null,
-      ]
-        .filter(Boolean)
-        .join(" ")
-    : [
-        `in ${cityName}`,
-        maxDistanceKm !== undefined ? `within ${formatDistance(maxDistanceKm, locale)}` : null,
-        maxPrice !== undefined ? `and price up to ${formatPrice(maxPrice, locale)}` : null,
-      ]
-        .filter(Boolean)
-        .join(" ");
+  const reason = [
+    t("reasonCity", { city: cityName }),
+    maxDistanceKm !== undefined ? t("reasonDistance", { distance: formatDistance(maxDistanceKm, locale) }) : null,
+    maxPrice !== undefined ? t("reasonPrice", { price: formatPrice(maxPrice, locale) }) : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <section className="flex flex-col items-center gap-5 py-6 text-center">

@@ -6,12 +6,10 @@ import Image from "next/image";
 import {
   Bell,
   Check,
-  ChevronLeft,
   Copy,
   Navigation,
   Phone,
   CalendarSync,
-  AlertTriangle,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
@@ -46,6 +44,13 @@ interface LiveTrackingViewProps {
   barber?: Barber | null;
   services?: Service[];
   queueStatus: QueueStatus;
+  /** يعرض شريط محاكاة الطابور (للتطوير والمراجعة بس) — من غيره المرحلة بتيجي من queueStatus */
+  demo?: boolean;
+}
+
+// المرحلة الحقيقية من حالة الدور؛ "حان دورك" بتتعرض من الصفحة نفسها (YourTurnState)
+function stageFromQueue(queueStatus: QueueStatus): LiveQueueSimStage {
+  return queueStatus.peopleAhead <= 1 ? "approaching" : "waiting";
 }
 
 export function LiveTrackingView({
@@ -54,6 +59,7 @@ export function LiveTrackingView({
   barber,
   services = [],
   queueStatus,
+  demo = false,
 }: LiveTrackingViewProps) {
   const t = useTranslations("app.liveTracking");
   const locale = useLocale();
@@ -63,8 +69,8 @@ export function LiveTrackingView({
   const [currentStatus, setCurrentStatus] = useState<BookingStatus>(booking.status);
 
   // حالة محاكاة الطابور التفاعلية (WebSocket Real-Time Simulation)
-  const [simStage, setSimStage] = useState<LiveQueueSimStage>("waiting");
-  const [autoPlay, setAutoPlay] = useState<boolean>(true);
+  const [simStage, setSimStage] = useState<LiveQueueSimStage>(() => (demo ? "waiting" : stageFromQueue(queueStatus)));
+  const [autoPlay, setAutoPlay] = useState<boolean>(demo);
   const [secondsToNext, setSecondsToNext] = useState<number>(15);
   const [completedModalOpen, setCompletedModalOpen] = useState(false);
   const [leaveQueueModalOpen, setLeaveQueueModalOpen] = useState(false);
@@ -358,13 +364,15 @@ export function LiveTrackingView({
           {/* العمود الرئيسي (متابعة الدور الحية ومحاكاة الطابور Real-Time) */}
           <div className="flex min-w-0 flex-1 flex-col gap-[18px]">
             {/* شريط التحكم بالمحاكاة ومؤقت التحديث التلقائي */}
-            <SimulationControlBar
-              currentStage={simStage}
-              onSelectStage={handleSelectStage}
-              autoPlay={autoPlay}
-              onToggleAutoPlay={() => setAutoPlay(!autoPlay)}
-              secondsToNext={secondsToNext}
-            />
+            {demo && (
+              <SimulationControlBar
+                currentStage={simStage}
+                onSelectStage={handleSelectStage}
+                autoPlay={autoPlay}
+                onToggleAutoPlay={() => setAutoPlay(!autoPlay)}
+                secondsToNext={secondsToNext}
+              />
+            )}
 
             {/* 1. في الانتظار: كارت التذكرة ومخطط خطوات الدور */}
             {simStage === "waiting" && (

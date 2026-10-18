@@ -41,9 +41,9 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
             <div className="w-full max-w-[440px] overflow-hidden rounded-2xl border border-[#CFE6E3] bg-white shadow-sm">
               <div className="h-1 w-full bg-[#0F766E]" />
               <div className="flex flex-col gap-1 p-5 pb-0">
-                <div className="text-base font-bold text-[#0E0F11]">بربر لاونج المعادي</div>
+                <div className="text-base font-bold text-[#0E0F11]">{t("login.sampleSalon")}</div>
                 <div className="text-[12.5px] text-[#6B7280]">
-                  قص شعر + تحديد دقن · مع كريم مصطفى
+                  {t("login.sampleServices")}
                 </div>
               </div>
 
@@ -58,7 +58,7 @@ export function AuthBrandPanel({ mode, className = "" }: AuthBrandPanelProps) {
                 <div className="flex flex-1 flex-col gap-1">
                   <span className="text-[11.5px] font-semibold text-[#6B7280]">{t("login.ticketLabelTime")}</span>
                   <span className="text-[32px] font-extrabold leading-none tabular-nums text-[#0E0F11]">
-                    6:30 م
+                    {t("login.sampleTime")}
                   </span>
                 </div>
                 <div className="my-1 w-px bg-[repeating-linear-gradient(#D9DDE2_0_5px,transparent_5px_10px)]" />
