@@ -19,15 +19,7 @@ class BranchDetailController extends Controller
         $model = Branch::query()
             ->publiclyListed()
             ->when($point !== null, fn ($query) => $query->nearestTo($point[0], $point[1]))
-            ->with([
-                'tenant',
-                'city',
-                'governorate',
-                'tenant.services' => fn ($services) => $services->withoutGlobalScopes()
-                    ->where('is_active', true)
-                    ->with(['category' => fn ($category) => $category->withoutGlobalScopes()])
-                    ->orderBy('price'),
-            ])
+            ->with(['tenant', 'city', 'governorate'])
             ->findOrFail($branch);
 
         return new BranchDetailResource($model);

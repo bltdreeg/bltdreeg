@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\V1\Booking\BookingServiceProvider;
 use App\Modules\V1\Branches\BranchesServiceProvider;
 use App\Modules\V1\Catalog\CatalogServiceProvider;
 use App\Modules\V1\Customer\CustomerServiceProvider;
@@ -22,4 +23,5 @@ return [
     UsersServiceProvider::class,
     CustomerServiceProvider::class,
     GeoServiceProvider::class,
+    BookingServiceProvider::class,
 ];

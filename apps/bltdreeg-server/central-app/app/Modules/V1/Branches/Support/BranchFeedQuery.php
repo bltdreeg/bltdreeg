@@ -22,7 +22,7 @@ class BranchFeedQuery
         $query = Branch::query()
             ->publiclyListed()
             ->nearestTo($originLat, $originLng)
-            ->addSelect(['price_from' => self::salonServices()->selectRaw('MIN(services.price)')])
+            ->addSelect(['price_from' => self::salonServices()->selectRaw('MIN('.self::EFFECTIVE_PRICE.')')])
             ->with([
                 'tenant:id,name',
                 'city',
@@ -41,7 +41,8 @@ class BranchFeedQuery
         }
 
         if (($maxPrice = $request->maxPrice()) !== null) {
-            $query->whereExists(self::salonServices()->where('services.price', '<=', $maxPrice));
+            // CAST: الـ binding بيتبعت string، وCOALESCE مالوش affinity في SQLite فالمقارنة كانت هتبقى نص برقم
+            $query->whereExists(self::salonServices()->whereRaw(self::EFFECTIVE_PRICE.' <= CAST(? AS DECIMAL(10, 2))', [$maxPrice]));
         }
 
         if (($search = $request->search()) !== null) {
@@ -89,11 +90,21 @@ class BranchFeedQuery
         $query->whereRaw('LOWER('.$query->getGrammar()->wrap($column).') LIKE ?', [$like], $boolean);
     }
 
-    /** خدمات الصالون الشغالة لنفس الفرع — subquery مربوطة بـ branches.tenant_id */
+    /** سعر الخدمة في الفرع: override الفرع لو موجود، وإلا سعر الصالون (BranchCatalog) */
+    private const EFFECTIVE_PRICE = 'COALESCE(branch_services.price, services.price)';
+
+    /**
+     * خدمات الصالون الشغالة في الفرع ده — subquery مربوطة بـ branches؛ الخدمة اللي الفرع قفلها مبتتحسبش.
+     */
     private static function salonServices(): QueryBuilder
     {
         return DB::table('services')
+            ->leftJoin('branch_services', function ($join): void {
+                $join->on('branch_services.service_id', '=', 'services.id')
+                    ->whereColumn('branch_services.branch_id', 'branches.id');
+            })
             ->whereColumn('services.tenant_id', 'branches.tenant_id')
-            ->where('services.is_active', true);
+            ->where('services.is_active', true)
+            ->where(fn (QueryBuilder $active) => $active->whereNull('branch_services.id')->orWhere('branch_services.is_active', true));
     }
 }

@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Schema;
  * PostgreSQL partial unique index; MySQL/MariaDB/SQLite do not support partial
  * indexes, so there it is enforced in the queue engine (documented in
  * schema-notes.md).
+ *
+ * started_at / served_at added when applied (2026-10-18): the expected-wait rule
+ * needs the barber's remaining time on the current customer.
  */
 return new class extends Migration
 {
@@ -36,6 +39,9 @@ return new class extends Migration
             $table->string('absence_state')->default('ok');
             $table->boolean('postpone_used')->default(false);
             $table->timestamp('cancel_at')->nullable();
+            // بداية ونهاية الخدمة: الوقت المتبقي للعميل الحالي في حساب الانتظار، وسجل الزيارة
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('served_at')->nullable();
             $table->timestamps();
 
             $table->unique(['customer_id', 'slot_id']);

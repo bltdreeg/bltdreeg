@@ -30,7 +30,15 @@ applied. Never modified; later work only adds new migrations.
 ### SB-A3 · Apply the continuation schema
 Copy the 26 drafts into `packages/core/database/migrations/` preserving sort
 order, run `php artisan migrate`, verify with `make migrate-fresh` + seed.
-- **Status:** `pending`
+- **Status:** `partial` (2026-10-18) — the booking slice (10 drafts) is applied:
+  branch live state, chairs, barber_profiles, chair_day_assignments,
+  branch_services, packages, slots, reservations (+ `started_at`/`served_at`),
+  reservation_lines, queue_events. They were **re-dated to `2026_10_18_*`**: the
+  draft dates (`2026_10_01…03`) sort before already-applied migrations (`…10_06/07`,
+  e.g. customers geo columns), so a fresh migrate would have run them out of order.
+  Re-date the remaining 16 drafts the same way when applying them. Models live in
+  `packages/core/src/Modules/Queue` (+ `Services/Models/BranchService`,
+  `Services/Support/BranchCatalog`).
 - **Migrations:** the 26 draft files (moved into place)
 - **Steps:**
   1. Copy drafts → package migration dir (date order `2026_10_01…2026_10_03`).
@@ -114,7 +122,7 @@ Reservation state machine enums (type/status/absence_state) live here.
 Join-now inserts a Reservation ordered solely by `join_time`; the queue is a live
 projection, never stored. Enforces one active live-queue per customer (Postgres
 partial unique index + engine gate).
-- **Status:** `pending`
+- **Status:** `partial` (2026-10-18) — `QueueEngine::joinNow` + `QueueProjection` (order by join_time, people ahead); one-live-queue gate in the engine (row lock on the customer); gates for closed branch / inactive chair / chair without a barber. No position stream yet (clients poll).
 - **Migrations:** `2026_10_02_002000_create_reservations_table.php`
 - **Steps:** joinNow(); liveQueue(chair); position stream; gates for closed
   branch / off chair / offline barber; emit `QueueEvent(join)` + notification
@@ -135,7 +143,7 @@ control locks). Cancellation anytime before service start.
 Sum of branch-effective durations of everyone ahead + barber's remaining time on
 the current customer. Recomputes on service change using duration_at_booking
 snapshots; never re-seats.
-- **Status:** `pending`
+- **Status:** `partial` (2026-10-18) — expected wait = remaining time of the in-service customer (`started_at`) + snapshot durations ahead. Service change not built.
 - **Migrations:** `2026_10_02_003000_create_reservation_lines_table.php`,
   `2026_10_02_000100…`/`…000300…` (branch-effective values)
 - **Steps:** waitFor(chair/reservation); serviceChange() recompute; feed push +
@@ -146,7 +154,7 @@ snapshots; never re-seats.
 Slot CRUD (capacity default 1), full-slot gate, two-active-future-slots + no
 same-start-time rules, slot-conflict ask at start (leave queue / cancel slot;
 no answer → cancel slot), auto-join at slot start as a normal fresh joiner.
-- **Status:** `pending`
+- **Status:** `partial` (2026-10-18) — `bookSlot` (capacity, 2 future slots, no same start time), cancel, `startDueSlots` (scheduled `booking:start-due-slots` every minute + lazily on customer/chair reads). Conflict at slot start cancels the slot (the 'ask ahead' push needs notifications). No slot CRUD UI yet — slots come from `DemoQueue`.
 - **Migrations:** `2026_10_02_001000_create_slots_table.php`,
   `2026_10_02_002000_create_reservations_table.php`
 - **Steps:** bookSlot(); releaseSlot(); processSlotStart() (queued job or

@@ -3,6 +3,7 @@
 namespace App\Modules\V1\Branches\Http\Resources;
 
 use Bltdreeg\Core\Modules\Services\Models\Service;
+use Bltdreeg\Core\Modules\Services\Support\BranchCatalog;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,7 +20,7 @@ class BranchDetailResource extends JsonResource
     {
         $branch = $this->resource;
         $locale = app()->getLocale();
-        $services = $branch->tenant->services;
+        $services = BranchCatalog::effective($branch);
         $distance = $branch->getAttribute('distance_m');
 
         return [
@@ -44,22 +45,24 @@ class BranchDetailResource extends JsonResource
             'cover_image_url' => $branch->coverImageUrl(),
             'images' => $branch->galleryUrls(),
             'currency' => $branch->currency->name,
+            'is_open' => (bool) $branch->is_open,
             'price_from' => $services->isEmpty() ? null : (float) $services->min('price'),
-            'service_categories' => $this->serviceCategories($services->all(), $locale),
+            'service_categories' => $this->serviceCategories($services->values()->all(), $locale),
         ];
     }
 
     /**
-     * الخدمات متجمعة بالتصنيف بترتيب أول ظهور (الأرخص الأول)؛ الخدمة من غير تصنيف شغال تحت id = null.
+     * الخدمات (بقيم الفرع الفعلية) متجمعة بالتصنيف بترتيب أول ظهور (الأرخص الأول)؛ من غير تصنيف شغال تحت id = null.
      *
-     * @param  list<Service>  $services
+     * @param  list<array{service: Service, price: float, duration: int}>  $services
      * @return list<array<string, mixed>>
      */
     private function serviceCategories(array $services, string $locale): array
     {
         $groups = [];
 
-        foreach ($services as $service) {
+        foreach ($services as $entry) {
+            $service = $entry['service'];
             $category = $service->category?->is_active ? $service->category : null;
             $key = $category?->id ?? 0;
 
@@ -73,8 +76,8 @@ class BranchDetailResource extends JsonResource
                 'id' => $service->id,
                 'name' => $service->getTranslation('name', $locale),
                 'description' => $service->getTranslation('description', $locale) ?: null,
-                'duration_minutes' => $service->duration,
-                'price' => (float) $service->price,
+                'duration_minutes' => $entry['duration'],
+                'price' => $entry['price'],
             ];
         }
 

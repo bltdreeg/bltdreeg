@@ -10,6 +10,7 @@ use Bltdreeg\Core\Modules\Catalog\Support\Catalog;
 use Bltdreeg\Core\Modules\Catalog\Support\CatalogImporter;
 use Bltdreeg\Core\Modules\Geo\Enums\LocationSourceEnum;
 use Bltdreeg\Core\Modules\Geo\Support\LocationResolver;
+use Bltdreeg\Core\Modules\Queue\Support\DemoQueue;
 use Bltdreeg\Core\Modules\Tenancy\Enums\CurrencyEnum;
 use Bltdreeg\Core\Modules\Tenancy\Enums\TenantStatusEnum;
 use Bltdreeg\Core\Modules\Tenancy\Models\Branch;
@@ -43,6 +44,7 @@ class DemoData
             $importer->importCatalog($tenant);
             $ownerUser = self::ensureOwner($tenant, $owner, $provisioner);
             self::seedTenantBranches($tenant);
+            DemoQueue::seed($tenant);
             // Owners stay branch-free so they can switch among all tenant branches.
             $ownerUser->forceFill(['branch_id' => null])->save();
 

@@ -38,6 +38,9 @@ use Spatie\Translatable\HasTranslations;
     'team_size',
     'service_location_type',
     'is_active',
+    'is_open',
+    'opened_at',
+    'closed_at',
 ])]
 #[Translatable('name', 'address')]
 class Branch extends Model
@@ -94,6 +97,9 @@ class Branch extends Model
             'team_size' => TeamSizeEnum::class,
             'service_location_type' => 'array',
             'images' => 'array',
+            'is_open' => 'boolean',
+            'opened_at' => 'datetime',
+            'closed_at' => 'datetime',
         ];
     }
 
