@@ -865,6 +865,9 @@
     },
     "dateTime": {
       "appointmentWindow": "{duration} دقيقة · من {start} لحد {end}"
+    },
+    "branchCard": {
+      "new": "جديد"
     }
   },
   "marketing": {
@@ -891,24 +894,18 @@
           "yourTurn": "جاء دورك"
         },
         "trackOnMap": "تتبع مكانك على الخريطة",
-        "nearbyInArea": "الصالونات القريبة منك في <bold>{area}</bold>"
+        "nearbyInArea": "الصالونات القريبة منك في <bold>{area}</bold>",
+        "defaultArea": "منطقتك"
       },
       "rails": {
         "viewAll": "عرض الكل",
-        "recentlyViewed": {
-          "title": "آخر ما شفته"
-        },
-        "recommended": {
-          "title": "مقترح لك",
-          "subtitle": "حسب تقييمك وزياراتك"
-        },
         "newInArea": {
           "title": "جديد في منطقتك",
-          "subtitle": "صالونات فتحت من شهرين"
+          "subtitle": "أحدث الصالونات اللي انضمت"
         },
-        "mostBooked": {
-          "title": "الأكثر طلباً",
-          "subtitle": "{count, plural, one {صالون واحد فيه ميعاد النهارده} two {صالونين فيهم ميعاد النهارده} few {# صالونات فيهم ميعاد النهارده} many {# صالون فيهم ميعاد النهارده} other {# صالون فيهم ميعاد النهارده}}"
+        "lowestPrice": {
+          "title": "أسعار على قد الإيد",
+          "subtitle": "مرتّبة بأرخص خدمة"
         }
       },
       "nearby": {
@@ -967,8 +964,7 @@
       },
       "areas": {
         "title": "استكشف حسب المنطقة",
-        "subtitle": "القاهرة والجيزة",
-        "shopCount": "{count, plural, one {صالون واحد} two {صالونين} few {# صالونات} many {# صالون} other {# صالون}}"
+        "subtitle": "اختار محافظتك"
       }
     },
     "favorites": {
@@ -1132,10 +1128,30 @@
       },
       "suggestions": {
         "didYouMean": "يمكن تكون بتقصد…"
+      },
+      "feed": {
+        "sortLabel": "ترتيب النتايج",
+        "price": "السعر",
+        "anyPrice": "أي سعر",
+        "upToPrice": "حتى {price}",
+        "governorate": "المحافظة",
+        "anyGovernorate": "كل المحافظات",
+        "city": "المدينة",
+        "anyCity": "كل المدن",
+        "loadError": "مقدرناش نحمّل النتايج.",
+        "retry": "حاول تاني",
+        "noResultsTitle": "مفيش صالونات مطابقة",
+        "noResultsQuery": "ملقيناش صالونات فيها «{query}» بالفلاتر دي.",
+        "noResultsFilters": "جرّب تغيّر الفلاتر أو تختار منطقة تانية.",
+        "clearAll": "امسح البحث والفلاتر",
+        "resultsTitle": "{count, plural, one {صالون واحد فيه «{query}»} two {صالونين فيهم «{query}»} few {# صالونات فيها «{query}»} many {# صالون فيه «{query}»} other {# صالون فيه «{query}»}}",
+        "allTitle": "{count, plural, one {صالون واحد} two {صالونين} few {# صالونات} many {# صالون} other {# صالون}}",
+        "sortedFrom": "المسافات محسوبة من {area}",
+        "loadMore": "اعرض أكتر",
+        "loadingMore": "جاري التحميل…"
       }
     },
     "salon": {
-      "metaDescription": "اعرف خدمات {name} ومواعيده المتاحة واحجز أونلاين",
       "notFound": {
         "title": "الصالون ده مش موجود",
         "description": "ممكن الرابط يكون غلط أو الصالون اتشال",
@@ -1147,7 +1163,8 @@
         "barbers": "الحلاقين",
         "offers": "العروض",
         "reviews": "التقييمات",
-        "hours": "المواعيد"
+        "hours": "المواعيد",
+        "info": "المكان"
       },
       "info": {
         "inFavorites": "في المفضلة",
@@ -1175,7 +1192,9 @@
         "title": "الخدمات",
         "durationMinutes": "{count} دقيقة",
         "selectService": "اختيار {name}",
-        "deselectService": "إلغاء اختيار {name}"
+        "deselectService": "إلغاء اختيار {name}",
+        "empty": "الصالون لسه مضافش خدمات.",
+        "uncategorized": "خدمات تانية"
       },
       "barbers": {
         "title": "طاقم الحلاقين",
@@ -1218,10 +1237,18 @@
         "removeService": "إزالة {name}",
         "estimatedDuration": "الوقت المقدر للخدمات:",
         "total": "الإجمالي",
-        "joinQueue": "ادخل الطابور"
+        "bookingSoon": "الحجز أونلاين قريباً",
+        "callToBook": "اتصل بالصالون واحجز"
       },
       "bookingBar": {
-        "joinQueue": "ادخل الطابور"
+        "bookingSoon": "الحجز أونلاين قريباً",
+        "callToBook": "اتصل واحجز"
+      },
+      "loadError": "مقدرناش نحمّل بيانات الصالون.",
+      "retry": "حاول تاني",
+      "location": {
+        "title": "المكان والعنوان",
+        "directions": "الاتجاهات"
       }
     }
   }

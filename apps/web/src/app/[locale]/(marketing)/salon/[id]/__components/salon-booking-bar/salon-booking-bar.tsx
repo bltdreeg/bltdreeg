@@ -1,29 +1,21 @@
 "use client";
-
+// شريط الحجز السفلي (موبايل) — الحجز أونلاين قريباً، فالزرار الأساسي اتصال بالصالون لو رقمه موجود
+import { Phone } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { ROUTE_BOOK_SLOT } from "@/lib/data/constants/routes.constants";
 import { formatPrice } from "@/lib/utils/format/price.utils";
 import { selectionCount } from "@/lib/utils/format/queue-labels.utils";
-import type { Service } from "@/lib/types/service/service.interface";
+import type { BranchService } from "@/lib/types/branch";
 
 type SalonBookingBarProps = {
-  salonId: string;
-  selectedServices: Service[];
+  phone: string | null;
+  selectedServices: BranchService[];
 };
 
-export function SalonBookingBar({ salonId, selectedServices }: SalonBookingBarProps) {
+export function SalonBookingBar({ phone, selectedServices }: SalonBookingBarProps) {
   const t = useTranslations("marketing.salon.bookingBar");
   const locale = useLocale();
   const count = selectedServices.length;
   const total = selectedServices.reduce((n, s) => n + s.price, 0);
-
-  const bookUrl = (() => {
-    if (count === 0) return null;
-    const p = new URLSearchParams();
-    for (const svc of selectedServices) p.append("service", svc.id);
-    return `${ROUTE_BOOK_SLOT(salonId)}?${p.toString()}`;
-  })();
 
   return (
     <div className="sticky bottom-0 z-30 flex w-full items-center gap-3 border-t border-border bg-background px-4 sm:px-8 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-2px_12px_rgba(0,0,0,0.06)] lg:hidden">
@@ -34,20 +26,21 @@ export function SalonBookingBar({ salonId, selectedServices }: SalonBookingBarPr
         </span>
       </div>
 
-      {bookUrl ? (
-        <Link
-          href={bookUrl}
-          className="flex h-13 flex-1 items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed"
+      {phone ? (
+        <a
+          href={`tel:${phone}`}
+          className="flex h-13 flex-1 items-center justify-center gap-2 rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary-pressed"
         >
-          {t("joinQueue")}
-        </Link>
+          <Phone className="size-4" />
+          <span>{t("callToBook")}</span>
+        </a>
       ) : (
         <button
           type="button"
           disabled
           className="flex h-13 flex-1 items-center justify-center rounded-xl bg-disabled-bg font-bold text-disabled-fg"
         >
-          {t("joinQueue")}
+          {t("bookingSoon")}
         </button>
       )}
     </div>

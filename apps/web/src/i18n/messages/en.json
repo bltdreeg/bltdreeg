@@ -865,6 +865,9 @@
     },
     "dateTime": {
       "appointmentWindow": "{duration} min · from {start} to {end}"
+    },
+    "branchCard": {
+      "new": "New"
     }
   },
   "marketing": {
@@ -891,24 +894,18 @@
           "yourTurn": "Your turn"
         },
         "trackOnMap": "Track your location on map",
-        "nearbyInArea": "Salons near you in <bold>{area}</bold>"
+        "nearbyInArea": "Salons near you in <bold>{area}</bold>",
+        "defaultArea": "your area"
       },
       "rails": {
         "viewAll": "View all",
-        "recentlyViewed": {
-          "title": "Recently viewed"
-        },
-        "recommended": {
-          "title": "Recommended for you",
-          "subtitle": "Based on your ratings and visits"
-        },
         "newInArea": {
           "title": "New in your area",
-          "subtitle": "Salons opened in the last 2 months"
+          "subtitle": "The latest salons to join"
         },
-        "mostBooked": {
-          "title": "Most popular",
-          "subtitle": "{count, plural, one {# salon has slots today} other {# salons have slots today}}"
+        "lowestPrice": {
+          "title": "Easy on the wallet",
+          "subtitle": "Sorted by cheapest service"
         }
       },
       "nearby": {
@@ -967,8 +964,7 @@
       },
       "areas": {
         "title": "Explore by Area",
-        "subtitle": "Cairo & Giza",
-        "shopCount": "{count, plural, one {# salon} other {# salons}}"
+        "subtitle": "Pick your governorate"
       }
     },
     "favorites": {
@@ -1132,10 +1128,30 @@
       },
       "suggestions": {
         "didYouMean": "Did you mean…"
+      },
+      "feed": {
+        "sortLabel": "Sort results",
+        "price": "Price",
+        "anyPrice": "Any price",
+        "upToPrice": "Up to {price}",
+        "governorate": "Governorate",
+        "anyGovernorate": "All governorates",
+        "city": "City",
+        "anyCity": "All cities",
+        "loadError": "We couldn't load the results.",
+        "retry": "Try again",
+        "noResultsTitle": "No matching salons",
+        "noResultsQuery": "We didn't find salons matching “{query}” with these filters.",
+        "noResultsFilters": "Try changing the filters or picking another area.",
+        "clearAll": "Clear search and filters",
+        "resultsTitle": "{count, plural, one {# salon matching “{query}”} other {# salons matching “{query}”}}",
+        "allTitle": "{count, plural, one {# salon} other {# salons}}",
+        "sortedFrom": "Distances from {area}",
+        "loadMore": "Show more",
+        "loadingMore": "Loading…"
       }
     },
     "salon": {
-      "metaDescription": "Discover services and available slots for {name} and book online",
       "notFound": {
         "title": "This salon does not exist",
         "description": "The link might be wrong or the salon was removed",
@@ -1147,7 +1163,8 @@
         "barbers": "Barbers",
         "offers": "Offers",
         "reviews": "Reviews",
-        "hours": "Hours"
+        "hours": "Hours",
+        "info": "Location"
       },
       "info": {
         "inFavorites": "In Favorites",
@@ -1175,7 +1192,9 @@
         "title": "Services",
         "durationMinutes": "{count} min",
         "selectService": "Select {name}",
-        "deselectService": "Deselect {name}"
+        "deselectService": "Deselect {name}",
+        "empty": "This salon hasn't added services yet.",
+        "uncategorized": "Other services"
       },
       "barbers": {
         "title": "Barbers Team",
@@ -1218,10 +1237,18 @@
         "removeService": "Remove {name}",
         "estimatedDuration": "Estimated service time:",
         "total": "Total",
-        "joinQueue": "Join queue"
+        "bookingSoon": "Online booking coming soon",
+        "callToBook": "Call the salon to book"
       },
       "bookingBar": {
-        "joinQueue": "Join queue"
+        "bookingSoon": "Online booking coming soon",
+        "callToBook": "Call to book"
+      },
+      "loadError": "We couldn't load this salon.",
+      "retry": "Try again",
+      "location": {
+        "title": "Location & address",
+        "directions": "Directions"
       }
     }
   }

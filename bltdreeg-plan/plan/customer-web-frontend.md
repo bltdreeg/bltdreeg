@@ -128,16 +128,22 @@ backend endpoint with its frontend slice.
 - [x] Fix the 5 ESLint errors (§5) so lint can gate CI. Added `.github/workflows/web.yml`.
 
 ### Phase 1 — Discovery on real data (needs CA-B1 backend: branch feed + branch detail)
-- [ ] Rename domain types `Shop` → `Branch` across hooks/types/components.
-- [ ] `branches.action.ts`: `getBranches(filters)`, `getBranch(id)`;
-      hooks `useBranches`, `useBranch` — follow the `web-data-access` skill.
-- [ ] Home rails, search & filters, salon page → real data; make `BranchCard`
-      a link to `/salon/[id]`.
-- [ ] Salon page tabs (services / barbers / reviews / info) from branch detail.
-- [ ] Delete `/api/shops*`, `shops.constants`, `salon-details`, `services`,
-      `barbers`, `offers` mocks as each one is replaced.
-- [ ] SSR/SEO for salon pages (server-fetched metadata, OpenGraph image) —
-      salon pages are the shareable, indexable surface.
+Backend added in central-app: `GET /api/v1/branches` (q, governorate_id, city_id,
+max_price, sort=nearest|price|newest) and `GET /api/v1/branches/{id}`. Services and
+prices are salon-wide until `branch_services` (SB-B2) lands.
+
+- [x] `branches.action.ts`: `getBranches`, `getBranch`; hooks `useBranchFeed`, `useBranch`.
+- [x] Search & filters, salon page, home rails → real data; `BranchCard` links to `/salon/[id]`.
+      Home: nearby + "new in your area" (newest) + "lowest prices"; explore-by-area from
+      `/geo/governorates`. Removed the hardcoded testimonials and the mock rails.
+- [x] Salon page: gallery, info, services (by salon category), location. Barbers, offers,
+      reviews, hours and queue status are hidden until they have APIs. Booking CTA reads
+      "online booking coming soon" + call the salon (the booking flow is still mock).
+- [ ] Rename `Shop` → `Branch` in the remaining mock areas (favorites, booking flow) when
+      they get real data (Phase 2/4); `shops.constants` & co. are still used there.
+- [ ] Search filters the API can't serve yet: service type, distance, open today, date strip.
+- [ ] SSR/SEO for salon pages (server-fetched metadata, OpenGraph image).
+- [ ] Page titles repeat the app name (`page()` helper + layout template) — every page.
 
 ### Phase 2 — Booking (needs CA-C2 backend: slots + reservations)
 - [ ] Slot list with the queue-number preview ("لو حجزت 6:30 م هيكون رقمك في الدور 3")

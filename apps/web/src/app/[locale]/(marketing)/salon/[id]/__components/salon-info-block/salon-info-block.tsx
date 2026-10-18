@@ -1,92 +1,62 @@
 "use client";
 
-import { Heart, Navigation, Phone, Star } from "lucide-react";
+import { Heart, Navigation, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import type { SalonDetails } from "@/lib/types/salon";
-import { formatDistance } from "@/lib/utils/format/price.utils";
-import { isOpenNow } from "@/lib/utils/hours.utils";
-import {
-  barbersOnShift,
-  chairsActive,
-  salonQueueTitle,
-  salonReviewsWithCount,
-} from "@/lib/utils/format/queue-labels.utils";
-import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
 import { useToast } from "@/components/atoms/toast";
 import { ROUTE_FAVORITES } from "@/lib/data/constants/routes.constants";
+import { useFavorites } from "@/lib/hooks/favorites/use-favorites.hook";
+import type { BranchDetail } from "@/lib/types/branch";
 import { cn } from "@/lib/utils/cn.utils";
+import { formatDistance, formatFrom } from "@/lib/utils/format/price.utils";
+import { branchDirectionsUrl } from "@/lib/utils/branches/branch-links";
 
 type SalonInfoBlockProps = {
-  salon: SalonDetails;
-  barbersOnShiftCount: number;
+  branch: BranchDetail;
 };
 
-export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockProps) {
+/** راس صفحة الصالون: الاسم والفرع والمنطقة + المفضلة والاتجاهات والاتصال (التقييم والدور لما يبقى ليهم API) */
+export function SalonInfoBlock({ branch }: SalonInfoBlockProps) {
   const t = useTranslations("marketing.salon.info");
   const locale = useLocale();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { toast } = useToast();
-  const isFav = isFavorite(salon.id);
-
-  const open = isOpenNow(salon.hours);
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(salon.address)}`;
-
-  const tone = !open ? "neutral" : salon.queue.peopleAhead === 0 ? "success" : "warning";
-  const toneClasses = {
-    neutral: { bg: "bg-muted", dot: "bg-muted-foreground", text: "text-muted-foreground" },
-    success: { bg: "bg-success-bg", dot: "bg-success", text: "text-success-strong" },
-    warning: { bg: "bg-warning-bg", dot: "bg-warning", text: "text-warning-fg" },
-  }[tone];
+  const isFav = isFavorite(branch.id);
+  const displayName = branch.salon.name;
 
   const handleToggleFavorite = () => {
-    toggleFavorite(salon.id);
+    toggleFavorite(branch.id);
     if (!isFav) {
       toast.success(
         t("toasts.addedTitle"),
-        t("toasts.addedDesc", { name: salon.name }),
+        t("toasts.addedDesc", { name: displayName }),
         { label: t("toasts.viewFavorites"), href: ROUTE_FAVORITES }
       );
     } else {
-      toast.info(
-        t("toasts.removedTitle"),
-        t("toasts.removedDesc", { name: salon.name })
-      );
+      toast.info(t("toasts.removedTitle"), t("toasts.removedDesc", { name: displayName }));
     }
   };
 
   return (
     <div className="flex flex-col gap-3.5 px-4 sm:px-8 pt-4 pb-5 lg:px-0">
-      <h1 className="text-[21px] font-extrabold text-foreground">{salon.name}</h1>
-
-      <div className="flex flex-wrap items-center gap-2.5 text-sm text-muted-foreground">
-        <div className="flex items-center gap-1 font-bold text-foreground">
-          <Star className="size-3.5 fill-amber-400 text-amber-400" />
-          <span className="tabular">{salon.rating}</span>
-          <span className="font-normal text-muted-foreground">
-            {salonReviewsWithCount(salon.reviewCount, locale)}
-          </span>
-        </div>
-        <span className="text-border">·</span>
-        <span>{salon.cityName}</span>
-        <span className="text-border">·</span>
-        <span className="tabular">{formatDistance(salon.distanceKm, locale)}</span>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-[21px] font-extrabold text-foreground">{displayName}</h1>
+        <p className="text-sm font-semibold text-muted-foreground">{branch.name}</p>
       </div>
 
-      <div
-        aria-live="polite"
-        className={`flex items-center gap-2.5 rounded-xl px-3.5 py-3.5 ${toneClasses.bg}`}
-      >
-        <span className={`size-2.5 shrink-0 rounded-full ${toneClasses.dot}`} />
-        <div className="flex flex-col gap-0.5">
-          <span className={`text-[14.5px] font-extrabold ${toneClasses.text}`}>
-            {salonQueueTitle(open, salon.queue, locale)}
-          </span>
-          {open && (
-            <span className={`text-[12.5px] font-semibold ${toneClasses.text}`}>
-              {chairsActive(salon.chairsActive, locale)} · {barbersOnShift(barbersOnShiftCount, locale)}
-            </span>
-          )}
-        </div>
+      <div className="flex flex-wrap items-center gap-2.5 text-sm text-muted-foreground">
+        <span>{branch.city.name}</span>
+        {branch.distanceKm !== null && (
+          <>
+            <span className="text-border">·</span>
+            <span className="tabular">{formatDistance(branch.distanceKm, locale)}</span>
+          </>
+        )}
+        {branch.priceFrom !== null && (
+          <>
+            <span className="text-border">·</span>
+            <span className="tabular font-bold text-foreground">{formatFrom(branch.priceFrom, locale)}</span>
+          </>
+        )}
       </div>
 
       <div className="flex flex-wrap sm:flex-nowrap gap-2">
@@ -112,7 +82,7 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
         </button>
 
         <a
-          href={mapsUrl}
+          href={branchDirectionsUrl(branch)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-11 flex-1 min-w-[100px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
@@ -120,13 +90,15 @@ export function SalonInfoBlock({ salon, barbersOnShiftCount }: SalonInfoBlockPro
           <Navigation className="size-4" />
           <span>{t("directions")}</span>
         </a>
-        <a
-          href={`tel:${salon.phone}`}
-          className="flex h-11 flex-1 min-w-[90px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
-        >
-          <Phone className="size-4" />
-          <span>{t("call")}</span>
-        </a>
+        {branch.phone && (
+          <a
+            href={`tel:${branch.phone}`}
+            className="flex h-11 flex-1 min-w-[90px] items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-[13.5px] font-bold text-foreground transition-colors hover:bg-muted"
+          >
+            <Phone className="size-4" />
+            <span>{t("call")}</span>
+          </a>
+        )}
       </div>
     </div>
   );

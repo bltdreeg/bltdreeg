@@ -1,37 +1,23 @@
 "use client";
-// الشريط الجانبي للحجز (ديسكتوب فقط) — ملخص الحجز وزرار "ادخل الطابور"
+// الشريط الجانبي للحجز (ديسكتوب فقط) — ملخص الخدمات المختارة.
+// الحجز أونلاين لسه مالوش API، فالزرار بيقول "قريباً" وبيعرض الاتصال بالصالون بداله
 import { useTranslations, useLocale } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { ROUTE_BOOK_SLOT } from "@/lib/data/constants/routes.constants";
 import { formatPrice } from "@/lib/utils/format/price.utils";
-import { selectionCount } from "@/lib/utils/format/queue-labels.utils";
-import { X, Clock } from "lucide-react";
-import type { Service } from "@/lib/types/service/service.interface";
+import { X, Clock, Phone } from "lucide-react";
+import type { BranchService } from "@/lib/types/branch";
 
 type BookingSidebarProps = {
-  salonId: string;
-  selectedServices: Service[];
+  phone: string | null;
+  selectedServices: BranchService[];
   onRemoveService: (id: string) => void;
 };
 
-export function BookingSidebar({
-  salonId,
-  selectedServices,
-  onRemoveService,
-}: BookingSidebarProps) {
+export function BookingSidebar({ phone, selectedServices, onRemoveService }: BookingSidebarProps) {
   const t = useTranslations("marketing.salon.bookingSidebar");
   const locale = useLocale();
 
   const totalPrice = selectedServices.reduce((n, s) => n + s.price, 0);
   const totalMinutes = selectedServices.reduce((n, s) => n + s.durationMinutes, 0);
-  const hasServices = selectedServices.length > 0;
-
-  const bookUrl = (() => {
-    if (!hasServices) return null;
-    const p = new URLSearchParams();
-    for (const svc of selectedServices) p.append("service", svc.id);
-    return `${ROUTE_BOOK_SLOT(salonId)}?${p.toString()}`;
-  })();
 
   return (
     <div className="flex max-h-full flex-col rounded-[14px] border border-border bg-background p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
@@ -46,29 +32,20 @@ export function BookingSidebar({
       {/* قائمة الخدمات المختارة (تمرير عند الطول) */}
       <div className="flex flex-col py-3 overflow-y-auto overflow-x-hidden min-h-0">
         {selectedServices.length === 0 ? (
-          <div className="py-6 text-center text-xs text-muted-foreground">
-            {t("empty")}
-          </div>
+          <div className="py-6 text-center text-xs text-muted-foreground">{t("empty")}</div>
         ) : (
           <div className="divide-y divide-border/80">
             {selectedServices.map((svc) => (
-              <div
-                key={svc.id}
-                className="flex items-center justify-between py-2.5"
-              >
+              <div key={svc.id} className="flex items-center justify-between py-2.5">
                 <div className="flex min-w-0 flex-col">
-                  <span className="truncate text-sm font-semibold text-foreground">
-                    {svc.name}
-                  </span>
+                  <span className="truncate text-sm font-semibold text-foreground">{svc.name}</span>
                   <span className="tabular text-[11px] text-muted-foreground">
                     {t("durationMinutes", { count: svc.durationMinutes })}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="tabular text-xs font-bold text-foreground">
-                    {formatPrice(svc.price, locale)}
-                  </span>
+                  <span className="tabular text-xs font-bold text-foreground">{formatPrice(svc.price, locale)}</span>
                   <button
                     type="button"
                     onClick={() => onRemoveService(svc.id)}
@@ -101,27 +78,24 @@ export function BookingSidebar({
       {/* الإجمالي الكلي */}
       <div className="my-4 flex items-baseline justify-between shrink-0">
         <span className="text-sm font-bold text-muted-foreground">{t("total")}</span>
-        <span className="tabular text-2xl font-black text-foreground">
-          {formatPrice(totalPrice, locale)}
-        </span>
+        <span className="tabular text-2xl font-black text-foreground">{formatPrice(totalPrice, locale)}</span>
       </div>
 
-      {/* زر دخول الطابور */}
-      {bookUrl ? (
-        <Link
-          href={bookUrl}
-          className="flex h-12 w-full items-center justify-center rounded-xl bg-primary font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary-pressed hover:shadow-md cursor-pointer"
+      <button
+        type="button"
+        disabled
+        className="flex h-12 w-full items-center justify-center rounded-xl bg-disabled-bg text-sm font-bold text-disabled-fg cursor-not-allowed select-none"
+      >
+        {t("bookingSoon")}
+      </button>
+      {phone && (
+        <a
+          href={`tel:${phone}`}
+          className="mt-2 flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-background text-sm font-bold text-foreground transition-colors hover:bg-muted"
         >
-          {t("joinQueue")}
-        </Link>
-      ) : (
-        <button
-          type="button"
-          disabled
-          className="flex h-12 w-full items-center justify-center rounded-xl bg-disabled-bg text-xs font-bold text-disabled-fg cursor-not-allowed select-none"
-        >
-          {selectionCount(0, locale)}
-        </button>
+          <Phone className="size-4 text-primary" />
+          <span>{t("callToBook")}</span>
+        </a>
       )}
     </div>
   );

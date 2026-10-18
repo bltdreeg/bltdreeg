@@ -17,3 +17,6 @@ export const QK_VISITOR_POSITION = ["visitor-position"] as const;
 /** null = الترتيب من الـ IP؛ لما الإحداثيات توصل المفتاح بيتغير والقائمة بتتجاب تاني */
 export const QK_NEARBY_BRANCHES = (position: { lat: number; lng: number } | null) =>
   ["branches", "nearby", position ? `${position.lat},${position.lng}` : "ip"] as const;
+export const QK_BRANCH_FEED = (filters: object, position: { lat: number; lng: number } | null) =>
+  ["branches", "feed", filters, position ? `${position.lat},${position.lng}` : "ip"] as const;
+export const QK_BRANCH = (id: string) => ["branches", "detail", id] as const;

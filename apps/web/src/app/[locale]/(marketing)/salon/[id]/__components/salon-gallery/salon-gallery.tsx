@@ -115,60 +115,26 @@ export function SalonGallery({ photos, name, salonId }: SalonGalleryProps) {
           )}
         </div>
 
-        {/* العمود الجانبي للصور — يظهر من الشاشات المتوسطة والكبيرة */}
-        <div className="hidden sm:flex flex-1 flex-col gap-2 sm:gap-3">
-          {/* الصورة العلوية */}
-          <div className="relative flex-1 overflow-hidden rounded-[14px] bg-white border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
-            {side[0] ? (
-              <button
-                type="button"
-                onClick={() => setOpenIndex(1)}
-                className="absolute inset-0 cursor-pointer"
-                aria-label={t("viewPhotos", { name })}
+        {/* العمود الجانبي — بيظهر بس لو فيه صور زيادة (مش خانات فاضية)، والصورة الرئيسية بتاخد العرض كله غير كده */}
+        {side.length > 0 && (
+          <div className="hidden sm:flex flex-1 flex-col gap-2 sm:gap-3">
+            {side.map((photo, index) => (
+              <div
+                key={photo}
+                className="relative flex-1 overflow-hidden rounded-[14px] bg-white border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)]"
               >
-                <Image
-                  src={side[0]}
-                  alt={`${name} interior`}
-                  fill
-                  sizes="(min-width: 1024px) 17vw, 34vw"
-                  className="object-cover"
-                />
-              </button>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-[repeating-linear-gradient(135deg,#F8FAFC_0_10px,#EDEFF2_10px_20px)]">
-                <span className="font-mono text-[10px] font-medium tracking-widest text-slate-400">
-                  INTERIOR
-                </span>
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(index + 1)}
+                  className="absolute inset-0 cursor-pointer"
+                  aria-label={t("viewPhotos", { name })}
+                >
+                  <Image src={photo} alt={name} fill sizes="(min-width: 1024px) 17vw, 34vw" className="object-cover" />
+                </button>
               </div>
-            )}
+            ))}
           </div>
-
-          {/* الصورة السفلية */}
-          <div className="relative flex-1 overflow-hidden rounded-[14px] bg-white border border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
-            {side[1] ? (
-              <button
-                type="button"
-                onClick={() => setOpenIndex(2)}
-                className="absolute inset-0 cursor-pointer"
-                aria-label={t("viewPhotos", { name })}
-              >
-                <Image
-                  src={side[1]}
-                  alt={`${name} work`}
-                  fill
-                  sizes="(min-width: 1024px) 17vw, 34vw"
-                  className="object-cover"
-                />
-              </button>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-[repeating-linear-gradient(135deg,#F8FAFC_0_10px,#EDEFF2_10px_20px)]">
-                <span className="font-mono text-[10px] font-medium tracking-widest text-slate-400">
-                  WORK
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+        )}
       </div>
 
       {/* لايت بوكس — يعرض كل الصور بالتنقل */}
