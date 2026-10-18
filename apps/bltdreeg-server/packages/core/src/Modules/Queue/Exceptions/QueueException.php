@@ -26,6 +26,9 @@ class QueueException extends Exception
         parent::__construct($message === $key ? $errorCode : $message, $statusCode);
     }
 
+    /** رفض قاعدة بيزنس (409/422) مش عطل — ميتسجلش في اللوج */
+    public function report(): void {}
+
     public function render(Request $request): JsonResponse
     {
         return response()->json([

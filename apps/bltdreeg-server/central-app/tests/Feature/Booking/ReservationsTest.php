@@ -144,6 +144,17 @@ test('slot rules: capacity, two future slots, no same start time, no double book
     bookSlot(Customer::factory()->create(), $slot, [$haircut->id])->assertStatus(409)->assertJsonPath('code', 'booking.slot_full');
 });
 
+test('a cancelled slot can be booked again', function () {
+    ['chair' => $chair, 'haircut' => $haircut] = bookableChair();
+    $customer = Customer::factory()->create();
+    $slot = Slot::factory()->create(['chair_id' => $chair->id]);
+    $id = bookSlot($customer, $slot, [$haircut->id])->assertCreated()->json('id');
+
+    $this->actingAs($customer, 'customer')->postJson("/api/v1/reservations/{$id}/cancel")->assertOk();
+
+    bookSlot($customer, $slot, [$haircut->id])->assertCreated()->assertJsonPath('status', 'booked');
+});
+
 test('a slot that already started cannot be booked', function () {
     ['chair' => $chair, 'haircut' => $haircut] = bookableChair();
     $slot = Slot::factory()->startingAt(now()->subMinute()->toImmutable())->create(['chair_id' => $chair->id]);

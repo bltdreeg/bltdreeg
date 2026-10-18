@@ -73,8 +73,11 @@ DB enforces an invariant versus where the application layer must.
 - **One active live-queue reservation per customer**: PostgreSQL partial unique
   index `reservations_one_live_queue_per_customer` (in the draft). On
   MySQL/MariaDB/SQLite (no partial indexes) the **queue engine** enforces it.
-- **One booking per slot**: `unique(customer_id, slot_id)` enforces a customer
-  never holds the same slot twice; capacity/full is app-enforced.
+- **One booking per slot**: app-enforced in `QueueEngine::bookSlot` (a customer
+  never holds the same slot twice *at once*). The draft's `unique(customer_id,
+  slot_id)` was dropped when applied (2026-10-18) because it also blocked
+  re-booking a slot after cancelling it; it is a plain index now. Capacity/full is
+  app-enforced.
 - **Two active future slots, no same start time**: app-enforced (slot engine).
 - **Ratings once per visit per target**: `ratings_visit_target_unique` unique
   index + app check (nullable target ids make the index insufficient alone).

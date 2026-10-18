@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Schema;
  * schema-notes.md).
  *
  * started_at / served_at added when applied (2026-10-18): the expected-wait rule
- * needs the barber's remaining time on the current customer.
+ * needs the barber's remaining time on the current customer. The draft's
+ * unique(customer_id, slot_id) became a plain index: it also blocked re-booking a
+ * slot after cancelling it (cancellation is friction-free, feature 1).
  */
 return new class extends Migration
 {
@@ -44,7 +46,9 @@ return new class extends Migration
             $table->timestamp('served_at')->nullable();
             $table->timestamps();
 
-            $table->unique(['customer_id', 'slot_id']);
+            // مش unique: العميل يقدر يلغي slot ويحجزه تاني، والإلغاء بيفضل في السجل.
+            // "ميحجزش نفس الـ slot مرتين في نفس الوقت" بيتطبق في QueueEngine::bookSlot
+            $table->index(['customer_id', 'slot_id']);
             $table->index(['branch_id', 'status']);
             $table->index(['chair_id', 'status']);
             $table->index(['customer_id', 'status']);
