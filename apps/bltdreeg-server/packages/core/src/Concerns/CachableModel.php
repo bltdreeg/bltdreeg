@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Cache;
  * @method static Builder query()
  * @method static void saved(\Closure|callable|array|class-string $callback)
  * @method static void deleted(\Closure|callable|array|class-string $callback)
+ * @method Collection newCollection(array $models = [])
+ * @method static newFromBuilder(array|object $attributes = [], ?string $connection = null)
  * @mixin Model
  */
 trait CachableModel
@@ -81,6 +83,7 @@ trait CachableModel
             fn () => static::query()->get()->map->getAttributes()->all(),
         );
 
+        /** @var Model&static $instance */
         $instance = new static;
 
         return $instance->newCollection(
